@@ -90,7 +90,8 @@ device/driver support
 	# Extended PID (epid) debice support
 	# motor controllers:
 	#    soft support
-	#    Intelligent Motion Systems IM483PL, IM483SM, and PIC844
+	#    Intelligent Motion Systems IM483PL, and IM483SM
+	#	 Physik Instrumente PIC844
 	#    Newport MM3000, MM4000/5, PM500, ESP300, and XPSC8
 	#    Oregon Micro Systems VME8/44, VME58, and MAXv
 	#    E500 (a CAMAC module)
