@@ -1,8 +1,8 @@
 #FILENAME:	Makefile
 #USAGE:		Top Makefile
-#Version:	$Revision: 1.7.2.1 $
-#Modified By:	$Author: bcda $
-#Last Modified:	$Date: 2003-04-10 22:23:51 $
+#Version:	$Revision: 1.7.2.2 $
+#Modified By:	$Author: rivers $
+#Last Modified:	$Date: 2003-05-18 16:26:18 $
 #NOTES- The "DIRS" order is based on compile time dependencies.
 #     - The user must modify SUPPORT for local configuration.
 #     - Pointing the CONFIG macro to a different config directory
@@ -92,6 +92,11 @@ include $(SUPPORT)/$(CONFIG)/IP330_RELEASE
 DIRS += $(IP330)
 RELEASE_FILES += $(IP330)/config/RELEASE
 MASTER_FILES  += $(SUPPORT)/$(CONFIG)/IP330_RELEASE
+
+include $(SUPPORT)/$(CONFIG)/QUADEM_RELEASE
+DIRS += $(QUADEM)
+RELEASE_FILES += $(QUADEM)/config/RELEASE
+MASTER_FILES  += $(SUPPORT)/$(CONFIG)/QUADEM_RELEASE
 
 include $(SUPPORT)/$(CONFIG)/IP_RELEASE
 DIRS += $(IP)
