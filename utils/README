@@ -5,6 +5,17 @@ Modifications to following support modules were limited to the
 <supporttop>/config directories.
 
 
+MODULE:		bitBus
+VERSION:	R1-4
+URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/bitBus/index.html
+BUILD DEPENDENCIES: EPICS_BASE
+PROCEDURE:
+- <top>/Makefile copied from R3.13.4 xxx/Makefile.
+- Removed contents of <top>/config and replaced with files from R3.13.4
+xxx/config.
+- Configured <top>/config/RELEASE.
+
+
 MODULE:		ipac
 VERSION:	2.2
 URL: http://www.aps.anl.gov/asd/people/anj/ipac/
@@ -285,6 +296,7 @@ PROCEDURE:
 	- Elcomat.db/Elcomat; no "Elcomat autocollimator" device support.
 	- Eurotherm.db/Eurotherm; no "Hideos ao Eurotherm" and no
 		"Hideos so Eurotherm" device support.
+	- ip330Scan.db; duplicate of ip330Scan.template in ip330 module.
 
 - Modifications to ipLIBOBJS as a result of using the standard mpf distribution:
 	- Replaced mpfDevLib with DevMpf.o; mpfDevLib was dropped with mpf R1-5.
