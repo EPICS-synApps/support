@@ -1,0 +1,90 @@
+#!/bin/sh
+# changePrefix_synApps_4.5
+if [ $# -lt 2 ]; then
+	printf "%s\n" "usage: changePrefix_synApps_4.5 old new"
+	printf "%s\n" "example: changePrefix_synApps_4.5 xxx 1bma"
+	exit
+fi
+
+old=$1
+new=$2
+if [ ! -d ${old}App ]; then
+	printf "%s\n" "changePrefix_synApps_4.5: ${old}App not found.  Nothing done."
+	exit
+fi
+if [ ! -d iocBoot ]; then
+	printf "%s\n" "changePrefix_synApps_4.5: iocBoot not found.  Nothing done."
+	exit
+fi
+
+if [ ! -d iocBoot/ioc${old} ]; then
+	printf "%s\n" "changePrefix_synApps_4.5: iocBoot/ioc${old} not found.  Nothing done."
+	exit
+fi
+
+TOP=`pwd`
+
+printf "\r%-50s" "start_epics_${new}"
+mv start_epics_${old} start_epics_${new}
+doSed "s!/${old}!/${new}!g" start_epics_${new}
+doSed "s/${old}.adl/${new}.adl/g" start_epics_${new}
+
+printf "\r%-50s" "${new}App/src"
+mv ${old}App ${new}App
+cd ${new}App/src
+mv ${old}Include.dbd ${new}Include.dbd
+doSed "s/${old}Lib/${new}Lib/g" Makefile.Vx
+doSed "s/${old}Include/${new}Include/g" Makefile.Host
+doSed "s/${old}App/${new}App/g" Makefile.Host
+
+printf "\r%-50s" "${new}App/Db"
+cd ${TOP}/${new}App/Db
+doSed "s/${old}.dbd/${new}.dbd/g" Makefile.Host
+doSed "s/${old}.template/${new}.template/g" Makefile.Host
+doSed "s/${old}Include/${new}Include/g" Makefile.Host
+
+printf "\r%-50s" "iocBoot/"
+cd ${TOP}/iocBoot
+mv ioc${old} ioc${new}
+cd ioc${new}
+for file in *.cmd
+do
+	printf "\r%-50s" "$file"
+	doSed "s!/${old}/!/${new}/!g" $file
+	doSed "s/${old}:/${new}:/g" $file
+	doSed "s/ioc${old}/ioc${new}/g" $file
+	doSed "s/${old}Lib/${new}Lib/g" $file
+	doSed "s/${old}App/${new}App/g" $file
+	doSed "s/=${old}/=${new}/g" $file
+done
+for file in auto*.req
+do
+	printf "\r%-50s" "$file"
+	doSed "s/${old}:/${new}:/g" $file
+done
+for file in *.substitutions
+do
+	printf "\r%-50s" "$file"
+	doSed "s/${old}:/${new}:/g" $file
+done
+doSed "s!/${old}/!/${new}/!g" bootParms
+doSed "s/ioc${old}/ioc${new}/g" bootParms
+
+printf "\r%-50s" "${new}App/op"
+cd ${TOP}/${new}App/op
+mv adl/${old}.adl adl/${new}.adl
+for file in adl/*.adl
+do
+	printf "\r%-50s" "$file"
+	doSed "s/${old}:/${new}:/g" $file
+	doSed "s/${old}App/${new}App/g" $file
+	doSed "s/${old}.adl/${new}.adl/g" $file
+done
+for file in burt/*
+do
+	printf "\r%-50s" "$file"
+	doSed "s/${old}/${new}/g" $file
+done
+doSed "s/${old}:/${new}:/g" idl/catch1d.env
+
+printf "\r%-50s\n" "Done."
