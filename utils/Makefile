@@ -1,14 +1,20 @@
 #FILENAME:	Makefile
 #USAGE:		Top Makefile
-#Version:	$Revision: 1.7 $
+#Version:	$Revision: 1.8 $
 #Modified By:	$Author: sluiter $
-#Last Modified:	$Date: 2002-03-20 15:22:59 $
+#Last Modified:	$Date: 2003-04-23 17:00:27 $
 #NOTES- The "DIRS" order is based on compile time dependencies.
 #     - The user must modify SUPPORT for local configuration.
-#     - Only the "DIRS" are the target of gnumake.
 #     - Pointing the CONFIG macro to a different config directory
 #	supports multiple configurations in the same support
 #	directory.
+#     - Support modules can be shared between configurations only if
+#	dependencies are not violated.  Only the "DIRS" are the target of
+#	gnumake.  If this configuration is using a support module built by
+#	another configuration, then the	DIRS line for that support module must
+#	be commented out (i.e, must begin with a '#') and the 'include',
+#	'RELEASE_FILES' and 'MASTER_FILES' lines must be uncommented (i.e.,
+#	the '#' must be removed).
 
 SUPPORT = !!Set to <supporttop> complete pathname!!
 CONFIG = config
@@ -95,7 +101,7 @@ MASTER_FILES  += $(SUPPORT)/$(CONFIG)/IP_RELEASE
 DIRS += $(SUPPORT)/xxx
 RELEASE_FILES += $(SUPPORT)/xxx/config/RELEASE
 
-all install clean rebuild inc depends build uninstall::
+all install clean rebuild inc depends build uninstall release::
 	@$(PERL) makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILES) $(RELEASE_FILES)
 
 include $(SUPPORT)/$(CONFIG)/RULES_DIRS
