@@ -1,4 +1,4 @@
-	Instructions for using synApps 5.1
+	synApps 5.1
 
 synApps is a collection of custom EPICS software (source code, EPICS
 databases, client scripts, executables, etc.) intended to support most
@@ -8,9 +8,49 @@ work together to support an entire SR beamline.  synApps is also
 intended to underly additional software that may be station or
 beamline specific.
 
-This release of synApps is compatible with EPICS release 3.14.7
-and later.  The distribution is intended to build under EPICS R3.14.7
-using Tornado 2.02.
+This release of synApps is compatible with EPICS release 3.14.7, Tornado 2.02,
+and the following EPICS modules/versions produced and maintained by other
+members of the EPICS collaboration:
+
+allenBradley v2-1    for communicating with Allen Bradley PLC's (ANL)
+ipac v2-8            required for IndustryPack support (ANL)
+asyn v4-2            required by mca, dac128V, ip, ip330, motor, quadEM (ANL)
+seq v2-0-8           for SNL programs in synApps (SLAC)
+vxStats v1-7-2c      vxWorks statistics modified by us (SNS)
+genSub v1-6          the genSub record (Observatory Sciences)
+
+For convenience, this distribution includes the module versions listed above,
+in place and ready to build, with minor modifications to build files.  A few of
+the modules have suffered more substantial modifications to fix problems, add
+MEDM displays, etc.
+
+Here's a list of the modules and directories that actually are part of synApps:
+
+autosave      save-restore
+calc          run-time expression evaluation
+camac         CAMAC support
+ccd           scientific CCD detectors, including Bruker, MAR, and Roper
+              detectors
+config        (directory) build files, including the top-level make file
+dac128V       IndustryPack DAC
+dxp           DSP
+ip            various serial devices
+ip330         IndustryPack ADC
+ipUnidig      IndustryPack digital I/O
+love          Love controllers
+mca           multichannel analyzers
+motor         motors
+optics        optical table, monochromators, slits, etc.
+quadEM        4-channel electrometer
+sscan         sscan record and related software
+std           misc EPICS software
+utils         (directory) miscellaneous tools
+vme           vme-specific support
+xxx           sample user-application directory
+
+See config/MASTER_RELEASE for a complete set of compatible module versions.
+In most cases, there is some negative consequence of using a different
+version than the one specified in MASTER_RELEASE.
 
 synApps includes software developed by the Beamline Controls & Data
 Acquisition and Accelerator Controls groups of the Advanced Photon
@@ -22,7 +62,6 @@ Aside from databases, SNL programs, and the like, synApps contains the
 following code:
 
 Record support
-
     busy	utility record: calls recGblFwdLink only when its
 		VAL field makes a transition to zero.
     camac	user/database interface to CAMAC bus
@@ -59,7 +98,6 @@ Record support
     		available in a published module.
 
 Device/driver support
-
 	Acromag IP-330 ADC as waveform recorder
 	Advanced Control Systems driver support.
 	Bunch clock generator (Frank Lenkszus)
@@ -109,7 +147,6 @@ Device/driver support
 	   Joerger VS series
 	   CAMAC DSP RTC-018 timer and QS-450 quad scaler
 	   Struck STR7201, SIS 38xx
-	MPFread, MPFwriteRead, MPFwrite
 	soft device support for the sCalcout record
 	XIA dxp 
 
@@ -134,49 +171,8 @@ Documentation
 	Some modules have their own example iocBoot directories.
 
 
-
 How to use synApps
 ------------------
-
-synApps is not a complete software installation in itself.  To use
-synApps, you must acquire and build EPICS base and other modules
-on which synApps depends.  Here's a list of the modules and the
-version with which synApps 5.1 is known to work.
-
-EPICS baseR3.14.7  or, possibly, a later 3.14 release
-allenBradley2-1    if you intend to connect with Allen Bradley PLC's
-ipac2-8            required for IndustryPack support
-asyn4-2            required by mca, dac128V, ip, ip330, motor, quadEM
-seq2-0-10          for SNL programs in synApps
-vxStats1-7-2c      vxWorks statistics
-genSub1-6          the genSub record
-
-Here's a list of the modules included in synApps 5.1:
-
-autosave      save-restore
-calc          run-time expression evaluation
-camac         CAMAC support
-ccd           scientific CCD detectors, including Bruker, MAR, and Roper 
-              detectors
-dac128V       IndustryPack DAC
-dxp           DSP
-ip            various serial devices
-ip330         IndustryPack ADC
-ipUnidig      IndustryPack digital I/O
-love          Love controllers
-mca           multichannel analyzers
-motor         motors
-optics        optical table, monochromators, slits, etc.
-quadEM        4-channel electrometer
-sscan         sscan record and related software
-std           misc EPICS software
-utils         miscellaneous tools
-vme           vme-specific support
-xxx           sample user-application directory
-
-See config/MASTER_RELEASE for a complete set of compatible module versions.
-In most cases, there is some negative consequence of using a different
-version than the one specified in MASTER_RELEASE.
 
 Although synApps is distributed as a single 'support' directory, it's
 normally used as a two-part system: the 'support' tree, and a 'user'
@@ -201,7 +197,7 @@ support/
         Makefile                             <-- EDIT to build
         ...
     dac128V/
-	dxp/
+    dxp/
     documentation/
     utils/
     ip/
@@ -214,11 +210,11 @@ support/
     optics/
     mpf/
     quadEM/
-	sscan/
+    sscan/
     std/
-	utils/
-	vme/
-	vxStats/
+    utils/
+    vme/
+    vxStats/
     xxx/
 
 ioc/
@@ -232,42 +228,39 @@ ioc/
             nfsCommands
             ioc1bma/
                 Makefile
-				camac.cmd
-				canberra_1.cmd
-				canberra_13.cmd
-				canberra_3.cmd
-				dac128V.cmd
-				dxp_16.cmd
-				industryPack.cmd
-				ip330.cmd
-				ipUnidig.cmd
-				quadEM.cmd
-				save_restore.cmd
-				serial.cmd
-				st.cmd
-				vme.cmd
-				asynRecord.substitutions
-				basic_motor.substitutions
-				canberra_13.substitutions
-				canberra_3.substitutions
-				dac128V.substitutions
-				dxp_16.substitutions*
-				ip330Scan.substitutions
-				ipUnidig.substitutions
-				motor.substitutions
-				picMot.substitutions
-				pid_fast.substitutions*
-				pid_slow.substitutions*
-				quadEM_pid.substitutions
-				scanParms.substitutions
-				vxStats.substitutions
+		camac.cmd
+		canberra_1.cmd
+		canberra_13.cmd
+		canberra_3.cmd
+		dac128V.cmd
+		dxp_16.cmd
+		industryPack.cmd
+		ip330.cmd
+		ipUnidig.cmd
+		quadEM.cmd
+		save_restore.cmd
+		serial.cmd
+		vme.cmd
+		st.cmd
+		basic_motor.substitutions
+		canberra_13.substitutions
+		canberra_3.substitutions
+		dac128V.substitutions
+		dxp_16.substitutions
+		ip330Scan.substitutions
+		ipUnidig.substitutions
+		motor.substitutions
+		picMot.substitutions
+		pid_fast.substitutions
+		pid_slow.substitutions
+		quadEM_pid.substitutions
+		scanParms.substitutions
+		vxStats.substitutions
                 auto_positions.req 
                 auto_settings.req
                 autosave/
-                cdCommands
+                cdCommands or envPaths
                 saveData.req 
-		interp.sav
-		interp_settings.req
             ioc1bmb/
                <much like ioc1bma>
 
@@ -289,29 +282,22 @@ ioc/
 If you have a built copy of EPICS base 3.14.7 or later,  then building
 synApps should be very simple:
 
-1) Either get all the external modules on which synApps depends from
-   their web sources (see support/config/README) and modify them
-   according to the procedures in support/config/README, or just
-   untar the already-modified copies of those distributions from
-   the support/TAR directory.  The modules are expected to be
-   in the support directory, along with the synApps modules.
-
-2) Edit support/config/MASTER_RELEASE to set the variables SUPPORT
+1) Edit support/config/MASTER_RELEASE to set the variables SUPPORT
    and EPICS_BASE.  SUPPORT should be the full path to the synApps
    support directory.  Also edit support/config/Makefile to select
    which modules you want to build.
 
-3) Edit motor/motorApp/Makefile to select the motor support you
+2) Edit motor/motorApp/Makefile to select the motor support you
    want to build.
 
-4) Set the environment variable EPICS_HOST_ARCH to the architecture
+3) Set the environment variable EPICS_HOST_ARCH to the architecture
    (and compiler, if there is a choice) on which you are building.
    I used solaris-sparc-gnu, and linux-x86.  I wasn't able to get
    solaris-sparc to work.
 
-5) in support/config, run the same GNU Make executable used to build
-   EPICS base.  You may need $(EPICS_BASE)/bin/<arch> in your command
-   path, and you may need $(EPICS_BASE)/lib/<arch> in LD_LIBRARY_PATH.
+4) In support/config, run the same GNU Make executable used to build
+   EPICS base.  You may need $(EPICS_BASE)/bin/<arch> in your path,
+   and you may need $(EPICS_BASE)/lib/<arch> in LD_LIBRARY_PATH.
 
 When executed in the support/config directory, make will go to all
 of the modules support/config/Makefile knows about and edit the
@@ -700,7 +686,9 @@ changePrefix
 ------------
 These are for the application developer's convenience in changing EPICS
 prefixes in a user tree.  You must be in the top level of the user tree
-to run changePrefix.
+to run changePrefix, and you should do a "gnumake clean uninstall"
+before running it.
+
 Example of use:
     cd $(SYNAPPS)/ioc/1bm
     changePrefix xxx 1bma
@@ -737,6 +725,6 @@ files, substitution files and st.cmd).
 Tim Mooney (mooney@aps.anl.gov)
 Beamline Controls & Data Acquisition Group
 Advanced Photon Source
-3/21/2005
+3/23/2005
 
 
