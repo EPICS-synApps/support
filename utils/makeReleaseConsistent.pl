@@ -57,9 +57,9 @@ FOR each release file.
 ENDFOR
 =cut
 #
-# Version:	$Revision: 1.2 $
+# Version:	$Revision: 1.3 $
 # Modified By:	$Author: sluiter $
-# Last Modified:$Date: 2001-11-05 20:42:37 $
+# Last Modified:$Date: 2003-06-27 17:27:04 $
 
 # NOTE with Perl 5.6, replace the following with File::Temp.
 use POSIX;
@@ -127,6 +127,7 @@ for ($itera = 0; $itera < $ritera; $itera++)
 	    chomp($line);
 	    $_ = $line;
 	    ($prefix,$fullmacro,$macro,$post) = /(.*)\s*=\s*(\$\((.*)\))?(.*)?/;
+	    $prefix =~ s/^\s+|\s+$//g; # strip leading and trailing whitespace.
 	    if ($master_macro{$prefix} ne '' && $master_macro{$prefix} ne $post)
 	    {
 		$rewrite = 'YES';
