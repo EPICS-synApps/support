@@ -23,14 +23,34 @@ gnumake clean uninstall;gnumake
 ==============================================================================
 	STANDARD SUPPORT MODULES
 ==============================================================================
-The following support modules required limited modifications.
+
+MODULE:		EPICS base
+VERSION:	R3.14.2
+BUILD DEPENDENCIES: Tornado 2.0.2
+
+
+MODULE:		vxStats
+VERSION:	R1-1
+SOURCE:  R1-1 CVS tagged release;
+	cvs export -d vxStats1-1 -r R1-1 epics/modules/soft/vxStats
+BUILD DEPENDENCIES: EPICS_BASE
+PROCEDURE:
+
+MODULE:		seq
+VERSION:	2.0.4
+URL:  http://www.slac.stanford.edu/comp/unix/package/epics/sequencer
+BUILD DEPENDENCIES: EPICS_BASE
+PROCEDURE:
+- After unzipping and untarring seq-2.0.4.tar.gz;
+	cd <supporttop>;
+	mv seq-2.0.4 seq-2-0-4; chmod u+w seq-2-0-4/configure/RELEASE
 
 MODULE:		allenBradley
-VERSION:	1-6
+VERSION:	1-7
 URL:  http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/allenBradley/
 BUILD DEPENDENCIES: EPICS_BASE
 PROCEDURE:
-- After unzipping and untarring allenBradley1-6.tar.gz; "mv 1-6 allenBradley1-6".
+- After unzipping and untarring allenBradley1-7.tar.gz; "mv 1-7 allenBradley1-7".
 
 
 MODULE:		bitBus
@@ -40,19 +60,20 @@ BUILD DEPENDENCIES: EPICS_BASE
 
 
 MODULE:		ipac
-VERSION:	2.4
+VERSION:	2.5
 URL: http://www.aps.anl.gov/asd/people/anj/ipac/
 BUILD DEPENDENCIES: EPICS_BASE
 PROCEDURE:
-- After unzipping and untarring ipac-2.4.tar.gz; "mv ipac-2.4 ipac2-4".
+- After unzipping and untarring ipac-2.5.tar.gz; "mv ipac-2.5 ipac2-5".
+- Delete the SUPPORT= line from configure/RELEASE.
 
 MODULE:		mpf
-VERSION:	R1-8
-URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/mpf/
+VERSION:	R2-2
+URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/mpfosi/
 BUILD DEPENDENCIES: EPICS_BASE, IPAC
 PROCEDURE:
-- After unzipping and untarring mpf1-8.tar, "mv 1-8 mpf1-8".
-- cd <supporttop>; chmod u+w mpf1-8/config/RELEASE
+- After unzipping and untarring mpf2-2.tar.gz;
+	cd <supporttop>; chmod u+w mpf2-2/configure/RELEASE
 
 
 MODULE:		mpfGpib
@@ -80,18 +101,10 @@ INSTALLS += gpibServer.o
 ------- Makefile.Vx -------
 
 
-MODULE:		mpfSerial
-VERSION:	R1-4
-URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/serial/mpfSerial/index.html
-BUILD DEPENDENCIES: EPICS_BASE, MPF
-PROCEDURE:
-- After unzipping and untarring mpfSerial1-4.tar, "mv 1-4 mpfSerial1-4".
-
-
 MODULE:		motor
 VERSION:	4-5
 URL: http://www.aps.anl.gov/upd/people/sluiter/epics/motor/index.html
-BUILD DEPENDENCIES: EPICS_BASE, MPF, MPF_SERIAL, MPF_GPIB
+BUILD DEPENDENCIES: EPICS_BASE, MPF, MPF_GPIB
 PROCEDURE:
 - <top>/config/RELEASE. Uncomment MPF_SERIAL=, MPF=, EPICS_BASE=,
 			TEMPLATE_TOP=, MSITOP= and MPF_GPIB=
@@ -103,7 +116,7 @@ PROCEDURE:
 MODULE:		std
 VERSION:	1-2
 SOURCE: R1-2 CVS tagged release
-BUILD DEPENDENCIES: EPICS_BASE BITBUS
+BUILD DEPENDENCIES: EPICS_BASE, SNCSEQ, MPF
 PROCEDURE:
 NOTES: - Should bitBus be in baseLIBOBJS?
 
@@ -111,7 +124,7 @@ NOTES: - Should bitBus be in baseLIBOBJS?
 MODULE:		dac128V
 VERSION:	1-2
 SOURCE: R1-2 CVS tagged release
-BUILD DEPENDENCIES: EPICS_BASE, MPF
+BUILD DEPENDENCIES: EPICS_BASE, IPAC, MPF
 PROCEDURE:
 - Made <top>/config/RELEASE compatible with makeReleaseConsistent.pl.
 - <top>/config/RULES.Db updated to EPICS base R3.13.5 for 'depends' make target.
@@ -152,7 +165,7 @@ PROCEDURE:
 MODULE:		ip330
 VERSION:	1-5
 SOURCE: R1-5 CVS tagged release
-BUILD DEPENDENCIES: EPICS_BASE, MPF, DAC128V, STD, MCA
+BUILD DEPENDENCIES: EPICS_BASE, IPAC, MPF, DAC128V, STD, MCA
 PROCEDURE:
 - Made <top>/config/RELEASE compatible with makeReleaseConsistent.pl.
 
@@ -164,8 +177,7 @@ NOTES:
 MODULE:		ip
 VERSION:	1-2
 SOURCE: R1-2 CVS tagged release
-BUILD DEPENDENCIES: EPICS_BASE, MPF, MPF_SERIAL, MPF_GPIB, STD, DAC128V,
-			IPUNIDIG, LOVE, IP330
+BUILD DEPENDENCIES: EPICS_BASE, SNCSEQ, MPF, STD
 
 
 ===============================================================================
@@ -183,12 +195,4 @@ All of the following have the same synApps release tag:
 <top>/util   -	Since these are not support modules, and will not be separately
 <top>/xxx	released from synApps; they are tagged along with synApps.
 
-===============================================================================
-	DEVELOPER ISSUES
-===============================================================================
-
-- If a user wants to link iocCore, seq and stdLib into <ioc>Lib, he will get
-multiple definition errors unless dbLoadRecords, dbLoadTemplate, etc. are
-removed from his version of EPICS base.  Non-VxWorks users have no choice
-but to create one load module.
 
