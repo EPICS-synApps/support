@@ -14,8 +14,8 @@ Tornado 2.02.
 
 synApps includes software developed by the Beamline Controls & Data
 Acquisition and Accelerator Controls groups of the Advanced Photon
-Source (APS); by developers in APS Collaborative Access
-Teams--notably, Mark Rivers (CARS-CAT); and by developers in the EPICS
+Source (APS); by developers in APS Collaborative Access Teams --
+notably, Mark Rivers (CARS-CAT); and by developers in the EPICS
 collaboration outside of the APS.
 
 Aside from databases, SNL programs, and the like, synApps contains the
@@ -318,6 +318,7 @@ ioc/
         dbd/
         iocBoot/
             Makefile
+            nfsCommands                      <-- EDIT to boot
             ioc1bma/
                 13element.cmd                <-- EDIT to boot
                 13element.substitutions      <-- EDIT to boot
@@ -340,16 +341,21 @@ ioc/
                 st_mpfserver.cmd             <-- EDIT to boot
             ioc1bmb/
                <much like ioc1bma>
-            nfsCommands                      <-- EDIT to boot
 
         release.pl
-        start_epics_1bma                     <-- EDIT to boot
-        start_epics_1bmb                     <-- EDIT to boot
+        start_epics_1bma                     <-- EDIT to run MEDM
+        start_epics_1bmb                     <-- EDIT to run MEDM
         1bmaApp/
         1bmbApp/
 
     1id/
 	<much like 1bm>
+    .
+    .
+    .
+
+1) Building and configuring a user tree
+=======================================
 
 If you have a built copy of EPICS base 3.13.7 or later, and if you
 have a copy of those modules needed by synApps that aren't included in
@@ -360,16 +366,18 @@ synApps, then building should be very simple:
 2) Edit Makefile to set the variables EPICS_BASE and SUPPORT.  SUPPORT
    should be the full path to the synApps support directory.
 
-3) Run the same make executable used to build EPICS base.
+3) Run the same GNU Make executable used to build EPICS base.  You may
+   need $(EPICS_BASE)/bin/<arch> in your path.
 
 When executed in the support/config directory, make will go to all
 of the modules support/config/Makefile knows about and edit the
 config/RELEASE files in those modules so that they all build from the
-same version of EPICS base and of other known modules.
+same versions of EPICS base and other known modules.
 
-Once synApps' support directory has built without errors, you can
-build a user tree to support your crates.  Make a copy of the
-support/xxx directory, cd to the top-level directory and run
+Once synApps' support directory has built without errors, the xxx
+module will have been configured so that you can use it to build a
+user tree to support your crates.  Make a copy of the support/xxx
+directory, cd to the top-level directory and run
 changePrefix_synApps_4.5 to change the PV-name prefix from xxx to
 whatever you want.  (Note you must have support/utils in your path.)
 Here's what I do:
@@ -382,30 +390,38 @@ Here's what I do:
     cd 1bm
     tar xf $(SYNAPPS)/support/xxx.tar
     changePrefix_synApps_4.5 xxx 1bma
-    <edit iocBoot/ioc1bma/Makefile to specify the processor type>
+    <edit iocBoot/ioc1bma/Makefile to specify the VME processor type>
+    gnumake
+
+To put a second application, 1bmb, into 1bm, I run the following
+commands:
+
+    cd $(SYNAPPS)/ioc
+    mkdir temp
+    cd temp
+    tar xf $(SYNAPPS)/support/xxx.tar
+    changePrefix_synApps_4.5 xxx 1bmb
+    <edit iocBoot/ioc1bmb/Makefile to specify the VME processor type>
+    cd $(SYNAPPS)/ioc
+    mv temp/1bmbApp/start_epics_1bmb 1bm
+    mv temp/1bmbApp 1bm
+    mv temp/iocBoot/ioc1bmb 1bm/iocBoot
+    rm -rf temp
+    cd 1bm
     gnumake
 
 Edit the files marked "EDIT to boot" above to agree with your
 hardware, to load the databases you want, etc., set up the VME
 processor's parameters to load from the software just configured, and
-boot the crate.
+boot the crate.  If you don't know how to do this, read on.
 
+
+2) Setting up the crate
 ======================================================================
-synApps is available in prebuilt form, on request.  The prebuilt
-version does not have to be built again unless you want to add or
-modify C code or database definition (.dbd) code, or to run it on
-hardware other than that for which it was built.  If you need merely
-to modify startup files, databases, medm displays, autosave files, and
-the like, then you don't need to build synApps, nor do you need to
-have built EPICS base to use prebuilt synApps.  Further, if you don't
-have to build synApps, and you don't have other reasons for wanting to
-build base or extensions, then you don't need a VxWorks developer's
-license to use the prebuilt distribution.  You still need a VxWorks
-target license for each VME processor, of course.
 
-Ensure that startCArepeater gets run when your workstation boots.
-If you have no way of doing this, you can run it manually or put the
-command in your .login file.
+Ensure that $(EPICS_BASE)/bin/<arch>/startCArepeater gets run when your
+workstation boots.  If you have no way of doing this, you can run it
+manually or put the command in your .login file.
     
 Setup your host system to work with the EPICS processor.  See the
 "VxWorks Programmer's Guide" if you have a copy.  Here's what we do:
@@ -484,39 +500,43 @@ the following files will be touched:
         a copy of the boot parameters (in case the VME processor
         crashes in a way that erases nonvolatile memory)
 
+
+If you have the appropriate hardware, you may also want to
+customize the following files:
+
+    xxx/iocBoot/iocxxx/13element.substitutions
+        13-element MCA
+
+    xxx/iocBoot/iocxxx/3element.substitutions
+        3-element MCA
+
+    xxx/iocBoot/iocxxx/picMot.substitutions
+        picomotors
+
+    xxx/iocBoot/iocxxx/ip330Scan.substitutions
+        IndustryPack ADC module
+
 3.1) xxx/iocBoot/iocxxx/st.cmd
 ------------------------------
-The distribution copy of this file loads nearly all of the compiled
-software in synApps.  But it loads only those databases consistent
-with a very minimal set of VME hardware: one VME58-8 motor controller,
-one Joerger scaler, and a Hideos processor with an octal-serial
-RS-232 IP.
+The distribution copy of this file contains commands to load nearly
+all of the compiled software in synApps.  But it loads only those
+databases consistent with a very minimal set of VME hardware.
 
 This file is probably worth studying.  It is reasonably well commented,
 and it contains dbLoadRecords() commands for most of the EPICS
 databases in synApps.
 
-If you are converting from xfdApp, be aware that every dbLoad* command
-in st.cmd has changed in form, and many have changed in content.  You
-now must either append a directory name to the dbLoad* command, or 'cd'
-to a directory before invoking it.  Many of the databases from xfdApp
-have new or changed parameters.  In my experience with this conversion,
-it has been much easier to edit the new st.cmd file than to retrofit the
-old one.
-
 3.2) Motors
 -----------
 To load more motors, add lines to the file
-xxx/iocBoot/iocxxx/motor.substitutions, or use gdc313 to make a new motor
-database, and modify st.cmd to load the new database.
+xxx/iocBoot/iocxxx/motor.substitutions.
 
 If you want the new motors to work with the AllStop button
-("xxx:allstop.VAL"--see the top-level medm display xxx.adl), select the
-appropriate version of the file $SHARE_DIR/stdApp/Db/all_com_?.db, or
-edit and load a customized version of the database.  (As delivered,
-xxxApp loads the database all_com_8.db, which supports 8 motors.
-$SHARE_DIR/stdApp/Db contains versions for 8, 16, 20, 24, 32, 40, 48,
-and 56 motors.)
+("xxx:allstop.VAL"--see the top-level medm display xxx.adl), select
+the appropriate version of all_com_?.db, or edit and load a customized
+version of the database.  (As delivered, xxxApp loads the database
+all_com_16.db, which supports 16 motors.  support/std/stdApp/Db
+contains versions for various numbers of motors.)
 
 If you want to manage positions and settings of the new motors using
 the "Save", Restore", and "Compare" buttons on the supplied top-level
@@ -592,7 +612,7 @@ recalibrating any motors.
 -------------------
 Several varieties of crystal monochromators are supported in synApps:
 two constant-offset "channel-cut" monochromators, a high-resolution
-double-crystal monochromator, and a spherical grating monochromator.
+double-crystal monochromator, and a spherical-grating monochromator.
 Most are supported by databases paired with State Notation Language
 (SNL) programs, and several medm displays.  The EPICS databases
 kohzuSeq.db, SNL program kohzuCtl.st, and medm displays kohzu*.adl
@@ -610,17 +630,17 @@ to control the placement of filter material in the beam path.  The
 databases filterMotor.db and filterLock.db, and the medm displays
 *filter*.adl are involved in this application.
 
-3.7) userCalcs, userTransforms
-------------------------------
+3.7) Basic run-time programming
+-------------------------------
 Impromptu coordinated motions and other bits of run-time programming
 are handled by what we call a "userCalc" (actually just a swait record
 with a nice Medm interface) or a "userTransform" (actually just a
-transform record with a nice medm interface).  We normally load five or
-ten of these into each EPICS processor, and the users type in
-expressions to be evaluated, and link inputs and outputs, as needed to
-glue existing objects together to do what they want done at the
-moment.  Here are some examples of the tasks that have been accomplished
-with userCalcs and userTransforms:
+transform record with a nice medm interface).  We normally load ten of
+these into each EPICS processor, and the users type in expressions to
+be evaluated, and link inputs and outputs, as needed to glue existing
+objects together to do what they want done at the moment.  Here are
+some examples of the tasks that have been accomplished with userCalcs
+and userTransforms:
 
 - turn off hardware feedback control of a monochromator crystal when
 beam drops below a user-specified level.  The userCalc monitored the
@@ -650,7 +670,7 @@ userStringCalcs, which resemble userCalcs closely, but differ in
 significant details.  A package containing two stringCalcs and a generic
 serial record (called a "serial O/I block") is also available for
 run-time programming of simple serial-device support.  There is also
-a GPIB O/I block, but it hasn't been tested.
+a GPIB O/I block.
 
 3.9) sequence support
 ---------------------
@@ -672,122 +692,71 @@ the 4step database as you would treat the scaler or mca software.
 --------------------
 See xxx/iocBoot/iocxxx/bootParms for sample boot parameters
 
-4.2) MEDM & BURT
-----------------
+4.2) MEDM
+---------
 See the MEDM Operator's Manual for detailed information on the special
 needs of this Motif program.  I'll assume those needs have been met.
 
-Set the environment variable EPICS_DISPLAY_PATH to include the
-directories $USER_DIR/*App/op/adl and $SHARE_DIR/*App/op/adl.  (See
-$SYNAPPS/bin/set_EPICS_DISPLAY_PATH.)
-
-Set the environment variable BURT_INCLUDE to include the directories
-$SHARE_DIR/*App/op/burt.  (See $SYNAPPS/bin/set_BURT_INCLUDE.)
-
 To bring up the top-level medm display for synApps software, cd to
-xxx and type "start_epics".  All of the EPICS tools we normally
-use can be invoked from this display.  These tools include the data
-catcher, the strip-chart tool, the save/restore tool BURT, and a
-BURT-compatible comparison script "showBurtDiff".
+xxx and type "start_epics_xxx" (e.g., start_epics_1bma).  This
+script locates the directories that might have medm-display files
+and includes them in the environment variable EPICS_DISPLAY_PATH,
+cd's to xxxApp/op/adl, and runs MEDM with the default top-level
+display file.
 
 4.3) autosave/restore
 ---------------------
-You must give the crate write permission to xxx/iocBoot/iocxxx so it
-can write the files auto_positions.sav and auto_settings.sav there.
-Also, 'cd' to xxx/iocBoot and execute the command "chmod g+s iocxxx*" so
-that files the crate writes will be owned by the owner of the directory
-instead of by <vxworks_user> To modify the list of PV's that are saved
-and restored, edit the files
-xxx/iocBoot/iocxxx/auto_settings.req and
-xxx/iocBoot/iocxxx/auto_positions.req
+You must give the crate write permission to
+xxx/iocBoot/iocxxx/autosave so it can write the files
+auto_positions.sav and auto_settings.sav there.  Also, 'cd' to
+xxx/iocBoot and execute the commandIt's also helpful to set the
+autosave directory's 'group' bit so that files the crate writes will
+be owned by the owner of the directory instead of by <vxworks_user>.
+Normally, I do this:
+
+    chmod a+w,g+s autosave
+
+To modify the list of PV's that are saved and restored, edit the files
+
+   xxx/iocBoot/iocxxx/auto_settings.req and
+   xxx/iocBoot/iocxxx/auto_positions.req
 
 The autosave software is started by the lines "create_monitor_set(..."
 in xxx/iocBoot/iocxxx/st.cmd.  The restore happens during iocInit
 as a result of function calls inserted into initHooks.o, which is loaded
 by xxx/iocBoot/iocxxx/st.cmd.
 
-The source code that implements autosave/restore is in $SHARE_DIR/stdApp/src:
-dbrestore.c, save_restore.c, and initHooks.c.
-
-
 Miscellaneous executables, loose ends
 =====================================
 
 doSed
-changePrefix3.13.1
----------------
+changePrefix_synApps_4.5
+------------------------
 These are for the application developer's convenience in changing EPICS
 prefixes in a user tree.
 Example of use:
-    cd /home/oxygen/MOONEY/epics/3.13.1/xxx
-    changePrefix3.13.1 xxx 1bma
+    cd $(SYNAPPS)/ioc/1bm
+    changePrefix_synApps_4.5 xxx 1bma
 
-medm_help.sh
-netURL
-------
-These support online documentation for medm (version 2.2.5 and later)
-displays.  This documentation is Web based, and the script medm_help.sh
-assumed you're using netscape on a unix platform.
-Example of use:
-    setenv MEDM_HELP_DIR /home/sricat/BCDA/epics/3.13.1/medm_help
-    medm&
+==============================================
 
-showBurtDiff
-wrapCmd
-wrapper
--------
-These implement the BURT "Compare" operations called up from the
-top-level medm screen.  (See, e.g., xxx/xxxApp/op/adl/xxx.adl.)
-Example of use:
-    # compare current PV values with those saved in settings.sav
-    burtrb -f settings.req -o current.save 1>&- 2>&-; wrapCmd 'showBurtDiff current.save settings1.save'&
-
-set_EPICS_DISPLAY_PATH
-----------------------
-This sets the environment variable EPICS_DISPLAY_PATH for medm, if the
-environment variable SHARE_DIR points to the share tree.
-Example of use:
-    setenv SHARE_DIR /home/sricat/BCDA/epics/synApps_R3.13.1.1_R4.1/share
-    source set_EPICS_DISPLAY_PATH
-    medm
-
-set_BURT_INCLUDE
-----------------
-This sets the environment variable BURT_INCLUDE, for use in burtrb
-commands, if the environment variable SHARE_DIR points to the share tree.
-Example of use:
-    setenv SHARE_DIR /home/sricat/BCDA/epics/synApps_R3.13.1.1_R4.1/share
-    source set_BURT_INCLUDE
-    burtrb -f <request_file> $BURT_INCLUDE -o <snapshot_file>
-
-gdct313
--------
-This replacement for gdct works only with EPICS 3.13.  If gdct313 will
-not read a database you've carried over from 3.12, and complains about
-a line of the form
-    database(x) { nowhere() {
-then you need to read that database into a recent 3.12-compatible
-version of gdct, make some trivial modification, and save it.
-gdct313 wants to see lines of the form
-    grecord(ao,"myAOrecord") {
-
-Examples of use:
-    In the user tree:
-    gdct313 -s xxxApp.dbd&
-
-    In the share tree:
-    gdct313 -s synApps.dbd&
-
-gdct313 has a problem.  Sometimes when you make a link to a field other than
-<target_record>.VAL, the graphics shows you the correct link, but the record
-actually contains a link to <target_record.VAL>.  You have to Examine the record,
-and use "Edit Attributes" to see what field was actually linked to, and change it
-if necessary.
+synApps is available in prebuilt form, on request.  The prebuilt
+version does not have to be built again unless you want to add or
+modify C code or database definition (.dbd) code, or to run it on
+hardware other than that for which it was built.  If you need merely
+to modify startup files, databases, medm displays, autosave files, and
+the like, then you don't need to build synApps, nor do you need to
+have built EPICS base to use prebuilt synApps.  Further, if you don't
+have to build synApps, and you don't have other reasons for wanting to
+build base or extensions, then you don't need a VxWorks developer's
+license to use the prebuilt distribution.  You still need a VxWorks
+target license for each VME processor, of course.
 
 ===============================================================================
+
 Tim Mooney (mooney@aps.anl.gov)
 Beamline Controls & Data Acquisition Group
 Advanced Photon Source
-10/29/99
+01/22/04
 
 
