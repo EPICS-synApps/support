@@ -1,11 +1,28 @@
+# FILENAME...	makeIocCdCommands.pl
+#
+# ORIGINAL AUTHOR: Janet Anderson
+# CURRENT AUTHOR: Ron Sluiter
+# 
+# SYNOPSIS...	makeIocCdCommands.pl(supporttop_dir, epics_base_dir,
+#				master_config_dir, supporttop_dir)
+#
+# NOTES...
+#	- The Current Working Directory (cwd) command is overridden if the
+#	environment variable EPICS_IOC_STARTUP is defined.  This feature
+#	can be used in network environments where the path reported by the
+#	cwd() command is not that same as that needed in the cdCommands file.
+#
 eval 'exec perl -S $0 ${1+"$@"}'  # -*- Mode: perl -*-
     if $running_under_some_shell; # makeIocCdCommands.pl
 
 use Cwd;
+use Env;
 
 $cwd  = cwd();
-#hack for sun4
-$cwd =~ s|/tmp_mnt||;
+if ($ENV{EPICS_IOC_STARTUP} ne "")
+{
+    $cwd = $ENV{EPICS_IOC_STARTUP};
+}
 $arch = $ARGV[0];
 
 unlink("cdCommands");
@@ -15,7 +32,7 @@ print OUT "startup = \"$cwd\"\n";
 #appbin is kept for compatibility with 3.13.1 
 $appbin = $cwd;
 $appbin =~ s/iocBoot.*//;
-$appbin = $appbin . "/bin/${arch}";
+$appbin = $appbin . "bin/${arch}";
 print OUT "appbin = \"$appbin\"\n";
 
 $top = $cwd;
