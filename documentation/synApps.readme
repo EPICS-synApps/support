@@ -1,4 +1,4 @@
-	Instructions for using synApps 5.0
+	Instructions for using synApps 5.1
 
 synApps is a collection of custom EPICS software (source code, EPICS
 databases, client scripts, executables, etc.) intended to support most
@@ -8,8 +8,8 @@ work together to support an entire SR beamline.  synApps is also
 intended to underly additional software that may be station or
 beamline specific.
 
-This release of synApps is compatible with EPICS release 3.14.5
-and later.  The distribution is setup to build under EPICS R3.14.5
+This release of synApps is compatible with EPICS release 3.14.6
+and later.  The distribution is setup to build under EPICS R3.14.6
 using Tornado 2.02.
 
 synApps includes software developed by the Beamline Controls & Data
@@ -22,40 +22,40 @@ Aside from databases, SNL programs, and the like, synApps contains the
 following code:
 
 record support
-    epid       Extended version of the EPICS PID record, for
-               implementing feedback loops
-    motor      stepper and servo motors, "soft" motor
-    scaler     scaler bank
-    scanparm   scan parameters for use with the scan record
-    table      6-degree-of-freedom optical table
-    transform  like an array of calc records, with output links
-    sCalcout   calcout record extended to handle string expressions,
-	           links, and values.
-    busy       utility record: calls recGblFwdLink only when its
-               VAL field makes a transition to zero.
-    swait      replaces the wait record in base.
-               This version uses a modified version of recDynLlib
-               that supports dbNotify command completion.  It uses
-               ca_put_callback to do puts, instead of ca_put.
-    sscan      Replaces the scan record (Ned Arnold/APS) in base.
-               This version uses a modified version of recDynLlib
-               that supports dbNotify command completion.  It uses
-               ca_put_callback to do puts, instead of ca_put.
-    sseq       string-sequence record.  This is a modified version of
-               the seq record in base.  This version can link to/from
-			   either string or numeric PVs, and it can use
-			   dbCaPutLinkCallback to wait for completion of the
-			   execution started by one link before going on to the
-			   next.
-    serial     generic serial record (Mark Rivers/APS/CARS-CAT)
-    vme        generic vme record (Mark Rivers/APS/CARS-CAT)
-    gpib       generic GPIB record (Mark Rivers/APS/CARS-CAT)
-    mca        support for the Canberra AIM multichannel
-               analyzer and the Struck SIS380x multichannel scaler.
-    timestamp  Needed by the vxStats module, but not available in a
-	           published module.
-    genSub     
-
+    busy	utility record: calls recGblFwdLink only when its
+		VAL field makes a transition to zero.
+    camac	user/database interface to CAMAC bus
+		Execute a CAMAC CNAF command
+    dxp		XIA dxp digital signal processor
+		Set/read signal-processor parameters
+    epid	Extended version of the EPICS PID record, for
+		implementing feedback loops
+    mca		support for multichannel analyzers, and some other
+		array-valued detectors
+    motor	stepper and servo motors, "soft" motor
+    sCalcout	calcout record extended to handle string expressions,
+		links, and values.
+    scaler	scaler bank
+    sscan	Replaces the scan record (Ned Arnold/APS) in base.
+		This version uses a modified version of recDynLlib
+		that supports dbNotify command completion.  It uses
+		ca_put_callback to do puts, instead of ca_put.
+    scanparm	scan parameters for use with the scan record
+    sseq	string-sequence record.  This is a modified version of
+		the seq record in base.  This version can link to/from
+		either string or numeric PVs, and it can use
+		dbCaPutLinkCallback to wait for completion of the
+		execution started by one link before going on to the
+		next.
+    swait	replaces the wait record in base.
+		This version uses a modified version of recDynLlib
+		that supports dbNotify command completion.  It uses
+		ca_put_callback to do puts, instead of ca_put.
+    table	6-degree-of-freedom optical table
+    transform	like an array of calc records, with output links
+    vme		generic vme record (Mark Rivers/APS/CARS-CAT)
+    timestamp	Needed by the vxStats module, but apparently not
+    		available in a published module.
 
 device/driver support
 	# Acromag IP-330 ADC as waveform recorder
@@ -90,18 +90,21 @@ device/driver support
 	# Extended PID (epid) debice support
 	# motor controllers:
 	#    soft support
-	#    Intelligent Motion Systems IM483PL and IM483SM
-	#    Newport MM3000, MM4000/5, PM500 and ESP300
-	#    Oregon Micro Systems VME8/44 and VME58
+	#    Intelligent Motion Systems IM483PL, IM483SM, and PIC844
+	#    Newport MM3000, MM4000/5, PM500, ESP300, and XPSC8
+	#    Oregon Micro Systems VME8/44, VME58, and MAXv
 	#    E500 (a CAMAC module)
-	#    Advanced Control Systems MCB-4B")
+	#    Advanced Control Systems MCB-4B
 	#    MDrive
 	#    MXmotor
 	#    Mclennan PM304
+	#    Delta Tau PMAC
+	#    Micos MoCo
+	#    Micro Mo MVP2001
 	# scalers:
 	#    Joerger VSC8/16
-	#    ??? CAMAC
-	#    Struck STR7201
+	#    CAMAC DSP RTC-018 timer and QS-450 quad scaler
+	#    Struck STR7201, SIS 38xx
 	# generic serial
 	# MPFread, MPFwriteRead, MPFwrite
 
@@ -126,13 +129,13 @@ synApps, you must acquire and build EPICS base and other modules
 on which synApps depends.  Here's a list of the modules and the
 version with which synApps is known to work.
 
-EPICS baseR3.14.5   or later 3.14 release
-allenBradley2-1     if you intend to connect with Allen Bradley PLC's
-ipac2-7             required by mpf
-mpf2-4-2            required by mca, dac128V, ip, ip330, love, motor,
-                    quadEM
-seq2-0-8            for SNL programs in synApps
-vxStats1-7-2a		vxWorks stats
+EPICS baseR3.14.6  or later 3.14 release
+allenBradley2-1    if you intend to connect with Allen Bradley PLC's
+ipac2-7a           required for IndustryPack support
+asyn3-4            required by mca, dac128V, ip, ip330, motor, quadEM
+seq2-0-8           for SNL programs in synApps
+vxStats1-7-2a      vxWorks statistics
+genSub1-6          the genSub record
 
 Here's a list of the modules included in synApps:
 
@@ -248,7 +251,7 @@ ioc/
 1) Building and configuring a user tree
 =======================================
 
-If you have a built copy of EPICS base 3.14.5 or later,  then building
+If you have a built copy of EPICS base 3.14.6 or later,  then building
 synApps should be very simple:
 
 1) Either get all the external modules on which synApps depends from
@@ -258,9 +261,10 @@ synApps should be very simple:
    the support/MOD_TAR directory.  The modules are expected to be
    in the support directory, along with the synApps modules.
 
-2) Edit support/config/Makefile to set the variables SUPPORT and
-   EPICS_BASE.  SUPPORT should be the full path to the synApps
-   support directory.
+2) Edit support/config/MASTER_RELEASE to set the variables SUPPORT
+   and EPICS_BASE.  SUPPORT should be the full path to the synApps
+   support directory.  Also edit support/config/Makefile to select
+   which modules you want to build.
 
 3) Edit motor/motorApp/Makefile to select the motor support you
    want to build.
@@ -346,14 +350,14 @@ Setup your host system to work with the EPICS processor.  See the
     Type "p" to see the current boot parameters,  type "c" to
     change them.  Here are sample boot parameters 
 
-    boot device          : ei 
+    boot device          : dc 
     processor number     : 0 
     host name            : server 
-    file name            : /usr/local/vxWorks/T202/mv2700
+    file name            : /usr/local/vxWorks/T202/mv2700-asd7
     inet on ethernet (e) : xxx.xxx.xxx.xxx:fffffe00 
     inet on backplane (b): 
     host inet (h)        : xxx.xxx.xxx.xxx
-    gateway inet (g)     : xxx.xxx.xxx.xxx
+    gateway inet (g)     : 
     user (u)             : <vx_username> 
     ftp password (pw) (blank = use rsh): <vx_password>  
     flags (f)            : 0x0
@@ -570,14 +574,13 @@ incident beam energy changes.
 ------------------------------
 Run-time programming involving strings and/or numbers can be done with
 userStringCalcs, which resemble userCalcs closely, but differ in
-significant details.  A package containing two stringCalcs and a generic
-serial record (called a "serial O/I block") is also available for
-run-time programming of simple serial-device support.  There is also
-a GPIB O/I block.
+significant details.  A package containing two stringCalcs and an 'asyn'
+record (called a "deviceCmdReply") is also available for run-time
+programming of simple serial- and GPIB-device support.
 
 3.9) sequence support
 ---------------------
-Run-time programming of sequences is possible using the new sseq record
+Run-time programming of sequences is possible using the sseq record
 and related medm displays yySseq.adl
 
 3.10) multiple-step measurement
@@ -610,6 +613,15 @@ be able to name only the broadcast address for the subnet that contains
 the ioc's, but if this doesn't work, you can put in the IP addresses of
 all the ioc's you want to connect with, separated by spaces, as follows:
 setenv EPICS_CA_ADDR_LIST "164.54.53.126 164.54.53.127"
+
+If you want to use arrays larger than 16000 bytes (e.g., MCA spectra of
+more than 4000 channels, scans of more than 2000 data points), you must
+set the environment variable EPICS_CA_MAX_ARRAY_BYTES, in *both* the ioc
+and workstation, to the size of the largest array you plan to send over
+the network.  On a Unix system, for example, you might say
+	setenv EPICS_CA_MAX_ARRAY_BYTES 64008
+in the ioc's st.cmd file, you'd say
+	putenv "EPICS_CA_MAX_ARRAY_BYTES=64008"
 
 To bring up the top-level medm display for synApps software, cd to
 xxx and type "start_epics_xxx" (e.g., start_epics_1bma).  This
@@ -699,6 +711,6 @@ files, substitution files and st.cmd).
 Tim Mooney (mooney@aps.anl.gov)
 Beamline Controls & Data Acquisition Group
 Advanced Photon Source
-3/4/2004
+9/30/2004
 
 
