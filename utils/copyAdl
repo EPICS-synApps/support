@@ -1,0 +1,17 @@
+#!/bin/csh
+
+if ($1 == "" || $2 == "") then
+echo "usage: copyAdl support_directory adl_directory"
+echo "example: copyAdl /home/epics/synApps_4_6/support ."
+exit
+endif
+
+if (!(-e $2)) mkdir $2
+if (!(-d $2)) then
+    echo "'$2' exists and is not a directory.  Nothing done."
+    exit
+endif
+foreach i (`find $1 -name adl -print`)
+echo "copying from" $i
+cp $i/*.adl $2
+end
