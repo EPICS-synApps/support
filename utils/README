@@ -33,7 +33,8 @@ VERSION:	R1-6
 URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/mpf/
 BUILD DEPENDENCIES: EPICS_BASE, IPAC
 PROCEDURE:
-- Replaced makeConfigAppInclude.pl with utils/makeConfigAppInclude.pl
+- Replaced makeConfigAppInclude.pl and makeIocCdCommands.pl with copies from
+the support/utils directory.
 - Configured <top>/config/RELEASE. <top>/config/RELEASE copied from
 	utils/RELEASE.  Deleted everthing except EPICS_BASE_RELEASE and IPAC.
 
@@ -55,7 +56,8 @@ VERSION:	R1-2
 URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/serial/mpfSerial/index.html
 BUILD DEPENDENCIES: EPICS_BASE, MPF
 PROCEDURE:
-- Replaced makeConfigAppInclude.pl with utils/makeConfigAppInclude.pl
+- Replaced makeConfigAppInclude.pl and makeIocCdCommands.pl with copies from
+the support/utils directory.
 - Configured <top>/config/RELEASE. <top>/config/RELEASE copied from
 	utils/RELEASE.  Deleted everthing except EPICS_BASE_RELEASE and MPF.
 
@@ -71,7 +73,8 @@ URL: http://www.aps.anl.gov/upd/people/sluiter/epics/modules/mechanism/motor/ind
 BUILD DEPENDENCIES: EPICS_BASE, MPF, MPF_SERIAL, MPF_GPIB
 PROCEDURE:
 - Replaced RULES.Vx  with xxx/config/RULES.Vx (R3.13.4 update).
-- Replaced makeConfigAppInclude.pl with utils/makeConfigAppInclude.pl
+- Replaced makeConfigAppInclude.pl and makeIocCdCommands.pl with copies from
+the support/utils directory.
 - <top>/motorApp/Makefile.  All device support selected.
 - <top>/motorExApp/Makefile.  Build motor examples.
 - Configured <top>/config/RELEASE;
@@ -184,8 +187,6 @@ PROCEDURE:
 	drvSTR7201.h;1, etc..
 - Change "SHARE_BIN = ." to "MCA_BIN = ." in Makefile.Vx, mcaMpfServerLIBOBJS
 	and mcaLIBOBJS.
-??
-
 - Added devMCA_soft.c to Makefile.Vx and mcaLIBOBJS.
 - Configured <top>/config/RELEASE.
 
