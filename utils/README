@@ -55,12 +55,12 @@ PROCEDURE:
 - After unzipping and untarring ipac-2.4.tar.gz; "mv ipac-2.4 ipac2-4".
 
 MODULE:		mpf
-VERSION:	R1-8
+VERSION:	R1-10
 URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/mpf/
 BUILD DEPENDENCIES: EPICS_BASE, IPAC
 PROCEDURE:
-- After unzipping and untarring mpf1-8.tar, "mv 1-8 mpf1-8".
-- cd <supporttop>; chmod u+w mpf1-8/config/RELEASE
+- After unzipping and untarring mpf1-10.tar, "mv 1-10 mpf1-10".
+- cd <supporttop>; chmod u+w mpf1-10/config/RELEASE
 
 
 MODULE:		mpfGpib
@@ -97,7 +97,7 @@ PROCEDURE:
 
 
 MODULE:		motor
-VERSION:	4-5
+VERSION:	4-6
 URL: http://www.aps.anl.gov/upd/people/sluiter/epics/motor/index.html
 BUILD DEPENDENCIES: EPICS_BASE, MPF, MPF_SERIAL, MPF_GPIB
 PROCEDURE:
@@ -109,28 +109,25 @@ PROCEDURE:
 
 
 MODULE:		std
-VERSION:	1-2
-SOURCE: R1-2 CVS tagged release
+VERSION:	1-3
+SOURCE: R1-3 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE BITBUS
 PROCEDURE:
 NOTES: - Should bitBus be in baseLIBOBJS?
 
 
 MODULE:		dac128V
+VERSION:	1-3
+SOURCE: R1-3 CVS tagged release
+BUILD DEPENDENCIES: EPICS_BASE, MPF
+PROCEDURE:
+
+MODULE:		ipUnidig
 VERSION:	1-2
 SOURCE: R1-2 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE, MPF
 PROCEDURE:
 - Made <top>/config/RELEASE compatible with makeReleaseConsistent.pl.
-- <top>/config/RULES.Db updated to EPICS base R3.13.5 for 'depends' make target.
-
-MODULE:		ipUnidig
-VERSION:	1-1
-SOURCE: R1-1 CVS tagged release
-BUILD DEPENDENCIES: EPICS_BASE, MPF
-PROCEDURE:
-- Made <top>/config/RELEASE compatible with makeReleaseConsistent.pl.
-- <top>/config/RULES.Db updated to EPICS base R3.13.5 for 'depends' make target.
 
 
 MODULE:		love
@@ -141,8 +138,8 @@ PROCEDURE:
 
 
 MODULE:		mca
-VERSION:	5-2
-SOURCE: R5-2 CVS tagged release
+VERSION:	5-3
+SOURCE: R5-3 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE, MPF, STD
 PROCEDURE:
 
@@ -158,8 +155,8 @@ PROCEDURE:
 
 
 MODULE:		ip330
-VERSION:	1-5
-SOURCE: R1-5 CVS tagged release
+VERSION:	1-6
+SOURCE: R1-6 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE, MPF, DAC128V, STD, MCA
 PROCEDURE:
 - Made <top>/config/RELEASE compatible with makeReleaseConsistent.pl.
