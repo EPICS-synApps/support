@@ -9,31 +9,17 @@
 #
 # Add your declarations here
 
-# RELEASE - Location of master IP release file.
-include $(EPICS_SUPPORT_PATH)/config/IP_RELEASE
-# RELEASE - Location of master IP330 release file.
-include $(EPICS_SUPPORT_PATH)/config/IP330_RELEASE
-# RELEASE - Location of master MCA release file.
-include $(EPICS_SUPPORT_PATH)/config/MCA_RELEASE
-# RELEASE - Location of master LOVE release file.
-include $(EPICS_SUPPORT_PATH)/config/LOVE_RELEASE
-# RELEASE - Location of master IPUNIDIG release file.
-include $(EPICS_SUPPORT_PATH)/config/IPUNIDIG_RELEASE
-# RELEASE - Location of master DAC128V release file.
-include $(EPICS_SUPPORT_PATH)/config/DAC128V_RELEASE
-# RELEASE - Location of master MOTOR release file.
-include $(EPICS_SUPPORT_PATH)/config/MOTOR_RELEASE
-# RELEASE - Location of master STD release file.
-include $(EPICS_SUPPORT_PATH)/config/STD_RELEASE
-# RELEASE - Location of master BITBUS release file.
-include $(EPICS_SUPPORT_PATH)/config/BITBUS_RELEASE
-# RELEASE - Location of master MPF SERIAL release file.
-include $(EPICS_SUPPORT_PATH)/config/MPFSERIAL_RELEASE
-# RELEASE - Location of master MPF GPIB release file.
-include $(EPICS_SUPPORT_PATH)/config/MPFGPIB_RELEASE
-# RELEASE - Location of master IPAC release file.
-include $(EPICS_SUPPORT_PATH)/config/IPAC_RELEASE
-# RELEASE - Location of master MPF release file.
-include $(EPICS_SUPPORT_PATH)/config/MPF_RELEASE
-# RELEASE - Location of master EPICS base release file.
-include $(EPICS_SUPPORT_PATH)/config/EPICS_BASE_RELEASE
+include $(TOP)/../config/IP_RELEASE
+include $(TOP)/../config/IP330_RELEASE
+include $(TOP)/../config/MCA_RELEASE
+include $(TOP)/../config/LOVE_RELEASE
+include $(TOP)/../config/IPUNIDIG_RELEASE
+include $(TOP)/../config/DAC128V_RELEASE
+include $(TOP)/../config/STD_RELEASE
+include $(TOP)/../config/MOTOR_RELEASE
+include $(TOP)/../config/MPFGPIB_RELEASE
+include $(TOP)/../config/MPFSERIAL_RELEASE
+include $(TOP)/../config/MPF_RELEASE
+include $(TOP)/../config/IPAC_RELEASE
+include $(TOP)/../config/BITBUS_RELEASE
+include $(TOP)/../config/RELEASE
