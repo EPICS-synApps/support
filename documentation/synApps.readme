@@ -357,20 +357,23 @@ ioc/
 1) Building and configuring a user tree
 =======================================
 
-If you have a built copy of EPICS base 3.13.7 or later, and if you
-have copies of those modules needed by synApps that aren't included in
-synApps, then building should be very simple:
+If you have a built copy of EPICS base 3.13.7 or later,  then building
+synApps should be very simple:
 
-1) cd to support/config, check out the README file for any special
-   instructions for building or configuring external modules
+1) Either get all the external modules on which synApps depends from
+   their web sources (see support/config/README) and modify them
+   according to the procedures in support/config/README, or just
+   untar the already-modified copies of those distributions from
+   the support/MOD_TAR directory.  The modules are expected to be
+   in the support directory, along with the synApps modules.
 
-2) Edit Makefile to set the variable SUPPORT.  SUPPORT should be the
-   full path to the synApps support directory.
+2) Edit support/config/Makefile to set the variable SUPPORT.  SUPPORT
+   should be the full path to the synApps support directory.
 
-3) Edit MASTER_RELEASE to set the variable EPICS_BASE.
+3) Edit support/config/MASTER_RELEASE to set the variable EPICS_BASE.
 
-4) Run the same GNU Make executable used to build EPICS base.  You may
-   need $(EPICS_BASE)/bin/<arch> in your path.
+4) in support/config, run the same GNU Make executable used to build
+   EPICS base.  You may need $(EPICS_BASE)/bin/<arch> in your path.
 
 When executed in the support/config directory, make will go to all
 of the modules support/config/Makefile knows about and edit the
