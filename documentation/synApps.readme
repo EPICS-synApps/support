@@ -287,7 +287,12 @@ synApps should be very simple:
 3) Edit motor/motorApp/Makefile to select the motor support you
    want to build.
 
-4) in support/config, run the same GNU Make executable used to build
+4) Set the environment variable EPICS_HOST_ARCH to the architecture
+   (and compiler, if there is a choice) on which you are building.
+   I used solaris-sparc-gnu, and linux-x86.  I wasn't able to get
+   solaris-sparc to work.
+
+5) in support/config, run the same GNU Make executable used to build
    EPICS base.  You may need $(EPICS_BASE)/bin/<arch> in your path.
 
 When executed in the support/config directory, make will go to all
@@ -304,6 +309,7 @@ must have support/utils in your path.)
 Here's what I do:
 
     cd $(SYNAPPS)/support/xxx
+	setenv EPICS_HOST_ARCH <host architecture>
     gnumake clean uninstall
     tar cvf ../xxx.tar *
     cd $(SYNAPPS)/ioc
