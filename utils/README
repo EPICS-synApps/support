@@ -4,14 +4,14 @@
 Edit the following for your site:
 
 <supporttop>/config/RELEASE - Set EPICS_BASE to EPICS base pathname.
-<supporttop>/xxx/config/RELEASE - Set SUPPORT to <supporttop> pathname.
+<supporttop>/xxx/configure/RELEASE - Set SUPPORT to <supporttop> pathname.
 <supporttop>/utils/Makefile - Set SUPPORT to <supporttop> pathname.
 			    - Add/delete support modules by adding/deleting
 			    '#' to the four entries for each support module;
 			 
 			    include $(SUPPORT)/config/<module>_RELEASE
 			    DIRS += $(module)
-			    RELEASE_FILES += $(module)/config/RELEASE
+			    RELEASE_FILES += $(module)/configure/RELEASE
 			    MASTER_FILES  += $(SUPPORT)/config/<module>_RELEASE
 
 To rebuild synApps;
@@ -25,7 +25,7 @@ gnumake clean uninstall;gnumake
 ==============================================================================
 
 MODULE:		EPICS base
-VERSION:	R3.14.2
+VERSION:	R3.14.3
 BUILD DEPENDENCIES: Tornado 2.0.2
 
 
@@ -37,13 +37,13 @@ BUILD DEPENDENCIES: EPICS_BASE
 PROCEDURE:
 
 MODULE:		seq
-VERSION:	2.0.4
+VERSION:	2.0.7
 URL:  http://www.slac.stanford.edu/comp/unix/package/epics/sequencer
 BUILD DEPENDENCIES: EPICS_BASE
 PROCEDURE:
-- After unzipping and untarring seq-2.0.4.tar.gz;
+- After unzipping and untarring seq-2.0.7.tar.gz;
 	cd <supporttop>;
-	mv seq-2.0.4 seq-2-0-4; chmod u+w seq-2-0-4/configure/RELEASE
+	mv seq-2.0.7 seq-2_0_7; chmod u+w seq-2_0_7/configure/RELEASE
 
 MODULE:		allenBradley
 VERSION:	1-7
@@ -64,16 +64,16 @@ VERSION:	2.5
 URL: http://www.aps.anl.gov/asd/people/anj/ipac/
 BUILD DEPENDENCIES: EPICS_BASE
 PROCEDURE:
-- After unzipping and untarring ipac-2.5.tar.gz; "mv ipac-2.5 ipac2-5".
+- After unzipping and untarring ipac-2.5.tar.gz; "mv ipac-2.5 ipac-2_5".
 - Delete the SUPPORT= line from configure/RELEASE.
 
 MODULE:		mpf
-VERSION:	R2-2
+VERSION:	R2-4
 URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/mpfosi/
 BUILD DEPENDENCIES: EPICS_BASE, IPAC
 PROCEDURE:
-- After unzipping and untarring mpf2-2.tar.gz;
-	cd <supporttop>; chmod u+w mpf2-2/configure/RELEASE
+- After unzipping and untarring mpf2-4.tar.gz; "mv mpf2-4 mpf-2_4".
+	cd <supporttop>; chmod u+w mpf-2_4/configure/RELEASE
 
 
 MODULE:		mpfGpib
