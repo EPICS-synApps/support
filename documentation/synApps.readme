@@ -8,8 +8,8 @@ work together to support an entire SR beamline.  synApps is also
 intended to underly additional software that may be station or
 beamline specific.
 
-This release of synApps is compatible with EPICS release 3.14.6
-and later.  The distribution is setup to build under EPICS R3.14.6
+This release of synApps is compatible with EPICS release 3.14.7
+and later.  The distribution is intended to build under EPICS R3.14.7
 using Tornado 2.02.
 
 synApps includes software developed by the Beamline Controls & Data
@@ -87,7 +87,7 @@ device/driver support
 	# Varoc SSI encoder interface board
 	# StringParm device support for various records
 	# IP330 ADC
-	# Extended PID (epid) debice support
+	# Extended PID (epid) record device support
 	# motor controllers:
 	#    soft support
 	#    Intelligent Motion Systems IM483PL, and IM483SM
@@ -103,11 +103,13 @@ device/driver support
 	#    Micos MoCo
 	#    Micro Mo MVP2001
 	# scalers:
-	#    Joerger VSC8/16
+	#    Joerger VSC series
+	#    Joerger VS series
 	#    CAMAC DSP RTC-018 timer and QS-450 quad scaler
 	#    Struck STR7201, SIS 38xx
 	# generic serial
 	# MPFread, MPFwriteRead, MPFwrite
+	# soft device support for the sCalcout record
 
 miscellaneous C code
 
@@ -121,6 +123,7 @@ miscellaneous C code
 		Automatic parameter save and boot-time restore.
 	saveData
 		Saves scan data to files on an NFS-mounted disk.
+	
 		
 How to use synApps
 ------------------
@@ -130,10 +133,10 @@ synApps, you must acquire and build EPICS base and other modules
 on which synApps depends.  Here's a list of the modules and the
 version with which synApps is known to work.
 
-EPICS baseR3.14.6  or later 3.14 release
+EPICS baseR3.14.7  or, possibly, a later 3.14 release
 allenBradley2-1    if you intend to connect with Allen Bradley PLC's
-ipac2-7a           required for IndustryPack support
-asyn3-4            required by mca, dac128V, ip, ip330, motor, quadEM
+ipac2-8            required for IndustryPack support
+asyn4-1            required by mca, dac128V, ip, ip330, motor, quadEM
 seq2-0-8           for SNL programs in synApps
 vxStats1-7-2a      vxWorks statistics
 genSub1-6          the genSub record
@@ -143,7 +146,8 @@ Here's a list of the modules included in synApps:
 autosave      save-restore
 calc          run-time expression evaluation
 camac         CAMAC support
-ccd           various scientific CCD detectors
+ccd           scientific CCD detectors, including Bruker, MAR, and Roper
+				detectors
 dac128V       IndustryPack DAC
 dxp           DSP
 ip            various serial devices
@@ -211,35 +215,48 @@ ioc/
         dbd/
         iocBoot/
             Makefile
-            nfsCommands                      <-- EDIT to boot
+            nfsCommands
             ioc1bma/
-                13element.cmd                <-- EDIT to boot
-                13element.substitutions      <-- EDIT to boot
-                3element.cmd                 <-- EDIT to boot
-                3element.substitutions       <-- EDIT to boot
-                MPFconfig.cmd                <-- EDIT to boot
-                Makefile                     <-- EDIT to boot
-                auto_positions.req           <-- EDIT to boot
-                auto_settings.req            <-- EDIT to boot
-                autosave/                    < chmod a+w,g+s>
-                basic_motor.substitutions    <-- EDIT to boot
+                Makefile
+				camac.cmd
+				canberra_1.cmd
+				canberra_13.cmd
+				canberra_3.cmd
+				dac128V.cmd
+				dxp_16.cmd
+				industryPack.cmd
+				ip330.cmd
+				ipUnidig.cmd
+				quadEM.cmd
+				save_restore.cmd
+				serial.cmd
+				vme.cmd
+				st.cmd
+				basic_motor.substitutions
+				canberra_13.substitutions
+				canberra_3.substitutions
+				dac128V.substitutions
+				dxp_16.substitutions*
+				ip330Scan.substitutions
+				ipUnidig.substitutions
+				motor.substitutions
+				picMot.substitutions
+				pid_fast.substitutions*
+				pid_slow.substitutions*
+				quadEM_pid.substitutions
+				scanParms.substitutions
+				vxStats.substitutions
+                auto_positions.req 
+                auto_settings.req
+                autosave/
                 cdCommands
-                ip330Scan.substitutions      <-- EDIT to boot
-                dac128V.substitutions        <-- EDIT to boot
-                motor.substitutions          <-- EDIT to boot
-                picMot.substitutions         <-- EDIT to boot
-                saveData.req                 <-- EDIT to boot
-                scanParms.substitutions      <-- EDIT to boot
-                st.cmd                       <-- EDIT to boot
-                st1.cmd                      <-- EDIT to boot
-                st1_mpfserver.cmd            <-- EDIT to boot
-                st_mpfserver.cmd             <-- EDIT to boot
+                saveData.req 
             ioc1bmb/
                <much like ioc1bma>
 
         release.pl
-        start_epics_1bma                     <-- EDIT to run MEDM
-        start_epics_1bmb                     <-- EDIT to run MEDM
+        start_epics_1bma
+        start_epics_1bmb
         1bmaApp/
         1bmbApp/
 
@@ -252,14 +269,14 @@ ioc/
 1) Building and configuring a user tree
 =======================================
 
-If you have a built copy of EPICS base 3.14.6 or later,  then building
+If you have a built copy of EPICS base 3.14.7 or later,  then building
 synApps should be very simple:
 
 1) Either get all the external modules on which synApps depends from
    their web sources (see support/config/README) and modify them
    according to the procedures in support/config/README, or just
    untar the already-modified copies of those distributions from
-   the support/MOD_TAR directory.  The modules are expected to be
+   the support/TAR directory.  The modules are expected to be
    in the support directory, along with the synApps modules.
 
 2) Edit support/config/MASTER_RELEASE to set the variables SUPPORT
@@ -314,10 +331,10 @@ commands:
     cd 1bm
     gnumake
 
-Edit the files marked "EDIT to boot" above to agree with your
-hardware, to load the databases you want, etc., set up the VME
-processor's parameters to load from the software just configured, and
-boot the crate.  If you don't know how to do this, read on.
+Edit the files above to agree with your hardware, to load the databases you
+want, etc., set up the VME processor's parameters to load from the software
+just configured, and boot the crate.  If you don't know how to do this, read
+on.
 
 
 2) Setting up the crate
@@ -387,40 +404,22 @@ In a complete job of fitting synApps to a VME crate's hardware, all of
 the following files will be touched:
 
     xxx/iocBoot/ioc*/st.cmd
-        specifies installed hardware, loads desired software
+		This is the ioc's startup script, and it loads the other .cmd files 
 
-    xxx/iocBoot/ioc*/motor.substitutions
-        specifies motors    
-
-    xxxApp/iocBoot/ioc*/scanParms.substitutions
-        attaches scan parameters to selected PV's
-
+    xxx/iocBoot/ioc*/*.cmd
+    xxx/iocBoot/ioc*/*.substitutions
+		
     xxx/iocBoot/ioc*/auto_positions.req
     xxx/iocBoot/ioc*/auto_settings.req
         specifies PV's to be saved/restored automatically
 
-    xxx/iocBoot/ioc*/saveData.req
-        identifies PV's used by the saveData software, and identifies
-        sscan records to be monitored for data
+	xxx/iocBoot/ioc*/saveData.req identifies PV's used by the saveData
+		software,  sscan records to be monitored for data, and PV's whose
+		values are to be included in all scan-data files.
 
     xxx/iocBoot/ioc*/bootParms
         a copy of the boot parameters (in case the VME processor
         crashes in a way that erases nonvolatile memory)
-
-If you have the appropriate hardware, you may also want to
-customize the following files:
-
-    xxx/iocBoot/ioc*/13element.substitutions
-        13-element MCA
-
-    xxx/iocBoot/ioc*/3element.substitutions
-        3-element MCA
-
-    xxx/iocBoot/ioc*/picMot.substitutions
-        picomotors
-
-    xxx/iocBoot/ioc*/ip330Scan.substitutions
-        IndustryPack ADC module
 
 3.1) xxx/iocBoot/ioc*/st.cmd
 ------------------------------
@@ -453,8 +452,6 @@ If you want the VME crate automatically to save positions and settings
 of the new motors, and restore them when the crate reboots, add lines
 to the files xxx/iocBoot/ioc*/auto_settings.req and
 xxx/iocBoot/ioc*/auto_positions.req.
-
-
 
 3.3) Slits
 ----------
