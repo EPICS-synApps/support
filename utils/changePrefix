@@ -1,24 +1,19 @@
 #!/bin/sh
-# changePrefix_synApps_4.6
+# changePrefix v5.0
 if [ $# -lt 2 ]; then
-	printf "%s\n" "usage: changePrefix_synApps_4.6 old new"
-	printf "%s\n" "example: changePrefix_synApps_4.6 xxx 1bma"
+	printf "%s\n" "usage: changePrefix old new"
+	printf "%s\n" "example: changePrefix xxx 1bma"
 	exit
 fi
 
 old=$1
 new=$2
 if [ ! -d ${old}App ]; then
-	printf "%s\n" "changePrefix_synApps_4.6: ${old}App not found.  Nothing done."
+	printf "%s\n" "changePrefix: ${old}App not found.  Nothing done."
 	exit
 fi
 if [ ! -d iocBoot ]; then
-	printf "%s\n" "changePrefix_synApps_4.6: iocBoot not found.  Nothing done."
-	exit
-fi
-
-if [ ! -d iocBoot/ioc${old} ]; then
-	printf "%s\n" "changePrefix_synApps_4.6: iocBoot/ioc${old} not found.  Nothing done."
+	printf "%s\n" "changePrefix: iocBoot not found.  Nothing done."
 	exit
 fi
 
@@ -54,34 +49,38 @@ doSed "s/${old}/${new}/g" Makefile
 
 printf "\r%-50s" "iocBoot/"
 cd ${TOP}/iocBoot
-mv ioc${old} ioc${new}
-cd ioc${new}
-for file in *.cmd*
-do
-	printf "\r%-50s" "$file"
-	doSed "s!/${old}/!/${new}/!g" $file
-	doSed "s/${old}:/${new}:/g" $file
-	doSed "s/${old}\./${new}./g" $file
-	doSed "s/ioc${old}/ioc${new}/g" $file
-	doSed "s/${old}Lib/${new}Lib/g" $file
-	doSed "s/${old}App/${new}App/g" $file
-	doSed "s/=${old}/=${new}/g" $file
-	doSed "/dbLoadDatabase/s/${old}/${new}/g" $file
-	doSed "/registerRecordDeviceDriver/s/${old}/${new}/g" $file
-	doSed "/shellPromptSet/s/${old}/${new}/g" $file
+for dir in ioc*
+	do
+	cd ${TOP}/iocBoot/$dir
+	for file in *.cmd*
+	do
+		printf "\r%-50s" "$file"
+		doSed "s!/${old}/!/${new}/!g" $file
+		doSed "s/${old}:/${new}:/g" $file
+		doSed "s/${old}\./${new}./g" $file
+		doSed "s/ioc${old}/ioc${new}/g" $file
+		doSed "s/${old}Lib/${new}Lib/g" $file
+		doSed "s/${old}App/${new}App/g" $file
+		doSed "s/=${old}/=${new}/g" $file
+		doSed "/dbLoadDatabase/s/${old}/${new}/g" $file
+		doSed "/registerRecordDeviceDriver/s/${old}/${new}/g" $file
+		doSed "/shellPromptSet/s/${old}/${new}/g" $file
+	done
+	for file in auto*.req
+	do
+		printf "\r%-50s" "$file"
+		doSed "s/${old}:/${new}:/g" $file
+	done
+	for file in *.substitutions
+	do
+		printf "\r%-50s" "$file"
+		doSed "s/${old}:/${new}:/g" $file
+	done
+	if [ -f bootParms ]; then
+		doSed "s!/${old}/!/${new}/!g" bootParms
+		doSed "s/ioc${old}/ioc${new}/g" bootParms
+	fi
 done
-for file in auto*.req
-do
-	printf "\r%-50s" "$file"
-	doSed "s/${old}:/${new}:/g" $file
-done
-for file in *.substitutions
-do
-	printf "\r%-50s" "$file"
-	doSed "s/${old}:/${new}:/g" $file
-done
-doSed "s!/${old}/!/${new}/!g" bootParms
-doSed "s/ioc${old}/ioc${new}/g" bootParms
 
 printf "\r%-50s" "${new}App/op"
 cd ${TOP}/${new}App/op
