@@ -24,7 +24,7 @@ FOR each master file.
     WHILE master file lines left to process.
 	Skip whitespace.
 	Parse input line for macro assignment.
-	IF TOP macro found.
+	IF SUPPORT macro found.
 	    Prefix $supporttop to pathname.
 	ENDIF
 	Assign macro to master macro list.
@@ -57,9 +57,9 @@ FOR each release file.
 ENDFOR
 =cut
 #
-# Version:	$Revision: 1.1 $
+# Version:	$Revision: 1.2 $
 # Modified By:	$Author: sluiter $
-# Last Modified:$Date: 2001-11-02 21:59:01 $
+# Last Modified:$Date: 2001-11-05 20:42:37 $
 
 # NOTE with Perl 5.6, replace the following with File::Temp.
 use POSIX;
@@ -98,7 +98,7 @@ for ($itera = 0; $itera < $mitera; $itera++)
 	chomp($line);
 	$_ = $line;
 	($prefix,$macro,$post) = /(.*)\s*=\s*\$\((.*)\)(.*)/;
-	if ($macro ne "" && $macro eq "TOP")
+	if ($macro ne "" && $macro eq "SUPPORT")
 	{
 	    $post = $supporttop . $post;
 	}

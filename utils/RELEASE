@@ -9,17 +9,21 @@
 #
 # Add your declarations here
 
-include $(TOP)/../config/IP_RELEASE
-include $(TOP)/../config/IP330_RELEASE
-include $(TOP)/../config/MCA_RELEASE
-include $(TOP)/../config/LOVE_RELEASE
-include $(TOP)/../config/IPUNIDIG_RELEASE
-include $(TOP)/../config/DAC128V_RELEASE
-include $(TOP)/../config/STD_RELEASE
-include $(TOP)/../config/MOTOR_RELEASE
-include $(TOP)/../config/MPFGPIB_RELEASE
-include $(TOP)/../config/MPFSERIAL_RELEASE
-include $(TOP)/../config/MPF_RELEASE
-include $(TOP)/../config/IPAC_RELEASE
-include $(TOP)/../config/BITBUS_RELEASE
-include $(TOP)/../config/RELEASE
+SUPPORT=!!Set to <supporttop> complete pathname!!
+
+include $(SUPPORT)/config/IP_RELEASE
+include $(SUPPORT)/config/IP330_RELEASE
+include $(SUPPORT)/config/CAMAC_RELEASE
+include $(SUPPORT)/config/MCA_RELEASE
+include $(SUPPORT)/config/LOVE_RELEASE
+include $(SUPPORT)/config/IPUNIDIG_RELEASE
+include $(SUPPORT)/config/DAC128V_RELEASE
+include $(SUPPORT)/config/MOTOR_RELEASE
+include $(SUPPORT)/config/STD_RELEASE
+include $(SUPPORT)/config/BITBUS_RELEASE
+include $(SUPPORT)/config/MPFGPIB_RELEASE
+include $(SUPPORT)/config/MPFSERIAL_RELEASE
+include $(SUPPORT)/config/MPF_RELEASE
+include $(SUPPORT)/config/RELEASE
+
+TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top

@@ -4,14 +4,14 @@
 Edit the following for your site:
 
 <supporttop>/config/RELEASE - Set EPICS_BASE to EPICS base pathname.
-<supporttop>/utils/Makefile - Set TOP to "support" directory pathname.
+<supporttop>/utils/Makefile - Set SUPPORT to <supporttop> pathname.
 			    - Add/delete support modules by adding/deleting
 			    '#' to the four entries for each support module;
 			 
-			    include $(TOP)/config/<module>_RELEASE
+			    include $(SUPPORT)/config/<module>_RELEASE
 			    DIRS += $(module)
 			    RELEASE_FILES += $(module)/config/RELEASE
-			    MASTER_FILES  += $(TOP)/config/<module>_RELEASE
+			    MASTER_FILES  += $(SUPPORT)/config/<module>_RELEASE
 
 To rebuild synApps;
 
@@ -35,13 +35,15 @@ MODULE:		ipac
 VERSION:	2.3
 URL: http://www.aps.anl.gov/asd/people/anj/ipac/
 BUILD DEPENDENCIES: EPICS_BASE
-
+PROCEDURE:
+- After unzipping and untarring ipac-2.3.tar.gz; "mv ipac ipac2-3".
 
 MODULE:		mpf
 VERSION:	R1-7
 URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/mpf/
 BUILD DEPENDENCIES: EPICS_BASE, IPAC
 PROCEDURE:
+- After unzipping and untarring mpf1-7.tar, "mv 1-7 mpf1-7".
 - Applied fix for "Known Problems" as described in,
 URL:http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/mpf/R1-7/knownProblems.html
 Changed the stack size for watchDog from 2000 to 4000.
@@ -53,6 +55,7 @@ VERSION:	R1-4
 URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/gpib/mpfGpib/index.html
 BUILD DEPENDENCIES: EPICS_BASE, MPF
 PROCEDURE:
+- After unzipping and untarring mpfGpib1-4.tar, "mv 1-4 mpfGpib1-4".
 - cd <supporttop>; chmod u+w mpfGpib1-4/config/RELEASE
 
 
@@ -61,6 +64,7 @@ VERSION:	R1-3
 URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/serial/mpfSerial/index.html
 BUILD DEPENDENCIES: EPICS_BASE, MPF
 PROCEDURE:
+- After unzipping and untarring mpfSerial1-3.tar, "mv 1-3 mpfSerial1-3".
 - Applied fix for "Known Problems" as described in,
 http://www.aps.anl.gov/asd/people/mrk/epics/modules/serial/mpfSerial/R1-3/knownProblems.html
 Changed the stack size for watchDog from 2000 to 4000.
@@ -89,7 +93,7 @@ PROCEDURE:
 
 MODULE:		std
 VERSION:	1-1
-SOURCE: ?????????R1-1 CVS tagged release???????????
+SOURCE: R1-1 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE
 PROCEDURE:
 
@@ -169,8 +173,8 @@ All of the following have the same synApps release tag:
 <top>/config - The *_RELEASE files define which release of each support module
 		correspond to a particular release of synApps.
 
-<top>/util   - Since these are not support modules, and will not be seperately
-<top>/xxx    - released from synApps, they are tagged along with synApps.
+<top>/util   -	Since these are not support modules, and will not be separately
+<top>/xxx	released from synApps; they are tagged along with synApps.
 
 ===============================================================================
 	DEVELOPER ISSUES
