@@ -1,8 +1,8 @@
 #FILENAME:	Makefile
 #USAGE:		Top Makefile
-#Version:	$Revision: 1.9 $
-#Modified By:	$Author: sluiter $
-#Last Modified:	$Date: 2003-10-07 20:24:17 $
+#Version:	$Revision: 1.10 $
+#Modified By:	$Author: mooney $
+#Last Modified:	$Date: 2003-11-05 19:57:29 $
 #NOTES- The "DIRS" order is based on compile time dependencies.
 #     - The user must modify SUPPORT for local configuration.
 #     - Pointing the CONFIG macro to a different config directory
@@ -16,18 +16,17 @@
 #	'RELEASE_FILES' and 'MASTER_FILES' lines must be uncommented (i.e.,
 #	the '#' must be removed).
 
-SUPPORT = !!Set to <supporttop> complete pathname!!
+SUPPORT = /home/oxygen/MOONEY/epics/synApps_4_6/support
 CONFIG = config
 
 include $(SUPPORT)/$(CONFIG)/RELEASE
 include $(EPICS_BASE)/config/CONFIG_COMMON
 include $(SUPPORT)/$(CONFIG)/CONFIG
 
-
-include $(SUPPORT)/$(CONFIG)/VXSTATS_RELEASE
-DIRS += $(VXSTATS)
-RELEASE_FILES += $(VXSTATS)/configure/RELEASE
-MASTER_FILES  += $(SUPPORT)/$(CONFIG)/VXSTATS_RELEASE
+#include $(SUPPORT)/$(CONFIG)/VXSTATS_RELEASE
+#DIRS += $(VXSTATS)
+#RELEASE_FILES += $(VXSTATS)/configure/RELEASE
+#MASTER_FILES  += $(SUPPORT)/$(CONFIG)/VXSTATS_RELEASE
 
 include $(SUPPORT)/$(CONFIG)/SNCSEQ_RELEASE
 DIRS += $(SNCSEQ)
@@ -58,6 +57,16 @@ MASTER_FILES +=  $(SUPPORT)/$(CONFIG)/MPF_RELEASE
 #DIRS += $(MPF_GPIB)
 #RELEASE_FILES += $(MPF_GPIB)/config/RELEASE
 #MASTER_FILES  += $(SUPPORT)/$(CONFIG)/MPFGPIB_RELEASE
+
+include $(SUPPORT)/$(CONFIG)/GPIBCORE_RELEASE
+DIRS += $(GPIBCORE)
+RELEASE_FILES += $(GPIBCORE)/configure/RELEASE
+MASTER_FILES  += $(SUPPORT)/$(CONFIG)/GPIBCORE_RELEASE
+
+#include $(SUPPORT)/$(CONFIG)/MPFSERIAL_RELEASE
+#DIRS += $(MPF_SERIAL)
+#RELEASE_FILES += $(MPF_GPIB)/config/RELEASE
+#MASTER_FILES  += $(SUPPORT)/$(CONFIG)/MPFSERIAL_RELEASE
 
 include $(SUPPORT)/$(CONFIG)/MOTOR_RELEASE
 DIRS += $(MOTOR)
@@ -91,7 +100,7 @@ MASTER_FILES  += $(SUPPORT)/$(CONFIG)/MCA_RELEASE
 
 #include $(SUPPORT)/$(CONFIG)/CAMAC_RELEASE
 #DIRS += $(CAMAC)
-#RELEASE_FILES += $(CAMAC)/config/RELEASE
+#RELEASE_FILES += $(CAMAC)/configure/RELEASE
 #MASTER_FILES  += $(SUPPORT)/$(CONFIG)/CAMAC_RELEASE
 
 include $(SUPPORT)/$(CONFIG)/IP330_RELEASE
