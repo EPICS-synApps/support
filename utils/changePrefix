@@ -1,0 +1,104 @@
+#!/bin/sh
+# changePrefix_synApps_4.6
+if [ $# -lt 2 ]; then
+	printf "%s\n" "usage: changePrefix_synApps_4.6 old new"
+	printf "%s\n" "example: changePrefix_synApps_4.6 xxx 1bma"
+	exit
+fi
+
+old=$1
+new=$2
+if [ ! -d ${old}App ]; then
+	printf "%s\n" "changePrefix_synApps_4.6: ${old}App not found.  Nothing done."
+	exit
+fi
+if [ ! -d iocBoot ]; then
+	printf "%s\n" "changePrefix_synApps_4.6: iocBoot not found.  Nothing done."
+	exit
+fi
+
+if [ ! -d iocBoot/ioc${old} ]; then
+	printf "%s\n" "changePrefix_synApps_4.6: iocBoot/ioc${old} not found.  Nothing done."
+	exit
+fi
+
+TOP=`pwd`
+
+printf "\r%-50s" "start_epics_${new}"
+mv start_epics_${old} start_epics_${new}
+doSed "s!/${old}!/${new}!g" start_epics_${new}
+doSed "s/${old}.adl/${new}.adl/g" start_epics_${new}
+
+printf "\r%-50s" "${new}App/src"
+mv ${old}App ${new}App
+cd ${new}App/src
+if [ -f ${old}Main.cpp ]; then
+	mv ${old}Main.cpp ${new}Main.cpp
+fi
+if [ -f ${old}Main.c ]; then
+	mv ${old}Main.c ${new}Main.c
+fi
+for file in *${old}*Include.dbd
+do
+	doSed "/Include\.dbd/s/${old}/${new}/g" $file
+	mv $file `echo $file | sed "s/${old}/${new}/g"`
+done
+doSed "s/${old}/${new}/g" Makefile
+
+printf "\r%-50s" "${new}App/Db"
+cd ${TOP}/${new}App/Db
+doSed "s/${old}.dbd/${new}.dbd/g" Makefile
+doSed "s/${old}.template/${new}.template/g" Makefile
+doSed "s/${old}Include/${new}Include/g" Makefile
+doSed "s/${old}/${new}/g" Makefile
+
+printf "\r%-50s" "iocBoot/"
+cd ${TOP}/iocBoot
+mv ioc${old} ioc${new}
+cd ioc${new}
+for file in *.cmd*
+do
+	printf "\r%-50s" "$file"
+	doSed "s!/${old}/!/${new}/!g" $file
+	doSed "s/${old}:/${new}:/g" $file
+	doSed "s/${old}\./${new}./g" $file
+	doSed "s/ioc${old}/ioc${new}/g" $file
+	doSed "s/${old}Lib/${new}Lib/g" $file
+	doSed "s/${old}App/${new}App/g" $file
+	doSed "s/=${old}/=${new}/g" $file
+	doSed "/dbLoadDatabase/s/${old}/${new}/g" $file
+	doSed "/registerRecordDeviceDriver/s/${old}/${new}/g" $file
+	doSed "/shellPromptSet/s/${old}/${new}/g" $file
+done
+for file in auto*.req
+do
+	printf "\r%-50s" "$file"
+	doSed "s/${old}:/${new}:/g" $file
+done
+for file in *.substitutions
+do
+	printf "\r%-50s" "$file"
+	doSed "s/${old}:/${new}:/g" $file
+done
+doSed "s!/${old}/!/${new}/!g" bootParms
+doSed "s/ioc${old}/ioc${new}/g" bootParms
+
+printf "\r%-50s" "${new}App/op"
+cd ${TOP}/${new}App/op
+mv adl/${old}\.adl adl/${new}.adl
+for file in adl/*.adl
+do
+	printf "\r%-50s" "$file"
+	doSed "s/${old}:/${new}:/g" $file
+	doSed "s/${old}App/${new}App/g" $file
+	doSed "s/${old}\.adl/${new}.adl/g" $file
+done
+if [ -d burt ]; then
+	for file in burt/*
+	do
+		printf "\r%-50s" "$file"
+		doSed "s/${old}/${new}/g" $file
+	done
+fi
+
+printf "\r%-50s\n" "Done."
