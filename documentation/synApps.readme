@@ -1,29 +1,22 @@
-	Instructions for using synApps_R3.13.1.1_R4.1
+	Instructions for using synApps_R4.5
 
-synApps is a directory tree containing custom EPICS software (source
+synApps is a collection of custom EPICS software (source
 code, EPICS databases, client scripts, executables, etc.) intended to
 support most of the requirements of an x-ray laboratory or
 synchrotron-radiation (SR) experiment station.  Several instances of
-this application can work together to support an entire SR beamline,
-though some issues involving user control over crate-crate
-communication need to be better addressed.  synApps is also intended to
-underly additional software that may be station or beamline specific.
-All of the SRI-CAT beamlines and most of the x-ray laboratories run
-this software.
+this application can work together to support an entire SR beamline.
+synApps is also intended to underly additional software that may be
+station or beamline specific.
 
-This release of synApps is compatible with EPICS release 3.13.1.beta12
-and later.  The distribution is setup to build under EPICS R3.13.1.1
-using Tornado (VxWorks 5.3).
+This release of synApps is compatible with EPICS release 3.13.7
+and later.  The distribution is setup to build under EPICS R3.13.7
+using Tornado 2.02.
 
 synApps includes software developed by the Beamline Controls & Data
 Acquisition and Accelerator Controls groups of the Advanced Photon
-Source (APS); by developers in the EPICS collaboration outside of the
-APS, notably LANL, BESSY and CEBAF; and by developers in APS
-Collaborative Access Teams--notably, Mark Rivers (CARS-CAT).  I've made
-a cursory attempt in this documentation to name authors outside the APS
-BCDA group, partly to give credit, mostly to direct feedback.  But in a
-collaboration, authorship can become really complex, and there seems
-little point in tracking down every nuance.
+Source (APS); by developers in APS Collaborative Access Teams--notably,
+Mark Rivers (CARS-CAT); and by developers in the EPICS collaboration
+outside of the APS.
 
 Aside from databases, SNL programs, and the like, synApps contains
 the following code:
@@ -34,7 +27,7 @@ record support
 	scanparm	scan parameters for use with the scan record
 	table		6-degree-of-freedom optical table
 	transform	like an array of calc records, with output links
-	sCalcout	calcout record (Ned Arnold/APS) extended to handle
+	scalcout	calcout record (Ned Arnold/APS) extended to handle
 			string expressions, links, and values.
 	busy		utility record: calls recGblFwdLink only when its
 			VAL field makes a transition to zero.
@@ -46,8 +39,8 @@ record support
 			This version uses a modified version of recDynLlib
 			that supports dbNotify command completion.  It uses
 			ca_put_callback to do puts, instead of ca_put.
-	sseq		string-sequence record.  This is a modified version of
-			the seq record (John Winans/APS) in base.  This
+	sseq		string-sequence record.  This is a modified version
+			of the seq record (John Winans/APS) in base.  This
 			version can link to/from either string or numeric PVs.
 	serial		generic serial record (Mark Rivers/APS/CARS-CAT)
 	vme		generic vme record (Mark Rivers/APS/CARS-CAT)
@@ -58,145 +51,164 @@ record support
 	ddfanout	Like the dfanout (Johnny Tang, Matthew Bickley, and
 			Chip Watson/CEBAF) record.  Modified (Mark Rivers
 			/CARS-CAT/APS) to use double, rather then long.
+	camac
+	dxp
+	epid
+	genSub
 
 device support
-	# Motors
-	device(motor,VME_IO,devOMS,"OMS VME8/44")
-	device(motor,VME_IO,devOms58,"OMS VME58")
-	device(motor,VME_IO,devV544,"Highland V544")
-	device(motor,VME_IO,devMM4000,"MM4000")
-	device(motor,CONSTANT,devMotorSoft,"Soft Channel")
-
-	# Scalers
-	device(scaler,VME_IO,devScaler,"Joerger VSC8/16")
-
-	# Queensgate Piezo drive
-	device(ao,BBGPIB_IO,devAoAX301,"PZT Bug")
-	device(ai,BBGPIB_IO,devAoAX301,"PZT Bug")
-	device(bo,BBGPIB_IO,devAoAX301,"PZT Bug")
-	device(longout,BBGPIB_IO,devAoAX301,"PZT Bug")
-
-	# GP307 GPIB (John Winans/APS)
+	device(ai,BBGPIB_IO,devAiAX301,"PZT Bug")
 	device(ai,GPIB_IO,devAiGP307Gpib,"Vg307 GPIB Instrument")
-	device(bi,GPIB_IO,devBiGP307Gpib,"Vg307 GPIB Instrument")
-	device(bo,GPIB_IO,devBoGP307Gpib,"Vg307 GPIB Instrument")
-	device(stringin,GPIB_IO,devSiGP307Gpib,"Vg307 GPIB Instrument")
-
-	# Heidenhain ND261 and related serial interface boxes
-	device(ai,VME_IO,devAiHeidND261,"Hideos ai HeidND261")
-
-	# Varoc SSI encoder interface board (Karen Coulter/APS)
-	device(ai,VME_IO,devAiVaroc,"ESRF Varoc SSI Encoder Iface")
-
-	# GPIB Heidenhain encoder
-	device(longin,GPIB_IO,devLiHeidAWE1024,"Heidenhein Encoder")
-	device(bo,GPIB_IO,devBoHeidAWE1024,"Heidenhein Encoder")
-	device(ao,GPIB_IO,devAoHeidAWE1024,"Heidenhein Encoder")
 	device(ai,GPIB_IO,devAiHeidAWE1024,"Heidenhein Encoder")
-	device(bi,GPIB_IO,devBiHeidAWE1024,"Heidenhein Encoder")
-	device(longout,GPIB_IO,devLoHeidAWE1024,"Heidenhein Encoder")
-	device(mbbo,GPIB_IO,devMbboHeidAWE1024,"Heidenhein Encoder")
-	device(mbbi,GPIB_IO,devMbbiHeidAWE1024,"Heidenhein Encoder")
-	device(stringin,GPIB_IO,devSiHeidAWE1024,"Heidenhein Encoder")
-	device(stringout,GPIB_IO,devSoHeidAWE1024,"Heidenhein Encoder")
-
-	# HP 10895A Laser Axis (interferometer) board
-	device(bi,VME_IO,devBiHP10895LaserAxis,"HP interferometer")
-	device(bo,VME_IO,devBoHP10895LaserAxis,"HP interferometer")
-	device(mbbi,VME_IO,devMbbiHP10895LaserAxis,"HP interferometer")
-	device(mbbo,VME_IO,devMbboHP10895LaserAxis,"HP interferometer")
-	device(longin,VME_IO,devLiHP10895LaserAxis,"HP interferometer")
-	device(longout,VME_IO,devLoHP10895LaserAxis,"HP interferometer")
-
-	# GPIB Keithley model 199 DMM
-	device(longin,GPIB_IO,devLiKeithleyDMM199,"KeithleyDMM199")
-	device(bo,GPIB_IO,devBoKeithleyDMM199,"KeithleyDMM199")
-	device(ao,GPIB_IO,devAoKeithleyDMM199,"KeithleyDMM199")
 	device(ai,GPIB_IO,devAiKeithleyDMM199,"KeithleyDMM199")
-	device(bi,GPIB_IO,devBiKeithleyDMM199,"KeithleyDMM199")
-	device(longout,GPIB_IO,devLoKeithleyDMM199,"KeithleyDMM199")
-	device(mbbo,GPIB_IO,devMbboKeithleyDMM199,"KeithleyDMM199")
-	device(mbbi,GPIB_IO,devMbbiKeithleyDMM199,"KeithleyDMM199")
-	device(stringin,GPIB_IO,devSiKeithleyDMM199,"KeithleyDMM199")
-	device(stringout,GPIB_IO,devSoKeithleyDMM199,"KeithleyDMM199")
-
-	# Generic GPIB record (Mark Rivers/APS/CARS-CAT)
-	device(gpib,GPIB_IO,devGPIB,"GPIB (NI or HIDEOS)")
-	device(gpib,BBGPIB_IO,devGPIB,"GPIB (BitBusS)")
-
-	# Bunch clock generator (Frank Lenkszus/APS)
-	device(ai,VME_IO,devAiBunchClkGen,"APS Bunch Clock")
-	device(ao,VME_IO,devAoBunchClkGen,"APS Bunch Clock")
-	device(bi,VME_IO,devBiBunchClkGen,"APS Bunch Clock")
-	device(bo,VME_IO,devBoBunchClkGen,"APS Bunch Clock")
-	device(waveform,VME_IO,devWfBunchClkGen,"APS Bunch Clock")
-
-	device(swait,CONSTANT,devWaitIoEvent,"Soft Channel")
-
-	# multichannel analyzer/scaler (Mark Rivers/APS/CARS-CAT)
-	device(mca,VME_IO,devMCA_AIM,"Canberra AIM MCA")
-	device(mca,VME_IO,devSTR7201,"Struck STR7201 MCS")
-
-	# Generic A32/D32 VME Access (Ned Arnold/APS)
+	device(ai,INST_IO,devAiVXStats,"VX stats")
 	device(ai,VME_IO,devAiA32Vme,"Generic A32 VME")
-	device(ao,VME_IO,devAoA32Vme,"Generic A32 VME")
-	device(bi,VME_IO,devBiA32Vme,"Generic A32 VME")
-	device(bo,VME_IO,devBoA32Vme,"Generic A32 VME")
-	device(mbbi,VME_IO,devMbbiA32Vme,"Generic A32 VME")
-	device(mbbo,VME_IO,devMbboA32Vme,"Generic A32 VME")
-	device(longin,VME_IO,devLiA32Vme,"Generic A32 VME")
-	device(longout,VME_IO,devLoA32Vme,"Generic A32 VME")
-
-	# Heidenhain IK320 VME counter/interpolator (Till Straumann/BESSY)
-	device(mbbo,VME_IO,devIK320Funct,"Heidenhain IK320 Command")
-	device(mbbo,VME_IO,devIK320Dir,"Heidenhain IK320 Sign")
-	device(mbbo,VME_IO,devIK320ModeX3,"Heidenhain IK320 X3 Mode")
-	device(stringout,VME_IO,devIK320Parm,"Heidenhain IK320 Parameter")
+	device(ai,VME_IO,devAiBunchClkGen,"APS Bunch Clock")
+	device(ai,VME_IO,devAiHeidND261,"Hideos ai HeidND261")
+	device(ai,VME_IO,devAiIcbMpf,"MPF ICB")
+	device(ai,VME_IO,devAiIp330Scan,"ip330Scan")
+	device(ai,VME_IO,devAiLove,"Love Controller via MPF")
+	device(ai,VME_IO,devAiMKS,"HPS SensaVac 937")
+	device(ai,VME_IO,devAiMPC,"MPC via MPF")
+	device(ai,VME_IO,devAiQuadEM,"quadEM"
+	device(ai,VME_IO,devAiStrParm,"Hideos ai stringParm")
+	device(ai,VME_IO,devAiVaroc,"ESRF Varoc SSI Encoder Iface")
 	device(ai,VME_IO,devIK320Ai,"Heidenhain IK320")
 	device(ai,VME_IO,devIK320GroupAi,"Heidenhain IK320 Group")
-
-	# Hideos (Jim Kowalkowski/APS)
-	device(ai,VME_IO,devHideosADC,"Hideos ADC")
-	device(ao,VME_IO,devHideosDAC,"Hideos SysTran DAC128V")
-	device(ao,VME_IO,devAoStrParm,"Hideos ao stringParm")
-	device(ai,VME_IO,devAiStrParm,"Hideos ai stringParm")
-	device(ai,VME_IO,devAiLove,"Hideos Love")
-	device(ai,VME_IO,devAiElcomat,"Elcomat autocollimator")
-
-	device(longout,VME_IO,devLoStrParm,"Hideos lo stringParm")
-	device(longout,VME_IO,devLoElcomat,"Elcomat autocollimator")
-
-	device(stringin,VME_IO,devSiHuberDMC,"Huber DMC 9200")
-	device(ai,VME_IO,devAiHuberDMC,"Huber DMC 9200")
-	device(longin,VME_IO,devLiHuberDMC,"Huber DMC 9200")
-
-	device(serial,VME_IO,devSerialHideos,"Hideos Serial")
-
-	device(bi,VME_IO,devBiStrParm,"Hideos bi stringParm")
-	device(longin,VME_IO,devLiStrParm,"Hideos li stringParm")
-	device(stringin,VME_IO,devSiStrParm,"Hideos si stringParm")
-	device(stringout,VME_IO,devSoStrParm,"Hideos so stringParm")
-
-	# Heidenhain ND261 and related serial interface boxes
-	device(ai,VME_IO,devAiHeidND261,"Hideos ai HeidND261")
-
-	# Eurotherm temp controller
+	device(ao,BBGPIB_IO,devAoAX301,"PZT Bug")
+	device(ao,GPIB_IO,devAoHeidAWE1024,"Heidenhein Encoder")
+	device(ao,GPIB_IO,devAoKeithleyDMM199,"KeithleyDMM199")
+	device(ao,INST_IO,devAoVXStats,"VX stats")
+	device(ao,VME_IO,devAoA32Vme,"Generic A32 VME")
+	device(ao,VME_IO,devAoBunchClkGen,"APS Bunch Clock")
+	device(ao,VME_IO,devAoDAC128V,"dac128V")
 	device(ao,VME_IO,devAoEurotherm,"Hideos ao Eurotherm")
+	device(ao,VME_IO,devAoIcbMpf,"MPF ICB")
+	device(ao,VME_IO,devAoLove,"Love Controller via MPF")
+	device(ao,VME_IO,devAoMPC,"MPC via MPF")
+	device(ao,VME_IO,devAoQuadEM,"quadEM")
+	device(ao,VME_IO,devAoStrParm,"Hideos ao stringParm")
+	device(ao,VME_IO,devAoVMI4116,"VMIVME-4116")
+	device(bi,GPIB_IO,devBiGP307Gpib,"Vg307 GPIB Instrument")
+	device(bi,GPIB_IO,devBiHeidAWE1024,"Heidenhein Encoder")
+	device(bi,GPIB_IO,devBiKeithleyDMM199,"KeithleyDMM199")
+	device(bi,VME_IO,devBiA32Vme,"Generic A32 VME")
+	device(bi,VME_IO,devBiAvme9440,"AVME9440 I")
+	device(bi,VME_IO,devBiBunchClkGen,"APS Bunch Clock")
+	device(bi,VME_IO,devBiHP10895LaserAxis,"HP interferometer")
+	device(bi,VME_IO,devBiIpUnidig,"Greenspring IP-Unidig")
+	device(bi,VME_IO,devBiLove,"Love Controller via MPF")
+	device(bi,VME_IO,devBiMPC,"MPC via MPF")
+	device(bi,VME_IO,devBiStrParm,"Hideos bi stringParm")
+	device(bi,VME_IO,devBiXy240,"XYCOM-240")
+	device(bo,BBGPIB_IO,devBoAX301,"PZT Bug")
+	device(bo,GPIB_IO,devBoGP307Gpib,"Vg307 GPIB Instrument")
+	device(bo,GPIB_IO,devBoHeidAWE1024,"Heidenhein Encoder")
+	device(bo,GPIB_IO,devBoKeithleyDMM199,"KeithleyDMM199")
+	device(bo,VME_IO, devBoIpUnidig,"Greenspring IP-Unidig")
+	device(bo,VME_IO,devBoA32Vme,"Generic A32 VME")
+	device(bo,VME_IO,devBoAvme9440,"AVME9440 O")
+	device(bo,VME_IO,devBoBunchClkGen,"APS Bunch Clock")
+	device(bo,VME_IO,devBoHP10895LaserAxis,"HP interferometer")
+	device(bo,VME_IO,devBoLove,"Love Controller via MPF")
+	device(bo,VME_IO,devBoMPC,"MPC via MPF")
+	device(bo,VME_IO,devBoXy240,"XYCOM-240")
+	device(dxp,VME_IO,devDxpMpf,"MPF DXP")
+	device(epid,CONSTANT,devEpidSoft,"Soft Channel")
+	device(epid,VME_IO,devEpidMpf,"MPF EPID")
+	device(gpib,BBGPIB_IO,devGPIB,"GPIB (BitBusS)")
+	device(gpib,GPIB_IO,devGPIB,"GPIB (NI or HIDEOS)")
+	device(longin,GPIB_IO,devLiHeidAWE1024,"Heidenhein Encoder")
+	device(longin,GPIB_IO,devLiKeithleyDMM199,"KeithleyDMM199")
+	device(longin,VME_IO, devLiIpUnidig,"Greenspring IP-Unidig")
+	device(longin,VME_IO,devLiA32Vme,"Generic A32 VME")
+	device(longin,VME_IO,devLiHP10895LaserAxis,"HP interferometer")
+	device(longin,VME_IO,devLiStrParm,"Hideos li stringParm")
+	device(longout,BBGPIB_IO,devLoAX301,"PZT Bug")
+	device(longout,GPIB_IO,devLoHeidAWE1024,"Heidenhein Encoder")
+	device(longout,GPIB_IO,devLoKeithleyDMM199,"KeithleyDMM199")
+	device(longout,VME_IO,devLoA32Vme,"Generic A32 VME")
+	device(longout,VME_IO,devLoHP10895LaserAxis,"HP interferometer")
+	device(longout,VME_IO,devLoIp330Config,"ip330Config")
+	device(longout,VME_IO,devLoStrParm,"Hideos lo stringParm")
+	device(mbbi,GPIB_IO,devMbbiHeidAWE1024,"Heidenhein Encoder")
+	device(mbbi,GPIB_IO,devMbbiKeithleyDMM199,"KeithleyDMM199")
+	device(mbbi,VME_IO,devMbbiA32Vme,"Generic A32 VME")
+	device(mbbi,VME_IO,devMbbiAvme9440,"AVME9440 I")
+	device(mbbi,VME_IO,devMbbiHP10895LaserAxis,"HP interferometer")
+	device(mbbi,VME_IO,devMbbiIcbMpf,"MPF ICB")
+	device(mbbi,VME_IO,devMbbiLove,"Love Controller via MPF")
+	device(mbbi,VME_IO,devMbbiXy240,"XYCOM-240")
+	device(mbbo,GPIB_IO,devMbboHeidAWE1024,"Heidenhein Encoder")
+	device(mbbo,GPIB_IO,devMbboKeithleyDMM199,"KeithleyDMM199")
+	device(mbbo,VME_IO,devIK320Dir,"Heidenhain IK320 Sign")
+	device(mbbo,VME_IO,devIK320Funct,"Heidenhain IK320 Command")
+	device(mbbo,VME_IO,devIK320ModeX3,"Heidenhain IK320 X3 Mode")
+	device(mbbo,VME_IO,devMbboA32Vme,"Generic A32 VME")
+	device(mbbo,VME_IO,devMbboAvme9440,"AVME9440 O")
+	device(mbbo,VME_IO,devMbboHP10895LaserAxis,"HP interferometer")
+	device(mbbo,VME_IO,devMbboIcbMpf,"MPF ICB")
+	device(mbbo,VME_IO,devMbboMPC,"MPC via MPF")
+	device(mbbo,VME_IO,devMbboQuadEM,"quadEM")
+	device(mbbo,VME_IO,devMbboXy240,"XYCOM-240")
+	device(mca,CONSTANT,devMCA_soft,"Soft Channel")
+	device(mca,VME_IO,devMcaMpf,"MPF MCA")
+	device(mca,VME_IO,devSTR7201,"Struck STR7201 MCS")
+	device(motor,CONSTANT,devMotorSoft,"Soft Channel")
+	device(motor,VME_IO,devE500,"E500")
+	device(motor,VME_IO,devESP300,"ESP300")
+	device(motor,VME_IO,devIM483PL,"IM483PL")
+	device(motor,VME_IO,devIM483SM,"IM483SM")
+	device(motor,VME_IO,devMCB4B,"ACS MCB-4B")
+	device(motor,VME_IO,devMDrive, "MDrive")
+	device(motor,VME_IO,devMM3000,"MM3000")
+	device(motor,VME_IO,devMM4000,"MM4000")
+	device(motor,VME_IO,devOMS,"OMS VME8/44")
+	device(motor,VME_IO,devOms58,"OMS VME58")
+	device(motor,VME_IO,devPM304,"Mclennan PM304")
+	device(motor,VME_IO,devPM500, "PM500")
+	device(motor,VME_IO,devV544,"Highland V544")
+	device(scaler,VME_IO,devScaler,"Joerger VSC8/16")
+	device(scaler,VME_IO,devScalerCamac,"CAMAC scaler")
+	device(scaler,VME_IO,devScalerSTR7201,"Struck STR7201 Scaler")
+	device(serial,VME_IO,devSerial,"Hideos/MPF Serial")
+	device(stringin,GPIB_IO,devSiGP307Gpib,"Vg307 GPIB Instrument")
+	device(stringin,GPIB_IO,devSiHeidAWE1024,"Heidenhein Encoder")
+	device(stringin,GPIB_IO,devSiKeithleyDMM199,"KeithleyDMM199")
+	device(stringin,VME_IO,devSiMPC,"MPC via MPF")
+	device(stringin,VME_IO,devSiMpfRead,"MPFread")
+	device(stringin,VME_IO,devSiMpfWriteRead,"MPFwriteRead")
+	device(stringin,VME_IO,devSiStrParm,"Hideos si stringParm")
+	device(stringout,GPIB_IO,devSoHeidAWE1024,"Heidenhein Encoder")
+	device(stringout,GPIB_IO,devSoKeithleyDMM199,"KeithleyDMM199")
+	device(stringout,VME_IO,devIK320Parm,"Heidenhain IK320 Parameter")
 	device(stringout,VME_IO,devSoEurotherm,"Hideos so Eurotherm")
+	device(stringout,VME_IO,devSoMPC,"MPC via MPF")
+	device(stringout,VME_IO,devSoMpfWrite,"MPFwrite")
+	device(stringout,VME_IO,devSoStrParm,"Hideos so stringParm")
+	device(swait,CONSTANT,devSWaitIoEvent,"Soft Channel")
 
 driver support
-	drvOms		Oregon Microsystems VME8/4 stepmotor controllers
-	drvOms58	Oregon Microsystems VME58 stepmotor controllers
-	drvV544		Highland Technology V544 stepmotor controller
-	drvMM4000	Newport MM4000 motor controller
-	drvVaroc	ESRF VAROC SSI absolute encoder interface
-			(Karen Coulter/APS)
-
-	# Bunch clock generator (Frank Lenkszus/APS)
+	driver(drvBitBus)
 	driver(drvBunchClkGen)
-
-	# Heidenhain IK320 (Till Straumann/BESSY)
+	driver(drvE500)
+	driver(drvESP300)
+	driver(drvGpib)
 	driver(drvIK320)
+	driver(drvIM483PL)
+	driver(drvIM483SM)
+	driver(drvMCB4B)
+	driver(drvMDrive)
+	driver(drvMM3000)
+	driver(drvMM4000)
+	driver(drvMz8310)
+	driver(drvOms)
+	driver(drvOms58)
+	driver(drvPM304)
+	driver(drvPM500)
+	driver(drvV544)
+	driver(drvXy240)
+	driver(drvXy566)
 
 miscellaneous C code
 	dbLoadRecords
@@ -208,28 +220,51 @@ miscellaneous C code
 		that you can prepend a path to the database file (named in the
 		substitutions file) using a variable defined in
 		iocxxx/cdCommands.
-	calcPerform
-		Backward compatible extension of the expression evaluation
-		software in base.
+	sCalcPerform, sCalcPostfix
+		String-expression evaluation support, similar to, and
+		mostly backward compatible with support in base for numeric
+		expressions.
 	recDynLink  (original author: Marty Kraimer/APS)
 		Backward compatible extension of the dynamic-link software in
-		base.
-	save_restore, dbrestore (original author: Bob Dalesio/LANL)
+		base.  Extension supports ca_put_callback().
+	autosave (original author: Bob Dalesio/LANL)
 		Automatic parameter save and boot-time restore.
 	saveData
-		Saves scan data to files on an NFS-mounted disk.  The file
-		format is intended to be a private arrangement between this
-		software and a translator daemon (?) that writes files in the
-		NeXus format.  The translator software currently is under
-		development.
-
-Other EPICS-applications
-	See http://www.aps.anl.gov/xfd/bcda/medm_help/ for a reasonably
-complete listing of supported devices and techniques.
+		Saves scan data to files on an NFS-mounted disk.
 
 How to use synApps
------------------
-This distribution is divided into two parts: the share tree ("share")
+------------------
+
+synApps is not a complete software installation in itself.  To use
+synApps, you must acquire and build EPICS base, and other modules
+on which the synApps modules depend.  Here's a list of the modules and the
+version with which synApps is known to work.
+
+EPICS baseR3.13.7 or later
+allenBradley1-7   if you intend to connect with Allen Bradley PLC's
+bitBus1-4         probably not of general interest
+ipac2-4           required by mpf
+mpf1-10           required by mca, dac128V, ip, ip330, love, motor, and quadEM
+mpfGpib1-4        required for GPIB support
+mpfSerial1-4      required for serial support
+
+Here's a list of the modules included in synApps:
+
+camac    CAMAC support
+dac128V  IndustryPack DAC
+ip       various serial devices
+ip330    IndustryPack ADC
+ipUnidig IndustryPack digital I/O
+love     Love controllers
+mca      multichannel analyzers
+motor4-8 motors
+quadEM    
+std      tons of stuff
+utils    only used to build synApps
+xxx      sample user-application directory
+
+LEFT OFF HERE -----------------------------------------------------------------
+This distribution is divided into two parts: the support directory
 and a user tree ("xxx").  This division provides a place for you to
 develop applications that inherit both from EPICS base and from synApps
 without getting your work entangled with either of them.  As delivered,
