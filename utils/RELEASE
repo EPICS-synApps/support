@@ -20,7 +20,6 @@ include $(SUPPORT)/config/IPUNIDIG_RELEASE
 include $(SUPPORT)/config/DAC128V_RELEASE
 include $(SUPPORT)/config/MOTOR_RELEASE
 include $(SUPPORT)/config/STD_RELEASE
-include $(SUPPORT)/config/BITBUS_RELEASE
 include $(SUPPORT)/config/MPFGPIB_RELEASE
 include $(SUPPORT)/config/MPFSERIAL_RELEASE
 include $(SUPPORT)/config/MPF_RELEASE

@@ -1,8 +1,8 @@
 #FILENAME:	Makefile
 #USAGE:		Top Makefile
-#Version:	$Revision: 1.7.2.2 $
-#Modified By:	$Author: rivers $
-#Last Modified:	$Date: 2003-05-18 16:26:18 $
+#Version:	$Revision: 1.7.2.3 $
+#Modified By:	$Author: mooney $
+#Last Modified:	$Date: 2004-01-21 22:44:34 $
 #NOTES- The "DIRS" order is based on compile time dependencies.
 #     - The user must modify SUPPORT for local configuration.
 #     - Pointing the CONFIG macro to a different config directory
@@ -16,22 +16,17 @@
 #	'RELEASE_FILES' and 'MASTER_FILES' lines must be uncommented (i.e.,
 #	the '#' must be removed).
 
-SUPPORT = !!Set to <supporttop> complete pathname!!
+SUPPORT = /home/oxygen/MOONEY/epics/synApps_4_5/support
 CONFIG = config
 
 include $(SUPPORT)/$(CONFIG)/RELEASE
 include $(EPICS_BASE)/config/CONFIG_COMMON
 include $(SUPPORT)/$(CONFIG)/CONFIG
 
-#include $(SUPPORT)/$(CONFIG)/ALLEN_BRADLEY_RELEASE
-#DIRS += $(ALLEN_BRADLEY)
-#RELEASE_FILES += $(ALLEN_BRADLEY)/config/RELEASE
-#MASTER_FILES  += $(SUPPORT)/$(CONFIG)/ALLEN_BRADLEY_RELEASE
-
-include $(SUPPORT)/$(CONFIG)/BITBUS_RELEASE
-DIRS += $(BITBUS)
-RELEASE_FILES += $(BITBUS)/config/RELEASE
-MASTER_FILES  += $(SUPPORT)/$(CONFIG)/BITBUS_RELEASE
+include $(SUPPORT)/$(CONFIG)/ALLEN_BRADLEY_RELEASE
+DIRS += $(ALLEN_BRADLEY)
+RELEASE_FILES += $(ALLEN_BRADLEY)/config/RELEASE
+MASTER_FILES  += $(SUPPORT)/$(CONFIG)/ALLEN_BRADLEY_RELEASE
 
 include $(SUPPORT)/$(CONFIG)/IPAC_RELEASE
 DIRS += $(IPAC)
@@ -83,10 +78,10 @@ DIRS += $(MCA)
 RELEASE_FILES += $(MCA)/config/RELEASE
 MASTER_FILES  += $(SUPPORT)/$(CONFIG)/MCA_RELEASE
 
-include $(SUPPORT)/$(CONFIG)/CAMAC_RELEASE
-DIRS += $(CAMAC)
-RELEASE_FILES += $(CAMAC)/config/RELEASE
-MASTER_FILES  += $(SUPPORT)/$(CONFIG)/CAMAC_RELEASE
+#include $(SUPPORT)/$(CONFIG)/CAMAC_RELEASE
+#DIRS += $(CAMAC)
+#RELEASE_FILES += $(CAMAC)/config/RELEASE
+#MASTER_FILES  += $(SUPPORT)/$(CONFIG)/CAMAC_RELEASE
 
 include $(SUPPORT)/$(CONFIG)/IP330_RELEASE
 DIRS += $(IP330)
