@@ -17,7 +17,7 @@ xxx/config.
 
 
 MODULE:		ipac
-VERSION:	2.2
+VERSION:	2.3
 URL: http://www.aps.anl.gov/asd/people/anj/ipac/
 BUILD DEPENDENCIES: EPICS_BASE
 PROCEDURE:
@@ -29,7 +29,7 @@ xxx/config.
 
 
 MODULE:		mpf
-VERSION:	R1-6
+VERSION:	R1-7
 URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/mpf/
 BUILD DEPENDENCIES: EPICS_BASE, IPAC
 PROCEDURE:
@@ -40,7 +40,7 @@ the support/utils directory.
 
 
 MODULE:		mpfGpib
-VERSION:	R1-3
+VERSION:	R1-4
 URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/gpib/mpfGpib/index.html
 BUILD DEPENDENCIES: EPICS_BASE, MPF
 PROCEDURE:
@@ -52,7 +52,7 @@ xxx/config.
 
 
 MODULE:		mpfSerial
-VERSION:	R1-2
+VERSION:	R1-3
 URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/serial/mpfSerial/index.html
 BUILD DEPENDENCIES: EPICS_BASE, MPF
 PROCEDURE:
@@ -68,11 +68,10 @@ Modifications to following support modules were NOT limited to the
 -------------------------------------------------------------------------------
 
 MODULE:		motor
-VERSION:	4-3
+VERSION:	4-4
 URL: http://www.aps.anl.gov/upd/people/sluiter/epics/modules/mechanism/motor/index.html
 BUILD DEPENDENCIES: EPICS_BASE, MPF, MPF_SERIAL, MPF_GPIB
 PROCEDURE:
-- Replaced RULES.Vx  with xxx/config/RULES.Vx (R3.13.4 update).
 - Replaced makeConfigAppInclude.pl and makeIocCdCommands.pl with copies from
 the support/utils directory.
 - <top>/motorApp/Makefile.  All device support selected.
@@ -139,17 +138,12 @@ PROCEDURE:
 
 
 MODULE:		dac128V
-VERSION:	1-1
+VERSION:	1-2
 URL: - dac128V: http://cars9.uchicago.edu/software/pub/dac128VApp.tar
 BUILD DEPENDENCIES: EPICS_BASE, MPF
 PROCEDURE:
 - Copied <top>/Makefile and <top>/config from xxx.
 - Extracted dac128VApp.tar into dac128V1-1.
-- Deleted manual version control copies and Unix links; i.e., DAC128V.h;1,
-	dac128V.cc;1, etc..
-- Modifications:
-	dac128VApp/src/Makefile.Host: Comment on why DAC128V.h is 'installed'.
-- Configured <top>/config/RELEASE.
 
 
 MODULE:		ipUnidig
@@ -177,22 +171,15 @@ PROCEDURE:
 
 
 MODULE:		mca
-VERSION:	5.02
+VERSION:	5-1
 URL: http://millenia.cars.aps.anl.gov/software/pub/mcaApp.tar
 BUILD DEPENDENCIES: EPICS_BASE, MPF, STD
 PROCEDURE:
-- Copied <top>/Makefile and <top>/config from xxx.
-- Extracted mcaApp.tar to mca_5.02.
-- Deleted manual version control copies and Unix links; i.e.,
-	drvSTR7201.h;1, etc..
-- Change "SHARE_BIN = ." to "MCA_BIN = ." in Makefile.Vx, mcaMpfServerLIBOBJS
-	and mcaLIBOBJS.
-- Added devMCA_soft.c to Makefile.Vx and mcaLIBOBJS.
 - Configured <top>/config/RELEASE.
 
 
 MODULE:		ip330
-VERSION:	1.02
+VERSION:	1-3
 URL: 	http://cars.uchicago.edu/software/pub/ip330App.tar
 BUILD DEPENDENCIES: EPICS_BASE, MPF, DAC128V, STD, MCA
 PROCEDURE:
@@ -324,3 +311,17 @@ PROCEDURE:
 		xxx/xxxApp/src/Makefile.Vx.
 - Configured <top>/config/RELEASE.
 
+
+DEVELOPERS NOTES
+================
+
+CVS tagging synApps
+-------------------
+
+All of the following have the same synApps release tag:
+
+<top>/config - The *_RELEASE files define which release of each support module
+		correspond to a particular release of synApps.
+
+<top>/util   - Since these are not support modules, and will not be seperately
+<top>/xxx    - released from synApps, they are tagged along with synApps.
