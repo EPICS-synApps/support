@@ -10,6 +10,9 @@
 # NOTES...
 #	- Master release files MUST have a "_RELEASE" suffix.
 #
+# MODIFICATION LOG..
+#  01/26/04 - Bug fix; no support for master files w/o macros.
+#
 # LOGIC...
 =for block comments
 
@@ -57,9 +60,9 @@ FOR each release file.
 ENDFOR
 =cut
 #
-# Version:	$Revision: 1.2.2.1 $
+# Version:	$Revision: 1.2.2.2 $
 # Modified By:	$Author: sluiter $
-# Last Modified:$Date: 2003-06-27 17:30:20 $
+# Last Modified:$Date: 2004-01-26 20:04:13 $
 
 # NOTE with Perl 5.6, replace the following with File::Temp.
 use POSIX;
@@ -97,7 +100,15 @@ for ($itera = 0; $itera < $mitera; $itera++)
 	next if ($line =~ /^(#|\s*\n)/);
 	chomp($line);
 	$_ = $line;
-	($prefix,$macro,$post) = /(.*)\s*=\s*\$\((.*)\)(.*)/;
+	$macro = /(.*)\s*=\s*\$\((.*)\)/;
+	if ($macro eq "")
+	{
+	    ($prefix,$post) = /(.*)\s*=\s*(.*)/;
+	}
+	else
+	{
+	    ($prefix,$macro,$post) = /(.*)\s*=\s*\$\((.*)\)(.*)/;
+	}
 	if ($macro ne "" && $macro eq "SUPPORT")
 	{
 	    $post = $supporttop . $post;
