@@ -1,5 +1,5 @@
 #!/bin/sh
-# changePrefix v5.0
+# changePrefix v5.1
 if [ $# -lt 2 ]; then
 	printf "%s\n" "usage: changePrefix old new"
 	printf "%s\n" "example: changePrefix xxx 1bma"
@@ -72,6 +72,11 @@ for dir in ioc*
 		doSed "s/${old}:/${new}:/g" $file
 	done
 	for file in *.substitutions
+	do
+		printf "\r%-50s" "$file"
+		doSed "s/${old}:/${new}:/g" $file
+	done
+	for file in *.template
 	do
 		printf "\r%-50s" "$file"
 		doSed "s/${old}:/${new}:/g" $file
