@@ -25,6 +25,13 @@ gnumake clean uninstall;gnumake
 ==============================================================================
 The following support modules required limited modifications.
 
+MODULE:		allenBradley
+VERSION:	1-6
+URL:  http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/allenBradley/
+BUILD DEPENDENCIES: EPICS_BASE
+PROCEDURE:
+- After unzipping and untarring allenBradley1-6.tar.gz; "mv 1-6 allenBradley1-6".
+
 
 MODULE:		bitBus
 VERSION:	R1-4
@@ -80,9 +87,6 @@ BUILD DEPENDENCIES: EPICS_BASE, MPF
 PROCEDURE:
 - After unzipping and untarring mpfSerial1-4.tar, "mv 1-4 mpfSerial1-4".
 
-==============================================================================
-The following support modules required more extensive modifications.
-==============================================================================
 
 MODULE:		motor
 VERSION:	4-5
@@ -95,10 +99,6 @@ PROCEDURE:
 - <top>/motorApp/Makefile.  All device support selected.
 - <top>/motorExApp/Makefile.  Build all motor examples.
 
-
-===============================================================================
-	CUSTOMIZED SUPPORT MODULES
-===============================================================================
 
 MODULE:		std
 VERSION:	1-2
@@ -191,3 +191,4 @@ All of the following have the same synApps release tag:
 multiple definition errors unless dbLoadRecords, dbLoadTemplate, etc. are
 removed from his version of EPICS base.  Non-VxWorks users have no choice
 but to create one load module.
+
