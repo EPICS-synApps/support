@@ -1,30 +1,31 @@
-	Instructions for using synApps_R4.5
+	Instructions for building and using synApps_R4.5
 
-synApps is a collection of custom EPICS software (source
-code, EPICS databases, client scripts, executables, etc.) intended to
-support most of the requirements of an x-ray laboratory or
-synchrotron-radiation (SR) experiment station.  Several instances of
-this application can work together to support an entire SR beamline.
-synApps is also intended to underly additional software that may be
-station or beamline specific.
+synApps is a collection of custom EPICS software (source code, EPICS
+databases, client scripts, executables, etc.) intended to support most
+of the requirements of an x-ray laboratory or synchrotron-radiation
+(SR) experiment station.  Several instances of this application can
+work together to support an entire SR beamline.  synApps is also
+intended to underly additional software that may be station or
+beamline specific.
 
-This release of synApps is compatible with EPICS release 3.13.7
-and later.  The distribution is setup to build under EPICS R3.13.7
-using Tornado 2.02.
+This release of synApps is compatible with EPICS release 3.13.7 and
+later.  The distribution is setup to build under EPICS R3.13.9 using
+Tornado 2.02.
 
 synApps includes software developed by the Beamline Controls & Data
 Acquisition and Accelerator Controls groups of the Advanced Photon
-Source (APS); by developers in APS Collaborative Access Teams--notably,
-Mark Rivers (CARS-CAT); and by developers in the EPICS collaboration
-outside of the APS.
+Source (APS); by developers in APS Collaborative Access
+Teams--notably, Mark Rivers (CARS-CAT); and by developers in the EPICS
+collaboration outside of the APS.
 
-Aside from databases, SNL programs, and the like, synApps contains
-the following code:
+Aside from databases, SNL programs, and the like, synApps contains the
+following code:
 
 record support
+
 	motor		stepper and servo motors, "soft" motor
 	scaler		scaler bank
-	scanparm	scan parameters for use with the scan record
+	scanparm	scan parameters for use with the sscan record
 	table		6-degree-of-freedom optical table
 	transform	like an array of calc records, with output links
 	scalcout	calcout record (Ned Arnold/APS) extended to handle
@@ -35,10 +36,9 @@ record support
 			This version uses a modified version of recDynLlib
 			that supports dbNotify command completion.  It uses
 			ca_put_callback to do puts, instead of ca_put.
-	sscan		Replaces the scan record (Ned Arnold/APS) in base.
-			This version uses a modified version of recDynLlib
-			that supports dbNotify command completion.  It uses
-			ca_put_callback to do puts, instead of ca_put.
+	sscan		Replaces the scan record in base.  This version uses
+                        EPICS' execution-tracing (i.e., ca_put_callback()) to
+                        determine when positioners and detectors are finished.
 	sseq		string-sequence record.  This is a modified version
 			of the seq record (John Winans/APS) in base.  This
 			version can link to/from either string or numeric PVs.
@@ -57,7 +57,7 @@ record support
 	genSub
 
 device support
-	device(ai,BBGPIB_IO,devAiAX301,"PZT Bug")
+
 	device(ai,GPIB_IO,devAiGP307Gpib,"Vg307 GPIB Instrument")
 	device(ai,GPIB_IO,devAiHeidAWE1024,"Heidenhein Encoder")
 	device(ai,GPIB_IO,devAiKeithleyDMM199,"KeithleyDMM199")
@@ -75,7 +75,6 @@ device support
 	device(ai,VME_IO,devAiVaroc,"ESRF Varoc SSI Encoder Iface")
 	device(ai,VME_IO,devIK320Ai,"Heidenhain IK320")
 	device(ai,VME_IO,devIK320GroupAi,"Heidenhain IK320 Group")
-	device(ao,BBGPIB_IO,devAoAX301,"PZT Bug")
 	device(ao,GPIB_IO,devAoHeidAWE1024,"Heidenhein Encoder")
 	device(ao,GPIB_IO,devAoKeithleyDMM199,"KeithleyDMM199")
 	device(ao,INST_IO,devAoVXStats,"VX stats")
@@ -101,7 +100,6 @@ device support
 	device(bi,VME_IO,devBiMPC,"MPC via MPF")
 	device(bi,VME_IO,devBiStrParm,"Hideos bi stringParm")
 	device(bi,VME_IO,devBiXy240,"XYCOM-240")
-	device(bo,BBGPIB_IO,devBoAX301,"PZT Bug")
 	device(bo,GPIB_IO,devBoGP307Gpib,"Vg307 GPIB Instrument")
 	device(bo,GPIB_IO,devBoHeidAWE1024,"Heidenhein Encoder")
 	device(bo,GPIB_IO,devBoKeithleyDMM199,"KeithleyDMM199")
@@ -116,7 +114,6 @@ device support
 	device(dxp,VME_IO,devDxpMpf,"MPF DXP")
 	device(epid,CONSTANT,devEpidSoft,"Soft Channel")
 	device(epid,VME_IO,devEpidMpf,"MPF EPID")
-	device(gpib,BBGPIB_IO,devGPIB,"GPIB (BitBusS)")
 	device(gpib,GPIB_IO,devGPIB,"GPIB (NI or HIDEOS)")
 	device(longin,GPIB_IO,devLiHeidAWE1024,"Heidenhein Encoder")
 	device(longin,GPIB_IO,devLiKeithleyDMM199,"KeithleyDMM199")
@@ -124,7 +121,6 @@ device support
 	device(longin,VME_IO,devLiA32Vme,"Generic A32 VME")
 	device(longin,VME_IO,devLiHP10895LaserAxis,"HP interferometer")
 	device(longin,VME_IO,devLiStrParm,"Hideos li stringParm")
-	device(longout,BBGPIB_IO,devLoAX301,"PZT Bug")
 	device(longout,GPIB_IO,devLoHeidAWE1024,"Heidenhein Encoder")
 	device(longout,GPIB_IO,devLoKeithleyDMM199,"KeithleyDMM199")
 	device(longout,VME_IO,devLoA32Vme,"Generic A32 VME")
@@ -189,7 +185,7 @@ device support
 	device(swait,CONSTANT,devSWaitIoEvent,"Soft Channel")
 
 driver support
-	driver(drvBitBus)
+
 	driver(drvBunchClkGen)
 	driver(drvE500)
 	driver(drvESP300)
@@ -211,24 +207,37 @@ driver support
 	driver(drvXy566)
 
 miscellaneous C code
+
 	dbLoadRecords
-		Adds an optional trailing argument to  dbLoadRecords(), so
+		Adds an optional trailing argument to dbLoadRecords(), so
 		that you can prepend a path to the database file using a
-		variable defined in iocxxx/cdCommands.
+		variable defined in iocxxx/cdCommands.  For example:
+
+		dbLoadRecords("stdApp/Db/yySseq.db","P=xxx:,S=Sseq2", std)
+
 	dbLoadTemplate
-		Adds an optional trailing argument to  dbLoadTemplate(), so
-		that you can prepend a path to the database file (named in the
-		substitutions file) using a variable defined in
-		iocxxx/cdCommands.
+		Allows you to use dbLoadTemplate() to load a .substitutions
+		file that uses templates located in other directories.  
+		You can do this in the .substitutions file as follows:
+
+		dbLoadTemplate("motor.substitutions")
+		where motors.substitutions contains the line:
+		file motorApp/Db/motor.db, motor
+
+		and 'motor' is defined in cdCommands.
+
 	sCalcPerform, sCalcPostfix
 		String-expression evaluation support, similar to, and
 		mostly backward compatible with support in base for numeric
 		expressions.
+
 	recDynLink  (original author: Marty Kraimer/APS)
 		Backward compatible extension of the dynamic-link software in
 		base.  Extension supports ca_put_callback().
+
 	autosave (original author: Bob Dalesio/LANL)
 		Automatic parameter save and boot-time restore.
+
 	saveData
 		Saves scan data to files on an NFS-mounted disk.
 
@@ -236,296 +245,211 @@ How to use synApps
 ------------------
 
 synApps is not a complete software installation in itself.  To use
-synApps, you must acquire and build EPICS base, and other modules
-on which the synApps modules depend.  Here's a list of the modules and the
+synApps, you must acquire and build EPICS base and other modules
+on which synApps depends.  Here's a list of the modules and the
 version with which synApps is known to work.
 
-EPICS baseR3.13.7 or later
-allenBradley1-7   if you intend to connect with Allen Bradley PLC's
-bitBus1-4         probably not of general interest
-ipac2-4           required by mpf
-mpf1-10           required by mca, dac128V, ip, ip330, love, motor, and quadEM
-mpfGpib1-4        required for GPIB support
-mpfSerial1-4      required for serial support
+EPICS baseR3.13.7   or later
+allenBradley1-7     if you intend to connect with Allen Bradley PLC's
+ipac2-4             required by mpf
+mpf1-10             required by mca, dac128V, ip, ip330, love, motor,
+                    quadEM, mpfGpib, mpfSerial
+mpfGpib1-4          required for GPIB support
+mpfSerial1-4        required for serial support
 
 Here's a list of the modules included in synApps:
 
-camac    CAMAC support
-dac128V  IndustryPack DAC
-ip       various serial devices
-ip330    IndustryPack ADC
-ipUnidig IndustryPack digital I/O
-love     Love controllers
-mca      multichannel analyzers
-motor4-8 motors
-quadEM    
-std      tons of stuff
-utils    only used to build synApps
-xxx      sample user-application directory
+camac      CAMAC support
+dac128V    IndustryPack DAC
+ip         various serial devices
+ip330      IndustryPack ADC
+ipUnidig   IndustryPack digital I/O
+love       Love controllers
+mca        multichannel analyzers
+motor4-8   motors
+quadEM     4-channel electrometer
+std        optics, scans, scalers, calculations, autosave, etc.
+utils      only used to build synApps
+xxx        sample user-application directory
 
-LEFT OFF HERE -----------------------------------------------------------------
-This distribution is divided into two parts: the support directory
-and a user tree ("xxx").  This division provides a place for you to
-develop applications that inherit both from EPICS base and from synApps
-without getting your work entangled with either of them.  As delivered,
-the user tree simply inherits everything from the share tree (a
-selected subset of the device/driver support included in EPICS base,
-and the custom software added by share).  In normal use supporting many
-VME-based systems, you might create several user trees, each supporting
-several crates, and link all of those trees to the same share tree.
+Although synApps is distributed as a single 'support' directory, it's
+normally used as a two-part system: the 'support' tree, and a 'user'
+tree.  The support tree can be installed on a read-only file system,
+along with EPICS base and other modules, and used from there by the
+user tree, which begins as a copy of the module 'support/xxx', and is
+customized/extended by the end user to particular applications and
+sets of hardware.  To support many VME-based systems, you might create
+several user trees, each supporting several crates, and link all of
+those trees to the support tree.  Here's what a complete installation
+might look like (much detail omitted) with all the files you will have
+to edit before you can build or boot a crate:
 
-synApps is available in prebuilt form.  The prebuilt version does not
-have to be built again unless you want to add or modify C code or
-database definition (.dbd) code, or to run it on hardware other than
-the MVME167 and MVME162.  If you need merely to modify the startup
-files, databases, medm displays, BURT request files, autosave files,
-and the like, then you don't need to build synApps, nor do you need to
-have built EPICS base to use synApps.  Further, if you don't have to
-build synApps, and you don't have other reasons for wanting to build
-base or extensions, then you don't need a VxWorks developer's license
-to use the prebuilt distribution because it contains executable copies
-of the VxWorks operating system for the MVME167 and MVME162.  You still
-need a VxWorks target license for each VME processor, of course.
-
-This release of synApps is configured to build for the MVME167 and
-MVME162 architectures, and it contains prebuilt support for running
-Hideos under VxWorks, so that Industry Pack modules can be used on the
-MVME162 that runs EPICS as well as on a secondary MVME162 that does not
-run EPICS or VxWorks.  It was tested on an MVME162-532 running EPICS
-and Hideos, with an MVME162-002 running only Hideos.  Most of this
-software has been running on SRI-CAT beamlines at the APS for several
-years.
-
-This distribution contains a few statically linked EPICS extensions for
-solaris, but it doesn't contain everything needed to run a beamline.
-The most notable client programs not included are medm, the data
-catcher, and the MCA-control program.  These programs are available via
-the EPICS software distribution.
-
-The custom EPICS software contained in synApps should not be assumed to
-be compatible with the medm displays, burt scripts, etc. of any
-previous releases of xfdApp.  If you pull software from here, it's
-probably best to pull complete sets of related code (source, dbd,
-database, medm display, and excerpts from burt request files,
-autosave/restore request files, template files and st.cmd).
-
-This file is not intended to be your only source of information on
-installing and using synApps.  In addition to standard EPICS documentation,
-available via the URL
-	http://www.aps.anl.gov/Epics
-(especially "IOC Applications: Building and Source/Release Control"),
-see also more beamline-specific documentation via
-	http://www.aps.anl.gov/xfd/bcda/Welcome.html
-particularly,
-	http://www.aps.anl.gov/xfd/bcda/medm_help
-which documents not medm, but the displays (and, indirectly, the
-databases) in synApps.  Some of this user-interface documentation
-is out of date--particularly the scan-related stuff.
-
-
-0) Preliminary system setup
-===========================
-
-I'll assume you've either successfully built EPICS base and those
-extensions you care about, or plan to use only the executables included
-in synApps.  If you have EPICS base and extensions, I'll assume that
-you know how to use them, and that you can figure out which of the
-following instructions to ignore.
-
-Put something like the following commands in your .login file (or whatever
-gets run when you login):
-
-	setenv SYNAPPS <path to directory in which this distribution was untarred>
-	setenv USER_DIR <path to user directory, xxx>
-	setenv SHARE_DIR <path to share dir, $SYNAPPS/share>
-	setenv HOST_ARCH `$SYNAPPS/bin/HostArch`
-	set path = ($path $SYNAPPS/bin $SYNAPPS/bin/$HOST_ARCH $SHARE_DIR/bin/$HOST_ARCH)
-	setenv PSPRINTER <the name of a PostScript printer>
-
-Ensure that $SYNAPPS/bin/$HOST_ARCH/startCArepeater gets run when your
-workstation boots.  If you have no way of doing this, you can run it
-manually or put the command in your .login file.
-	
-Setup your host system to work with the EPICS processor.  See section
-2.3 in the "VxWorks Programmer's Guide".  Here's what we do:
-
-	Add a user named <vx_username> with the password <vx_password>.
-	The user has nothing in its home directory, and very few priviledges.
-
-	Connect an ethernet cable to the transceiver attached to the
-	"MVME 712/M" transition connector.
-
-	Setup the workstation to use a serial port at 9600 baud.
-	Connect a serial cable from the workstation's serial line (A)
-	to the VME processor's "serial port 1/Console".
-
-	Start up an "xterm" on the workstation and type
-	cu -lttya
-	(On some workstations we must type "cu -lcua/a".)
-	This gets the xterm communicating with the crate processor.
-
-	Turn the crate on.  The crate processor says "Press any key to
-	stop auto-boot..." and a number counting down from 7.  Pressing
-	a key gets the prompt "[VxWorks Boot]:"
-
-	Type "p" to see the current boot parameters,  type "c" to
-	change them.  Here are sample boot parameters 
-
-	boot device          : ei 
-	processor number     : 0 
-	host name            : server 
-	file name            : /home/server/USER/epics/xxx/bin/mv162/vxWorks
-	inet on ethernet (e) : xxx.xxx.xxx.xxx:fffffe00 
-	inet on backplane (b): 
-	host inet (h)        : xxx.xxx.xxx.xxx
-	gateway inet (g)     : xxx.xxx.xxx.xxx
-	user (u)             : username 
-	ftp password (pw) (blank = use rsh):  
-	flags (f)            : 0x0
-	target name (tn)     : iocxxx
-	startup script (s)   : /home/server/USER/epics/xxx/iocBoot/iocxxx/st.cmd
-	other (o)            : 
-
-
-1) Unpack everything
-====================
-
-Unzip and untar synApps_R3.13.1.1_R4.1.tar.gz.
-
-
-If you don't plan to build synApps, skip section (2), and manually link the
-user (xxx) tree with the share (synApps_R3.13.1.1_R4.1/share) tree, as described
-below.  From now on, I'll call the share tree $SHARE_DIR and the user tree $USER_DIR.
-
-1) (prebuilt distribution only) edit the file
-$USER_DIR/iocBoot/iocxxx/cdCommands to specify the locations
-	startup = "<user directory>/iocBoot/iocxxx"
-	top = "<user directory>"
-	appbin = "<user directory>/bin/mv162"
-		OR
-	appbin = "<user directory>/bin/mv167"
-	share = "<share directory>"
-
-2) BUILDING synApps
-==================
-
-2.1) Configure the share tree
------------------------------
-Edit files in the directory  $SHARE_DIR/config
+support/
+    allenBradley1-7/
+    camac/
+    config/
 	CONFIG
-	- name the target architectures for which you want to build
-	RELEASE
-	- specify the full path to EPICS base
-	- specify the full path to HIDEOS (if you plan to build it)
+	DAC128V_RELEASE
+        ...
+        Makefile                             <-- EDIT to build
+    dac128V/
+    documentation/
+    utils/
+    ip/
+    ip330/
+    ipUnidig/
+    ipac2-4/
+    love/
+    mca/
+    motor/
+    motor4-8/
+    mpf1-10/
+    mpfGpib1-4/
+    mpfSerial1-4/
+    quadEM/
+    std/
+    xxx/
 
+ioc/
+    1bm/
+        Makefile
+        bin/
+        config/
+        dbd/
+        iocBoot/
+            Makefile
+            ioc1bma/
+                13element.cmd                <-- EDIT to boot
+                13element.substitutions      <-- EDIT to boot
+                3element.cmd                 <-- EDIT to boot
+                3element.substitutions       <-- EDIT to boot
+                MPFconfig.cmd                <-- EDIT to boot
+                Makefile                     <-- EDIT to boot
+                auto_positions.req           <-- EDIT to boot
+                auto_settings.req            <-- EDIT to boot
+                autosave/                    < chmod a+w,g+s>
+                basic_motor.substitutions    <-- EDIT to boot
+                cdCommands
+                ip330Scan.substitutions      <-- EDIT to boot
+                motor.substitutions          <-- EDIT to boot
+                picMot.substitutions         <-- EDIT to boot
+                saveData.req                 <-- EDIT to boot
+                scanParms.substitutions      <-- EDIT to boot
+                st.cmd                       <-- EDIT to boot
+                st1.cmd                      <-- EDIT to boot
+                st_mpfserver.cmd             <-- EDIT to boot
+            ioc1bmb/
+               <much like ioc1bma>
+            nfsCommands                      <-- EDIT to boot
 
-2.2) (optional) build Hideos
-----------------------------
+        release.pl
+        start_epics_1bma                     <-- EDIT to boot
+        start_epics_1bmb                     <-- EDIT to boot
+        1bmaApp/
+        1bmbApp/
 
-If you have never built Hideos, now is probably not the time to start.
-We plan to abandon Hideos, and to port the synApps software that now
-relies on Hideos to the EPICS Message Passing Facility.  (Actually,
-Mark Rivers has already done most of this.  When the dust settles,
-we'll release a new version of synApps with the MPF stuff included.)
+    1id/
+	<much like 1bm>
 
-If you don't want to build Hideos, you can use the prebuilt
-IndustryPack support in $SHARE_DIR/ipApp/src/prebuilt*, as described
-below.  If you do want to build Hideos, see
-	"http://www.aps.anl.gov/asd/controls/Hideos/install.html"
-for a recipe, and be sure to get the version of Hideos that works with
-EPICS 3.13.  This build is normally very straightforward, although it
-takes several hours to download, build, and install everything.
+If you have a built copy of EPICS base 3.13.7 or later, and if you
+have a copy of those modules needed by synApps that aren't included in
+synApps, then building should be very simple:
 
+1) cd to support/config
 
-2.3) Build the share tree
--------------------------
+2) Edit Makefile to set the variables EPICS_BASE and SUPPORT.  SUPPORT
+   should be the full path to the synApps support directory.
 
-First, decide what you want to do about IndustryPack support (i.e., the
-Hideos device-support software in $SHARE_DIR/ipApp/src).  There are
-three possibilities:
+3) Run the same make executable used to build EPICS base.
 
-	1) Use prebuilt IndustryPack support by making the following link:
+When executed in the support/config directory, make will go to all
+of the modules support/config/Makefile knows about and edit the
+config/RELEASE files in those modules so that they all build from the
+same version of EPICS base and of other known modules.
 
-		ln -s Makefile.Vx.use_prebuilt Makefile.Vx
+Once synApps' support directory has built without errors, you can
+build a user tree to support your crates.  Make a copy of the
+support/xxx directory, cd to the top-level directory and run
+changePrefix_synApps_4.5 to change the PV-name prefix from xxx to
+whatever you want.  (Note you must have support/utils in your path.)
+Here's what I do:
 
-	2) Ignore the IndustryPack stuff completely by commenting out the line
+    cd $(SYNAPPS)/support/xxx
+    gnumake clean uninstall
+    tar cvf ../xxx.tar *
+    cd $(SYNAPPS)/ioc
+    mkdir 1bm
+    cd 1bm
+    tar xf $(SYNAPPS)/support/xxx.tar
+    changePrefix_synApps_4.5 xxx 1bma
+    <edit iocBoot/ioc1bma/Makefile to specify the processor type>
+    gnumake
 
-		DIRS += ipApp
+Edit the files marked "EDIT to boot" above to agree with your
+hardware, to load the databases you want, etc., set up the VME
+processor's parameters to load from the software just configured, and
+boot the crate.
 
-	from the file $SHARE_DIR/Makefile.
+======================================================================
+synApps is available in prebuilt form, on request.  The prebuilt
+version does not have to be built again unless you want to add or
+modify C code or database definition (.dbd) code, or to run it on
+hardware other than that for which it was built.  If you need merely
+to modify startup files, databases, medm displays, autosave files, and
+the like, then you don't need to build synApps, nor do you need to
+have built EPICS base to use prebuilt synApps.  Further, if you don't
+have to build synApps, and you don't have other reasons for wanting to
+build base or extensions, then you don't need a VxWorks developer's
+license to use the prebuilt distribution.  You still need a VxWorks
+target license for each VME processor, of course.
 
-	3) Build everything (assumes you've built Hideos) by making the
-	following link:
+Ensure that startCArepeater gets run when your workstation boots.
+If you have no way of doing this, you can run it manually or put the
+command in your .login file.
+    
+Setup your host system to work with the EPICS processor.  See the
+"VxWorks Programmer's Guide" if you have a copy.  Here's what we do:
 
-		ln -s Makefile.Vx.do_build Makefile.Vx
+    Add a user named <vx_username> with the password <vx_password>.
+    The user has nothing in its home directory, and very few priviledges.
 
-Now do the build.  'cd' to $SHARE_DIR and type
+    Connect an ethernet cable to the processor.
 
-	gnumake clean uninstall
-	gnumake
+    Setup the workstation to use a serial port at 9600 baud.
+    Connect a serial cable from the workstation to the VME
+    processor's "Console" port.
 
-This will get a pristine directory and build synApps against the version
-of EPICS you've already built; rebuild the *.dbd files that are
-required to describe synApps' custom records, etc.; and compile all of
-synApps' custom source code into modules that can be downloaded into
-the VME processor.  The file gnumake.out, which was produced by the
-(csh) command
+    Start up an "xterm" on the workstation and type
+    cu -lttya
+    (On some workstations we must type "cu -lcua/a".)
+    This gets the xterm communicating with the crate processor.
 
-	gnumake >& gnumake.out
+    Turn the crate on.  The crate processor says "Press any key to
+    stop auto-boot..." and a number counting down from 7.  Pressing
+    a key gets the prompt "[VxWorks Boot]:"
 
-shows the output produced during a successful build.
-When this has completed successfully, you have a working share
-directory to which user trees can refer during their build.
+    Type "p" to see the current boot parameters,  type "c" to
+    change them.  Here are sample boot parameters 
 
-2.4) Configure the user tree
-----------------------------
-Edit the following files in the directory $USER_DIR/config:
+    boot device          : ei 
+    processor number     : 0 
+    host name            : server 
+    file name            : /usr/local/vxWorks/T202/mv2700
+    inet on ethernet (e) : xxx.xxx.xxx.xxx:fffffe00 
+    inet on backplane (b): 
+    host inet (h)        : xxx.xxx.xxx.xxx
+    gateway inet (g)     : xxx.xxx.xxx.xxx
+    user (u)             : <vx_username> 
+    ftp password (pw) (blank = use rsh): <vx_password>  
+    flags (f)            : 0x0
+    target name (tn)     : iocxxx
+    startup script (s)   : /home/server/USER/epics/xxx/iocBoot/iocxxx/st.cmd
+    other (o)            : 
 
-	CONFIG
-	- name the target architectures for which you want to build
-
-	RELEASE
-	- specify the full path to EPICS base
-	- specify the full path to the share directory you just built
-
-2.5) Build the user tree
-------------------------
-'cd' to $USER_DIR and type
-
-	gnumake clean uninstall
-	gnumake
-
-This will get a pristine directory and populate it with files from the
-share directory.  If you add any custom software, these commands will
-also rebuild the xxxApp.dbd file that describes your custom records,
-etc.; and compile all of your custom source code into modules that can
-be downloaded into the VME processor.  The file gnumake.out, which was
-produced by the (csh) command
-
-	gnumake >& gnumake.out
-
-shows the output produced during a successful build.
-When this has completed successfully, you have a working system
-that can be fitted to the hardware in your VME crate.
-
-NOTE: An underlying assumption in the make rules is that you will not
-modify the share directory once you've built any user tree.  The share
-tree is assumed to be a *release*, not a development directory.  When
-you nevertheless do modify and rebuild share with linked user trees,
-you must do a
-
-	gnumake clean uninstall   <<<---<
-	gnumake
-
-or, equivalently,
-
-	gnumake rebuild
-
-in the user trees that inherit from share.
 
 
 3) Fitting synApps to a particular set of VME hardware
-=====================================================
+======================================================
 
 This happens in the user tree.  Generally, you must tell "EPICS" what
 hardware is in your crate, and what addresses, interrupt vectors, etc.
@@ -533,59 +457,32 @@ you have DIP-jumpered your hardware to use.  You also must specify
 which motors any slit, table, monochromator, etc. control software is
 to use.  If you use serial or GPIB, you must match port names to
 hardware devices, set serial-port parameters, and specify GPIB
-addresses.  For any IndustryPack modules, you must specify the IP slots
-on the MVME162 processor into which you've loaded those modules.
-
-If you have more than one application on an ethernet subnet, you must
-select a short prefix string for each application, and you must edit
-many files to replace the existing prefix with your choice.  (The shell
-script changePrefix3.13.1.1 automates this.)  You should customize
-backup/restore and autosave/restore request files to name the EPICS
-process variables whose values you want routinely to save and restore.
-If you use the data catcher, you should specify the EPICS process
-variables whose values are to be saved before each scan.
+addresses.  For any IndustryPack modules, you must specify the IP
+carrier and slot into which you've loaded those modules.
 
 In a complete job of fitting synApps to a VME crate's hardware, all of
 the following files will be touched:
 
-	xxx/iocBoot/iocxxx/st.cmd
-		specifies installed hardware, loads desired software
+    xxx/iocBoot/iocxxx/st.cmd
+        specifies installed hardware, loads desired software
 
-	xxx/iocBoot/iocxxx/motor.substitutions
-		specifies motors	
+    xxx/iocBoot/iocxxx/motor.substitutions
+        specifies motors    
 
-	xxxApp/iocBoot/iocxxx/scanParms.substitutions
-		attaches scan parameters to selected PV's
+    xxxApp/iocBoot/iocxxx/scanParms.substitutions
+        attaches scan parameters to selected PV's
 
-	xxx/iocBoot/iocxxx/auto_positions.req
-	xxx/iocBoot/iocxxx/auto_settings.req
-		specifies PV's to be saved/restored automatically
+    xxx/iocBoot/iocxxx/auto_positions.req
+    xxx/iocBoot/iocxxx/auto_settings.req
+        specifies PV's to be saved/restored automatically
 
-	xxx/iocBoot/iocxxx/saveData.req
-		identifies PV's used by the saveData software, and identifies
-		sscan records to be monitored for data
+    xxx/iocBoot/iocxxx/saveData.req
+        identifies PV's used by the saveData software, and identifies
+        sscan records to be monitored for data
 
-	xxx/iocBoot/iocxxx/bootParms
-		a copy of the boot parameters (in case the VME processor
-		crashes in a way that erases nonvolatile memory)
-
-	xxx/xxxApp/op/burt/settings.req
-	xxx/xxxApp/op/burt/positions.req
-		specifies PV's to be saved manually
-
-	xxx/xxxApp/op/idl/catch1d.env
-		specifies PV's to be saved at every scan
-
-	xxx/xxxApp/op/adl/xxx.adl (customize a copy of this file)
-		sample top-level medm display
-
-In my experience, a large part of the job of fitting synApps to an
-experimental station is in changing all the prefixes in files that
-contain fully resolved PV names.  I use the shell script
-"changePrefix3.13.1.1" which applies the unix stream editor, sed, to a
-list of files.  This script is in the directory $SHARE_DIR/bin, and it
-calls "doSed", which is also in that directory.  Neither of these
-scripts is very smart or robust.
+    xxx/iocBoot/iocxxx/bootParms
+        a copy of the boot parameters (in case the VME processor
+        crashes in a way that erases nonvolatile memory)
 
 3.1) xxx/iocBoot/iocxxx/st.cmd
 ------------------------------
@@ -822,8 +719,8 @@ changePrefix3.13.1
 These are for the application developer's convenience in changing EPICS
 prefixes in a user tree.
 Example of use:
-	cd /home/oxygen/MOONEY/epics/3.13.1/xxx
-	changePrefix3.13.1 xxx 1bma
+    cd /home/oxygen/MOONEY/epics/3.13.1/xxx
+    changePrefix3.13.1 xxx 1bma
 
 medm_help.sh
 netURL
@@ -832,8 +729,8 @@ These support online documentation for medm (version 2.2.5 and later)
 displays.  This documentation is Web based, and the script medm_help.sh
 assumed you're using netscape on a unix platform.
 Example of use:
-	setenv MEDM_HELP_DIR /home/sricat/BCDA/epics/3.13.1/medm_help
-	medm&
+    setenv MEDM_HELP_DIR /home/sricat/BCDA/epics/3.13.1/medm_help
+    medm&
 
 showBurtDiff
 wrapCmd
@@ -842,44 +739,44 @@ wrapper
 These implement the BURT "Compare" operations called up from the
 top-level medm screen.  (See, e.g., xxx/xxxApp/op/adl/xxx.adl.)
 Example of use:
-	# compare current PV values with those saved in settings.sav
-	burtrb -f settings.req -o current.save 1>&- 2>&-; wrapCmd 'showBurtDiff current.save settings1.save'&
+    # compare current PV values with those saved in settings.sav
+    burtrb -f settings.req -o current.save 1>&- 2>&-; wrapCmd 'showBurtDiff current.save settings1.save'&
 
 set_EPICS_DISPLAY_PATH
 ----------------------
 This sets the environment variable EPICS_DISPLAY_PATH for medm, if the
 environment variable SHARE_DIR points to the share tree.
 Example of use:
-	setenv SHARE_DIR /home/sricat/BCDA/epics/synApps_R3.13.1.1_R4.1/share
-	source set_EPICS_DISPLAY_PATH
-	medm
+    setenv SHARE_DIR /home/sricat/BCDA/epics/synApps_R3.13.1.1_R4.1/share
+    source set_EPICS_DISPLAY_PATH
+    medm
 
 set_BURT_INCLUDE
 ----------------
 This sets the environment variable BURT_INCLUDE, for use in burtrb
 commands, if the environment variable SHARE_DIR points to the share tree.
 Example of use:
-	setenv SHARE_DIR /home/sricat/BCDA/epics/synApps_R3.13.1.1_R4.1/share
-	source set_BURT_INCLUDE
-	burtrb -f <request_file> $BURT_INCLUDE -o <snapshot_file>
+    setenv SHARE_DIR /home/sricat/BCDA/epics/synApps_R3.13.1.1_R4.1/share
+    source set_BURT_INCLUDE
+    burtrb -f <request_file> $BURT_INCLUDE -o <snapshot_file>
 
 gdct313
 -------
 This replacement for gdct works only with EPICS 3.13.  If gdct313 will
 not read a database you've carried over from 3.12, and complains about
 a line of the form
-	database(x) { nowhere() {
+    database(x) { nowhere() {
 then you need to read that database into a recent 3.12-compatible
 version of gdct, make some trivial modification, and save it.
 gdct313 wants to see lines of the form
-	grecord(ao,"myAOrecord") {
+    grecord(ao,"myAOrecord") {
 
 Examples of use:
-	In the user tree:
-	gdct313 -s xxxApp.dbd&
+    In the user tree:
+    gdct313 -s xxxApp.dbd&
 
-	In the share tree:
-	gdct313 -s synApps.dbd&
+    In the share tree:
+    gdct313 -s synApps.dbd&
 
 gdct313 has a problem.  Sometimes when you make a link to a field other than
 <target_record>.VAL, the graphics shows you the correct link, but the record
