@@ -288,9 +288,9 @@ support/
     camac1-3/
     config/
         CONFIG
-        DAC128V_RELEASE
-        ...
+        MASTER_RELEASE                       <-- EDIT to build
         Makefile                             <-- EDIT to build
+        ...
     dac128V1-4/
     documentation/
     utils/
@@ -363,10 +363,12 @@ synApps, then building should be very simple:
 
 1) cd to support/config
 
-2) Edit Makefile to set the variables EPICS_BASE and SUPPORT.  SUPPORT
-   should be the full path to the synApps support directory.
+2) Edit Makefile to set the variable SUPPORT.  SUPPORT should be the
+   full path to the synApps support directory.
 
-3) Run the same GNU Make executable used to build EPICS base.  You may
+3) Edit MASTER_RELEASE to set the variable EPICS_BASE.
+
+4) Run the same GNU Make executable used to build EPICS base.  You may
    need $(EPICS_BASE)/bin/<arch> in your path.
 
 When executed in the support/config directory, make will go to all
