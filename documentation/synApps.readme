@@ -1,0 +1,704 @@
+	Instructions for using synApps 5.0
+
+synApps is a collection of custom EPICS software (source code, EPICS
+databases, client scripts, executables, etc.) intended to support most
+of the requirements of an x-ray laboratory or synchrotron-radiation
+(SR) experiment station.  Several instances of this application can
+work together to support an entire SR beamline.  synApps is also
+intended to underly additional software that may be station or
+beamline specific.
+
+This release of synApps is compatible with EPICS release 3.14.5
+and later.  The distribution is setup to build under EPICS R3.14.5
+using Tornado 2.02.
+
+synApps includes software developed by the Beamline Controls & Data
+Acquisition and Accelerator Controls groups of the Advanced Photon
+Source (APS); by developers in APS Collaborative Access Teams --
+notably, Mark Rivers (CARS-CAT); and by developers in the EPICS
+collaboration outside of the APS.
+
+Aside from databases, SNL programs, and the like, synApps contains the
+following code:
+
+record support
+    epid       Extended version of the EPICS PID record, for
+               implementing feedback loops
+    motor      stepper and servo motors, "soft" motor
+    scaler     scaler bank
+    scanparm   scan parameters for use with the scan record
+    table      6-degree-of-freedom optical table
+    transform  like an array of calc records, with output links
+    sCalcout   calcout record extended to handle string expressions,
+	           links, and values.
+    busy       utility record: calls recGblFwdLink only when its
+               VAL field makes a transition to zero.
+    swait      replaces the wait record in base.
+               This version uses a modified version of recDynLlib
+               that supports dbNotify command completion.  It uses
+               ca_put_callback to do puts, instead of ca_put.
+    sscan      Replaces the scan record (Ned Arnold/APS) in base.
+               This version uses a modified version of recDynLlib
+               that supports dbNotify command completion.  It uses
+               ca_put_callback to do puts, instead of ca_put.
+    sseq       string-sequence record.  This is a modified version of
+               the seq record in base.  This version can link to/from
+			   either string or numeric PVs, and it can use
+			   dbCaPutLinkCallback to wait for completion of the
+			   execution started by one link before going on to the
+			   next.
+    serial     generic serial record (Mark Rivers/APS/CARS-CAT)
+    vme        generic vme record (Mark Rivers/APS/CARS-CAT)
+    gpib       generic GPIB record (Mark Rivers/APS/CARS-CAT)
+    mca        support for the Canberra AIM multichannel
+               analyzer and the Struck SIS380x multichannel scaler.
+    timestamp  Needed by the vxStats module, but not available in a
+	           published module.
+    genSub     
+
+
+device/driver support
+	# Acromag IP-330 ADC as waveform recorder
+	# Advanced Control Systems driver support.
+	# Bunch clock generator (Frank Lenkszus)
+	# Canberra AIM multichannel analyzer, and various ICB modules
+	# Struck STR7201/SIS3806 as multichannel and normal scaler
+	# dac128V 8-channel DAC
+	# Eurotherm temp controller
+	# GP307 GPIB
+	# GPIB Heidenhain encoder
+	# GPIB Keithley model 199 DMM
+	# Generic A32/D32 VME Access 
+	# Generic GPIB record
+	# Greenspring IP-Unidig digital I/O IP module
+	# HP 10895A Laser Axis (interferometer) board
+	# Heidenhain IK320 (Till Straumann/BESSY)
+	# Heidenhain IK320 VME counter/interpolator (Till Straumann/BESSY)
+	# Heidenhain ND261 and related serial interface boxes
+	# HPS SensaVac 937
+	# Love Controllers, via MPF
+	# MKS vacuum gauge controller
+	# MPC ion pump controller
+	# MPF ICB support, used by Canberra ICB modules
+	# MPF MCA support, used by Canberra AIM multichannel analyzer and
+	# Queensgate Piezo drive.
+	# Struck STR7201 or SIS 380x multi-channel scaler
+	# VMI4116 16-bit D/A converter
+	# Varoc SSI encoder interface board
+	# StringParm device support for various records
+	# IP330 ADC
+	# Extended PID (epid) debice support
+	# motor controllers:
+	#    soft support
+	#    Intelligent Motion Systems IM483PL and IM483SM
+	#    Newport MM3000, MM4000/5, PM500 and ESP300
+	#    Oregon Micro Systems VME8/44 and VME58
+	#    E500 (a CAMAC module)
+	#    Advanced Control Systems MCB-4B")
+	#    MDrive
+	#    MXmotor
+	#    Mclennan PM304
+	# scalers:
+	#    Joerger VSC8/16
+	#    ??? CAMAC
+	#    Struck STR7201
+	# generic serial
+	# MPFread, MPFwriteRead, MPFwrite
+
+miscellaneous C code
+
+	sCalcPerform
+		Backward compatible extension of the expression evaluation
+		software in base.
+	recDynLink
+		Backward compatible extension of the dynamic-link software
+		previously in base.  (Superceded by dbCaPutlinkCallback)
+	save_restore, dbrestore
+		Automatic parameter save and boot-time restore.
+	saveData
+		Saves scan data to files on an NFS-mounted disk.
+		
+How to use synApps
+------------------
+
+synApps is not a complete software installation in itself.  To use
+synApps, you must acquire and build EPICS base and other modules
+on which synApps depends.  Here's a list of the modules and the
+version with which synApps is known to work.
+
+EPICS baseR3.14.5   or later 3.14 release
+allenBradley2-1     if you intend to connect with Allen Bradley PLC's
+ipac2-7             required by mpf
+mpf2-4-2            required by mca, dac128V, ip, ip330, love, motor,
+                    quadEM
+seq2-0-8            for SNL programs in synApps
+vxStats1-7-2a		vxWorks stats
+
+Here's a list of the modules included in synApps:
+
+autosave      save-restore
+calc          run-time expression evaluation
+camac         CAMAC support
+ccd           various scientific CCD detectors
+dac128V       IndustryPack DAC
+dxp           DSP
+ip            various serial devices
+ip330         IndustryPack ADC
+ipUnidig      IndustryPack digital I/O
+love          Love controllers
+mca           multichannel analyzers
+motor         motors
+optics        optical table, monochromators, slits, etc.
+quadEM        4-channel electrometer
+sscan         sscan record and related software
+std           misc EPICS software
+utils         miscellaneous tools
+vme           vme-specific support
+xxx           sample user-application directory
+
+Although synApps is distributed as a single 'support' directory, it's
+normally used as a two-part system: the 'support' tree, and a 'user'
+tree.  The support tree can be installed on a read-only file system,
+along with EPICS base and other modules, and used from there by the
+user tree, which begins as a copy of the module 'support/xxx', and is
+customized/extended by the end user to particular applications and
+sets of hardware.  To support many VME-based systems, you might create
+several user trees, each supporting several crates, and link all of
+those trees to the support tree.  Here's what a complete installation
+might look like (much detail omitted) with all the files you will have
+to edit before you can build or boot a crate:
+
+support/
+    allenBradley/
+    calc/
+    camac/
+    ccd/
+    config/
+        CONFIG
+        MASTER_RELEASE                       <-- EDIT to build
+        Makefile                             <-- EDIT to build
+        ...
+    dac128V/
+	dxp/
+    documentation/
+    utils/
+    ip/
+    ip330/
+    ipUnidig/
+    ipac/
+    love/
+    mca/
+    motor/
+    optics/
+    mpf/
+    quadEM/
+	sscan/
+    std/
+	utils/
+	vme/
+	vxStats/
+    xxx/
+
+ioc/
+    1bm/
+        Makefile
+        bin/
+        config/
+        dbd/
+        iocBoot/
+            Makefile
+            nfsCommands                      <-- EDIT to boot
+            ioc1bma/
+                13element.cmd                <-- EDIT to boot
+                13element.substitutions      <-- EDIT to boot
+                3element.cmd                 <-- EDIT to boot
+                3element.substitutions       <-- EDIT to boot
+                MPFconfig.cmd                <-- EDIT to boot
+                Makefile                     <-- EDIT to boot
+                auto_positions.req           <-- EDIT to boot
+                auto_settings.req            <-- EDIT to boot
+                autosave/                    < chmod a+w,g+s>
+                basic_motor.substitutions    <-- EDIT to boot
+                cdCommands
+                ip330Scan.substitutions      <-- EDIT to boot
+                dac128V.substitutions        <-- EDIT to boot
+                motor.substitutions          <-- EDIT to boot
+                picMot.substitutions         <-- EDIT to boot
+                saveData.req                 <-- EDIT to boot
+                scanParms.substitutions      <-- EDIT to boot
+                st.cmd                       <-- EDIT to boot
+                st1.cmd                      <-- EDIT to boot
+                st1_mpfserver.cmd            <-- EDIT to boot
+                st_mpfserver.cmd             <-- EDIT to boot
+            ioc1bmb/
+               <much like ioc1bma>
+
+        release.pl
+        start_epics_1bma                     <-- EDIT to run MEDM
+        start_epics_1bmb                     <-- EDIT to run MEDM
+        1bmaApp/
+        1bmbApp/
+
+    1id/
+    <much like 1bm>
+    .
+    .
+    .
+
+1) Building and configuring a user tree
+=======================================
+
+If you have a built copy of EPICS base 3.14.5 or later,  then building
+synApps should be very simple:
+
+1) Either get all the external modules on which synApps depends from
+   their web sources (see support/config/README) and modify them
+   according to the procedures in support/config/README, or just
+   untar the already-modified copies of those distributions from
+   the support/MOD_TAR directory.  The modules are expected to be
+   in the support directory, along with the synApps modules.
+
+2) Edit support/config/Makefile to set the variables SUPPORT and
+   EPICS_BASE.  SUPPORT should be the full path to the synApps
+   support directory.
+
+3) Edit motor/motorApp/Makefile to select the motor support you
+   want to build.
+
+4) in support/config, run the same GNU Make executable used to build
+   EPICS base.  You may need $(EPICS_BASE)/bin/<arch> in your path.
+
+When executed in the support/config directory, make will go to all
+of the modules support/config/Makefile knows about and edit the
+config/RELEASE files in those modules so that they all build from the
+same versions of EPICS base and other known modules.
+
+Once synApps' support directory has built without errors, the xxx
+module will have been configured so that you can use it to build a
+user tree to support your crates.  Make a copy of the support/xxx
+directory, cd to the top-level directory and run changePrefix to
+change the PV-name prefix from xxx to whatever you want.  (Note you
+must have support/utils in your path.)
+Here's what I do:
+
+    cd $(SYNAPPS)/support/xxx
+    gnumake clean uninstall
+    tar cvf ../xxx.tar *
+    cd $(SYNAPPS)/ioc
+    mkdir 1bm
+    cd 1bm
+    tar xf $(SYNAPPS)/support/xxx.tar
+    changePrefix xxx 1bma
+    <edit iocBoot/ioc1bma/Makefile to specify the VME processor type>
+    gnumake
+
+To put a second application, 1bmb, into 1bm, I run the following
+commands:
+
+    cd $(SYNAPPS)/ioc
+    mkdir temp
+    cd temp
+    tar xf $(SYNAPPS)/support/xxx.tar
+    changePrefix xxx 1bmb
+    <edit iocBoot/ioc1bmb/Makefile to specify the VME processor type>
+    cd $(SYNAPPS)/ioc
+    mv temp/1bmbApp/start_epics_1bmb 1bm
+    mv temp/1bmbApp 1bm
+    mv temp/iocBoot/ioc1bmb 1bm/iocBoot
+    rm -rf temp
+    cd 1bm
+    gnumake
+
+Edit the files marked "EDIT to boot" above to agree with your
+hardware, to load the databases you want, etc., set up the VME
+processor's parameters to load from the software just configured, and
+boot the crate.  If you don't know how to do this, read on.
+
+
+2) Setting up the crate
+======================================================================
+
+Ensure that $(EPICS_BASE)/bin/<arch>/startCArepeater gets run when your
+workstation boots.  If you have no way of doing this, you can run it
+manually or put the command in your .login file.
+    
+Setup your host system to work with the EPICS processor.  See the
+"VxWorks Programmer's Guide" if you have a copy.  Here's what we do:
+
+    Add a user named <vx_username> with the password <vx_password>.
+    The user has nothing in its home directory, and very few priviledges.
+
+    Connect an ethernet cable to the processor.
+
+    Setup the workstation to use a serial port at 9600 baud.
+    Connect a serial cable from the workstation to the VME
+    processor's "Console" port.
+
+    Start up an "xterm" on the workstation and type
+    cu -lttya
+    (On some workstations we must type "cu -lcua/a".)
+    This gets the xterm communicating with the crate processor.
+
+    Turn the crate on.  The crate processor says "Press any key to
+    stop auto-boot..." and a number counting down from 7.  Pressing
+    a key gets the prompt "[VxWorks Boot]:"
+
+    Type "p" to see the current boot parameters,  type "c" to
+    change them.  Here are sample boot parameters 
+
+    boot device          : ei 
+    processor number     : 0 
+    host name            : server 
+    file name            : /usr/local/vxWorks/T202/mv2700
+    inet on ethernet (e) : xxx.xxx.xxx.xxx:fffffe00 
+    inet on backplane (b): 
+    host inet (h)        : xxx.xxx.xxx.xxx
+    gateway inet (g)     : xxx.xxx.xxx.xxx
+    user (u)             : <vx_username> 
+    ftp password (pw) (blank = use rsh): <vx_password>  
+    flags (f)            : 0x0
+    target name (tn)     : iocxxx
+    startup script (s)   : /home/server/USER/epics/xxx/iocBoot/iocxxx/st.cmd
+    other (o)            : 
+	
+See support/xxx/iocBoot/ioc*/bootParms for other processor types.
+
+
+
+
+3) Fitting synApps to a particular set of VME hardware
+======================================================
+
+This happens in the user tree.  Generally, you must tell "EPICS" what
+hardware is in your crate, and what addresses, interrupt vectors, etc.
+you have DIP-jumpered your hardware to use.  You also must specify
+which motors any slit, table, monochromator, etc. control software is
+to use.  If you use serial or GPIB, you must match port names to
+hardware devices, set serial-port parameters, and specify GPIB
+addresses.  For any IndustryPack modules, you must specify the IP
+carrier and slot into which you've loaded those modules.
+
+In a complete job of fitting synApps to a VME crate's hardware, all of
+the following files will be touched:
+
+    xxx/iocBoot/ioc*/st.cmd
+        specifies installed hardware, loads desired software
+
+    xxx/iocBoot/ioc*/motor.substitutions
+        specifies motors    
+
+    xxxApp/iocBoot/ioc*/scanParms.substitutions
+        attaches scan parameters to selected PV's
+
+    xxx/iocBoot/ioc*/auto_positions.req
+    xxx/iocBoot/ioc*/auto_settings.req
+        specifies PV's to be saved/restored automatically
+
+    xxx/iocBoot/ioc*/saveData.req
+        identifies PV's used by the saveData software, and identifies
+        sscan records to be monitored for data
+
+    xxx/iocBoot/ioc*/bootParms
+        a copy of the boot parameters (in case the VME processor
+        crashes in a way that erases nonvolatile memory)
+
+If you have the appropriate hardware, you may also want to
+customize the following files:
+
+    xxx/iocBoot/ioc*/13element.substitutions
+        13-element MCA
+
+    xxx/iocBoot/ioc*/3element.substitutions
+        3-element MCA
+
+    xxx/iocBoot/ioc*/picMot.substitutions
+        picomotors
+
+    xxx/iocBoot/ioc*/ip330Scan.substitutions
+        IndustryPack ADC module
+
+3.1) xxx/iocBoot/ioc*/st.cmd
+------------------------------
+The distribution copy of this file contains commands to load nearly
+all of the compiled software in synApps.  But it loads only those
+databases consistent with a very minimal set of VME hardware.
+
+This file is probably worth studying.  It is reasonably well commented,
+and it contains dbLoadRecords() commands for most of the EPICS
+databases in synApps.
+
+3.2) Motors
+-----------
+To load more motors, add lines to the file
+xxx/iocBoot/ioc*/motor.substitutions.
+
+If you want the new motors to work with the AllStop button
+("xxx:allstop.VAL"--see the top-level medm display xxx.adl), select
+the appropriate version of all_com_?.db, or edit and load a customized
+version of the database.  (As delivered, xxxApp loads the database
+all_com_16.db, which supports 16 motors.  support/std/stdApp/Db
+contains versions for various numbers of motors.)
+
+If you want to manage positions and settings of the new motors using
+the "Save", Restore", and "Compare" buttons on the supplied top-level
+medm display, edit the files xxx/xxxApp/op/burt/settings.req and
+xxx/xxxApp/op/burt/positions.req.
+
+If you want the VME crate automatically to save positions and settings
+of the new motors, and restore them when the crate reboots, add lines
+to the files xxx/iocBoot/ioc*/auto_settings.req and
+xxx/iocBoot/ioc*/auto_positions.req.
+
+
+
+3.3) Slits
+----------
+To use a pair of motors to control a slit, search for "2slit.db" in
+xxx/iocBoot/ioc*/st.cmd, and edit the dbLoadRecords() command you'll
+find there.  The example in st.cmd loads two copies of 2slit.db
+intended for use as the horizontal and vertical members of a four-jaw
+slit.  The medm displays 2slit*.adl and 4slit*.adl are involved in
+these applications.
+
+The slit database makes the following assumptions about the two motors
+attached to the individual slit leaves:
+1) Both of them have the same engineering units.
+2) Their .VAL fields are in the same coordinate system.  I.e., if the
+slit is closed, both motors have the same value.
+3) The APS standard beamline coordinate system is used.  Positive Z is
+the beam direction; positive Y is upward; positive X is outward from
+the storage ring.
+So then, if I open a slit, one motor's .VAL field increases and the
+other's decreases.
+
+The 2slit.db database allows users to move either the slit virtual
+motors or the actual motors, and it keeps all the readback values
+current regardless of how the actual motors got moved or recalibrated.
+But it does not automatically reset the slit *drive* values when the
+actual motors are used.  This must be dome manually, using the "SYNC"
+button on the 2slit.adl display.  Pressing this button causes the
+database to read the actual motor drive values and set the slit drive
+values accordingly.
+
+To recalibrate slit positions, press the "Set" button.  This automatically
+presses the "Set" button of both motors the slit software talks to, and
+the user/dial offsets of those motors actually implement the recalibration. 
+
+There is a new, experimental slit database in synApps which uses soft
+motor records as the user/client interface.  This allows clients that
+know how to control a motor also to control a slit, with some
+limitations.  We hope to use soft motor records in front of other
+positioners (e.g. monochromators, optical tables, insertion devices,
+and DAC channels) in the future.
+
+3.4) Optical tables
+-------------------
+Optical tables are controlled by a custom EPICS record (the "table"
+record), used in the database table.db and controlled via medm displays
+table*.adl.
+
+Table virtual motors behave in much the same way as do slit virtual
+motors.  However, the table software does not use user/dial offsets in
+the underlying motor to implement recalibration (it can't, since it
+works through a nonlinear transform).  Instead, the table maintains its
+own offsets for all of the six coordinated motions it implements.
+Pressing the "Set" button causes new table positions to modify the
+offsets instead of moving the table (which is exactly the way motor and
+slit calibration works).  In addition to a "Sync" button, which reads
+motor positions and calculates the table positions from them, the table
+display has an "Init" button, which zeros all offsets before doing a
+"sync" operation.  It also has a "Zero" button, which manipulates all the
+table offsets to make the current table positions zero without moving or
+recalibrating any motors.
+
+3.5) Monochromators
+-------------------
+Several varieties of crystal monochromators are supported in synApps:
+two constant-offset "channel-cut" monochromators, a high-resolution
+double-crystal monochromator, and a spherical-grating monochromator.
+Most are supported by databases paired with State Notation Language
+(SNL) programs, and several medm displays.  The EPICS databases
+kohzuSeq.db, SNL program kohzuCtl.st, and medm displays kohzu*.adl
+(also kohzu*.gif) are involved in control of two varieties of
+high-heat-load monochromators.  The EPICS database hrSeq.db, SNL
+program hrCtl.st, and medm displays hSeq*.adl are involbed in control
+of the high-resolution double-crystal monochromator.  The spherical
+grating monochromator is supported by the database SGM.db and the
+displays SGM*.adl.
+
+3.6) Filters
+------------
+The APS standard user filters combine several motors and solenoids
+to control the placement of filter material in the beam path.  The
+databases filterMotor.db and filterLock.db, and the medm displays
+*filter*.adl are involved in this application.
+
+3.7) Basic run-time programming
+-------------------------------
+Impromptu coordinated motions and other bits of run-time programming
+are handled by what we call a "userCalc" (actually just a swait record
+with a nice Medm interface) or a "userTransform" (actually just a
+transform record with a nice medm interface).  We normally load ten of
+these into each EPICS processor, and the users type in expressions to
+be evaluated, and link inputs and outputs, as needed to glue existing
+objects together to do what they want done at the moment.  Here are
+some examples of the tasks that have been accomplished with userCalcs
+and userTransforms:
+
+- turn off hardware feedback control of a monochromator crystal when
+beam drops below a user-specified level.  The userCalc monitored the
+EPICS PV that contains the value of the positron beam-current, and
+drove a DAC channel (used as a digital i/o bit) that enabled hardware
+feedback.
+
+- support the ubiquitous theta/two-theta coordination by slaving the
+two-theta motor's .VAL field to the theta motor's .VAL field.
+
+- talk to a motor through a nonlinear transformation, e.g., energy-to-
+Bragg-angle.
+
+- close slow feedback loops--e.g., to adjust a monochromator crystal to
+suppress third-order diffraction through the high-heat-load
+monochromator.
+
+- move multichannel-analyzer regions of interest automatically as the
+incident beam energy changes.
+
+- save and automatically subtract shutter-closed offsets from scaler data.
+
+3.8) string-expression support
+------------------------------
+Run-time programming involving strings and/or numbers can be done with
+userStringCalcs, which resemble userCalcs closely, but differ in
+significant details.  A package containing two stringCalcs and a generic
+serial record (called a "serial O/I block") is also available for
+run-time programming of simple serial-device support.  There is also
+a GPIB O/I block.
+
+3.9) sequence support
+---------------------
+Run-time programming of sequences is possible using the new sseq record
+and related medm displays yySseq.adl
+
+3.10) multiple-step measurement
+-------------------------------
+Up to four measurement steps involving positioners, detectors, and
+end calculations (e.g., to support dichroism experiments) can be done
+with the 4step.db database and the related medm display, 4step.adl.
+The entire measurement sequence can be involved in a scan by treating
+the 4step database as you would treat the scaler or mca software.
+
+
+4) Using synApps
+================
+
+4.1) Boot parameters
+--------------------
+See xxx/iocBoot/ioc*/bootParms for sample boot parameters.
+
+4.2) MEDM
+---------
+See the MEDM Operator's Manual for detailed information on the special
+needs of this Motif program.  I'll assume those needs have been met.
+
+Edit the file xxx/start_epics_xxx to so it sets the environment
+variable EPICS_APP to the directory that contains xxxApp.  If you plan
+to run MEDM on a workstation that isn't on the same subnet as the
+ioc's, you'll need to uncomment and edit the definition of the
+environment variable EPICS_CA_ADDR_LIST.  In principle, you should
+be able to name only the broadcast address for the subnet that contains
+the ioc's, but if this doesn't work, you can put in the IP addresses of
+all the ioc's you want to connect with, separated by spaces, as follows:
+setenv EPICS_CA_ADDR_LIST "164.54.53.126 164.54.53.127"
+
+To bring up the top-level medm display for synApps software, cd to
+xxx and type "start_epics_xxx" (e.g., start_epics_1bma).  This
+script locates the directories that might have medm-display files
+and includes them in the environment variable EPICS_DISPLAY_PATH,
+cd's to xxxApp/op/adl, and runs MEDM with the default top-level
+display file.
+
+4.3) autosave/restore
+---------------------
+You must give the crate write permission to
+xxx/iocBoot/ioc*/autosave so it can write the files
+auto_positions.sav and auto_settings.sav there.  It's also helpful to
+set the autosave directory's 'group' bit so that files the crate
+writes will be owned by the owner of the directory instead of by
+<vxworks_user>.  Normally, I do this:
+
+    chmod a+w,g+s autosave
+
+To modify the list of PV's that are saved and restored, edit the files
+
+   xxx/iocBoot/ioc*/auto_settings.req and
+   xxx/iocBoot/ioc*/auto_positions.req
+
+The autosave software is started by the lines "create_monitor_set(..."
+in xxx/iocBoot/ioc*/st.cmd.  The restore happens during iocInit
+as a result of function calls inserted into initHooks.o, which is loaded
+by xxx/iocBoot/ioc*/st.cmd.
+
+
+4.4) saveData
+-------------
+saveData is a CA client that monitors sscan records and saves scan
+data to files on as NFS-mounted disk.  The software is configured with
+the file xxx/iocBoot/ioc*/saveData.req, which needs no special attention
+unless you want to specify modify the list of EPICS PV's whose values
+are to be saved with every data file.  To do this, look for the string
+"[extraPV]" in the file, and edit the list of PV's immediately
+following that string.  If an entry in this list contains only the PV
+name, saveData will describe the PV, in the data file, using the .DESC
+field of the record that contains that PV.  If a string follows the PV
+name, saveData will use the string instead.
+
+
+Miscellaneous executables, loose ends
+=====================================
+
+doSed
+changePrefix
+------------
+These are for the application developer's convenience in changing EPICS
+prefixes in a user tree.  You must be in the top level of the user tree
+to run changePrefix.
+Example of use:
+    cd $(SYNAPPS)/ioc/1bm
+    changePrefix xxx 1bma
+
+copyAdl
+-------
+Look for .adl files and copy them to a directory
+Example of use:
+    copyAdl $SYNAPPS/support adl_files
+
+==============================================
+
+synApps is available in prebuilt form, on request.  The prebuilt
+version does not have to be built again unless you want to add or
+modify C code or database definition (.dbd) code, or to run it on
+hardware other than that for which it was built.  If you need merely
+to modify startup files, databases, medm displays, autosave files, and
+the like, then you don't need to build synApps, nor do you need to
+have built EPICS base to use prebuilt synApps.  Further, if you don't
+have to build synApps, and you don't have other reasons for wanting to
+build base or extensions, then you don't need a VxWorks developer's
+license to use the prebuilt distribution.  You still need a VxWorks
+target license for each VME processor, of course.
+
+The custom EPICS software contained in synApps should not be assumed to
+be compatible with the medm displays, burt scripts, etc. of any
+previous releases of synApps.  If you pull software from here, it's
+probably best to pull complete sets of related code (source, dbd,
+database, medm display, and excerpts from autosave/restore request
+files, substitution files and st.cmd).
+
+
+===============================================================================
+Tim Mooney (mooney@aps.anl.gov)
+Beamline Controls & Data Acquisition Group
+Advanced Photon Source
+3/4/2004
+
+
