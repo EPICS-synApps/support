@@ -2,7 +2,6 @@ eval 'exec perl -S $0 ${1+"$@"}'  # -*- Mode: perl -*-
     if $running_under_some_shell; # makeIocCdCommands.pl
 
 use Cwd;
-use Env;
 
 $cwd  = cwd();
 #hack for sun4
@@ -25,6 +24,8 @@ print OUT "top = \"$top\"\n";
 $topbin = "${top}/bin/${arch}";
 #skip check that top/bin/${arch} exists; src may not have been builT
 print OUT "topbin = \"$topbin\"\n";
+# Add TOP to macro list.
+$applications{TOP} = $top;
 
 @files =();
 push(@files,"$top/config/RELEASE");
@@ -45,13 +46,13 @@ foreach $file (@files) {
 		    ($prefix,$post) = /(.*)\s* \s*(.*)/;
 		}
 		else {
-                    if ($macro eq "TOP") {
-                       $base = $top;
-                       $post = $base . $post;
-                       #print "info: \$macro= $macro \$base= $base \$post= $post\n";
-                    } else {
-                       print "error: $macro is not TOP\n";
-                    }
+		    $base = $applications{$macro};
+		    if ($base eq "") {
+			#print "error: $macro was not previously defined\n";
+		    }
+		    else {
+			$post = $base . $post;
+		    }
 		}
 		push(@files,"$post")
 	    }
@@ -64,14 +65,14 @@ foreach $file (@files) {
 		    # prefix = post
 		    ($prefix,$post) = /(.*)\s*=\s*(.*)/;
 		} else {
-                    if ($macro eq "TOP") {
-                       $base = $top;
-                       $post = $base . $post;
-                       #print "info: \$macro= $macro \$base= $base \$post= $post\n";
-                    } else {
-                       print "error: $macro is not TOP\n";
-                    }
+		    $base = $applications{$macro};
+		    if ($base eq "") {
+			#print "error: $macro was not previously defined\n";
+		    } else {
+			$post = $base . $post;
+		    }
 		}
+		$applications{$prefix} = $post;
 		$app = lc($prefix);
 		if ( -d "$post") { #check that directory exists
 		    print OUT "$app = \"$post\"\n";
