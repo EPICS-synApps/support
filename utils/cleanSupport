@@ -1,0 +1,18 @@
+#!/usr/bin/csh -e
+pushd ..;
+cd bitBus1-4;gnumake clean uninstall
+cd ../ipac-2.2;gnumake clean uninstall
+cd ../mpf1-6;gnumake clean uninstall;
+cd ../mpfGpib1-3;gnumake clean uninstall
+cd ../mpfSerial1-2;gnumake clean uninstall
+cd ../motor4-3;gnumake clean uninstall
+cd ../std1-1;gnumake clean uninstall
+cd ../dac128V1-1;gnumake clean uninstall
+cd ../ipUnidig1-1;gnumake clean uninstall
+cd ../love1-1;gnumake clean uninstall
+cd ../mca_5.02;gnumake clean uninstall
+cd ../ip330_1.02;gnumake clean uninstall
+cd ../ip1-1;gnumake clean uninstall
+cd ../xxx;gnumake clean uninstall
+popd;
+

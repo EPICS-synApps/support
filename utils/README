@@ -1,0 +1,310 @@
+	STANDARD SUPPORT MODULES
+==============================================================================
+
+Modifications to following support modules were limited to the
+<supporttop>/config directories.
+
+
+MODULE:		bitBus
+VERSION:	R1-4
+URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/bitBus/index.html
+BUILD DEPENDENCIES: EPICS_BASE
+PROCEDURE:
+- <top>/Makefile copied from R3.13.4 xxx/Makefile.
+- Removed contents of <top>/config and replaced with files from R3.13.4
+xxx/config.
+- Configured <top>/config/RELEASE.
+
+
+MODULE:		ipac
+VERSION:	2.2
+URL: http://www.aps.anl.gov/asd/people/anj/ipac/
+BUILD DEPENDENCIES: EPICS_BASE
+PROCEDURE:
+- Added "DIRS += config" to <top>/Makefile.
+- Removed contents of <top>/config and replaced with files from R3.13.4
+xxx/config.
+- Configured <top>/config/RELEASE.
+
+
+MODULE:		mpf
+VERSION:	R1-6
+URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/mpf/
+BUILD DEPENDENCIES: EPICS_BASE, IPAC
+PROCEDURE:
+- Replaced makeConfigAppInclude.pl with utils/makeConfigAppInclude.pl
+- Configured <top>/config/RELEASE.
+
+
+MODULE:		mpfGpib
+VERSION:	R1-3
+URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/gpib/mpfGpib/index.html
+BUILD DEPENDENCIES: EPICS_BASE, MPF
+PROCEDURE:
+- <top>/Makefile copied from R3.13.4 xxx/Makefile.
+- Removed contents of <top>/config and replaced with files from R3.13.4
+xxx/config.
+- Configured <top>/config/RELEASE.
+
+
+MODULE:		mpfSerial
+VERSION:	R1-2
+URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/serial/mpfSerial/index.html
+BUILD DEPENDENCIES: EPICS_BASE, MPF
+PROCEDURE:
+- Replaced makeConfigAppInclude.pl with utils/makeConfigAppInclude.pl
+- Configured <top>/config/RELEASE.
+
+-------------------------------------------------------------------------------
+Modifications to following support modules were NOT limited to the
+<top>/config directory.
+-------------------------------------------------------------------------------
+
+MODULE:		motor
+VERSION:	4-3
+URL: http://www.aps.anl.gov/upd/people/sluiter/epics/modules/mechanism/motor/index.html
+BUILD DEPENDENCIES: EPICS_BASE, MPF, MPF_SERIAL, MPF_GPIB
+PROCEDURE:
+- Update <top>/config/RULES.Vx to R3.13.4
+- Replaced makeConfigAppInclude.pl with utils/makeConfigAppInclude.pl
+- <supporttop>/motorApp/Makefile.  All device support selected.
+- <supporttop>/motorExApp/Makefile.  Build motor examples.
+- Configured <top>/config/RELEASE.
+
+
+===============================================================================
+	CUSTOMIZED SUPPORT MODULES
+===============================================================================
+
+MODULE:		std
+VERSION:	1-1
+SOURCE: Taried from /home/beams/BCDA/epics/synApps_4_3/share/stdApp
+BUILD DEPENDENCIES: EPICS_BASE
+PROCEDURE:
+- Copied <top>/Makefile and <top>/config from xxx.
+- Extracted stdApp.tar into std1-1.
+- Deleted manual version control copies and Unix links; i.e., SGM_1.7a,
+	saveData_1.7.c, etc..
+- Modifications to stdApp/Db;
+	- Deleted unsupported and/or outdated files:
+		- table_5.1x
+		- table_5.1x.db
+	- Removed "DB += scanParms.template" from Makefile.Host;
+	scanParms.template link deleted.
+	
+- Modifications to stdApp/op/adl;
+	- Deleted unsupported, outdated or duplicate files:
+		- xxx.adl
+		- kohzu2SeqCtl_tiny.adl
+		- xx_ID_taper_ctrl_1.0.adl
+		- BMBPM_old.adl
+		- IDBPM_old.adl
+	- Changed SR_Status.adl to beamHistory_full.adl.
+	- Moved the following top-level user displays from stdApp/op/adl to
+	xxx/xxxApp/op/adl.
+		- 1bma_beamline.adl	
+		- 3idd.adl
+		- bcda2.adl
+		- 2ided_beamline.adl
+- Modifications to stdApp/src;
+	- Deleted unsupported, outdated or duplicate files:
+		- sscanRecord_5.1.dbd
+		- devVXStats.c
+	- Change "SHARE_BIN = ." to "STD_BIN = ." in Makefile.Vx.
+	- Delete "USER_DBDFLAGS += -I .. -I $(EPICS_BASE)/dbd" and
+		"PROD += caExample" from Makefile.Host.
+	- Remove vxWorks installation from Makefile.Vx.  EPICS compatible
+	vxWorks kernel won't be built in VX_CONFIG_DIR.  Copy vxWorks and
+	vxWorks.sym into xxx/bin/<Target_Arch> before creating distribution
+	tar ball.
+	- stdLIBOBJS; change all occurences of $(SHARE_BIN) to $(STD_BIN).
+- Configured <top>/config/RELEASE.
+
+
+MODULE:		dac128V
+VERSION:	1-1
+URL: - dac128V: http://cars9.uchicago.edu/software/pub/dac128VApp.tar
+BUILD DEPENDENCIES: EPICS_BASE, MPF
+PROCEDURE:
+- Copied <top>/Makefile and <top>/config from xxx.
+- Extracted dac128VApp.tar into dac128V1-1.
+- Deleted manual version control copies and Unix links; i.e., DAC128V.h;1,
+	dac128V.cc;1, etc..
+- Modifications:
+	dac128VApp/src/Makefile.Host: Comment on why DAC128V.h is 'installed'.
+- Configured <top>/config/RELEASE.
+
+
+MODULE:		ipUnidig
+VERSION:	1-1
+URL: - http://millenia.cars.aps.anl.gov/software/pub/ipUnidigApp.tar
+BUILD DEPENDENCIES: EPICS_BASE, MPF
+PROCEDURE:
+- Copied <top>/Makefile and <top>/config from xxx.
+- Extracted ipUnidigApp.tar into ipUnidig1-1.
+- Deleted manual version control copies and Unix links; i.e.,
+	devIpUnidig.cc;4, etc..
+- Configured <top>/config/RELEASE.
+
+
+MODULE:		love
+VERSION:	1-1
+URL: - Taried from /home/beams/BCDA/epics/synApps_4_3/share/mpf1-5a/loveApp
+BUILD DEPENDENCIES: EPICS_BASE, MPF, MPF_SERIAL
+PROCEDURE:
+- Copied <top>/Makefile and <top>/config from xxx.
+- Extracted loveApp.tar into love1-1.
+- Modifications:
+	loveApp/src/Makefile.Host: removed INC += loveServer.h.
+- Configured <top>/config/RELEASE.
+
+
+MODULE:		mca
+VERSION:	5.02
+URL: http://millenia.cars.aps.anl.gov/software/pub/mcaApp.tar
+BUILD DEPENDENCIES: EPICS_BASE, MPF, STD
+PROCEDURE:
+- Copied <top>/Makefile and <top>/config from xxx.
+- Extracted mcaApp.tar to mca_5.02.
+- Deleted manual version control copies and Unix links; i.e.,
+	drvSTR7201.h;1, etc..
+- Change "SHARE_BIN = ." to "MCA_BIN = ." in Makefile.Vx, mcaMpfServerLIBOBJS
+	and mcaLIBOBJS.
+??
+
+- Added devMCA_soft.c to Makefile.Vx and mcaLIBOBJS.
+- Configured <top>/config/RELEASE.
+
+
+MODULE:		ip330
+VERSION:	1.02
+URL: 	http://cars.uchicago.edu/software/pub/ip330App.tar
+BUILD DEPENDENCIES: EPICS_BASE, MPF, DAC128V, STD, MCA
+PROCEDURE:
+- Copied <top>/Makefile and <top>/config from xxx.
+- Extracted ip330.tar to ip330_1.02
+- Deleted manual version control copies and Unix links; i.e.,
+	Ip330Sweep.h;1, etc..
+- ip330App/src/Makefile.Vx modifications:
+	- Delete "USR_INCLUDES += -I../../../../include"
+	     and "USR_INCLUDES += -I$(SHARE)/include"
+	- Break ip330 into two libraries; one server library (ip330ServLib)
+		and everything else (ip330Lib).
+- Configured <top>/config/RELEASE.
+NOTES:
+	- ip330PID.cc -> Ip330PID.h -> DAC128V.h; hence, one of ip330's build
+	dependencies is DAC128V.
+
+
+MODULE:		ip
+VERSION:	1-1
+SOURCE: Taried from /home/beams/BCDA/epics/synApps_4_3/share/ipApp
+BUILD DEPENDENCIES: EPICS_BASE, MPF, MPF_SERIAL, MPF_GPIB, STD, DAC128V,
+			IPUNIDIG, LOVE, IP330
+PROCEDURE:
+- Copied <top>/Makefile and <top>/config from xxx.
+- Extracted ipApp.tar into ip1-1.
+- Deleted manual version control copies and Unix links; i.e., SR570_4.2.db,
+	devAiHeidND261_1.1.cc, etc..
+- Makefile.Vx link replaced by Makefile.Vx.buildMPF; Makefile.Vx.buildMPF
+	deleted.
+- Makefile.Vx.buildHideos and Makefile.Vx.use_prebuilt deleted (Hideos no
+	longer supported).
+- Removed the following, Hideos, dependant files from ipApp/src,
+	ipApp/src/Makefile.Vx and ipApp/src/ipLIBOBJS.
+	- devAiADC.cc
+	- devSoiHideos.cc
+	- devAiLove.cc
+	- serial_config.cc
+	- devFanuc.cc
+	- devAiHuberDMC.cc
+	- devLiHuberDMC.cc
+	- devSiHuberDMC.cc
+	- devAiElcomat.cc
+	- devLoElcomat.cc
+	- devAiTest.cc
+	- devHideos.cc
+	- devAoDAC.cc
+	- devAoEurotherm.cc
+	- devLoStrParm.cc; renamed devLoStrParmMPF.cc -> devLoStrParm.cc
+	- devSerial.cc, rename devSerialMPF.cc -> devSerial.cc
+	- set_delay.cc
+	- devSoEurotherm.cc
+	- devMetasys.cc
+	- devSoElcomat.cc
+	- string_test.cc
+	- devSoiHideos_term.cc
+	- devSoStrParm.cc; renamed devSoStrParmMPF.cc -> devSoStrParm.cc
+	- devSiStrParm.cc; renamed devSiStrParmMPF.cc -> devSiStrParm.cc
+	- devHideos.h
+	- README
+	- devAiStrParm.cc; renamed devAiStrParmMPF.cc -> devAiStrParm.cc
+	- devAiHeidND261.cc; renamed devAiHeidND261MPF.cc -> devAiHeidND261.cc
+	- renamed devAiMKSMPF.cc -> devAiMKS.cc
+	- devAoStrParm.cc; renamed devAoStrParmMPF.cc -> devAoStrParm.cc
+	- devBiStrParm.cc; renamed devBiStrParmMPF.cc -> devBiStrParm.cc
+	- devLiStrParm.cc; renamed devLiStrParmMPF.cc -> devLiStrParm.cc
+	- Gpib.cc
+	- serialIO.cc
+	- serialIO.h
+	
+- Deleted from ipApp/src
+	- devLove.dbd is in the "love" support module; removed devLove.dbd
+		from ipApp/src and Makefile.Host.
+	- serialIOMPF.cc, serialIO.h and gpibIO.h; moved to motor module.
+
+- Copied devMpf.dbd from synApps_4_3/share/mpf1-5a/epicsDevApp/epicsDevSrc to
+	ipApp/src.  This file doesn't exist in mpf R1-5 or R1-6.  Added
+	devMpf.dbd to ipApp/src/Makefile.Host DBDINSTALL list.
+
+- Update the following makefiles to R3.13.4:
+	- ipApp/src/Makefile.Host; removed USER_DBDFLAGS (not needed with
+		R3.13.4), moved serialIO.h to motor.
+	- ipShare.dbd link replaced by ipShare.dbd.MPF; ipShare.dbd.MPF
+		deleted. ipShare.dbd modifications:
+		- #device(ai,VME_IO,devHideosADC,"Hideos ADC") removed;
+		no devHideosADC device support.
+		- device(ao,VME_IO,devAoDAC128V,"Hideos SysTran DAC128V")
+		removed; moved to dac128V support module.
+		- Elcomat autocollimator
+		#device(ai,VME_IO,devAiElcomat,"Elcomat autocollimator")
+		#device(longout,VME_IO,devLoElcomat,"Elcomat autocollimator")
+		removed; no device support.
+		- # Eurotherm temp controller
+		#device(ao,VME_IO,devAoEurotherm,"Hideos ao Eurotherm")
+		#device(stringout,VME_IO,devSoEurotherm,"Hideos so Eurotherm")
+		removed; no device support.
+	- Changed "SHARE_BIN = ." to "IP_BIN = ." in Makefile.Vx.
+
+- Deleted the following unsupported *.db files from ipApp/Db:
+	- 16adc.db; no "Hideos ADC" device support.
+	- DAC.db/DAC; no "Hideos ADC" device support.
+	- Elcomat.db/Elcomat; no "Elcomat autocollimator" device support.
+	- Eurotherm.db/Eurotherm; no "Hideos ao Eurotherm" and no
+		"Hideos so Eurotherm" device support.
+
+- Modifications to ipLIBOBJS as a result of using the standard mpf distribution:
+	- Replaced mpfDevLib with DevMpf.o; mpfDevLib was dropped with mpf R1-5.
+	- Replaced $(MPF_BIN)/devAiIp330Scan.o with $(IP330_BIN).
+	- Replaced $(MPF_BIN)/devAoDAC128V.o with $(DAC128V_BIN).
+	- Replaced $(MPF_BIN)/devEpidIp330.o; with $(IP330_BIN).
+	- Replaced $(MPF_BIN)/devIpUnidig.o with $(IPUNIDIG_BIN).
+	- Replaced $(MPF_BIN)/devLove.o with $(LOVE_BIN).
+	- Replaced all occurences of $(SHARE_BIN) to $(IP_BIN).
+	- Deleted IPLIBOBJS += $(MPF_BIN)/mpfLib entry. Added BIN_INSTALLS +=
+		$(MPF_BIN)/mpfLib to xxx/xxxApp/src/Makefile.Vx.
+		
+- Modifications to ipMpfServerLIBOBJS
+	- Removed mpfServerLib (doesn't exist in mpf R1-6). Merged this file
+		into ipMpfServerLIBOBJS by adding gpibServer.o and
+		serialServer.o to ipMpfServerLIBOBJS.
+	- Location of GpibGsTi9914.o changed from MPF_BIN to MPF_GPIB_BIN.
+	- Location of OctalUART.o changed MPF_BIN to MPF_SERIAL_BIN.
+	- Location of dac128VLib, ipUnidigLib and loveServer.o changed from
+		MPF_BIN to DAC128V_BIN, IPUNIDIG_BIN and LOVE_BIN,
+		respectively.
+	- Deleted IPMPFSERVERLIBOBJS += $(IP330_BIN)/ip330Lib entry. Added
+		LIBOBJS += $(IP330_BIN)/ip330Lib to
+		xxx/xxxApp/src/Makefile.Vx.
+- Configured <top>/config/RELEASE.
+
