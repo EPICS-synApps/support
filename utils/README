@@ -4,6 +4,7 @@
 Edit the following for your site:
 
 <supporttop>/config/RELEASE - Set EPICS_BASE to EPICS base pathname.
+<supporttop>/xxx/config/RELEASE - Set SUPPORT to <supporttop> pathname.
 <supporttop>/utils/Makefile - Set SUPPORT to <supporttop> pathname.
 			    - Add/delete support modules by adding/deleting
 			    '#' to the four entries for each support module;
