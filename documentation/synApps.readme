@@ -761,6 +761,12 @@ Example of use:
     cd $(SYNAPPS)/ioc/1bm
     changePrefix xxx 1bma
 
+copyAdl
+-------
+Look for .adl files and copy them to a directory
+Example of use:
+    copyAdl $SYNAPPS/support adl_files
+
 ==============================================
 
 synApps is available in prebuilt form, on request.  The prebuilt
