@@ -13,7 +13,7 @@ SUPPORT=!!Set to <supporttop> complete pathname!!
 
 include $(SUPPORT)/config/IP_RELEASE
 include $(SUPPORT)/config/IP330_RELEASE
-include $(SUPPORT)/config/CAMAC_RELEASE
+#include $(SUPPORT)/config/CAMAC_RELEASE
 include $(SUPPORT)/config/MCA_RELEASE
 include $(SUPPORT)/config/LOVE_RELEASE
 include $(SUPPORT)/config/IPUNIDIG_RELEASE
@@ -24,6 +24,7 @@ include $(SUPPORT)/config/BITBUS_RELEASE
 include $(SUPPORT)/config/MPFGPIB_RELEASE
 include $(SUPPORT)/config/MPFSERIAL_RELEASE
 include $(SUPPORT)/config/MPF_RELEASE
+include $(SUPPORT)/config/ALLEN_BRADLEY_RELEASE
 include $(SUPPORT)/config/RELEASE
 
 TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
