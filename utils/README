@@ -26,13 +26,13 @@ gnumake clean uninstall;gnumake
 The following support modules required limited modifications.
 
 MODULE:		allenBradley
-VERSION:	1-6
+VERSION:	1-7
 URL:  http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/allenBradley/
 BUILD DEPENDENCIES: EPICS_BASE
 PROCEDURE:
-- After unzipping and untarring allenBradley1-6.tar.gz; "mv 1-6 allenBradley1-6".
+- After unzipping and untarring allenBradley1-7.tar.gz; "mv 1-7 allenBradley1-7".
 - synApps does not support the steppermotor record.  Make the following change
-to allenBradley1-6/allenBradleyApp/basicSrc/allenBradley.dbd,
+to allenBradley1-7/allenBradleyApp/basicSrc/allenBradley.dbd,
 
 ------- allenBradley.dbd -------
 26c26
@@ -102,37 +102,34 @@ PROCEDURE:
 
 
 MODULE:		motor
-VERSION:	4-6
+VERSION:	4-8
 URL: http://www.aps.anl.gov/upd/people/sluiter/epics/motor/index.html
 BUILD DEPENDENCIES: EPICS_BASE, MPF, MPF_SERIAL, MPF_GPIB
 PROCEDURE:
 - <top>/config/RELEASE. Uncomment MPF_SERIAL=, MPF=, EPICS_BASE=,
 			TEMPLATE_TOP=, MSITOP= and MPF_GPIB=
-			Delete all "include" lines.
 - <top>/motorApp/Makefile.  All device support selected.
 - <top>/motorExApp/Makefile.  Build all motor examples.
 
 
 MODULE:		std
-VERSION:	1-3
-SOURCE: R1-3 CVS tagged release
+VERSION:	1-4
+SOURCE: R1-4 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE BITBUS
 PROCEDURE:
-NOTES: - Should bitBus be in baseLIBOBJS?
 
 
 MODULE:		dac128V
-VERSION:	1-3
-SOURCE: R1-3 CVS tagged release
+VERSION:	1-4
+SOURCE: R1-4 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE, MPF
 PROCEDURE:
 
 MODULE:		ipUnidig
-VERSION:	1-2
-SOURCE: R1-2 CVS tagged release
+VERSION:	1-3
+SOURCE: R1-3 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE, MPF
 PROCEDURE:
-- Made <top>/config/RELEASE compatible with makeReleaseConsistent.pl.
 
 
 MODULE:		love
@@ -143,28 +140,25 @@ PROCEDURE:
 
 
 MODULE:		mca
-VERSION:	5-3
-SOURCE: R5-3 CVS tagged release
+VERSION:	5-5
+SOURCE: R5-5 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE, MPF, STD
 PROCEDURE:
 
 
 MODULE:		camac
-VERSION:	1-1
-SOURCE: R1-1 CVS tagged release
+VERSION:	1-3
+SOURCE: R1-3 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE, MPF, STD
 PROCEDURE:
-- <top>/config/RULES.Db updated to EPICS base R3.13.5 for 'depends' make target.
-- Made <top>/config/RELEASE compatible with makeReleaseConsistent.pl.
 
 
 
 MODULE:		ip330
-VERSION:	1-6
-SOURCE: R1-6 CVS tagged release
+VERSION:	1-7
+SOURCE: R1-7 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE, MPF, DAC128V, STD, MCA
 PROCEDURE:
-- Made <top>/config/RELEASE compatible with makeReleaseConsistent.pl.
 
 NOTES:
 	- ip330PID.cc -> Ip330PID.h -> DAC128V.h; hence, one of ip330's build
@@ -172,8 +166,8 @@ NOTES:
 
 
 MODULE:		ip
-VERSION:	1-2
-SOURCE: R1-2 CVS tagged release
+VERSION:	1-4
+SOURCE: R1-4 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE, MPF, MPF_SERIAL, MPF_GPIB, STD, DAC128V,
 			IPUNIDIG, LOVE, IP330
 
