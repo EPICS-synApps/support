@@ -58,6 +58,22 @@ BUILD DEPENDENCIES: EPICS_BASE, MPF
 PROCEDURE:
 - After unzipping and untarring mpfGpib1-4.tar, "mv 1-4 mpfGpib1-4".
 - cd <supporttop>; chmod u+w mpfGpib1-4/config/RELEASE
+- Replace the contents of mpfGpib1-4/gpibApp/Makefile.Vx with the following;
+------- Makefile.Vx -------
+PROD      = GpibHideosLocal.o
+PROD     += GpibHideosRemote.o
+
+LIBOBJS   = GpibGsTi9914.o
+LIBOBJS  += Gpib.o
+LIBOBJS  += gpibSniff.o
+LIBOBJS  += gpibServer.o
+LIBNAME   = mpfgpibserverLib
+
+INSTALLS  = GpibGsTi9914.o
+INSTALLS += Gpib.o
+INSTALLS += gpibSniff.o
+INSTALLS += gpibServer.o
+------- Makefile.Vx -------
 
 
 MODULE:		mpfSerial
@@ -70,7 +86,21 @@ PROCEDURE:
 http://www.aps.anl.gov/asd/people/mrk/epics/modules/serial/mpfSerial/R1-3/knownProblems.html
 Changed the stack size for watchDog from 2000 to 4000.
 - cd <supporttop>; chmod u+w mpfSerial1-3/config/RELEASE
+- Replace the contents of mpfSerial1-3/serialApp/Makefile.Vx with the following;
+------- Makefile.Vx -------
+PROD      = devStringMpf.o
 
+LIBOBJS   = OctalUART.o
+LIBOBJS  += SerialPort.o
+LIBOBJS  += serialPortSniff.o
+LIBOBJS  += serialServer.o
+LIBNAME   = mpfserialserverLib
+
+INSTALLS  = OctalUART.o
+INSTALLS += SerialPort.o
+INSTALLS += serialPortSniff.o
+INSTALLS += serialServer.o
+------- Makefile.Vx -------
 
 ==============================================================================
 The following support modules required more extensive modifications.
