@@ -5,17 +5,6 @@ Modifications to following support modules were limited to the
 <supporttop>/config directories.
 
 
-MODULE:		bitBus
-VERSION:	R1-4
-URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/bitBus/index.html
-BUILD DEPENDENCIES: EPICS_BASE
-PROCEDURE:
-- <top>/Makefile copied from R3.13.4 xxx/Makefile.
-- Removed contents of <top>/config and replaced with files from R3.13.4
-xxx/config.
-- Configured <top>/config/RELEASE.
-
-
 MODULE:		ipac
 VERSION:	2.2
 URL: http://www.aps.anl.gov/asd/people/anj/ipac/
@@ -24,7 +13,8 @@ PROCEDURE:
 - Added "DIRS += config" to <top>/Makefile.
 - Removed contents of <top>/config and replaced with files from R3.13.4
 xxx/config.
-- Configured <top>/config/RELEASE.
+- Configured <top>/config/RELEASE. <top>/config/RELEASE copied from
+	utils/RELEASE.  Deleted everthing except EPICS_BASE_RELEASE.
 
 
 MODULE:		mpf
@@ -33,7 +23,8 @@ URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/mpf/
 BUILD DEPENDENCIES: EPICS_BASE, IPAC
 PROCEDURE:
 - Replaced makeConfigAppInclude.pl with utils/makeConfigAppInclude.pl
-- Configured <top>/config/RELEASE.
+- Configured <top>/config/RELEASE. <top>/config/RELEASE copied from
+	utils/RELEASE.  Deleted everthing except EPICS_BASE_RELEASE and IPAC.
 
 
 MODULE:		mpfGpib
@@ -44,7 +35,8 @@ PROCEDURE:
 - <top>/Makefile copied from R3.13.4 xxx/Makefile.
 - Removed contents of <top>/config and replaced with files from R3.13.4
 xxx/config.
-- Configured <top>/config/RELEASE.
+- Configured <top>/config/RELEASE. <top>/config/RELEASE copied from
+	utils/RELEASE.  Deleted everthing except EPICS_BASE_RELEASE and MPF.
 
 
 MODULE:		mpfSerial
@@ -53,7 +45,9 @@ URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/serial/mpfSerial/index.
 BUILD DEPENDENCIES: EPICS_BASE, MPF
 PROCEDURE:
 - Replaced makeConfigAppInclude.pl with utils/makeConfigAppInclude.pl
-- Configured <top>/config/RELEASE.
+- Configured <top>/config/RELEASE. <top>/config/RELEASE copied from
+	utils/RELEASE.  Deleted everthing except EPICS_BASE_RELEASE and MPF.
+
 
 -------------------------------------------------------------------------------
 Modifications to following support modules were NOT limited to the
@@ -65,12 +59,20 @@ VERSION:	4-3
 URL: http://www.aps.anl.gov/upd/people/sluiter/epics/modules/mechanism/motor/index.html
 BUILD DEPENDENCIES: EPICS_BASE, MPF, MPF_SERIAL, MPF_GPIB
 PROCEDURE:
-- Update <top>/config/RULES.Vx to R3.13.4
+- Replaced RULES.Vx  with xxx/config/RULES.Vx (R3.13.4 update).
 - Replaced makeConfigAppInclude.pl with utils/makeConfigAppInclude.pl
-- <supporttop>/motorApp/Makefile.  All device support selected.
-- <supporttop>/motorExApp/Makefile.  Build motor examples.
-- Configured <top>/config/RELEASE.
-
+- <top>/motorApp/Makefile.  All device support selected.
+- <top>/motorExApp/Makefile.  Build motor examples.
+- Configured <top>/config/RELEASE;
+	- Delete "SUPPORT=" line.
+	- Replace "MPF_SERIAL=" line with
+	"include $(EPICS_SUPPORT_PATH)/config/MPFSERIAL_RELEASE"
+	- Replace "MPF=" line with
+	"include $(EPICS_SUPPORT_PATH)/config/MPF_RELEASE"
+	- Replace "EPICS_BASE=" line with
+	"include $(EPICS_SUPPORT_PATH)/config/EPICS_BASE_RELEASE"
+	- Replace "MPF_GPIB=" line with
+	"include $(EPICS_SUPPORT_PATH)/config/MPFGPIB_RELEASE"
 
 ===============================================================================
 	CUSTOMIZED SUPPORT MODULES
@@ -109,7 +111,8 @@ PROCEDURE:
 - Modifications to stdApp/src;
 	- Deleted unsupported, outdated or duplicate files:
 		- sscanRecord_5.1.dbd
-		- devVXStats.c
+		- devVXStats.c (use base version)
+		- devSerial.cc
 	- Change "SHARE_BIN = ." to "STD_BIN = ." in Makefile.Vx.
 	- Delete "USER_DBDFLAGS += -I .. -I $(EPICS_BASE)/dbd" and
 		"PROD += caExample" from Makefile.Host.
