@@ -21,7 +21,8 @@ collaboration outside of the APS.
 Aside from databases, SNL programs, and the like, synApps contains the
 following code:
 
-record support
+Record support
+
     busy	utility record: calls recGblFwdLink only when its
 		VAL field makes a transition to zero.
     camac	user/database interface to CAMAC bus
@@ -57,61 +58,62 @@ record support
     timestamp	Needed by the vxStats module, but apparently not
     		available in a published module.
 
-device/driver support
-	# Acromag IP-330 ADC as waveform recorder
-	# Advanced Control Systems driver support.
-	# Bunch clock generator (Frank Lenkszus)
-	# Canberra AIM multichannel analyzer, and various ICB modules
-	# Struck STR7201/SIS3806 as multichannel and normal scaler
-	# dac128V 8-channel DAC
-	# Eurotherm temp controller
-	# GP307 GPIB
-	# GPIB Heidenhain encoder
-	# GPIB Keithley model 199 DMM
-	# Generic A32/D32 VME Access 
-	# Generic GPIB record
-	# Greenspring IP-Unidig digital I/O IP module
-	# HP 10895A Laser Axis (interferometer) board
-	# Heidenhain IK320 (Till Straumann/BESSY)
-	# Heidenhain IK320 VME counter/interpolator (Till Straumann/BESSY)
-	# Heidenhain ND261 and related serial interface boxes
-	# HPS SensaVac 937
-	# Love Controllers, via MPF
-	# MKS vacuum gauge controller
-	# MPC ion pump controller
-	# MPF ICB support, used by Canberra ICB modules
-	# MPF MCA support, used by Canberra AIM multichannel analyzer and
-	# Queensgate Piezo drive.
-	# Struck STR7201 or SIS 380x multi-channel scaler
-	# VMI4116 16-bit D/A converter
-	# Varoc SSI encoder interface board
-	# StringParm device support for various records
-	# IP330 ADC
-	# Extended PID (epid) record device support
-	# motor controllers:
-	#    soft support
-	#    Intelligent Motion Systems IM483PL, and IM483SM
-	#	 Physik Instrumente PIC844
-	#    Newport MM3000, MM4000/5, PM500, ESP300, and XPSC8
-	#    Oregon Micro Systems VME8/44, VME58, and MAXv
-	#    E500 (a CAMAC module)
-	#    Advanced Control Systems MCB-4B
-	#    MDrive
-	#    MXmotor
-	#    Mclennan PM304
-	#    Delta Tau PMAC
-	#    Micos MoCo
-	#    Micro Mo MVP2001
-	# scalers:
-	#    Joerger VSC series
-	#    Joerger VS series
-	#    CAMAC DSP RTC-018 timer and QS-450 quad scaler
-	#    Struck STR7201, SIS 38xx
-	# generic serial
-	# MPFread, MPFwriteRead, MPFwrite
-	# soft device support for the sCalcout record
+Device/driver support
 
-miscellaneous C code
+	Acromag IP-330 ADC as waveform recorder
+	Advanced Control Systems driver support.
+	Bunch clock generator (Frank Lenkszus)
+	Canberra AIM multichannel analyzer, and various ICB modules
+	Struck STR7201/SIS3806 as multichannel and normal scaler
+	dac128V 8-channel DAC
+	Eurotherm temp controller
+	GP307 GPIB
+	GPIB Heidenhain encoder
+	GPIB Keithley model 199 DMM
+	Generic A32/D32 VME Access 
+	Generic GPIB record
+	Greenspring IP-Unidig digital I/O IP module
+	HP 10895A Laser Axis (interferometer) board
+	Heidenhain IK320 (Till Straumann/BESSY)
+	Heidenhain IK320 VME counter/interpolator (Till Straumann/BESSY)
+	Heidenhain ND261 and related serial interface boxes
+	HPS SensaVac 937
+	Love Controllers, via asyn
+	MKS vacuum gauge controller
+	MPC ion pump controller
+	Asyn ICB support, used by Canberra ICB modules
+	Asyn MCA support, used by Canberra AIM multichannel analyzer and
+	Queensgate Piezo drive.
+	Struck STR7201 or SIS 380x multi-channel scaler
+	VMI4116 16-bit D/A converter
+	Varoc SSI encoder interface board
+	StringParm device support for various records
+	IP330 ADC
+	Extended PID (epid) record device support
+	motor controllers:
+	   soft support
+	   Intelligent Motion Systems IM483PL, and IM483SM
+	   Physik Instrumente PIC844
+	   Newport MM3000, MM4000/5, PM500, ESP300, and XPSC8
+	   Oregon Micro Systems VME8/44, VME58, and MAXv
+	   E500 (a CAMAC module)
+	   Advanced Control Systems MCB-4B
+	   MDrive
+	   MXmotor
+	   Mclennan PM304
+	   Delta Tau PMAC
+	   Micos MoCo
+	   Micro Mo MVP2001
+	scalers:
+	   Joerger VSC series
+	   Joerger VS series
+	   CAMAC DSP RTC-018 timer and QS-450 quad scaler
+	   Struck STR7201, SIS 38xx
+	MPFread, MPFwriteRead, MPFwrite
+	soft device support for the sCalcout record
+	XIA dxp 
+
+Miscellaneous C code
 
 	sCalcPerform
 		Backward compatible extension of the expression evaluation
@@ -124,30 +126,38 @@ miscellaneous C code
 	saveData
 		Saves scan data to files on an NFS-mounted disk.
 	
-		
+Documentation
+
+	In addition to this top-level documentation, synApps modules have
+	their own documentation directories, and the xxx module	contains
+	examples of how most of the software is loaded and run in an ioc.
+	Some modules have their own example iocBoot directories.
+
+
+
 How to use synApps
 ------------------
 
 synApps is not a complete software installation in itself.  To use
 synApps, you must acquire and build EPICS base and other modules
 on which synApps depends.  Here's a list of the modules and the
-version with which synApps is known to work.
+version with which synApps 5.1 is known to work.
 
 EPICS baseR3.14.7  or, possibly, a later 3.14 release
 allenBradley2-1    if you intend to connect with Allen Bradley PLC's
 ipac2-8            required for IndustryPack support
-asyn4-1            required by mca, dac128V, ip, ip330, motor, quadEM
-seq2-0-8           for SNL programs in synApps
-vxStats1-7-2a      vxWorks statistics
+asyn4-2            required by mca, dac128V, ip, ip330, motor, quadEM
+seq2-0-10          for SNL programs in synApps
+vxStats1-7-2c      vxWorks statistics
 genSub1-6          the genSub record
 
-Here's a list of the modules included in synApps:
+Here's a list of the modules included in synApps 5.1:
 
 autosave      save-restore
 calc          run-time expression evaluation
 camac         CAMAC support
-ccd           scientific CCD detectors, including Bruker, MAR, and Roper
-				detectors
+ccd           scientific CCD detectors, including Bruker, MAR, and Roper 
+              detectors
 dac128V       IndustryPack DAC
 dxp           DSP
 ip            various serial devices
@@ -163,6 +173,10 @@ std           misc EPICS software
 utils         miscellaneous tools
 vme           vme-specific support
 xxx           sample user-application directory
+
+See config/MASTER_RELEASE for a complete set of compatible module versions.
+In most cases, there is some negative consequence of using a different
+version than the one specified in MASTER_RELEASE.
 
 Although synApps is distributed as a single 'support' directory, it's
 normally used as a two-part system: the 'support' tree, and a 'user'
@@ -230,8 +244,9 @@ ioc/
 				quadEM.cmd
 				save_restore.cmd
 				serial.cmd
-				vme.cmd
 				st.cmd
+				vme.cmd
+				asynRecord.substitutions
 				basic_motor.substitutions
 				canberra_13.substitutions
 				canberra_3.substitutions
@@ -251,6 +266,8 @@ ioc/
                 autosave/
                 cdCommands
                 saveData.req 
+		interp.sav
+		interp_settings.req
             ioc1bmb/
                <much like ioc1bma>
 
@@ -293,7 +310,8 @@ synApps should be very simple:
    solaris-sparc to work.
 
 5) in support/config, run the same GNU Make executable used to build
-   EPICS base.  You may need $(EPICS_BASE)/bin/<arch> in your path.
+   EPICS base.  You may need $(EPICS_BASE)/bin/<arch> in your command
+   path, and you may need $(EPICS_BASE)/lib/<arch> in LD_LIBRARY_PATH.
 
 When executed in the support/config directory, make will go to all
 of the modules support/config/Makefile knows about and edit the
@@ -302,16 +320,20 @@ same versions of EPICS base and other known modules.
 
 Once synApps' support directory has built without errors, the xxx
 module will have been configured so that you can use it to build a
-user tree to support your crates.  Make a copy of the support/xxx
-directory, cd to the top-level directory and run changePrefix to
+user tree to support your crates.  Clean and uninstall xxx, and tar a
+copy of the directory for use as a template.  To use the template,
+untar it, cd to its top-level directory and run changePrefix to
 change the PV-name prefix from xxx to whatever you want.  (Note you
 must have support/utils in your path.)
 Here's what I do:
 
+    # Do once when synApps is built
     cd $(SYNAPPS)/support/xxx
 	setenv EPICS_HOST_ARCH <host architecture>
     gnumake clean uninstall
     tar cvf ../xxx.tar *
+
+    # Do whenever a new user tree ('1bm', in this example) is needed
     cd $(SYNAPPS)/ioc
     mkdir 1bm
     cd 1bm
@@ -670,8 +692,8 @@ field of the record that contains that PV.  If a string follows the PV
 name, saveData will use the string instead.
 
 
-Miscellaneous executables, loose ends
-=====================================
+Utils executables
+=================
 
 doSed
 changePrefix
@@ -715,6 +737,6 @@ files, substitution files and st.cmd).
 Tim Mooney (mooney@aps.anl.gov)
 Beamline Controls & Data Acquisition Group
 Advanced Photon Source
-9/30/2004
+3/21/2005
 
 
