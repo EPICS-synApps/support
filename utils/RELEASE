@@ -1,0 +1,10 @@
+# RELEASE - Location of master MPF SERIAL release file.
+include $(EPICS_SUPPORT_PATH)/config/MPFSERIAL_RELEASE
+# RELEASE - Location of master MPF GPIB release file.
+include $(EPICS_SUPPORT_PATH)/config/MPFGPIB_RELEASE
+# RELEASE - Location of master IPAC release file.
+include $(EPICS_SUPPORT_PATH)/config/IPAC_RELEASE
+# RELEASE - Location of master MPF release file.
+include $(EPICS_SUPPORT_PATH)/config/MPF_RELEASE
+# RELEASE - Location of master EPICS base release file.
+include $(EPICS_SUPPORT_PATH)/config/EPICS_BASE_RELEASE
