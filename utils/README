@@ -124,7 +124,7 @@ PROCEDURE:
 
 MODULE:		std
 VERSION:	1-2
-SOURCE: R1-1 CVS tagged release
+SOURCE: R1-2 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE
 PROCEDURE:
 
@@ -164,7 +164,7 @@ PROCEDURE:
 
 MODULE:		camac
 VERSION:	1-1
-SOURCE: R5-1 CVS tagged release
+SOURCE: R1-1 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE, MPF, STD
 PROCEDURE:
 - <top>/config/RULES.Db updated to EPICS base R3.13.5 for 'depends' make target.
@@ -187,7 +187,7 @@ NOTES:
 
 MODULE:		ip
 VERSION:	1-2
-SOURCE: R1-1 CVS tagged release
+SOURCE: R1-2 CVS tagged release
 BUILD DEPENDENCIES: EPICS_BASE, MPF, MPF_SERIAL, MPF_GPIB, STD, DAC128V,
 			IPUNIDIG, LOVE, IP330
 
