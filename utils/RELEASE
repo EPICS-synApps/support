@@ -1,3 +1,32 @@
+# RELEASE - Location of external products
+#
+# (Architecture dependent declarations should go into RELEASE.<arch>)
+#
+# Note: This file will be scanned to automatically generate
+#       include path definitions etc.
+#       The order of the following declarations will be retained
+#       within those definitions.
+#
+# Add your declarations here
+
+# RELEASE - Location of master IP release file.
+include $(EPICS_SUPPORT_PATH)/config/IP_RELEASE
+# RELEASE - Location of master IP330 release file.
+include $(EPICS_SUPPORT_PATH)/config/IP330_RELEASE
+# RELEASE - Location of master MCA release file.
+include $(EPICS_SUPPORT_PATH)/config/MCA_RELEASE
+# RELEASE - Location of master LOVE release file.
+include $(EPICS_SUPPORT_PATH)/config/LOVE_RELEASE
+# RELEASE - Location of master IPUNIDIG release file.
+include $(EPICS_SUPPORT_PATH)/config/IPUNIDIG_RELEASE
+# RELEASE - Location of master DAC128V release file.
+include $(EPICS_SUPPORT_PATH)/config/DAC128V_RELEASE
+# RELEASE - Location of master MOTOR release file.
+include $(EPICS_SUPPORT_PATH)/config/MOTOR_RELEASE
+# RELEASE - Location of master STD release file.
+include $(EPICS_SUPPORT_PATH)/config/STD_RELEASE
+# RELEASE - Location of master BITBUS release file.
+include $(EPICS_SUPPORT_PATH)/config/BITBUS_RELEASE
 # RELEASE - Location of master MPF SERIAL release file.
 include $(EPICS_SUPPORT_PATH)/config/MPFSERIAL_RELEASE
 # RELEASE - Location of master MPF GPIB release file.
