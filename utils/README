@@ -45,6 +45,9 @@ MODULE:		bitBus
 VERSION:	R1-4
 URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/bus/bitBus/index.html
 BUILD DEPENDENCIES: EPICS_BASE
+PROCEDURE:
+- Edit bitBus1-4/config/RELEASE; delete the line
+	SUPPORT=/usr/local/iocapps/R3.13.1/support
 
 
 MODULE:		ipac
@@ -94,6 +97,8 @@ URL: http://www.aps.anl.gov/asd/people/mrk/epics/modules/serial/mpfSerial/index.
 BUILD DEPENDENCIES: EPICS_BASE, MPF
 PROCEDURE:
 - After unzipping and untarring mpfSerial1-4.tar, "mv 1-4 mpfSerial1-4".
+- Edit mpfSerial1-4/config/RELEASE; delete the line
+	SUPPORT=/usr/local/iocapps/R3.13.6/support
 
 
 MODULE:		motor
