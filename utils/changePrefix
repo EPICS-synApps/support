@@ -27,11 +27,9 @@ doSed "s/${old}.adl/${new}.adl/g" start_epics_${new}
 printf "\r%-50s" "${new}App/src"
 mv ${old}App ${new}App
 cd ${new}App/src
-if [ -f ${old}Main.cpp ]; then
-	mv ${old}Main.cpp ${new}Main.cpp
-fi
 if [ -f ${old}Main.c ]; then
 	mv ${old}Main.c ${new}Main.c
+	doSed "s/${old}/${new}/g" ${new}Main.c
 fi
 for file in *${old}*Include.dbd
 do
@@ -76,11 +74,16 @@ for dir in ioc*
 		printf "\r%-50s" "$file"
 		doSed "s/${old}:/${new}:/g" $file
 	done
-	for file in *.template
-	do
-		printf "\r%-50s" "$file"
-		doSed "s/${old}:/${new}:/g" $file
-	done
+	if [ -f *.template ]; then
+		for file in *.template
+		do
+			printf "\r%-50s" "$file"
+			doSed "s/${old}:/${new}:/g" $file
+		done
+	fi
+	if [ -f interp.sav ]; then
+		doSed "s/${old}/${new}/g" interp.sav
+	fi
 	if [ -f bootParms ]; then
 		doSed "s!/${old}/!/${new}/!g" bootParms
 		doSed "s/ioc${old}/ioc${new}/g" bootParms
