@@ -9,7 +9,7 @@
 #
 # Add your declarations here
 
-SUPPORT=!!Set to <supporttop> complete pathname!!
+SUPPORT=/home/oxygen/MOONEY/epics/synApps_4_5/support
 
 include $(SUPPORT)/config/IP_RELEASE
 include $(SUPPORT)/config/IP330_RELEASE
@@ -25,6 +25,8 @@ include $(SUPPORT)/config/MPFGPIB_RELEASE
 include $(SUPPORT)/config/MPFSERIAL_RELEASE
 include $(SUPPORT)/config/MPF_RELEASE
 include $(SUPPORT)/config/ALLEN_BRADLEY_RELEASE
+#include $(SUPPORT)/config/QUADEM_RELEASE
+include $(SUPPORT)/config/IPAC_RELEASE
 include $(SUPPORT)/config/RELEASE
 
 TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
