@@ -358,10 +358,11 @@ ioc/
 =======================================
 
 If you have a built copy of EPICS base 3.13.7 or later, and if you
-have a copy of those modules needed by synApps that aren't included in
+have copies of those modules needed by synApps that aren't included in
 synApps, then building should be very simple:
 
-1) cd to support/config
+1) cd to support/config, check out the README file for any special
+   instructions for building or configuring external modules
 
 2) Edit Makefile to set the variable SUPPORT.  SUPPORT should be the
    full path to the synApps support directory.
