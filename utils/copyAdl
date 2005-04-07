@@ -13,5 +13,5 @@ if (!(-d $2)) then
 endif
 foreach i (`find $1 -name adl -print`)
 echo "copying from" $i
-cp $i/*.adl $2
+cp -f $i/*.adl $2
 end
