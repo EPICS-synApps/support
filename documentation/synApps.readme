@@ -13,8 +13,8 @@ members of the EPICS collaboration:
 
 allenBradley v2-1    for communicating with Allen Bradley PLC's (ANL)
 ipac v2-8            required for IndustryPack support (ANL)
-asyn v4-2            required by mca, dac128V, ip, ip330, motor, quadEM (ANL)
-seq v2-0-8           for SNL programs in synApps (SLAC)
+asyn v4-2-1          required by mca, dac128V, ip, ip330, motor, quadEM (ANL)
+seq v2-0-10          for SNL programs in synApps (SLAC)
 vxStats v1-7-2c      vxWorks statistics modified by us (SNS)
 genSub v1-6          the genSub record (Observatory Sciences)
 
@@ -705,6 +705,6 @@ excerpts from autosave/restore request files, substitution files and st.cmd).
 Tim Mooney (mooney@aps.anl.gov)
 Beamline Controls & Data Acquisition Group
 Advanced Photon Source
-3/23/2005
+4/7/2005
 
 
