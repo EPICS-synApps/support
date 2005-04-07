@@ -73,6 +73,7 @@ for dir in ioc*
 	do
 		printf "\r%-50s" "$file"
 		doSed "s/${old}:/${new}:/g" $file
+		doSed "s/${old}App/${new}App/g" $file
 	done
 	if [ -f *.template ]; then
 		for file in *.template
