@@ -287,28 +287,35 @@ should be very simple:
    want to build.
 
 2) Edit motor/<version>/motorApp/Makefile to select the motor support you want
-to build.
+   to build.
 
 3) Set the environment variable EPICS_HOST_ARCH to the architecture (and
    compiler, if there is a choice) on which you are building. I used
    solaris-sparc-gnu, and linux-x86.  I wasn't able to get solaris-sparc to
    work.
 
-4) In support/config, run the same GNU Make executable used to build EPICS
-   base.  You may need $(EPICS_BASE)/bin/<arch> in your path, and you may need
-   $(EPICS_BASE)/lib/<arch> in LD_LIBRARY_PATH.
+4) In support/config, run "make release".
 
-When executed in the support/config directory, make will go to all of the
-modules support/config/Makefile knows about and edit the config/RELEASE files
-in those modules so that they all build from the same versions of EPICS base
-and other known modules.
+5) In support/config, run make.
+
+You should use the same GNU Make executable that was used to build EPICS
+base.  You may need $(EPICS_BASE)/bin/<arch> in your path, and you may need
+$(EPICS_BASE)/lib/<arch> in LD_LIBRARY_PATH.
+
+When executed in the support/config directory, "make release" will go to all
+of the modules support/config/Makefile knows about and edit the config/RELEASE
+files in those modules so that they all build from the same versions of EPICS
+base and other known modules.
 
 Once synApps' support directory has built without errors, the xxx module will
-have been configured so that you can use it to build a user tree to support
-your crates.  Clean and uninstall xxx, and tar a copy of the directory for use
-as a template.  To use the template, untar it, cd to its top-level directory
-and run changePrefix to change the PV-name prefix from xxx to whatever you
-want.  (Note you must have support/utils in your path.)
+have been configured and tested so that you can use it to build a user tree to
+support your iocs.  (I.e., xxx/configure/RELEASE will have correct, absolute
+paths to base and synApps.)  Clean and uninstall xxx, and tar a copy of the
+directory for use as a template.  To use the template, untar it, cd to its
+top-level directory and run changePrefix to change the PV-name prefix from xxx
+to whatever you want.  (Note you must have support/utils in your command path,
+or you could copy utils/changePrefix and utils/doSed to a directory that is in
+your command path.  Note the changePrefix is synApps-version specific.)
 
 Here's what I do:
 
