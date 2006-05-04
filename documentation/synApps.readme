@@ -1,4 +1,4 @@
-	synApps 5.1
+	synApps 5.2
 
 synApps is a collection of custom EPICS software (source code, EPICS databases,
 client scripts, MEDM display files, executables, etc.) intended to support most
@@ -13,9 +13,9 @@ members of the EPICS collaboration:
 
 allenBradley v2-1    for communicating with Allen Bradley PLC's (ANL)
 ipac v2-8            required for IndustryPack support (ANL)
-asyn v4-2-1          required by mca, dac128V, ip, ip330, motor, quadEM (ANL)
-seq v2-0-10          for SNL programs in synApps (SLAC)
-vxStats v1-7-2c      vxWorks statistics modified by us (SNS)
+asyn v4-5            required by mca, dac128V, ip, ip330, motor, quadEM (ANL)
+seq v2-0-11          for SNL programs in synApps (SLAC)
+vxStats v1-7-2d      vxWorks statistics modified by us (SNS)
 genSub v1-6          the genSub record (Observatory Sciences)
 
 For convenience, this distribution includes the module versions listed above,
@@ -714,4 +714,4 @@ Beamline Controls & Data Acquisition Group
 Advanced Photon Source
 4/7/2005
 
-
+Updated: 05/03/06
