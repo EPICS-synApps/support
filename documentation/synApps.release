@@ -1,0 +1,41 @@
+synApps R5-2 Release Notice
+===============================================================================
+
+
+Modification Log from R5-1-1 to R5-2
+====================================
+
+Support module versions; R5-1-1 vs. R5-2:
+
+Module         R5-1-1   R5-2
+------         ------   -------
+EPICS_BASE     3.14.7   3.14.8.2
+
+VXSTATS        1-7-2c   1-7-2d
+SNCSEQ         2-0-10   2-0-11
+ALLEN_BRADLEY   same as before
+IPAC            same as before
+
+SSCAN           same as before
+AUTOSAVE       4-1-2    4-1-3
+GENSUB          same as before
+ASYN           4-2-1    4-5
+
+CALC            same as before
+MOTOR          5-6      5-9
+STD             same as before
+DAC128V         same as before
+
+IP330           same as before
+IPUNIDIG        same as before
+LOVE           3-0-1    3-2-2
+IP              same as before
+
+CCD             same as before
+OPTICS          same as before
+CAMAC           same as before
+MCA            6-5      6-6
+
+VME             same as before
+QUADEM          same as before
+DXP            2-2      2-3
