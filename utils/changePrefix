@@ -23,6 +23,10 @@ printf "\r%-50s" "start_epics_${new}"
 mv start_epics_${old} start_epics_${new}
 doSed "s!/${old}!/${new}!g" start_epics_${new}
 doSed "s/${old}.adl/${new}.adl/g" start_epics_${new}
+doSed "s/=${old}:/=${new}:/g" start_epics_${new}
+doSed "s/ioc${old}/ioc${new}/g" start_epics_${new}
+doSed "s/${old}App/${new}App/g" start_epics_${new}
+chmod a+x start_epics_${new}
 
 printf "\r%-50s" "${new}App/src"
 mv ${old}App ${new}App
@@ -47,6 +51,7 @@ doSed "s/${old}/${new}/g" Makefile
 
 printf "\r%-50s" "iocBoot/"
 cd ${TOP}/iocBoot
+mv ioc${old} ioc${new}
 for dir in ioc*
 	do
 	cd ${TOP}/iocBoot/$dir
