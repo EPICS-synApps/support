@@ -1,5 +1,5 @@
 #!/bin/sh
-# changePrefix v5.1
+# changePrefix v5.2
 if [ $# -lt 2 ]; then
 	printf "%s\n" "usage: changePrefix old new"
 	printf "%s\n" "example: changePrefix xxx 1bma"
@@ -34,6 +34,9 @@ cd ${new}App/src
 if [ -f ${old}Main.c ]; then
 	mv ${old}Main.c ${new}Main.c
 	doSed "s/${old}/${new}/g" ${new}Main.c
+fi
+if [ -f ${old}Support.dbd ]; then
+	mv ${old}Support.dbd ${new}Support.dbd
 fi
 for file in *${old}*Include.dbd
 do
