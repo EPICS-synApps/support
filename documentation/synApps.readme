@@ -32,7 +32,7 @@ ccd           scientific CCD detectors, including Bruker, MAR, and Roper
               detectors
 config        (directory) build files, including the top-level make file
 dac128V       IndustryPack DAC
-dxp           DSP
+dxp           XIA's DXP digital signal processor
 ip            various serial devices
 ip330         IndustryPack ADC
 ipUnidig      IndustryPack digital I/O
@@ -56,15 +56,15 @@ Acquisition and the Accelerator Controls groups of the Advanced Photon Source
 (APS); by developers in APS Collaborative Access Teams -- notably, Mark Rivers
 (CARS-CAT); and by developers in the EPICS collaboration outside of the APS.
 
-Aside from databases, SNL programs, and the like, synApps contains the
-following code:
+Aside from databases, SNL (State Notation Language) programs, and the like,
+synApps contains the following code:
 
 Record support
     busy	utility record: calls recGblFwdLink only when its
 		VAL field makes a transition to zero.
     camac	user/database interface to CAMAC bus
 		Execute a CAMAC CNAF command
-    dxp		XIA dxp digital signal processor
+    dxp		XIA's DXP digital signal processor
 		Set/read signal-processor parameters
     epid	Extended version of the EPICS PID record, for
 		implementing feedback loops
@@ -151,11 +151,12 @@ Device/driver support
 Miscellaneous C code
 
 	sCalcPerform
-		Backward compatible extension of the expression evaluation
-		software in base.
+		Backward compatible extension of the expression-evaluation
+		software in EPICS base.
 	recDynLink
 		Backward compatible extension of the dynamic-link software
-		previously in base.  (Superceded by dbCaPutlinkCallback)
+		previously in EPICS base.  (New code should probably use
+		dbCaPutlinkCallback(), instead of recDynLink.)
 	save_restore, dbrestore
 		Automatic parameter save and boot-time restore.
 	saveData
@@ -181,7 +182,9 @@ particular applications and sets of hardware.  To support several applications,
 you might create several user trees, each supporting several ioc's, and link
 all of those trees to the support tree.  (If you haven't run into the term
 'ioc' yet, it stands for Input/Output Controller.  Typically, this is a VME
-crate with a processor running EPICS under the VxWorks operating system.)
+crate with a processor running EPICS under the VxWorks operating system, but
+beginning with EPICS 3.14, an ioc can also be a set of tasks on a workstation
+running Linux, Windows, Mac OS, SunOS, and a few other operating systems.)
 Here's what a complete installation might look like (much detail omitted) with
 all the files you will have to edit before you can build or boot an ioc:
 
@@ -278,8 +281,8 @@ ioc/
 1) Building and configuring a user tree
 =======================================
 
-If you have a built copy of EPICS base 3.14.7 or later,  then building synApps
-should be very simple:
+If you have a built copy of EPICS base,  then building synAppsshould be very
+simple:
 
 1) Edit support/config/MASTER_RELEASE to set the variables SUPPORT and
    EPICS_BASE.  SUPPORT should be the full path to the synApps support
@@ -315,7 +318,7 @@ directory for use as a template.  To use the template, untar it, cd to its
 top-level directory and run changePrefix to change the PV-name prefix from xxx
 to whatever you want.  (Note you must have support/utils in your command path,
 or you could copy utils/changePrefix and utils/doSed to a directory that is in
-your command path.  Note the changePrefix is synApps-version specific.)
+your command path.  Note that changePrefix is synApps-version specific.)
 
 Here's what I do:
 
@@ -364,7 +367,8 @@ workstation boots.  If you have no way of doing this, you can run it manually
 or put the command in your .login file.
 
 Setup your host system to work with the EPICS processor.  See the "VxWorks
-Programmer's Guide" if you have a copy.  Here's what we do:
+Programmer's Guide" if you have a copy.  Here's what we do (on a Sun
+workstation):
 
     Add a user named <vx_username> with the password <vx_password>.
     The user has nothing in its home directory, and very few priviledges.
@@ -402,7 +406,9 @@ Programmer's Guide" if you have a copy.  Here's what we do:
     startup script (s)   : /home/server/USER/epics/xxx/iocBoot/iocxxx/st.cmd
     other (o)            : 
 	
-See support/xxx/iocBoot/ioc*/bootParms for other processor types.
+See support/xxx/iocBoot/ioc*/bootParms for other processor types.  If you're
+VME processor has mount access to an 'APSshare' NFS file server, you can specify
+the 'file name', above, as "/APSshare/vw/T202/mv2700-asd7".
 
 
 
@@ -412,7 +418,7 @@ See support/xxx/iocBoot/ioc*/bootParms for other processor types.
 This happens in the user tree.  Generally, you must tell "EPICS" what hardware
 is in your crate, and what addresses, interrupt vectors, etc. you have set your
 hardware to use.  You also must specify which motors any slit, table,
-monochromator, etc. control software is to use.  If you use serial or GPIB, you
+monochromator, etc., control software is to use.  If you use serial or GPIB, you
 must match port names to hardware devices, set serial-port parameters, and
 specify GPIB addresses.  For any IndustryPack modules, you must specify the IP
 carrier and slot into which you've loaded those modules.
@@ -430,9 +436,10 @@ following files will be touched:
     xxx/iocBoot/ioc*/auto_settings.req
         specifies PV's to be saved/restored automatically
 
-    xxx/iocBoot/ioc*/saveData.req identifies PV's used by the saveData
-	software,  sscan records to be monitored for data, and PV's whose
-	values are to be included in all scan-data files.
+    xxx/iocBoot/ioc*/saveData.req
+	identifies PV's used by the saveData software,  sscan records to be
+	monitored for data, and PV's whose values are to be included in all
+	scan-data files.
 
     xxx/iocBoot/ioc*/bootParms
         a copy of the boot parameters (in case the ioc processor
@@ -454,7 +461,7 @@ contains dbLoadRecords() commands for most of the EPICS databases in synApps.
 To load more motors, add lines to the file
 xxx/iocBoot/ioc*/motor.substitutions.
 
-If you want the new motors to work with the AllStop button ("xxx:allstop.VAL"
+If you want the new motors to work with the 'AllStop' button ("xxx:allstop.VAL"
 -- see the top-level medm display xxx.adl), select the appropriate version of
 all_com_?.db, or edit and load a customized version of the database.  (As
 delivered, xxxApp loads the database all_com_16.db, which supports 16 motors. 
@@ -463,7 +470,8 @@ support/std/stdApp/Db contains versions for various numbers of motors.)
 If you want to manage positions and settings of the new motors using the
 "Save", Restore", and "Compare" buttons on the supplied top-level medm display,
 edit the files xxx/xxxApp/op/burt/settings.req and
-xxx/xxxApp/op/burt/positions.req.
+xxx/xxxApp/op/burt/positions.req.  The request files supporting this are not
+well maintained.  Most folks use autosave (next paragraph).
 
 If you want the ioc automatically to save positions and settings of the new
 motors, and restore them when the crate reboots, add lines to the files
@@ -492,13 +500,14 @@ The 2slit.db database allows users to move either the slit virtual motors or
 the actual motors, and it keeps all the readback values current regardless of
 how the actual motors got moved or recalibrated. But it does not automatically
 reset the slit *drive* values when the actual motors are used.  This must be
-dome manually, using the "SYNC" button on the 2slit.adl display.  Pressing this
+done manually, using the "SYNC" button on the 2slit.adl display.  Pressing this
 button causes the database to read the actual motor drive values and set the
-slit drive values accordingly.
+slit-drive values accordingly.
 
-To recalibrate slit positions, press the "Set" button.  This automatically
-presses the "Set" button of both motors the slit software talks to, and the
-user/dial offsets of those motors actually implement the recalibration. 
+To recalibrate slit positions, press the "Set" button, type in the current slit
+position as you want it to be called, and press the "Use" button.  This
+procedure uses the "Set" buttons of both motors the slit software talks to, and
+the user/dial offsets of those motors actually implement the recalibration. 
 
 There is a new, experimental slit database in synApps which uses soft motor
 records as the user/client interface.  This allows clients that know how to
@@ -595,6 +604,9 @@ calculations (e.g., to support dichroism experiments) can be done with the
 measurement sequence can be involved in a scan by treating the 4step database
 as you would treat the scaler or mca software.
 
+3.11) Orientation matrix
+------------------------
+
 
 4) Using synApps
 ================
@@ -606,7 +618,7 @@ See xxx/iocBoot/ioc*/bootParms for sample boot parameters.
 4.2) MEDM
 ---------
 See the MEDM Operator's Manual for detailed information on the special needs of
-this Motif program.  I'll assume those needs have been met.
+this X11/Motif program.  I'll assume those needs have been met.
 
 Edit the file xxx/start_epics_xxx to so it sets the environment variable
 EPICS_APP to the directory that contains xxxApp.  If you plan to run MEDM on a
@@ -615,16 +627,20 @@ uncomment and edit the definition of the environment variable
 EPICS_CA_ADDR_LIST.  In principle, you should be able to name only the
 broadcast address for the subnet that contains the ioc's, but if this doesn't
 work, you can put in the IP addresses of all the ioc's you want to connect
-with, separated by spaces, as follows: setenv EPICS_CA_ADDR_LIST "164.54.53.126
-164.54.53.127"
+with, separated by spaces, as follows:
+
+	setenv EPICS_CA_ADDR_LIST "164.54.53.126 164.54.53.127"
 
 If you want to use arrays larger than 16000 bytes (e.g., MCA spectra of more
-than 4000 channels, scans of more than 2000 data points), you must set the
+than 4000 channels, or scans of more than 2000 data points), you must set the
 environment variable EPICS_CA_MAX_ARRAY_BYTES, in *both* the ioc and
 workstation, to the size of the largest array you plan to send over the
 network.  On a Unix system, for example, you might say
+
 	setenv EPICS_CA_MAX_ARRAY_BYTES 64008
+
 in the ioc's st.cmd file, you'd say
+
 	putenv "EPICS_CA_MAX_ARRAY_BYTES=64008"
 
 To bring up the top-level medm display for synApps software, cd to xxx and type
@@ -659,12 +675,12 @@ xxx/iocBoot/ioc*/st.cmd.
 saveData is a CA client that monitors sscan records and saves scan data to
 files on as NFS-mounted disk.  The software is configured with the file
 xxx/iocBoot/ioc*/saveData.req, which needs no special attention unless you want
-to specify modify the list of EPICS PV's whose values are to be saved with
-every data file.  To do this, look for the string "[extraPV]" in the file, and
-edit the list of PV's immediately following that string.  If an entry in this
-list contains only the PV name, saveData will describe the PV, in the data
-file, using the .DESC field of the record that contains that PV.  If a string
-follows the PV name, saveData will use the string instead.
+to modify the list of EPICS PV's whose values are to be saved with every data
+file.  To do this, look for the string "[extraPV]" in the file, and edit the
+list of PV's immediately following that string.  If an entry in this list
+contains only the PV name, saveData will describe the PV, in the data file,
+using the .DESC field of the record that contains that PV.  If a string follows
+the PV name, saveData will use the string instead.
 
 
 Utils executables
@@ -712,6 +728,6 @@ excerpts from autosave/restore request files, substitution files and st.cmd).
 Tim Mooney (mooney@aps.anl.gov)
 Beamline Controls & Data Acquisition Group
 Advanced Photon Source
-4/7/2005
+7/30/2005
 
-Updated: 05/03/06
+
