@@ -12,11 +12,12 @@ and the following EPICS modules/versions produced and maintained by other
 members of the EPICS collaboration:
 
 allenBradley v2-1    for communicating with Allen Bradley PLC's (ANL)
-ipac v2-8            required for IndustryPack support (ANL)
-asyn v4-5            required by mca, dac128V, ip, ip330, motor, quadEM (ANL)
-seq v2-0-11          for SNL programs in synApps (SLAC)
-vxStats v1-7-2d      vxWorks statistics modified by us (SNS)
-genSub v1-6          the genSub record (Observatory Sciences)
+ipac         v2-8    required for IndustryPack support (ANL)
+asyn         v4-6    required by ccd, dac128V, dxp, ip, ip330, ipUnidig, love,
+                     mca, motor, optics, quadEM (ANL)
+seq         v2-0-11  for SNL programs in synApps (SLAC)
+vxStats     v1-7-2d  vxWorks statistics modified by us (SNS)
+genSub      v1-6     the genSub record (Observatory Sciences)
 
 For convenience, this distribution includes the module versions listed above,
 in place and ready to build, with minor modifications to build files.  A few of
@@ -60,40 +61,41 @@ Aside from databases, SNL (State Notation Language) programs, and the like,
 synApps contains the following code:
 
 Record support
-    busy	utility record: calls recGblFwdLink only when its
-		VAL field makes a transition to zero.
-    camac	user/database interface to CAMAC bus
-		Execute a CAMAC CNAF command
+    aCalcout   calcout record extended to handle array expressions
+    busy       utility record: calls recGblFwdLink only when its
+               VAL field makes a transition to zero.
+    camac      user/database interface to CAMAC bus
+               Execute a CAMAC CNAF command
     dxp		XIA's DXP digital signal processor
-		Set/read signal-processor parameters
-    epid	Extended version of the EPICS PID record, for
-		implementing feedback loops
-    mca		support for multichannel analyzers, and some other
-		array-valued detectors
-    motor	stepper and servo motors, "soft" motor
-    sCalcout	calcout record extended to handle string expressions,
-		links, and values.
-    scaler	scaler bank
-    sscan	Replaces the scan record (Ned Arnold/APS) in base.
-		This version uses a modified version of recDynLlib
-		that supports dbNotify command completion.  It uses
-		ca_put_callback to do puts, instead of ca_put.
-    scanparm	scan parameters for use with the scan record
-    sseq	string-sequence record.  This is a modified version of
-		the seq record in base.  This version can link to/from
-		either string or numeric PVs, and it can use
-		dbCaPutLinkCallback to wait for completion of the
-		execution started by one link before going on to the
-		next.
-    swait	replaces the wait record in base.
-		This version uses a modified version of recDynLlib
-		that supports dbNotify command completion.  It uses
-		ca_put_callback to do puts, instead of ca_put.
-    table	6-degree-of-freedom optical table
-    transform	like an array of calc records, with output links
-    vme		generic vme record (Mark Rivers/APS/CARS-CAT)
-    timestamp	Needed by the vxStats module, but apparently not
-    		available in a published module.
+               Set/read signal-processor parameters
+    epid       Extended version of the EPICS PID record, for
+               implementing feedback loops
+    mca        support for multichannel analyzers, and some other
+               array-valued detectors
+    motor      stepper and servo motors, "soft" motor
+    sCalcout   calcout record extended to handle string expressions,
+               links, and values.
+    scaler     scaler bank
+    sscan      Replaces the scan record (Ned Arnold/APS) in base.
+               This version uses a modified version of recDynLlib
+               that supports dbNotify command completion.  It uses
+               ca_put_callback to do puts, instead of ca_put.
+    scanparm   scan parameters for use with the scan record
+    sseq       string-sequence record.  This is a modified version of
+               the seq record in base.  This version can link to/from
+               either string or numeric PVs, and it can use
+               dbCaPutLinkCallback to wait for completion of the
+               execution started by one link before going on to the
+               next.
+    swait      replaces the wait record in base.
+               This version uses a modified version of recDynLlib
+               that supports dbNotify command completion.  It uses
+               ca_put_callback to do puts, instead of ca_put.
+    table      6-degree-of-freedom optical table
+    transform  like an array of calc records, with output links
+    vme        generic vme record (Mark Rivers/APS/CARS-CAT)
+    timestamp  (written by Stephanie Allison/SLAC) Needed by the vxStats
+               module, but apparently not available in a published module.
 
 Device/driver support
 	Acromag IP-330 ADC as waveform recorder
@@ -129,9 +131,9 @@ Device/driver support
 	motor controllers:
 	   soft support
 	   Intelligent Motion Systems IM483PL, and IM483SM
-	   Physik Instrumente PIC844
+	   Physik Instrumente PIC630, PIC844, PIC848, PIC662
 	   Newport MM3000, MM4000/5, PM500, ESP300, and XPSC8
-	   Oregon Micro Systems VME8/44, VME58, and MAXv
+	   Oregon Micro Systems VME8/44, VME58, MAXv, and PC68/78
 	   E500 (a CAMAC module)
 	   Advanced Control Systems MCB-4B
 	   MDrive
@@ -140,19 +142,21 @@ Device/driver support
 	   Delta Tau PMAC
 	   Micos MoCo
 	   Micro Mo MVP2001
+	   Faulhaber MCDC2805
+	   Parker/Compumotor 6K8
 	scalers:
 	   Joerger VSC series
 	   Joerger VS series
 	   CAMAC DSP RTC-018 timer and QS-450 quad scaler
 	   Struck STR7201, SIS 38xx
-	soft device support for the sCalcout record
+	soft device support for the aCalcout and sCalcout records
 	XIA dxp 
 
 Miscellaneous C code
 
-	sCalcPerform
-		Backward compatible extension of the expression-evaluation
-		software in EPICS base.
+	aCalcPostfix, aCalcPerform
+	sCalcPostfix, sCalcPerform
+		Support for run-time expression evaluation
 	recDynLink
 		Backward compatible extension of the dynamic-link software
 		previously in EPICS base.  (New code should probably use
@@ -190,6 +194,7 @@ all the files you will have to edit before you can build or boot an ioc:
 
 support/
     allenBradley/
+    asyn/
     calc/
     camac/
     ccd/
@@ -199,9 +204,9 @@ support/
         Makefile                             <-- EDIT to build
         ...
     dac128V/
-    dxp/
     documentation/
-    utils/
+    dxp/
+    genSub/
     ip/
     ip330/
     ipUnidig/
@@ -209,11 +214,14 @@ support/
     love/
     mca/
     motor/
+        motorApp/
+	    Makefile                         <-- EDIT to build
     optics/
-    mpf/
     quadEM/
+    seq/
     sscan/
     std/
+    TAR/
     utils/
     vme/
     vxStats/
@@ -281,8 +289,8 @@ ioc/
 1) Building and configuring a user tree
 =======================================
 
-If you have a built copy of EPICS base,  then building synAppsshould be very
-simple:
+If you have a built copy of EPICS base 3.14.8 or later,  then building synApps
+should be very simple:
 
 1) Edit support/config/MASTER_RELEASE to set the variables SUPPORT and
    EPICS_BASE.  SUPPORT should be the full path to the synApps support
@@ -591,12 +599,18 @@ details.  A package containing two stringCalcs and an 'asyn' record (called a
 "deviceCmdReply") is also available for run-time programming of simple serial-
 and GPIB-device support.
 
-3.9) sequence support
+3.9) array-expression support
+------------------------------
+Run-time programming involving arrays and/or numbers can be done with
+userArrayCalcs, which resemble userCalcs closely, but differ in significant
+details.
+
+3.10) sequence support
 ---------------------
 Run-time programming of sequences is possible using the sseq record and related
 medm displays yySseq.adl
 
-3.10) multiple-step measurement
+3.11) multiple-step measurement
 -------------------------------
 Up to four measurement steps involving positioners, detectors, and end
 calculations (e.g., to support dichroism experiments) can be done with the
@@ -604,7 +618,7 @@ calculations (e.g., to support dichroism experiments) can be done with the
 measurement sequence can be involved in a scan by treating the 4step database
 as you would treat the scaler or mca software.
 
-3.11) Orientation matrix
+3.12) Orientation matrix
 ------------------------
 
 
@@ -727,7 +741,6 @@ excerpts from autosave/restore request files, substitution files and st.cmd).
 ===============================================================================
 Tim Mooney (mooney@aps.anl.gov)
 Beamline Controls & Data Acquisition Group
-Advanced Photon Source
-7/30/2005
-
+Advanced Photon Source, Argonne National Laboratory
+8/22/2006
 
