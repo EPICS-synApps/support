@@ -54,7 +54,9 @@ doSed "s/${old}/${new}/g" Makefile
 
 printf "\r%-50s" "iocBoot/"
 cd ${TOP}/iocBoot
-mv ioc${old} ioc${new}
+if [ -f ioc${old} ]; then
+	mv ioc${old} ioc${new}
+fi
 for dir in ioc*
 	do
 	cd ${TOP}/iocBoot/$dir
@@ -96,6 +98,9 @@ for dir in ioc*
 	if [ -f bootParms ]; then
 		doSed "s!/${old}/!/${new}/!g" bootParms
 		doSed "s/ioc${old}/ioc${new}/g" bootParms
+	fi
+	if [ -f run ]; then
+		doSed "s@/${old}@/${new}@g" run
 	fi
 done
 
