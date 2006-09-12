@@ -16,7 +16,7 @@ ipac         v2-8    required for IndustryPack support (ANL)
 asyn         v4-6    required by ccd, dac128V, dxp, ip, ip330, ipUnidig, love,
                      mca, motor, optics, quadEM (ANL)
 seq         v2-0-11  for SNL programs in synApps (SLAC)
-vxStats     v1-7-2d  vxWorks statistics modified by us (SNS)
+vxStats     v1-7-2e  vxWorks statistics modified by us (SNS)
 genSub      v1-6     the genSub record (Observatory Sciences)
 
 For convenience, this distribution includes the module versions listed above,
@@ -34,6 +34,7 @@ ccd           scientific CCD detectors, including Bruker, MAR, and Roper
 config        (directory) build files, including the top-level make file
 dac128V       IndustryPack DAC
 dxp           XIA's DXP digital signal processor
+ebrick        support and sample application for low-cost PC-104 based IOC
 ip            various serial devices
 ip330         IndustryPack ADC
 ipUnidig      IndustryPack digital I/O
@@ -55,10 +56,13 @@ than the one specified in MASTER_RELEASE.
 synApps includes software developed by the Beamline Controls & Data
 Acquisition and the Accelerator Controls groups of the Advanced Photon Source
 (APS); by developers in APS Collaborative Access Teams -- notably, Mark Rivers
-(CARS-CAT); and by developers in the EPICS collaboration outside of the APS.
+(CARS-CAT); and by developers in the EPICS collaboration outside of the APS --
+notably, those at the Swiss Light Source, the Diamond Light Source, the National
+Synchrotron Light Source, the Australian Light Source, and the Canadian Light
+Source.
 
-Aside from databases, SNL (State Notation Language) programs, and the like,
-synApps contains the following code:
+Aside from EPICS databases, SNL (State Notation Language) programs, and the
+like, synApps contains the following code:
 
 Record support
     aCalcout   calcout record extended to handle array expressions
@@ -66,7 +70,7 @@ Record support
                VAL field makes a transition to zero.
     camac      user/database interface to CAMAC bus
                Execute a CAMAC CNAF command
-    dxp		XIA's DXP digital signal processor
+    dxp	       XIA's DXP digital signal processor
                Set/read signal-processor parameters
     epid       Extended version of the EPICS PID record, for
                implementing feedback loops
@@ -99,7 +103,12 @@ Record support
 
 Device/driver support
 	Acromag IP-330 ADC as waveform recorder
+	Acromag AVME9440 digital I/O
 	Advanced Control Systems driver support.
+	AllenBradley PLC (allenBradley module)
+	APS MRD100 
+	Asyn generic device support (asyn module)
+	AVME 9210 analog output
 	Bunch clock generator (Frank Lenkszus)
 	Canberra AIM multichannel analyzer, and various ICB modules
 	Struck STR7201/SIS3806 as multichannel and normal scaler
@@ -112,7 +121,7 @@ Device/driver support
 	Generic GPIB record
 	Greenspring IP-Unidig digital I/O IP module
 	HP 10895A Laser Axis (interferometer) board
-	Heidenhain IK320 (Till Straumann/BESSY)
+	Heidenhain AWE1024 encoder interpolator
 	Heidenhain IK320 VME counter/interpolator (Till Straumann/BESSY)
 	Heidenhain ND261 and related serial interface boxes
 	HPS SensaVac 937
@@ -135,6 +144,7 @@ Device/driver support
 	   Newport MM3000, MM4000/5, PM500, ESP300, and XPSC8
 	   Oregon Micro Systems VME8/44, VME58, MAXv, and PC68/78
 	   E500 (a CAMAC module)
+	   ACS Tech80 SPiiPlus
 	   Advanced Control Systems MCB-4B
 	   MDrive
 	   MXmotor
@@ -143,7 +153,9 @@ Device/driver support
 	   Micos MoCo
 	   Micro Mo MVP2001
 	   Faulhaber MCDC2805
+	   Oriel EMC18011
 	   Parker/Compumotor 6K8
+	   NewFocus PMNC8750, PMNC87xx
 	scalers:
 	   Joerger VSC series
 	   Joerger VS series
@@ -206,6 +218,7 @@ support/
     dac128V/
     documentation/
     dxp/
+	ebrick/
     genSub/
     ip/
     ip330/
@@ -289,7 +302,7 @@ ioc/
 1) Building and configuring a user tree
 =======================================
 
-If you have a built copy of EPICS base 3.14.8 or later,  then building synApps
+If you have a built copy of EPICS base 3.14.8 or later, then building synApps
 should be very simple:
 
 1) Edit support/config/MASTER_RELEASE to set the variables SUPPORT and
@@ -742,5 +755,5 @@ excerpts from autosave/restore request files, substitution files and st.cmd).
 Tim Mooney (mooney@aps.anl.gov)
 Beamline Controls & Data Acquisition Group
 Advanced Photon Source, Argonne National Laboratory
-8/22/2006
+9/8/2006
 
