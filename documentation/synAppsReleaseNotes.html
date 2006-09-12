@@ -1,0 +1,629 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<title>synAppsReleaseNotes</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h1 align="center">synApps 5.2 Release Notes</h1>
+
+
+<h2>Module changes from R5-1-1 to R5-2</h2>
+
+<table border>
+<tr><th>Module<th>R5-1-1<th>R5-2
+<tr><td>EPICS_BASE<td>3.14.7<td>3.14.8.2
+<tr><td>
+<tr><td>ALLEN_BRADLEY<td>2-1<td>2-1
+<tr><td>ASYN<td>4-2-1<td>4-6
+<tr><td>GENSUB<td>1-6<td>1-6
+<tr><td>IPAC<td>2-8<td>2-8
+<tr><td>SNCSEQ<td>2-0-10<td>2-0-11
+<tr><td>VXSTATS<td>1-7-2c<td>1-7-2e
+<tr><td>
+<tr><td>AUTOSAVE<td>4-1-2<td>4-2-1
+<tr><td>CALC<td>2-5<td>2-6-3
+<tr><td>CAMAC<td>2-4<td>2-5
+<tr><td>CCD<td>1-5<td>1-6
+<tr><td>DAC128V<td>2-3<td>2-3
+<tr><td>DXP<td>2-2<td>2-4
+<tr><td>EBRICK<td>N.A.<td>2-0-0
+<tr><td>IP<td>2-6<td>2-7
+<tr><td>IP330<td>2-3<td>2-4
+<tr><td>IPUNIDIG<td>2-3<td>2-4
+<tr><td>LOVE<td>3-0-1<td>3-2-3
+<tr><td>MCA<td>6-5<td>6-8
+<tr><td>MOTOR<td>5-6<td>5-9-1
+<tr><td>OPTICS<td>2-4-1<td>2-5-2
+<tr><td>QUADEM<td>2-2<td>2-3
+<tr><td>SSCAN<td>2-5-1<td>2-5-3
+<tr><td>STD<td>2-5-1<td>2-5-3
+<tr><td>VME<td>2-4-1<td>2-4-3
+</table>
+
+<p><hr>
+<hr>
+<h2>Module release notes</h2>
+<hr>
+<h2>autosave</h2>
+<h3>4.2.1</h3>
+<ul>
+<li>Added date/time to error messages printed to the console.
+<li>If asVerify is directed to create a restore file, it now writes a trial
+restore file first, and overwrites the real restore file only if more than half
+of the PV's were actually connected. 
+</ul>
+
+<h3>4.2</h3>
+<ul>
+<li>Added asVerify, a client-side tool to compare autosave .sav files
+with current PV values.  Also can write a .sav file useable for restoring
+values.
+</ul>
+
+<h3>4.1.3</h3>
+<ul>
+<li>Debug macros made more compliant with various compilers.
+<li>save_restore made less sensitive to errors.  Previously, any file
+write that set errno would abort the save, but this was just stupid,
+and caused way more problems than it solved.
+
+<li>Status PV's were restricted to STRING_LEN (30) characters, instead
+of PV_NAME_LEN (61).
+<li>Increased stack size to epicsThreadStackBig.
+<li>Don't treat unsupported fsync() as an error.
+</ul>
+
+<hr>
+
+<h2>calc</h2>
+<h3>2.6.3</h3>
+<ul>
+<li>array calcs reworked to allocate arrays only as needed.
+<br>aCalcPerform
+allocates no stack space until it is called.  Then, it allocates 20
+arrays of length aCalcArraySize (a volatile int, settable from the shell)
+or the arraySize argument specified by the first caller, whichever is
+larger.
+<br>aCalcoutRecord allocates an NELEM-size array for each variable AA-LL,
+when that variable is first read from or written to.
+</ul>
+
+<h3>2.6.2</h3>
+<ul>
+<li><p>Added the following functions for the aCalcout record
+<dl>
+<dt>DERIV <dd>take derivative (with respect to element number)
+<dt>FITPOLY <dd>fit to 2nd order polynomial
+<dt>FITMPOLY <dd>masked fit to 2nd order polynomial
+<dt>NSMOO <dd>apply smoothing operator a specified number of times
+</dl>
+<li>reworked medm displays that describe calc expressions
+<li>reworked medm displays for aCalcout record
+<li>fixed swaitRecord docs
+</ul>
+
+<h3>2.6.1</h3>
+<ul>
+<li><p>sCalcout and aCalcout records were not calling device support's
+init_record() routine
+<li><p>Added FWHM function to array calc support.
+</ul>
+
+<h3>2.6</h3>
+<ul>
+<li><p>Added array calc support.  This generalizes EPICS standard calc support
+in much the same way that the string calc support did, but with arrays
+instead of strings.
+
+<li><p>Added a python program to test string-calc software.
+
+<li><p>Interp support uses different genSub-record fields, and has acquired a mode switch
+and a success indicator.  See calc/documentation/interp.README.
+
+<li><p>sCalcout record has two new functions:
+<ul>
+<li>TR_ESC() translates escape sequences into the characters they represent
+<li>ESC()    translates selected unprintable characters into escape sequences.
+</ul>
+</ul>
+
+<hr>
+<h2>camac</h2>
+<h3>2.4</h3>
+<ul>
+   <li>Changed drvMotorE500.cc to use generic epicsThread priority</li>
+</ul>
+
+<hr>
+<h2>ccd</h2>
+<h3>1.6</h3>
+<ul>
+  <li>Added support for WIN32.</li>
+  <li>Removed variable argument macros for debugging in SNL code.</li>
+  <li>Minor changes in MAR code.</li>
+</ul>
+
+<hr>
+<h2>dac128V</h2>
+<ul>
+<li>No changes.
+</ul>
+
+<hr>
+<h2>dxp</h2>
+<h3>2.4</h3>
+<ul>
+  <li>Added support for detector "groups" in the dxp and mca record drivers.  This is used to turn on 
+      and off acquisition on all detectors as efficiently as possible.  Modifed dxpMED.db and dxpMED.st to
+      take advantage of this new capability.
+  <li>Added support for the new xMAP PXI modules.  This support runs on the cygwin-x86 architecture.
+  <li>Enhancements to dxpRecord:
+  <ul>
+     <li>Made baseline filter length (BASE_LEN) be a menu rather than a number.
+     <li>Added readback for baseline filter length (BASE_LEN_RBV)
+     <li>Added the baseline cut enable (BASE_CUT_ENBL) and readback (BASE_CUT_ENBL_RBV) fields.
+     <li>Implemented the pre-amp gain (PGAIN) and readback (PGAIN_RBV) fields.
+     <li>Added time/point for the baseline history (BHIST_TIME).  This is currently only implemented on the xMAP.
+     <li>Removed BASETHRADJ since xMAP does not support it, and it's available as low-level parameter.
+  </ul>
+  <li>Added code to support ADC trace and baseline history to dxpMED.st for multi-element detectors.
+  <li>Fixes and enhancements for 40MHz version of Saturn.
+  <li>Added support for native Windows build, in addition to Cygwin.
+  <li>This version does NOT support the DXP4C2X because that support from XIA lags behind the Saturn and xMAP in terms
+      of what acquisition parameters it supports.  The DXP4C2X will be supported in the next release.
+  <li>List of things to be added/fixed in next release:
+  <ul>
+    <li>Implement missing functions on DXP-2X so it will work again.
+    <li>Get algorithm for baseline threshold in energy units, implement on Saturn and DXP-2X.
+    <li>Implement ROI mapping mode on Saturn and DXP-2X.
+    <li>Implement MCA mapping mode on xMAP.
+    <li>Implement fast SCA acquisition on all models.
+    <li>Add DXP record fields for polarity, reset interval, and RC time constant.
+  </ul>
+</ul>
+
+<h3>2.3</h3>
+<ul>
+  <li>Added several readback fields to dxpRecord (BASETHRESH_RBV, etc.)
+  <li>Use value of RUNTASKS from save/restore, so that auto baseline threshold adjust and other
+      bits are restored.
+  <li>Fixed bugs in setting SCAs from MCA ROIs which were causing error messages.
+  <li>Fixed init_record in dxpRecord so that BASETHRESH from save/restore is set correctly
+      if automatic baseline threshold adjust is disabled.
+  <li>Fixed definition of bit 0 in RUNTASKS in dxp2x_rc.db and dxp2x_reset.db.  
+      This bug was causing baseline histogramming to stop if any other bits were
+      modified in RUNTASKS.
+  <li>Added 40MHz firmware files for the Saturn.
+  <li>Fixed bug that was causing bit 0 of RUNTASKS to be reset, turning off baseline histogramming
+      whenever RUNTASKS was modified.
+  <li>Added new ECAL field.  ADC_RULE is now at energy=ECAL, not at energy=EMAX/2.
+</ul>
+
+<hr>
+<h2>ip</h2>
+<h3>2.7</h3>
+<ul>
+<li>Added support for Newport LAE500 autocollimator
+<li>Added support for additional thermocouple types for Keithley 2700 multimeter
+<li>Databases using asyn serial support no longer set input/output terminator.
+This must be done in asyn-record configuration.
+<li>HeidVRZ460_encoder.db converted to use asyn
+<li>Keithley2kDMM_mf.db  -- Modified by Arun 08-Feb-2006 to include R-type thermocouple
+<li>Keithley2kDMM_mf20_settings.req -- new file
+<li>Keithley2kDMM_mf_channelN_settings.req now just includes calcout_settings.req
+<li>pzt3.db, pzt_3id.db -- BitBus-based databases deleted.
+<li>Keithley2kDMM.st -- Added support for additional thermocouple types for 2700
+<li>devAiHeidND261.c -- converted to use asyn
+<li>devXxEurotherm.c -- converted to use asyn
+</ul>
+
+
+<hr>
+<h2>ip330</h2>
+<h3>2.4</h3>
+<ul>
+  <li>Minor bug fix in driver.</li>
+</ul>
+
+
+<hr>
+<h2>ipUnidig</h2>
+<h3>2.4</h3>
+<ul>
+   <li>Ron Sluiter fixed a bug in initIpUnidig() of drvIpUnidig.c.
+       The BSP was not enabling interrupts for whatever level
+       the IP carrier was configured for unless some other
+       IRQ handler, with the same IRQ level, had already
+       enabled interrupts.</li>
+  <li>Kurt Goetze added new medm adl files: IpUnidig_all.adl, IpUnidig_help.adl,
+      IpUnidig_top.adl </li>
+</ul>
+
+<hr>
+<h2>love</h2>
+<H3>3.2.3</H3>
+<P ALIGN=LEFT>minor changes:</P>
+<UL>
+	<LI><P ALIGN=LEFT STYLE="margin-bottom: 0in">Corrected a problem
+	when communication would timeout.</P>
+	<LI><P ALIGN=LEFT STYLE="margin-bottom: 0in">Modified MEDM screen
+	field colors.</P>
+	<LI><P ALIGN=LEFT STYLE="margin-bottom: 0in">Added .req file for
+	save/restore.</P>
+</UL>
+<H3>3.2.2</H3>
+<P ALIGN=LEFT>minor changes:</P>
+<UL>
+	<LI><P ALIGN=LEFT STYLE="margin-bottom: 0in">Primary MEDM screen.</P>
+	<LI><P ALIGN=LEFT STYLE="margin-bottom: 0in">Modified startup
+	scripts for Linux.</P>
+	<LI><P STYLE="margin-bottom: 0in">Added devLove.dbd which is
+	necessary for other components/applications to have Love Controller
+	support.</P>
+</UL>
+<H3>3.2.0</H3>
+<P ALIGN=LEFT>significant architecture changes
+<UL>
+	<LI><P ALIGN=LEFT STYLE="margin-bottom: 0in">Module drvLove
+	implements the standard Asyn intefaces asynInt32,
+	asynUInt32Digitial, and asynDrvUser,</P>
+	<LI><P STYLE="margin-bottom: 0in">Enhanced MEDM screens for
+	diagnostics,</P>
+	<LI><P STYLE="margin-bottom: 0in">Database for monitoring and
+	setting controllers,</P>
+	<LI><P STYLE="margin-bottom: 0in">Removed all unused files (i.e.
+	sources, databases, MEDM screens),</P>
+</UL>
+<H3>3.1.0</H3>
+<P ALIGN=LEFT>significant architecture changes
+<UL>
+	<LI><P ALIGN=LEFT STYLE="margin-bottom: 0in">Added drvLove,
+	multidevice port driver,</P>
+	<LI><P STYLE="margin-bottom: 0in">Added ifaceLove, Love-specific
+	interface,</P>
+	<LI><P STYLE="margin-bottom: 0in">Added devLove, device support,</P>
+	<LI><P STYLE="margin-bottom: 0in">Supports the ai,ao,bi,bo, and mbbi
+	record types, removed support for longin,</P>
+	<LI><P STYLE="margin-bottom: 0in">Enhanced MEDM screens for
+	diagnostics,</P>
+	<LI><P STYLE="margin-bottom: 0in">Format of INP/OUT field has been
+	modified, refer to database definition files,</P>
+	<LI><P STYLE="margin-bottom: 0in">Removed all unused files (i.e.
+	sources, databases, MEDM screens),</P>
+</UL>
+
+<hr>
+<h2>mca</h2>
+<h3>6.8</h3>
+<ul>
+<li> Minor changes to drvFastSweep and drvIcbAsyn</li>
+</ul>
+<p></p>
+
+<h3>6.7</h3>
+<ul>
+  <li>Fixed timing bug in communication between record and device support.
+      In previous releases device support was setting the .ACQG field to 0 (Done)
+      before the final read of the device was complete.  This meant that channel access
+      clients that were doing cagets() of .ACQG to see when acquisition was complete
+      and then reading data immediately could get incorrect data.  Note that this problem did not
+      occur if clients were using monitors (callbacks), because the record did not
+      call dbPostEvents until the final read of data from the device was complete.
+      <p>
+      The fix to this problem required re-writing the interface between the record and
+      device support so that device support does not directly modify the .ACQG field.
+      Rather it now passes a structure with status information which the record uses
+      to modify the record fields, and it does not set the .ACQG field until the record contains
+      the latest data.
+      <p>
+      The record support, asyn device support (for all devices except Struck), and the Struck (SIS) 
+      device support were all modified.
+  <li>mcaRecord
+    <ul>
+      <li>Converted all DBF_FLOAT record fields to DBF_DOUBLE.
+      <li>Added the PSTATUS (private) field for status buffer.
+      <li>Removed the ACQP, DWLP, ERTP, ELTP and ACTP (private) fields which are
+          no longer needed because PSTATUS field replaces them.
+    </ul>
+   <li>Removed macro definitions with variable arguments (e.q. Debug) for portability.
+</ul>
+
+<h3>6.6</h3>
+<ul>
+  <li>Added mcaApp/RontecSrc directory with support for the Rontec XFlash MCA.   
+      This works with any serial port with asyn support.
+  <li>Added support for Canberra AIM on Windows IOCs (using Cygwin).
+  <li>Fixed a bug in mcaRecord.  If a channel access put should have caused the record
+      to process again because it was busy (.RPRO field=1) it was not processing again
+      because the record only calls recGblFwdLink when acquisition completes.  Work around
+      problem by checking RPRO at end of record processing and repeating processing loop
+      if RPRO=1 and acquisition is not complete.
+  <li>Fixed occasional timing problem with Canberra AIM on Linux not receiving first
+      inquiry response.
+  <li>Fixed problems with the iocLinux and iocVxWorks example IOCs.
+  <li>Added iocRontec example IOC.
+  <li>Added iocCygwin example IOC for Canberra on Cygwin.
+  <li>Added mcaApp/op/adl/mcaTest.adl medm screen for testing the example IOCs.
+  <li>Improved the documentation in mcaDoc.html and mcaRecord.html.
+  <li>Added the acquiring (.ACQG) field to 16element_time.adl.
+  <li>Things planned for future release:
+    <ul>
+      <li>
+        Add a calibrated X axis PV, so one can plot spectra versus energy in medm
+      <li>
+        Add ROI low and high PVs in calibrated units, so that users can define ROIs
+        in calibrated unit (e.g. energy), and copy ROIs from one MCA to another in
+        these calibrated units.
+      <li>
+        Add medm screen shots to the mcaDoc, mcaCanberra, and mcaStruck html files.
+    </ul>
+</ul>
+
+<hr>
+<h2>motor</h2>
+  <H3>5.9</H3>
+
+<ul>
+<li>Soft Motor allocation limit<br>
+  Peter Denison (Diamond Light Source) enhanced the Soft Channel device support by 
+  eliminating the 50 soft motor limit and replacing it with an unlimited linked list.
+<li>All motors done/stop/moving utility<br>
+  Kevin Peterson's (UNI-CAT) motorUtil task was added to the motor record 
+  distribution. The motorUtil task monitors and maintains 3 PV's; $(P)alldone, $(P)allstop, 
+  $(P)moving. motorUtil is a replacement for the all_com_##.db distributed with 
+  the STD support module.  See the motorUtil.db file for details.
+<li>Asyn Motor</br>
+  Peter Denison (Diamond), Nick Rees (Diamond) and Mark Rivers (APS) have added a 
+  new motor record device support architecture based on ASYN; called "asyn motor" 
+  support.  The asyn motor support <I>is an attempt to define a clean, extensible 
+  API for motor controller drivers to support</I>.  This is a preliminary release 
+  of work in progress.  Do not use <I>asynMotor</I> device support at this time, except 
+  for development and testing purposes only.
+
+<li>New Focus 8750 Network Controller<br>
+  Joe Sullivan added support for the New Focus Model 8750 Network Controller.
+
+<li>Physik Instrumente (PI) E-662 piezo controller<br>
+  Joe Sullivan added support for the Physik Instrumente (PI) GmbH & Co. Model E-662 
+  piezo controller.
+
+<li>Newport XPS-C8 asyn motor support<br>
+  Mark Rivers added asyn motor support for the Newport XPS-C8 motor controller. 
+  This is a preliminary release of work in progress. However, it has fewer 
+  problems than the previous XPS support, so we recommend using the new asyn 
+  support for the XPS, with the understanding that it is still under development.
+
+<li>Trajectory Scanning<br>
+  Mark Rivers added the Trajectory Scanning software for both the Newport MM4005 
+  and XPS-C8 motor controllers to the motor record distribution.
+
+<li>OMS PC68 and PC78 support<br>
+  Brian Tieman and Ron Sluiter added support for the standalone, RS-232 versions 
+  of the OMS PC68 and PC78 model controllers.  The same device driver (OMS PC68/78) 
+  supports both models.
+</ul>
+
+<H3>5.8</H3>
+<ul>
+<li>Faulhaber MCDC2805<br>
+  Mark Rivers added support for the Faulhaber MCDC2805 servo controller.
+<li>Parker Hannifin, Compumotor Division, 6K Series<br>
+  Joe Sullivan added support for Parker Hannifin, Compumotor Division, 6K Series 
+  controllers.
+</ul>
+
+<h3>5.7</h3>
+<ul>
+<li>Initial Position<br>
+  With this release, if the absolute values of both the save/restore's target 
+  position and the controller's commanded position are greater than the re-try 
+  deadband (RDBD) at boot-up, then DVAL will be initialized from the controller's 
+  value.  In other words, if the absolute value of the controller's commanded 
+  position is greater than the re-try deadband at boot-up, than the controller's 
+  position takes precedence over the save/restore value.
+<li>Physik Instrumente (PI) C-630<br>
+  Kurt Goetze added support for the Physik Instrumente (PI) model C-630 motion 
+  controller.
+<li>Physik Instrumente (PI) C-848<br>
+  Support added for the Physik Instrumente (PI) C-848 motor controller.
+</ul>
+
+
+
+<hr>
+<h2>optics</h2>
+<H3>2.5.2</H3>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Added MEDM display files for XIA PF4
+	filter, and fixed it to compile for vxWorks
+	</P>
+</UL>
+
+<H3>2.5.1</H3>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Added CoarseFineMotor database and
+	MEDM display files 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">fixed minor problems with xia_slit
+	MEDM display.</P>
+	<LI><P STYLE="margin-bottom: 0in">Added support for XIA PF4 dual
+	filters.</P>
+</UL>
+<H3>2.5</H3>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Added diffractometer support
+	(orientation matrix) 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Added some documentation for
+	slits, mirrors, filters, spherical grating monochromator,
+	high-energy-resolution monochromator. 
+	</P>
+	<LI><P>Ported xia slit to EPICS 3.14, and improved its behavior when
+	driven by ca_put_callback(). 
+	</P>
+</UL>
+
+<hr>
+<h2>quadEM</h2>
+<h3>2.3</h3>
+<ul>
+  <li>Fixed driver so that configuration routines can be called from iocsh.</li>
+</ul>
+
+<hr>
+<h2>sscan</h2>
+<h>2.5.3</h3>
+
+<ul>
+<li>Added sscanApp/op/python directory, with the following programs:
+<dl>
+<dt>addMDA.py<dd>Front end for adding MDA files, uses readMDA, opMDA, and writeMDA
+from mda.py
+<dt>mda.py<dd>Python API for MDA files.  Supports reading, writing, and arithmetic
+operations for up to 4-dimensional MDA files
+<dt>mdaAsc.py<dd>Uses mda.py to render a 1-dimensional MDA file as ascii text.
+<dt>opMDA.py<dd>Front end for operating on MDA files, uses readMDA, opMDA, and writeMDA
+from mda.py
+</dl>
+
+<li>Added Dohn Arms' 'mdautils' software in the sscanApp/src
+directory.  This software can convert an MDA file to ascii, print info
+about an MDA file, and read an MDA file into C data structures.
+
+<li>Fixed a race condition in the sscan record that was responsible for hanging scans
+at the last point (and maybe other things as well).
+
+<li> the sscan record no longer renews PV links when a scan starts if the new scan
+follows the previous scan by less than sscanRecordLookupTime.
+
+<li>If retrace or after-scan fails because recDynLinkPutCallback returns an error, skip
+the action rather than hang.
+
+<li>If the sscan record attempts to connect to a PV while an earlier connection attempt
+is still in progress, it now waits and retries.
+
+<li>recDynLinkQsize is now exported for use by the ioc shell.
+
+<li>recDynLink used to crash if one of its callback functions received an
+event_handler_args structure with a status element whose value was not ==
+ECA_NORMAL.  Now it declines to process the event or to pass it on to the client.
+
+<li>saveData used to check directory permissions by attempting to create a file
+whose name was illegal (contained ':') on some operating systems.
+</ul>
+
+<h3>2.5.2</h3>
+
+<ul>
+<li>sscanRecord checks parameters more closely, allows before-scan and after-scan
+links to write to selected PV's of their own sscan record.
+
+<li>New after-scan action: Move to center of mass of peak (this choice has
+problems with multiple positioners, since they won't, in general, have the
+same peak position).
+
+<li>In previous versions, recDynLink would deadlock if asked to clear the link
+to a PV while an action for that PV was still on queue.  This is fixed.
+
+<li>saveData zeros unused points in its XDR buffer, because XDR doesn't manage
+this well.
+
+</ul>
+
+<hr>
+<h2>std</h2>
+<H3>2.5.3</H3>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">epid record still had some FLOAT
+	stuff to convert to DOUBLE. Fixed record and docs. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">added userStringSeq10 database,
+	autosave request, and medm display files.</P>
+	<LI><P STYLE="margin-bottom: 0in">Added support for the Femto
+	current amplifier (<A HREF="http://www.femto.de/">www.femto.de</A>).</P>
+</UL>
+<H3>2.5.2</H3>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">sseqRecord.html rewritten. The old
+	version was a minimal modification of seqRecord.html, from the EPICS
+	Record Reference Manual, and was not very clear. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">scaler record: v3.18: Don't post
+	CNT field unless record-support changed its value. Modified debug
+	macro. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">devEpidFast.c: changed strtok_r to
+	epicsStrtok_r 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">pvHistory: new software to
+	maintain short-term history of a few PV's in the ioc. Software
+	comprises pvHistory.c (genSub routines), devTimeOfDay.c,
+	pvHistory.db, pvHistory.req (autosave-request file), and
+	pvHistory*.adl, and relies on autosave to save/restore the value
+	arrays. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">softMotor.db: shortened some .DESC
+	field values so they fit. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">all_com_4.db: new file 
+	</P>
+	<LI><P>softMotorConfig.adl: related-display callups were using
+	sCalcout files for calcout records, because synApps did not contain
+	calcout medm displays. Now the calc module does contain calcout
+	displays, so we use them. 
+	</P>
+</UL>
+
+<hr>
+<h2>vme</h2>
+<H3>2.4.3</H3>
+<UL>
+	<LI><P ALIGN=LEFT STYLE="margin-bottom: 0in">The following changes
+	were made to files:
+	<BR>1) Acromag_16IO.db &ndash; card number is now a macro.
+	<BR>2) devScaler.c &ndash; removed debug macro definitions with a
+	variable number of arguments
+	<BR>3) devScaler_VS.c &ndash; removed debug macro definitions with a
+	variable number of arguments
+	<BR>4) vmeRecord.c &ndash; removed debug macro definitions with a
+	variable number of arguments
+</UL>
+
+<H3>2.4.2</H3>
+<UL>
+	<LI><P ALIGN=LEFT STYLE="margin-bottom: 0in">The following changes
+	were made to files:<BR>1) getFilledBuckets.st &ndash; To allow
+	multiple instances.<BR>2) vmeVXSupport.db &ndash; Included
+	vmsSupport.dbd.<BR>3) Acro_bi_scan.adl &ndash; Added &ldquo;9440&rdquo;
+	to PV names,<BR>4) BunchClkGen.db &ndash; To allow multiple
+	instances.</P>
+	<LI><P ALIGN=LEFT STYLE="margin-bottom: 0in">The following changes
+	were made to the Heidenhain IK320 device driver.<BR>1) Elminated the
+	need to call drvIK320RegErrStr() from the vxWorks st.cmd file.<BR>2)
+	taskDelay(1)'s and semTake(**, 1)'s with delay of 1 tick changed to
+	5ms.<BR>3) Allow reading encoder without referencing.</P>
+</UL>
+
+<hr>
+<h2>xxx</h2>
+<h3>5.2</h3>
+<ul>
+<li><p>iocBoot/iocCygwin/* -- Added examples for loading databases,
+specifying autosave PV's, and invoking SNL programs, for orientation matrix,
+femto amplifier, and pf4dual slit.
+<li><p>pseudoMotor.db, sumDiff2D.db, and coordTrans2D.db are now in the motor
+module, and not in xxx.  This affects some substitution files in iocBoot/ioc*.
+<li><p>Some synApps databases used to specify input/output message terminators,
+and no longer do this.  Message terminators must be specified in serial.cmd.
+<li><p>Added examples for userArrayCalcs, pvHistory, XIA slit, string sequence
+<li><p>Specified message terminators for Digitel in serial.cmd
+<li><p>Added example of setting system clock rate to iocvxWorks/st.cmd
+<li><p>Added new motor types to xxxApp/src/*
+</ul>
+
+
+</body>
