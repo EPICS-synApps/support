@@ -29,7 +29,7 @@ content="text/html; charset=iso-8859-1">
 <tr><td>CAMAC<td>2-4<td>2-5
 <tr><td>CCD<td>1-5<td>1-6
 <tr><td>DAC128V<td>2-3<td>2-3
-<tr><td>DXP<td>2-2<td>2-4
+<tr><td>DXP<td>2-2<td>2-5
 <tr><td>EBRICK<td>N.A.<td>2-0-0
 <tr><td>IP<td>2-6<td>2-7
 <tr><td>IP330<td>2-3<td>2-4
@@ -155,6 +155,33 @@ and a success indicator.  See calc/documentation/interp.README.
 
 <hr>
 <h2>dxp</h2>
+
+<h3>2.5</h3>
+<ul>
+  <li>Upgraded xMAP DLLs and firmware to release 0.9.1 of xManager.  This release from XIA appears to fix 
+      all of the initialization problems and other bugs that I have reported to them.
+  <li>Fixed bug in devDxp.c that was causing crashes when reading SCA data on xMAP with 0.9.1 firmware and software.
+  <li>Added mutex to interlock access to Handel library.  This was needed because the poller thread, asyn port
+      and dxpRecord::init_record can all be calling Handel at the same time.
+  <li>This release uses R6-8 of the mcaRecord, which fixed a serious bug.  Previously the MCA record posted monitors
+      for .ACQG=0 (acquire done) before it posted monitors on the VAL field.  This could cause clients to collect bad
+      data.
+  <li>Added MAXWIDTH and MAXWIDTH_RBV fields to the dxpRecord.
+  <li>Changed the xMAP to use the energy livetime, rather than trigger livetime, for the MCA record livetime.
+  <li>Fixed the way in which the software determines what type of hardware (xMAP, Saturn, DXP2X) it is running on.
+      Previously it was reading the HDWRVAR low-level parameter, and this was not a reliable test.
+  <li>Moved iocsh commands from drvDxp.c to new file, epicsHandelUtils.c.
+  <li>Changed order of downloading parameters in dxpRecord::init_record so they all get applied the first time.
+  <li>Added feature to dxpMED.st.  It now copies the ROI LO and HI fields from the MCA records to the corresponding
+      SCA LO and HI fields in the DXP records.
+  <li>Implemented the poller thread callbacks in the Saturn database.  In R2-4 they were only implemented on the xMAP.
+  <li>Loaded EPICS sscan records and initialized saveData in the startup scripts in iocSaturn and iocXMAP.  Added 
+      menus for them to the top-level medm screens.  This is very useful for collecting data as quickly as possible
+      using saveData in the EPICS IOC.
+  <li>Combined MCA ROIs and DXP SCAs onto a single medm screen for multi-element detectors.
+  <li>Changed the prefix of the PVs in iocXMAP from dxpXMAP:med: to dxpXMAP:.
+</ul>
+
 <h3>2.4</h3>
 <ul>
   <li>Added support for detector "groups" in the dxp and mca record drivers.  This is used to turn on 
