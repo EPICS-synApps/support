@@ -16,3 +16,8 @@ echo "copying from" $i
 cp -f $i/*.adl $2
 cp -f $i/*.gif $2
 end
+foreach i (`find $1 -name medm -print`)
+echo "copying from" $i
+cp -f $i/*.adl $2
+cp -f $i/*.gif $2
+end
