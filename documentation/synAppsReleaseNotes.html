@@ -19,7 +19,7 @@ content="text/html; charset=iso-8859-1">
 <tr><td>
 <tr><td>ALLEN_BRADLEY<td>2-1<td>2-1
 <tr><td>ASYN<td>4-2-1<td>4-6
-<tr><td>GENSUB<td>1-6<td>1-6
+<tr><td>GENSUB<td>1-6<td>1-6a
 <tr><td>IPAC<td>2-8<td>2-8
 <tr><td>SNCSEQ<td>2-0-10<td>2-0-11
 <tr><td>VXSTATS<td>1-7-2c<td>1-7-2e
@@ -35,13 +35,13 @@ content="text/html; charset=iso-8859-1">
 <tr><td>IP330<td>2-3<td>2-4
 <tr><td>IPUNIDIG<td>2-3<td>2-4
 <tr><td>LOVE<td>3-0-1<td>3-2-3
-<tr><td>MCA<td>6-5<td>6-8
+<tr><td>MCA<td>6-5<td>6-9
 <tr><td>MOTOR<td>5-6<td>5-9-1
 <tr><td>OPTICS<td>2-4-1<td>2-5-2
 <tr><td>QUADEM<td>2-2<td>2-3
 <tr><td>SSCAN<td>2-5-1<td>2-5-3
-<tr><td>STD<td>2-5-1<td>2-5-3
-<tr><td>VME<td>2-4-1<td>2-4-3
+<tr><td>STD<td>2-5-1<td>2-5-4
+<tr><td>VME<td>2-4-1<td>2-4-4
 </table>
 
 <p><hr>
@@ -54,7 +54,16 @@ content="text/html; charset=iso-8859-1">
 <li>Added date/time to error messages printed to the console.
 <li>If asVerify is directed to create a restore file, it now writes a trial
 restore file first, and overwrites the real restore file only if more than half
-of the PV's were actually connected. 
+of the PV's were actually connected.
+<li>myPrintErrno modified to print the line and file of caller, and called only
+if there was an actual error.
+<li>Don't hold epicsMutex for a long time, because any priority inheritance
+that occurs while the mutex is held will persist until the mutex is released,
+even if it's no longer needed.  Now, the mutex is used to protect a variable
+which, in turn, protects save_restore's save-set list.
+<li>Use binary mode for fopen() calls in myFileCopy() (dbrestore.c) to avoid
+file-size differences resulting from different line terminators on different
+operating systems.  (Thanks to Kay Kasemir for this fix.)
 </ul>
 
 <h3>4.2</h3>
@@ -133,6 +142,12 @@ and a success indicator.  See calc/documentation/interp.README.
 
 <hr>
 <h2>camac</h2>
+
+<h3>2.5</h3>
+<ul>
+<li>Debug macros changed for compatibility with a wider range of compilers
+</ul>
+
 <h3>2.4</h3>
 <ul>
    <li>Changed drvMotorE500.cc to use generic epicsThread priority</li>
@@ -246,6 +261,11 @@ This must be done in asyn-record configuration.
 <li>Keithley2kDMM.st -- Added support for additional thermocouple types for 2700
 <li>devAiHeidND261.c -- converted to use asyn
 <li>devXxEurotherm.c -- converted to use asyn
+<li>deviceCmdReply.db -- Now is useable for binary data (i.e., strings that may
+contain unprintable characters, including the null character), and for devices
+that require CRC's or checksums that are implemented in the string-calc software
+(in the calc module).  However, the string-length limitation is still 39 bytes.
+<li>Added documentation for deviceCmdReply
 </ul>
 
 
@@ -325,6 +345,19 @@ This must be done in asyn-record configuration.
 
 <hr>
 <h2>mca</h2>
+
+<h3>6.9</h3>
+<ul>
+<li> Added support for SIS3820 multi-scaler for both mca and scaler records.
+<li> Added example application (mcaSISTest) for SIS3801 (STR7201) and SIS3820 in SISSrc,
+     and added iocBoot/iocVxWorks/st_sis.cmd and /mcaApp/op/adl/SISTest.adl to test it.
+<li> Fixed bug with data type of mcaPresetCounts in devMcaAsyn.c</li>
+<li> Fixed bug in mcaRecord.c. Need to force a read of the data when acquisition is turned on.  
+     Without it a device that is done acquiring by the time the status is read for the first time
+     will never get the data read (because Read record in database has scanned disabled if not acquiring).
+
+</ul>
+
 <h3>6.8</h3>
 <ul>
 <li> Minor changes to drvFastSweep and drvIcbAsyn</li>
@@ -392,6 +425,11 @@ This must be done in asyn-record configuration.
 
 <hr>
 <h2>motor</h2>
+
+  <H3>5.9.1</H3>
+<ul>
+<li>Some bug fixes?
+</ul>
   <H3>5.9</H3>
 
 <ul>
@@ -467,7 +505,8 @@ This must be done in asyn-record configuration.
 <UL>
 	<LI><P STYLE="margin-bottom: 0in">Added MEDM display files for XIA PF4
 	filter, and fixed it to compile for vxWorks
-	</P>
+	<li>xia_slit.st was not honoring limits written to the hardware.
+	<li>2slit.db converted to vdct
 </UL>
 
 <H3>2.5.1</H3>
@@ -517,6 +556,30 @@ operations for up to 4-dimensional MDA files
 from mda.py
 </dl>
 
+<li>Fixed problems in the communication between the sscan record and saveData
+that caused corrupted data files to be written:
+
+<ul>
+
+<li>The basic problem was that saveData was getting bufferred data arrays, but
+an unbuffered copy of the sscan record's CPT field.  The sscan record now
+maintains the field BCPT (bufferred CPT) which is posted when data array buffers
+are switched.
+
+<li>A second problem was that saveData was not able to put AWAIT=1 quickly
+enough to stop a very fast scan in time to ensure integrity of the data file.
+saveData now writes '1' to the sscan record's AAWAIT field on init, and
+writes '0' if it ever exits (not a supported operation at this time).  As a
+consequence, AAWAIT no longer occurs in the autosave-request file
+scan_settings.req.
+
+<li>A remaining problem, thus far seen only on cygwin, is that multidimensional
+scans can get saveData into trouble because CA monitors sometimes are received
+by saveData in a different order than they were posted by the sscan records.
+Currently, neither the sscan record nor saveData defend against this.
+
+</ul>
+
 <li>Added Dohn Arms' 'mdautils' software in the sscanApp/src
 directory.  This software can convert an MDA file to ascii, print info
 about an MDA file, and read an MDA file into C data structures.
@@ -541,6 +604,9 @@ ECA_NORMAL.  Now it declines to process the event or to pass it on to the client
 
 <li>saveData used to check directory permissions by attempting to create a file
 whose name was illegal (contained ':') on some operating systems.
+
+<li>rewrote sscanRecord.html
+
 </ul>
 
 <h3>2.5.2</h3>
@@ -563,6 +629,32 @@ this well.
 
 <hr>
 <h2>std</h2>
+
+<H3>2.5.4</H3>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Changes to scaler record:
+        <UL>
+          <LI>PRn and Sn fields are now DBF_ULONG rather than DBF_LONG.
+	  <LI>No longer hardcode VME_IO device type in the record logic.
+	  <LI>Removed .CARD record field.
+          <LI>Changed interface to device support so that all functions pass precord 
+              rather than card, and init_record passes pointer to device callback structure.
+          <LI>Move callback structures from dpvt to rpvt so record does not access dpvt.
+	</P>
+        </UL>
+	<LI><P STYLE="margin-bottom: 0in">Added asyn device support for scaler record. This is
+            currently used by the SIS3820 device support in mcaApp/SISSrc, but all scaler
+            device support will eventually be changed to use asyn.
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Changed stdApp/Db/scaler*.db so that $(OUT) is a
+            macro parameter, rather than assuming VME_IO link type.
+	<LI><P STYLE="margin-bottom: 0in">Deleted CARD field from stdApp/op/adl/scaler*.adl.
+	<LI><P STYLE="margin-bottom: 0in">Deleted stdApp/src/femto.dbd, not needed.
+	<li><P STYLE="margin-bottom: 0in">Added timer.db (resettable software timer) and
+		related software: timer.req, timer*.adl
+	</P>
+</UL>
+
 <H3>2.5.3</H3>
 <UL>
 	<LI><P STYLE="margin-bottom: 0in">epid record still had some FLOAT
@@ -605,8 +697,30 @@ this well.
 	</P>
 </UL>
 
+
+<hr>
+<h2>utils</h2>
+<ul>
+<li>Modified changePrefix to correctly handle the start_epics_xxx script,
+xxxSupport.dbd, rename iocBoot/iocxxx  directory if it exists, and a file
+named 'run' in iocBoot/*
+<li>Modified copyAdl so it also finds the medm display files in the asyn module.
+</ul>
+
 <hr>
 <h2>vme</h2>
+
+<H3>2.4.4</H3>
+<UL>
+	<LI><P ALIGN=LEFT STYLE="margin-bottom: 0in">The following changes
+	were made to files:
+	<BR>1) devScaler.c, devScaler_VS.c &ndash; changed to new interface between scaler
+		record and device support.
+	<BR>2) Db/Jscaler* &ndash; deleted, these are obsolete and stdApp/Db/scaler* should be
+		used instead.
+	<BR>3) src/devAvmeMRD.c &ndash; modified to eliminate compiler warnings.
+</UL>
+
 <H3>2.4.3</H3>
 <UL>
 	<LI><P ALIGN=LEFT STYLE="margin-bottom: 0in">The following changes
@@ -646,10 +760,11 @@ femto amplifier, and pf4dual slit.
 module, and not in xxx.  This affects some substitution files in iocBoot/ioc*.
 <li><p>Some synApps databases used to specify input/output message terminators,
 and no longer do this.  Message terminators must be specified in serial.cmd.
-<li><p>Added examples for userArrayCalcs, pvHistory, XIA slit, string sequence
+<li><p>Added examples for userArrayCalcs, pvHistory, XIA slit, string sequence, timer
 <li><p>Specified message terminators for Digitel in serial.cmd
 <li><p>Added example of setting system clock rate to iocvxWorks/st.cmd
 <li><p>Added new motor types to xxxApp/src/*
+<li><P>Scaler database loading has changed to accommodate asyn-based device support.
 </ul>
 
 
