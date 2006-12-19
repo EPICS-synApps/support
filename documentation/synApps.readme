@@ -16,8 +16,9 @@ ipac         v2-8    required for IndustryPack support (ANL)
 asyn         v4-6    required by ccd, dac128V, dxp, ip, ip330, ipUnidig, love,
                      mca, motor, optics, quadEM (ANL)
 seq         v2-0-11  for SNL programs in synApps (SLAC)
+stream      v2-1*    configurable device support for message-based devices
 vxStats     v1-7-2e  vxWorks statistics modified by us (SNS)
-genSub      v1-6     the genSub record (Observatory Sciences)
+genSub      v1-6a    the genSub record (Observatory Sciences)
 
 For convenience, this distribution includes the module versions listed above,
 in place and ready to build, with minor modifications to build files.  A few of
@@ -131,7 +132,7 @@ Device/driver support
 	Asyn ICB support, used by Canberra ICB modules
 	Asyn MCA support, used by Canberra AIM multichannel analyzer and
 	Queensgate Piezo drive.
-	Struck STR7201 or SIS 380x multi-channel scaler
+	Struck STR7201 or SIS 380x, and SIS3820 multi-channel scaler
 	VMI4116 16-bit D/A converter
 	Varoc SSI encoder interface board
 	StringParm device support for various records
@@ -140,7 +141,7 @@ Device/driver support
 	motor controllers:
 	   soft support
 	   Intelligent Motion Systems IM483PL, and IM483SM
-	   Physik Instrumente PIC630, PIC844, PIC848, PIC662
+	   Physik Instrumente PIC630, PIC844, PIC848, PIC662, PIC862, PIE710
 	   Newport MM3000, MM4000/5, PM500, ESP300, and XPSC8
 	   Oregon Micro Systems VME8/44, VME58, MAXv, and PC68/78
 	   E500 (a CAMAC module)
@@ -154,8 +155,9 @@ Device/driver support
 	   Micro Mo MVP2001
 	   Faulhaber MCDC2805
 	   Oriel EMC18011
-	   Parker/Compumotor 6K8
-	   NewFocus PMNC8750, PMNC87xx
+	   Parker/Compumotor PC6K
+	   NewFocus PMNC87xx
+	   ThorLabs MDT695
 	scalers:
 	   Joerger VSC series
 	   Joerger VS series
@@ -234,6 +236,7 @@ support/
     seq/
     sscan/
     std/
+    stream/
     TAR/
     utils/
     vme/
@@ -662,7 +665,8 @@ If you want to use arrays larger than 16000 bytes (e.g., MCA spectra of more
 than 4000 channels, or scans of more than 2000 data points), you must set the
 environment variable EPICS_CA_MAX_ARRAY_BYTES, in *both* the ioc and
 workstation, to the size of the largest array you plan to send over the
-network.  On a Unix system, for example, you might say
+network, plus the size of the extra data channel access might be asked to
+include with the array.  On a Unix system, for example, you might say
 
 	setenv EPICS_CA_MAX_ARRAY_BYTES 64008
 
@@ -755,5 +759,5 @@ excerpts from autosave/restore request files, substitution files and st.cmd).
 Tim Mooney (mooney@aps.anl.gov)
 Beamline Controls & Data Acquisition Group
 Advanced Photon Source, Argonne National Laboratory
-9/8/2006
+12/19/2006
 
