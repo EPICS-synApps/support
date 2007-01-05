@@ -7,7 +7,7 @@ experiment station.  Several instances of this application can work together to
 support an entire SR beamline.  synApps is also intended to underly additional
 software that may be station or beamline specific.
 
-This release of synApps is compatible with EPICS release 3.14.7, Tornado 2.02,
+This release of synApps is compatible with EPICS release 3.14.8, Tornado 2.02,
 and the following EPICS modules/versions produced and maintained by other
 members of the EPICS collaboration:
 
