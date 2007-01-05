@@ -358,6 +358,7 @@ Here's what I do:
     cd 1bm
     tar xf $(SYNAPPS)/support/xxx.tar
     changePrefix xxx 1bma
+	mv iocBoot/iocvxWorks iocBoot/ioc1bma
     edit iocBoot/ioc1bma/Makefile to specify the ioc processor type
     gnumake
 
@@ -368,6 +369,7 @@ To put a second application, 1bmb, into 1bm, I run the following commands:
     cd temp
     tar xf $(SYNAPPS)/support/xxx.tar
     changePrefix xxx 1bmb
+	mv iocBoot/iocvxWorks iocBoot/ioc1bmb
     edit iocBoot/ioc1bmb/Makefile to specify the ioc processor type
     cd $(SYNAPPS)/ioc
     mv temp/1bmbApp/start_epics_1bmb 1bm
@@ -759,5 +761,5 @@ excerpts from autosave/restore request files, substitution files and st.cmd).
 Tim Mooney (mooney@aps.anl.gov)
 Beamline Controls & Data Acquisition Group
 Advanced Photon Source, Argonne National Laboratory
-12/19/2006
+01/05/2007
 
