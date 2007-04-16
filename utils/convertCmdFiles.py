@@ -133,11 +133,11 @@ def isScriptCommand(s, verbose):
 	if (s[0] != '<'): return (0)	
 	return s[1:].lstrip()
 
-def printHead(s, unused):
-	print "\n############################################################################"
-	if unused: print "Unused",
-	print s
-	print "############################################################################"
+def printHead(file, s, unused):
+	file.write("\n############################################################################\n")
+	if unused: file.write("Unused ")
+	file.write(s + "\n")
+	file.write("############################################################################\n")
 
 dbDict = {}
 substitutionsDict = {}
@@ -353,99 +353,99 @@ def editCmdFile(fileName, verbose):
 	file.close()
 	newFile.close()
 
-def printDictionaries(printUnused=False):
+def printDictionaries(outFile, printUnused=False):
 
-	printHead("dbLoadRecords commands:", printUnused)
+	printHead(outFile, "dbLoadRecords commands:", printUnused)
 	if (len(dbDict.keys()) == 0):
-		print "None"
+		outFile.write("None\n")
 	else:
 		for key in dbDict.keys():
 			printedKey = False
 			for entry in dbDict[key]:
 				if printUnused:
-					if not entry.used: print entry.origLine,
+					if not entry.used: outFile.write(entry.origLine)
 				else:
 					if not printedKey:
-						print key
+						outFile.write(key + "\n")
 						printedKey = True
-					print "\t",
-					if (entry.isCommentedOut): print '#',
-					print entry.value
+					outFile.write("\t")
+					if (entry.isCommentedOut): outFile.write('#')
+					outFile.write(entry.value + "\n")
 
-	printHead("dbLoadTemplate commands:", printUnused)
+	printHead(outFile, "dbLoadTemplate commands:", printUnused)
 	if (len(substitutionsDict.keys()) == 0):
-		print "None"
+		outFile.write("None\n")
 	else:
 		for key in substitutionsDict.keys():
 			for entry in substitutionsDict[key]:
 				if printUnused:
-					if not entry.used: print entry.origLine,
+					if not entry.used: outFile.write(entry.origLine)
 				else:
-					if (entry.isCommentedOut): print '#',
-					print key
+					if (entry.isCommentedOut): outFile.write('#')
+					outFile.write(key + "\n")
 
-	printHead("function calls:", printUnused)
+	printHead(outFile, "function calls:", printUnused)
 	if (len(funcDict.keys()) == 0):
-		print "None"
+		outFile.write("None\n")
 	else:
 		for key in funcDict.keys():
 			printedKey = False
 			for entry in funcDict[key]:
 				if printUnused:
-					if not entry.used: print entry.origLine,
+					if not entry.used: outFile.write(entry.origLine)
 				else:
 					if not printedKey:
-						print key
+						outFile.write(key + "\n")
 						printedKey = True
-					print "\t",
-					if (entry.isCommentedOut): print '#',
-					print entry.value
+					outFile.write("\t")
+					if (entry.isCommentedOut): outFile.write('#')
+					outFile.write(entry.value + "\n")
 
-	printHead("variable definitions:", printUnused)
+	printHead(outFile, "variable definitions:", printUnused)
 	if (len(varDict.keys()) == 0):
-		print "None"
+		outFile.write("None\n")
 	else:
 		for key in varDict.keys():
 			printedKey = False
 			for entry in varDict[key]:
 				if printUnused:
-					if not entry.used: print entry.origLine,
+					if not entry.used: outFile.write(entry.origLine)
 				else:
 					if not printedKey:
-						print key
+						outFile.write(key + "\n")
 						printedKey = True
-					print "\t",
-					if (entry.isCommentedOut): print '#',
-					print entry.value
+					outFile.write("\t")
+					if (entry.isCommentedOut): outFile.write('#')
+					outFile.write(entry.value + "\n")
 
-	printHead("seq commands:", printUnused)
+	printHead(outFile, "seq commands:", printUnused)
 	if (len(seqDict.keys()) == 0):
-		print "None"
+		outFile.write("None\n")
 	else:
 		for key in seqDict.keys():
 			printedKey = False
 			for entry in seqDict[key]:
 				if printUnused:
-					if not entry.used: print entry.origLine,
+					if not entry.used: outFile.write(entry.origLine)
 				else:
 					if not printedKey:
-						print key
+						outFile.write(key + "\n")
 						printedKey = True
-					print "\t",
-					if (entry.isCommentedOut):'#',
-					print entry.value
+					outFile.write("\t")
+					if (entry.isCommentedOut): outFile.write('#')
+					outFile.write(entry.value + "\n")
 
-	printHead("script commands:", printUnused)
+	printHead(outFile, "script commands:", printUnused)
 	if (len(scriptDict.keys()) == 0):
-		print "None"
+		outFile.write("None\n")
 	else:
 		for key in scriptDict.keys():
 			for entry in scriptDict[key]:
 				if printUnused:
-					if not entry.used: print entry.origLine,
+					if not entry.used: outFile.write(entry.origLine)
 				else:
-					if (entry.isCommentedOut): print '#',
-					print key
+					if (entry.isCommentedOut): outFile.write('#')
+					outFile.write(key + "\n")
 					
 def parseCmdFiles(filespec, verbose):
 	cmdFiles = glob.glob(filespec)
@@ -456,7 +456,6 @@ def editCmdFiles(filespec, verbose):
 	cmdFiles = glob.glob(filespec)
 	for fileName in cmdFiles:
 		editCmdFile(fileName, max(verbose,0))
-	printDictionaries(True)
 	
 def main():
 	verbose = 0
@@ -478,7 +477,7 @@ def main():
 				return
 			filespec = os.path.join(sys.argv[dirArg], "*.cmd")
 			parseCmdFiles(filespec, verbose)
-			if (verbose): printDictionaries()
+			if (verbose): printDictionaries(sys.stdout, False)
 			dirArg = dirArg + 1
 
 		if (len(sys.argv) > dirArg):
@@ -487,6 +486,9 @@ def main():
 				return
 			filespec = os.path.join(sys.argv[dirArg], "*.cmd")
 			editCmdFiles(filespec, verbose)
+			reportFile = open("convert.out", "w+")
+			printDictionaries(reportFile, True)
+			reportFile.close()
 
 		
 if __name__ == "__main__":
