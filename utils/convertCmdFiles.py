@@ -38,11 +38,12 @@ class dictEntry:
 def isdbLoadRecordsCall(line, verbose):
 	if (line.find('dbLoadRecords(') == -1): return (0,0,0)
 	# e.g., dbLoadRecords("stdApp/Db/IDctrl.db","P=4id:,xx=04", std)
-	words = line.split('"',4)
+	words = line.split('(',2)
+	words = words[1].split(',',3)
+	words[0] = words[0].strip('"')
 	if (len(words) > 2):
-		# e.g., "dbLoadRecords(", "stdApp/Db/IDctrl.db", ",", "P=4id:,xx=04"
-		(path, dbFile) = os.path.split(words[1])
-		macroString = words[3]
+		(path, dbFile) = os.path.split(words[0])
+		macroString = words[1].strip('"')
 		return (path, dbFile, macroString)
 	return (0,0,0)
 
