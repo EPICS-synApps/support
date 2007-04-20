@@ -363,15 +363,9 @@ def printDictionaries(outFile, printUnused=False):
 		for key in dbDict.keys():
 			printedKey = False
 			for entry in dbDict[key]:
-				if printUnused:
-					if not entry.used: outFile.write(entry.origLine)
-				else:
-					if not printedKey:
-						outFile.write(key + "\n")
-						printedKey = True
-					outFile.write("\t")
-					if (entry.isCommentedOut): outFile.write('#')
-					outFile.write(entry.value + "\n")
+				if not entry.used or not printUnused: 
+					outFile.write(entry.origLine)
+
 
 	printHead(outFile, "dbLoadTemplate commands:", printUnused)
 	if (len(substitutionsDict.keys()) == 0):
@@ -379,11 +373,8 @@ def printDictionaries(outFile, printUnused=False):
 	else:
 		for key in substitutionsDict.keys():
 			for entry in substitutionsDict[key]:
-				if printUnused:
-					if not entry.used: outFile.write(entry.origLine)
-				else:
-					if (entry.isCommentedOut): outFile.write('#')
-					outFile.write(key + "\n")
+				if not entry.used or not printUnused: 
+					outFile.write(entry.origLine)
 
 	printHead(outFile, "function calls:", printUnused)
 	if (len(funcDict.keys()) == 0):
@@ -392,15 +383,8 @@ def printDictionaries(outFile, printUnused=False):
 		for key in funcDict.keys():
 			printedKey = False
 			for entry in funcDict[key]:
-				if printUnused:
-					if not entry.used: outFile.write(entry.origLine)
-				else:
-					if not printedKey:
-						outFile.write(key + "\n")
-						printedKey = True
-					outFile.write("\t")
-					if (entry.isCommentedOut): outFile.write('#')
-					outFile.write(entry.value + "\n")
+				if not entry.used or not printUnused: 
+					outFile.write(entry.origLine)
 
 	printHead(outFile, "variable definitions:", printUnused)
 	if (len(varDict.keys()) == 0):
@@ -409,15 +393,8 @@ def printDictionaries(outFile, printUnused=False):
 		for key in varDict.keys():
 			printedKey = False
 			for entry in varDict[key]:
-				if printUnused:
-					if not entry.used: outFile.write(entry.origLine)
-				else:
-					if not printedKey:
-						outFile.write(key + "\n")
-						printedKey = True
-					outFile.write("\t")
-					if (entry.isCommentedOut): outFile.write('#')
-					outFile.write(entry.value + "\n")
+				if not entry.used or not printUnused: 
+					outFile.write(entry.origLine)
 
 	printHead(outFile, "seq commands:", printUnused)
 	if (len(seqDict.keys()) == 0):
@@ -426,15 +403,8 @@ def printDictionaries(outFile, printUnused=False):
 		for key in seqDict.keys():
 			printedKey = False
 			for entry in seqDict[key]:
-				if printUnused:
-					if not entry.used: outFile.write(entry.origLine)
-				else:
-					if not printedKey:
-						outFile.write(key + "\n")
-						printedKey = True
-					outFile.write("\t")
-					if (entry.isCommentedOut): outFile.write('#')
-					outFile.write(entry.value + "\n")
+				if not entry.used or not printUnused: 
+					outFile.write(entry.origLine)
 
 	printHead(outFile, "script commands:", printUnused)
 	if (len(scriptDict.keys()) == 0):
@@ -442,11 +412,8 @@ def printDictionaries(outFile, printUnused=False):
 	else:
 		for key in scriptDict.keys():
 			for entry in scriptDict[key]:
-				if printUnused:
-					if not entry.used: outFile.write(entry.origLine)
-				else:
-					if (entry.isCommentedOut): outFile.write('#')
-					outFile.write(key + "\n")
+				if not entry.used or not printUnused: 
+					outFile.write(entry.origLine)
 					
 def parseCmdFiles(filespec, verbose):
 	cmdFiles = glob.glob(filespec)
@@ -462,17 +429,41 @@ def main():
 	verbose = 0
 	dirArg = 1
 	if len(sys.argv) < 2:
-		print "Usage:   convertCmdFiles.py [options] old_dir [new_dir]"
-		print "Example: convertCmdFiles.py -v1 <old_dir>  <new_dir> >cvt.out"
+		print "Usage:\tconvertCmdFiles.py [options] old_dir [new_dir]"
+		print "\toptions: -v (verbose/debug level)"
+		print "\nExamples: convertCmdFiles.py <old_dir> <new_dir>"
+		print "\tconvertCmdFiles.py <old_dir>"
+		print "\tconvertCmdFiles.py -v1 <old_dir> <new_dir>"
+		print "\nSynopsis: convertCmdfiles.py examines .cmd files in old_dir, collecting"
+		print "\tdbLoadRecords/Template commands, function calls, variable"
+		print "\tassignments (though not 'var' commands), SNL program invocations,"
+		print "\tand script commands."
+		print "\n\tIf new_dir is specified, new versions of all .cmd files in"
+		print "\tnew_dir (named, e.g., st.cmd.new) are created or overwritten."
+		print "\tThe new files are patched with information extracted from"
+		print "\told_dir.  The program notes whether commands in old_dir were"
+		print "\tcommented out, and it uses that information in writing"
+		print "\tcommands for new_dir."
+		print "\n\tThe program also creates or overwrites the file 'convert.out'"
+		print "\tin the current directory.  This file contains a list of the"
+		print "\tcommands found in old_dir.  If new_dir was specified, only"
+		print "\tthose commands from old_dir that did not find a place in"
+		print "\tnew_dir are listed."
 	else:
 		if (sys.argv[1][0] == '-'):
 			for i in range(len(sys.argv[1])):
+				print "char %d = '%c'" % (i, sys.argv[1][i])
 				if (sys.argv[1][i] == 'v'):
-					i = i + 1
-					verbose = max(1,int(sys.argv[1][i]))
+					if len(sys.argv[1]) > i+1:
+						i = i + 1
+						verbose = int(sys.argv[1][i])
+					else:
+						verbose = 1
+					break
 			dirArg = 2
 
 		if (len(sys.argv) > dirArg):
+			# user specified an old directory
 			if not os.path.isdir(sys.argv[dirArg]):
 				print "\n'"+sys.argv[dirArg]+"' is not a directory"
 				return
@@ -481,15 +472,19 @@ def main():
 			if (verbose): printDictionaries(sys.stdout, False)
 			dirArg = dirArg + 1
 
+		wrote_new_files = 0
 		if (len(sys.argv) > dirArg):
+			# user specified a new directory
 			if not os.path.isdir(sys.argv[dirArg]):
 				print "\n'"+sys.argv[dirArg]+"' is not a directory"
 				return
 			filespec = os.path.join(sys.argv[dirArg], "*.cmd")
 			editCmdFiles(filespec, verbose)
-			reportFile = open("convert.out", "w+")
-			printDictionaries(reportFile, True)
-			reportFile.close()
+			wrote_new_files = 1
+
+		reportFile = open("convert.out", "w+")
+		printDictionaries(reportFile, wrote_new_files)
+		reportFile.close()
 
 		
 if __name__ == "__main__":
