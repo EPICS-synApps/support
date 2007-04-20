@@ -231,6 +231,7 @@ def editCmdFile(fileName, verbose):
 	if (verbose): print "editCmdFile: ", fileName
 	file = open(fileName)
 	newFile = open(fileName+".new", "w+")
+	newFile.write("#??? <command> -- marks a command in %s that was not found in old_dir." % os.path.basename(fileName))
 	for rawLine in file:
 		strippedLine = rawLine.strip("\t\r\n ")
 		if (len(strippedLine) == 0):
