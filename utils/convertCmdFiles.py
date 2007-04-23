@@ -27,6 +27,7 @@ class dictEntry:
 		self.value = value
 		self.used = False
 		self.origLine = origLine
+		self.macroDict = None
 
 	def __str__(self):
 		if (self.value != None):
@@ -35,15 +36,48 @@ class dictEntry:
 			s = ""
 		return s
 
+envDict = {}
+def parse_cdCommands(fileName, verbose):
+	file = open(fileName)
+	for rawLine in file:
+		line = rawLine.strip("\t\r\n")
+		if (len(line) == 0): continue
+		if (isDecoration(line)):continue
+		if (verbose): print "\n'%s'" % line
+		isCommentedOut = (line[0] == '#')
+		line = line.lstrip("#")
+		words = line.split(' ')
+		if words[0] == "putenv":
+			words[1] = words[1].strip('"')
+			(var, value) = words[1].split('=')
+			if verbose: print var, ' = ', value
+			envDict[var] = value
+
+def parse_envPaths(fileName, verbose):
+	file = open(fileName)
+	for rawLine in file:
+		line = rawLine.strip("\t\r\n")
+		if (len(line) == 0): continue
+		if (isDecoration(line)):continue
+		if (verbose): print "\n'%s'" % line
+		isCommentedOut = (line[0] == '#')
+		line = line.lstrip("#")
+		words = line.split('(')
+		if words[0] == "epicsEnvSet":
+			words[1] = words[1].strip('"')
+			(var, value) = words[1].split(',')
+			if verbose: print var, ' = ', value
+			envDict[var] = value
+
 def isdbLoadRecordsCall(line, verbose):
 	if (line.find('dbLoadRecords(') == -1): return (0,0,0)
 	# e.g., dbLoadRecords("stdApp/Db/IDctrl.db","P=4id:,xx=04", std)
-	words = line.split('(',2)
-	words = words[1].split(',',3)
+	words = line.split('(',1)
+	words = words[1].rstrip(')').split(',',1)
 	words[0] = words[0].strip('"')
-	if (len(words) > 2):
+	if (len(words) >= 2):
 		(path, dbFile) = os.path.split(words[0])
-		macroString = words[1].strip('"')
+		macroString = words[1].strip().strip('"')
 		return (path, dbFile, macroString)
 	return (0,0,0)
 
@@ -177,7 +211,16 @@ def parseCmdFile(fileName, verbose):
 			if (verbose): print " -- is a dbLoadRecords command"
 			if (dbFile not in dbDict.keys()):
 				dbDict[dbFile] = []
-			dbDict[dbFile].append(dictEntry(isCommentedOut, macroString, rawLine))
+			entry = dictEntry(isCommentedOut, macroString, rawLine)
+			entry.macroDict = {}
+			parms = macroString.split(',')
+			for p in parms:
+				if '=' in p:
+					name, value = p.split('=')
+					name = name.strip()
+					entry.macroDict[name] = value.strip()
+					if (verbose-1 > 0): print "macro: '%s' = '%s'" % (name, value)
+			dbDict[dbFile].append(entry)
 			continue
 
 		substitutionsFile = isdbLoadTemplateCall(line, max(verbose-1,0))
@@ -415,7 +458,14 @@ def printDictionaries(outFile, printUnused=False):
 			for entry in scriptDict[key]:
 				if not entry.used or not printUnused: 
 					outFile.write(entry.origLine)
-					
+
+	printHead(outFile, "environment variables:", False)
+	if (len(envDict.keys()) == 0):
+		outFile.write("None\n")
+	else:
+		for key in envDict.keys():
+			outFile.write(key + "='" + envDict[key] + "'\n")
+
 def parseCmdFiles(filespec, verbose):
 	cmdFiles = glob.glob(filespec)
 	for fileName in cmdFiles:
@@ -482,6 +532,15 @@ def main():
 			filespec = os.path.join(sys.argv[dirArg], "*.cmd")
 			editCmdFiles(filespec, verbose)
 			wrote_new_files = 1
+
+			# parse cdCommands or envPaths file
+			file = os.path.join(sys.argv[dirArg], "cdCommands")
+			if os.path.isfile(file):
+				parse_cdCommands(file, verbose)
+			else:
+				file = os.path.join(sys.argv[dirArg], "envPaths")
+				if os.path.isfile(file):
+					parse_envPaths(file, verbose)
 
 		reportFile = open("convert.out", "w+")
 		printDictionaries(reportFile, wrote_new_files)
