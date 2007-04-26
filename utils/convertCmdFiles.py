@@ -19,7 +19,20 @@ import glob
 import string
 import curses.ascii
 
+# We're going to need a quick way to tell if a word might be legal as a
+# shell variable (consists of alphanumeric characters or underscores)
+# isalnum() almost works, and it would make a good preliminary check,
+# if we changed underscore to a letter.  The following translation table
+# does that when supplied to string.translate().
 transtable = string.maketrans('_','a')
+
+dbDict = {}
+substitutionsDict = {}
+funcDict = {}
+varDict = {}
+seqDict = {}
+scriptDict = {}
+envDict = {}
 
 class dictEntry:
 	def __init__(self, isCommentedOut, value, origLine):
@@ -36,7 +49,6 @@ class dictEntry:
 			s = ""
 		return s
 
-envDict = {}
 def parse_cdCommands(fileName, verbose):
 	file = open(fileName)
 	for rawLine in file:
@@ -168,23 +180,6 @@ def isScriptCommand(s, verbose):
 	if (s[0] != '<'): return (0)	
 	return s[1:].lstrip()
 
-def printHead(file, s, unused):
-	file.write("\n############################################################################\n")
-	if unused: file.write("Unused ")
-	file.write(s + "\n")
-	file.write("############################################################################\n")
-
-dbDict = {}
-substitutionsDict = {}
-funcDict = {}
-varDict = {}
-seqDict = {}
-scriptDict = {}
-funcName = ""
-argString = ""
-varName = ""
-varValue = ""
-
 def isDecoration(s):
 	for c in s:
 		if curses.ascii.ispunct(c): continue
@@ -192,6 +187,7 @@ def isDecoration(s):
 		if curses.ascii.iscntrl(c): continue
 		return(0)
 	return(1)
+
 
 def parseCmdFile(fileName, verbose):
 	file = open(fileName)
@@ -398,9 +394,19 @@ def editCmdFile(fileName, verbose):
 	file.close()
 	newFile.close()
 
-def printDictionaries(outFile, printUnused=False):
 
-	printHead(outFile, "dbLoadRecords commands:", printUnused)
+def writeHead(file, s, unused):
+	file.write("\n############################################################################\n")
+	if unused: file.write("Unused ")
+	file.write(s + "\n")
+	file.write("############################################################################\n")
+
+# Write the information collected from .cmd files, in most cases with its
+# original formatting.  If (printUnused), then only write information that
+# is not marked "used".
+def writeDictionaries(outFile, printUnused=False):
+
+	writeHead(outFile, "dbLoadRecords commands:", printUnused)
 	if (len(dbDict.keys()) == 0):
 		outFile.write("None\n")
 	else:
@@ -410,8 +416,7 @@ def printDictionaries(outFile, printUnused=False):
 				if not entry.used or not printUnused: 
 					outFile.write(entry.origLine)
 
-
-	printHead(outFile, "dbLoadTemplate commands:", printUnused)
+	writeHead(outFile, "dbLoadTemplate commands:", printUnused)
 	if (len(substitutionsDict.keys()) == 0):
 		outFile.write("None\n")
 	else:
@@ -420,7 +425,7 @@ def printDictionaries(outFile, printUnused=False):
 				if not entry.used or not printUnused: 
 					outFile.write(entry.origLine)
 
-	printHead(outFile, "function calls:", printUnused)
+	writeHead(outFile, "function calls:", printUnused)
 	if (len(funcDict.keys()) == 0):
 		outFile.write("None\n")
 	else:
@@ -430,7 +435,7 @@ def printDictionaries(outFile, printUnused=False):
 				if not entry.used or not printUnused: 
 					outFile.write(entry.origLine)
 
-	printHead(outFile, "variable definitions:", printUnused)
+	writeHead(outFile, "variable definitions:", printUnused)
 	if (len(varDict.keys()) == 0):
 		outFile.write("None\n")
 	else:
@@ -440,7 +445,7 @@ def printDictionaries(outFile, printUnused=False):
 				if not entry.used or not printUnused: 
 					outFile.write(entry.origLine)
 
-	printHead(outFile, "seq commands:", printUnused)
+	writeHead(outFile, "seq commands:", printUnused)
 	if (len(seqDict.keys()) == 0):
 		outFile.write("None\n")
 	else:
@@ -450,7 +455,7 @@ def printDictionaries(outFile, printUnused=False):
 				if not entry.used or not printUnused: 
 					outFile.write(entry.origLine)
 
-	printHead(outFile, "script commands:", printUnused)
+	writeHead(outFile, "script commands:", printUnused)
 	if (len(scriptDict.keys()) == 0):
 		outFile.write("None\n")
 	else:
@@ -459,7 +464,7 @@ def printDictionaries(outFile, printUnused=False):
 				if not entry.used or not printUnused: 
 					outFile.write(entry.origLine)
 
-	printHead(outFile, "environment variables:", False)
+	writeHead(outFile, "environment variables:", False)
 	if (len(envDict.keys()) == 0):
 		outFile.write("None\n")
 	else:
@@ -520,7 +525,7 @@ def main():
 				return
 			filespec = os.path.join(sys.argv[dirArg], "*.cmd")
 			parseCmdFiles(filespec, verbose)
-			if (verbose): printDictionaries(sys.stdout, False)
+			if (verbose): writeDictionaries(sys.stdout, False)
 			dirArg = dirArg + 1
 
 		wrote_new_files = 0
@@ -543,7 +548,8 @@ def main():
 					parse_envPaths(file, verbose)
 
 		reportFile = open("convert.out", "w+")
-		printDictionaries(reportFile, wrote_new_files)
+		printUnusedInformation = wrote_new_files
+		writeDictionaries(reportFile, printUnusedInformation)
 		reportFile.close()
 
 		
