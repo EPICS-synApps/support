@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-# This software is intended to help convert an ioc directory from one version
-# of synApps to another.
+"""This software is intended to help convert an ioc directory from one version
+of synApps to another.
+"""
 
 import sys
 import os
@@ -17,6 +18,10 @@ import curses.ascii
 transtable = string.maketrans('_','a')
 
 class cmdFileDictionaries:
+	"""A collection of dictionaries in which information from .cmd files, and
+	the cdCommands or envPaths file is accumulated.  All dictionaries contain,
+	as 'definitions', a list of instances of the class 'dictEntry'.
+	"""
 	def __init__(self):
 		self.dbLoadRecordsDict = {}		# dbLoadRecordsDict[dbFileName][i].dictEntry
 		self.dbLoadTemplateDict = {}	# dbLoadTemplateDict[subFileName][i].dictEntry
@@ -29,12 +34,12 @@ class cmdFileDictionaries:
 
 class dictEntry:
 	def __init__(self, value, origLine):
-		self.leadingComment = ""
-		self.trailingComment = ""
-		self.value = value
-		self.used = False
-		self.origLine = origLine
-		self.macroDict = None
+		self.leadingComment = ""		# comment from original line
+		self.trailingComment = ""		# comment from original line
+		self.value = value				# depends on dictionary
+		self.used = False				# has been used to write a new file
+		self.origLine = origLine		# original line from old ioc dir
+		self.macroDict = None			# {name:value, ...}
 
 	def __str__(self):
 		if (self.value != None):
@@ -42,9 +47,16 @@ class dictEntry:
 		else:
 			s = ""
 		return s
-#
+
+
 
 def countUnquotedBrackets(s, openChar, closeChar, verbose):
+	"""Count occurrences of 'openChar' and 'closeChar' (typically, '(' and ')')
+	in the string s,  ignoring those within a quoted string.  Return the number
+	of 'openChar' characters found, the number of 'openChar' characters minus
+	the number of 'closeChar', found, and the index at which the last 'closeChar'
+	was found.
+	"""
 	openBrackets = 0
 	netBrackets = 0   # numOpened - numClosed
 	closeIndex = 0
@@ -65,10 +77,12 @@ def countUnquotedBrackets(s, openChar, closeChar, verbose):
 	#print "countBrackets: openBrackets=", openBrackets, " netBrackets=", netBrackets 
 	return (openBrackets, netBrackets, closeIndex)
 
-# Increment line number.  If the new line is a comment, continue incrementing
-# until a non-comment line is found, or the last line is reached.
 
 def nextLine(lines, line):
+	"""Increment line number.  If the new line is a comment, continue
+	incrementing until a non-comment line is found, or the last line is
+	reached.
+	"""
 	maxLines = len(lines)
 	line = line + 1
 	while (line < maxLines):
@@ -78,15 +92,20 @@ def nextLine(lines, line):
 		line = line + 1
 	return line
 
-# Search through a list of strings (lines[]), starting at lines[line][char], for
-# a legal character (isLegal(c) == True), or a terminator (c in
-# terminatorChars). Do not test characters within quotes, or the quote character
-# that ends a quoted string, but do test the quote character that takes us from
-# out-of-quotes to in-quotes. If a legal or terminating character is found,
-# return it; otherwise return False.  Also return the line and character
-# numbers at which the legal or terminating character is found.
+
 
 def findUnquotedLegalOrTerminator(lines, line, char, isLegal, terminatorChars):
+	""" Find the first unquoted legal character or terminator in a list of strings.
+	
+	Search through a list of strings (lines[]), starting at lines[line][char],
+	for a legal character (isLegal(c) == True), or a terminator (c in
+	terminatorChars). Do not test characters within quotes, or the quote character
+	that ends a quoted string, but do test the quote character that takes us from
+	out-of-quotes to in-quotes. If a legal or terminating character is found,
+	return it; otherwise return False.  Also return the line and character numbers
+	at which the legal or terminating character is found.
+	"""
+
 	inSingleQuotes = False
 	inDoubleQuotes = False
 	while line < len(lines):
@@ -106,13 +125,17 @@ def findUnquotedLegalOrTerminator(lines, line, char, isLegal, terminatorChars):
 	#print "letter not found."
 	return (False, line, char)
 
-# Search through a list of strings (lines[]), starting at lines[line][char], for
-# a legal character (isLegal(c) == True), or a terminator (c in
-# terminatorChars). If a legal or terminating character is found, return it;
-# otherwise return False.  Also return the line and character numbers at which
-# the legal or terminating character is found.
 
 def findLegalOrTerminator(lines, line, char, isLegal, terminatorChars):
+	""" Find the first legal character or terminator in a list of strings.
+	
+	Search through a list of strings (lines[]), starting at lines[line][char], for
+	a legal character (isLegal(c) == True), or a terminator (c in
+	terminatorChars). If a legal or terminating character is found, return it;
+	otherwise return False.  Also return the line and character numbers at which
+	the legal or terminating character is found.
+	"""
+
 	while line < len(lines):
 		while char < len(lines[line]):
 			c = lines[line][char:char+1]
@@ -127,17 +150,21 @@ def findLegalOrTerminator(lines, line, char, isLegal, terminatorChars):
 	#print "letter not found."
 	return (False, line, char)
 
-# Search through a list of strings (lines[]), starting at lines[line][char], for
-# a character that is a member of targetCharList (c in targetCharList). 
-# targetCharList is expected to be a list of one-element strings.  If
-# targetCharList is not a list, make it the only element of a list.  Do not test
-# characters within quotes, or the quote character that ends a quoted string,
-# but do test the quote character that takes us from out-of-quotes to in-quotes.
-# If a target character is found, return it; otherwise return False.  Also
-# return the line and character numbers at which the legal or terminating
-# character is found.
 
 def findUnquotedTargetChar(lines, line, char, targetCharList):
+	""" Find the first unquoted target character in a list fo strings.
+	
+	Search through a list of strings (lines[]), starting at lines[line][char], for
+	a character that is a member of targetCharList (c in targetCharList). 
+	targetCharList is expected to be a list of one-element strings.  If
+	targetCharList is not a list, make it the only element of a list.  Do not test
+	characters within quotes, or the quote character that ends a quoted string,
+	but do test the quote character that takes us from out-of-quotes to in-quotes.
+	If a target character is found, return it; otherwise return False.  Also
+	return the line and character numbers at which the legal or terminating
+	character is found.
+	"""
+
 	if type(targetCharList) != type([]): targetCharList = [targetCharList]
 	inSingleQuotes = False
 	inDoubleQuotes = False
@@ -156,14 +183,18 @@ def findUnquotedTargetChar(lines, line, char, targetCharList):
 	#print "target(s) '%s' not found." % (targetCharList)
 	return (False, line, char)
 
-# Search through a list of strings (lines[]), starting at lines[line][char], for
-# a character that is a member of targetCharList (c in targetCharList). 
-# targetCharList is expected to be a list of one-element strings.  If
-# targetCharList is not a list, make it the only element of a list.  If a target
-# character is found, return it; otherwise return False.  Also return the line
-# and character numbers at which the legal or terminating character is found.
 
 def findTargetChar(lines, line, char, targetCharList):
+	""" Find the first target character in a list of strings.
+	
+	Search through a list of strings (lines[]), starting at lines[line][char], for
+	a character that is a member of targetCharList (c in targetCharList). 
+	targetCharList is expected to be a list of one-element strings.  If
+	targetCharList is not a list, make it the only element of a list.  If a target
+	character is found, return it; otherwise return False.  Also return the line
+	and character numbers at which the legal or terminating character is found.
+	"""
+
 	if type(targetCharList) != type([]): targetCharList = [targetCharList]
 	while line < len(lines):
 		while char < len(lines[line]):
@@ -177,14 +208,19 @@ def findTargetChar(lines, line, char, targetCharList):
 	#print "target(s) '%s' not found." % (targetCharList)
 	return (False, line, char)
 
-# Search through a list of strings (lines[]), starting at lines[line][char], for
-# a string that is a member of targetList (str in targetList).  targetList is
-# expected to be a list of strings.  If targetList is not a list, make it the
-# only element of a list.  If a target string is found, return it; otherwise
-# return False.  Also return the line and character numbers at which the string
-# is found, and the number of the first character not yet parsed.
+
 
 def findTarget(lines, line, char, targetList):
+	""" Find the first target string in a list of strings.
+	
+	Search through a list of strings (lines[]), starting at lines[line][char], for
+	a string that is a member of targetList (str in targetList).  targetList is
+	expected to be a list of strings.  If targetList is not a list, make it the
+	only element of a list.  If a target string is found, return it; otherwise
+	return False.  Also return the line and character numbers at which the string
+	is found, and the number of the first character not yet parsed.
+	"""
+
 	if type(targetList) != type([]): targetList = [targetList]
 	if type(lines) != type([]): lines = [lines]
 	if (char >= len(lines[line])):
@@ -202,16 +238,22 @@ def findTarget(lines, line, char, targetList):
 	#print "target(s) '%s' not found." % (targetList)
 	return (False, line, char, char)
 
-# If the string 'value' needs to be quoted, because it contains whitespace, or a
-# macro, or because it is empty, then return the string in double quotes.
 
 def maybeAddQuotes(value):
+	""" Return the supplied string enclosed in quotes, if they are needed.
+	
+	If the string 'value' needs to be quoted, because it contains whitespace, or a
+	macro, or because it is empty, then return the string in double quotes.
+	"""
+
 	if ((len(value.split()) > 1) or (value.find('$(') != -1) or (value == "")):
 		value = '"' + value + '"'
 	return value
 
 
 def isdbLoadRecordsCall(line, verbose):
+	""" See if a string is a dbLoadRecords command."""
+
 	if (line.find('dbLoadRecords(') == -1): return (0,0,0)
 	# e.g., dbLoadRecords("stdApp/Db/IDctrl.db","P=4id:,xx=04", std)
 	words = line.split('(',1)
@@ -227,6 +269,8 @@ def isdbLoadRecordsCall(line, verbose):
 	return (0,0,0)
 
 def isdbLoadTemplateCall(line, verbose):
+	""" See if a string is a dbLoadTemplate command."""
+
 	if (line.find('dbLoadTemplate(') == -1): return (0)
 	# e.g., dbLoadTemplate("myTemplate.substitutions")
 	words = line.split('"',2)
@@ -240,6 +284,8 @@ def isdbLoadTemplateCall(line, verbose):
 # 'iocInit'
 
 def isFunctionCall(line, verbose):
+	""" See if a string is a function call."""
+
 	(openParen, netParen, closeIndex) = countUnquotedBrackets(line, '(', ')', max(verbose-1,0))
 	if (closeIndex != 0): line = line[0:closeIndex+1]
 	if (openParen == 0): return (0,0)
@@ -261,6 +307,8 @@ def isFunctionCall(line, verbose):
 	return (funcName, argString)
 
 def isLegalName(ss, verbose):
+	""" See if a string is a legal variable name."""
+
 	# get string with legal characters converted to something alphanumeric
 	s = ss.translate(transtable)
 	if s[0].isdigit(): return (False)
@@ -271,6 +319,8 @@ def isLegalName(ss, verbose):
 # 'var motorUtil_debug,1'
 
 def isVariableDefinition(s, verbose):
+	""" See if a string is a variable definition."""
+
 	s = s.lstrip('#\t ')
 	if (s.find('=') == -1): return (0,0)
 	words = s.split('=',1)
@@ -284,6 +334,8 @@ def isVariableDefinition(s, verbose):
 	return (varName, varValue)
 	
 def isSeqCommand(s, verbose):
+	""" See if a string is a sequence-program invocation."""
+
 	s = s.lstrip('#\t ')
 	if (len(s) == 0): return (0,0)
 	s = s.split(None,1)
@@ -293,12 +345,16 @@ def isSeqCommand(s, verbose):
 	return split
 
 def isScriptCommand(s, verbose):
+	""" See if a string is a script command."""
+
 	s = s.lstrip('#\t ')
 	if (len(s) < 2): return (0)
 	if (s[0] != '<'): return (0)
 	return s[1:].lstrip()
 
 def isDecoration(s):
+	""" See if a string is a comment without useful content."""
+
 	for c in s:
 		if curses.ascii.ispunct(c): continue
 		if curses.ascii.isspace(c): continue
@@ -307,10 +363,14 @@ def isDecoration(s):
 	return(1)
 
 def getEnv(envDict, word):
+	""" Return the value of a variable defined in envDict."""
+
 	if not word in envDict.keys(): return None
 	return envDict[word][0].value
 	
 def getVar(varDict, word):
+	""" Return the value of a variable defined in varDict."""
+
 	if not word in varDict.keys(): return None
 	return varDict[word][0].value
 
@@ -320,6 +380,8 @@ def writeHead(file, s):
 	file.write("############################################################################\n")
 
 def writeUnusedEntries(dictionary, outFile):
+	""" Write all entries in a dictionary that are not marked 'used'."""
+
 	if (len(dictionary.keys()) == 0): return
 	for key in dictionary.keys():
 		for entry in dictionary[key]:
