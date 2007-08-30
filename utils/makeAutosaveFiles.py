@@ -27,8 +27,11 @@ Synopsis: makeAutosaveFiles.py examines .cmd and .substitution
     the ioc directory must be built before makeAutosaveFiles.py
     can be used on it.
 
-Result: the files auto_positions.req.STD and auto_settings.req.STD
-    are created, or overwritten if they already exist.
+Result: Files named auto_positions.req.STD and auto_settings.req.STD
+    are created or overwritten.
+
+See also: convertAutosaveFiles.py, convertIocFiles.py
+
 """
 
 def main():
