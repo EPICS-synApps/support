@@ -1,34 +1,39 @@
 #!/usr/bin/env python
 
-# This software is intended to help convert an ioc directory from one version of
-# synApps to another.  It parses .substitutions files, collects their content in
-# a dictionary, and writes that content in the correct format to new files.
-#
-# In the anticipated use, parseSubFiles() will read all the .substitutions files
-# in the old directory, and collect the information into a dictionary.  Then
-# writeNewSubFiles() will read all the .substitutions files in the new directory,
-# and create copies of them (<name>.substitutions.CVT) that contain information
-# from the dictionary.  If no information in the dictionary seems suitable as
-# a replacement for what's found in the .substitutions file, the information in
-# the .substitutions file will be used, but it will be commented out with "#NEW:".
-# When all new files have been written, any unused information in the dictionary
-# will be written to a log file.
+"""
+This software is intended to help convert an ioc directory from one version of
+synApps to another.  It parses .substitutions files, collects their content in
+a dictionary, and writes that content in the correct format to new files.
 
+In the anticipated use, parseSubFiles() will read all the .substitutions files
+in the old directory, and collect the information into a dictionary.  Then
+writeNewSubFiles() will read all the .substitutions files in the new directory,
+and create copies of them (<name>.substitutions.CVT) that contain information
+from the dictionary.  If no information in the dictionary seems suitable as
+a replacement for what's found in the .substitutions file, the information in
+the .substitutions file will be used, but it will be commented out with "#NEW:".
+When all new files have been written, any unused information in the dictionary
+will be written to a log file.
+"""
 
 import curses.ascii
 from conversionUtils import *
 import sys
 import os
 
-# Each substitutions file will be represented by a subFileDictEntry, which
-# consists mainly of the dictionary templateFileDict.  Each "word" in
-# templateFileDict is the (base) name of a template file; the corresponding
-# "definition" is a list of templateFileDictEntry's.  Each templateFileDictEntry
-# contains all of the macro names and values associated with a single instance
-# of that template file.  (Note that a template file may be mentioned more than
-# once in a substitutions file, though it's not very common.)
 
 class subFileDictEntry:
+	"""
+	Each substitutions file will be represented by a subFileDictEntry, which
+	consists mainly of the dictionary templateFileDict.  Each "word" in
+	templateFileDict is the (base) name of a template file; the corresponding
+	"definition" is a list of templateFileDictEntry's.  Each
+	templateFileDictEntry contains all of the macro names and values associated
+	with a single instance of that template file.  (Note that a template file
+	may be mentioned more than once in a substitutions file, though it's not
+	very common.)
+	"""
+
 	def __init__(self):
 		self.leadingComment = ""
 		self.trailingComment = ""
@@ -36,8 +41,9 @@ class subFileDictEntry:
 		self.templateFileDict = {}	# word is a database name
 									# definition is a list of templateFileDictEntry's
 
-# templateFileDictEntry holds the content of a single 'file "db" { {} {} {} }' command
 class templateFileDictEntry:
+	"""Store the content of a single 'file' command in a .substitutions file."""
+
 	def __init__(self):
 		self.leadingComment = ""
 		self.trailingComment = ""
@@ -47,21 +53,24 @@ class templateFileDictEntry:
 		self.macroDictList = None
 		self.valueListList = None
 
-# Expect something like "name1=val1, name2=val2, ... nameN=valN}".  Names are
-# expected to begin with a letter, and not to be quoted, but values may look
-# like "m$(N)", or "blah blah".  Parse a single name=value pair and return
-# them.  After the first set of name=value pairs, it will be our job to
-# recognize the "{" that introduces the next set of pairs.  Also, it's our job
-# to recognize the "}" that ends a set of pairs, and the "}" that ends the list
-# of sets.  Return one of the following:
-#    "Fatal"  parsing problem
-#    "Found"  a macro=value pair was found
-#    "NextDb" no macro=value pair was found; found another list
-#    "End"    the end of lists was found
-# Also return the macro and value found, and the line and number of the first
-# character not yet parsed.
 
 def parseMacroValue(lines, line, next):
+	"""
+	Expect something like "name1=val1, name2=val2, ... nameN=valN}".  Names are
+	expected to begin with a letter, and not to be quoted, but values may look
+	like "m$(N)", or "blah blah".  Parse a single name=value pair and return
+	them.  After the first set of name=value pairs, it will be our job to
+	recognize the "{" that introduces the next set of pairs.  Also, it's our job
+	to recognize the "}" that ends a set of pairs, and the "}" that ends the
+	list of sets.  Return one of the following:
+	   "Fatal"  parsing problem
+	   "Found"  a macro=value pair was found
+	   "NextDb" no macro=value pair was found; found another list
+	   "End"	the end of lists was found
+	Also return the macro and value found, and the line and number of the first
+	character not yet parsed.
+	"""
+
 	#print "parseMacroValue: line = '%s'" % (lines[line][next:])
 	(found, line, char) = findLegalOrTerminator(lines, line, next, curses.ascii.isalpha, "}{")
 	if (not found): return ("Fatal", line, char, 0, 0)
@@ -92,12 +101,15 @@ def parseMacroValue(lines, line, next):
 	#print "parseMacroValue: '%s=%s'" % (macro, value)
 	return ("Found", line, next, macro, value)
 
-# Expect something like "name1=val1, name2=val2, ... nameN=valN}".  Names are
-# expected to begin with a letter, and not to be quoted, but values may look
-# like "m$(N)", or "blah blah".  Return a list of dictionaries, a list of
-# macro names, and the line and number of the first character not yet parsed.
 
 def parseMacroValueLists(lines, line, next):
+	"""
+	Expect something like "name1=val1, name2=val2, ... nameN=valN}".  Names are
+	expected to begin with a letter, and not to be quoted, but values may look
+	like "m$(N)", or "blah blah".  Return a list of dictionaries, a list of
+	macro names, and the line and number of the first character not yet parsed.
+	"""
+
 	#print "parseMacroValueLists: line = '%s'" % (lines[line][next:])
 	dbNum = 0
 	dictList = []
@@ -117,26 +129,32 @@ def parseMacroValueLists(lines, line, next):
 			(status, line, next, macro, value) = parseMacroValue(lines, line, next)
 	return (dictList, pattern, line, next)
 
-# Expect something like "val1, val2, ... valN}", where "valN" might look like
-# "m$(N)", or "blah blah".  Parse a single value and return it.  After the first
-# set of values, it will be our job to recognize the "{" that introduces the
-# next set of values.  Also, it's our job to recognize the "}" that ends a set
-# of values, and the "}" that ends the list of sets.  Return one of the
-# following:
-#    "Fatal"    if no value is found
-#    "NextDb"   if no value is found, but the next list is found
-#    "Found"    if a value is found
-#    "FoundEnd" if a value is found, and the terminating character also
-#               terminates the value list
-#    "End"      if the end of the value list is found
-# Also return the value found, and the line and number of the first
-# character not yet parsed.
+def notWhiteOrComma(c):
+	if c==",": return False
+	return curses.ascii.isgraph(c)
 
 def parseValue(lines, line, next, verbose=0):
+	"""
+	Expect something like "val1, val2, ... valN}", where "valN" might look like
+	"m$(N)", or "blah blah".  Parse a single value and return it.  After the
+	first set of values, it will be our job to recognize the "{" that introduces
+	the next set of values.  Also, it's our job to recognize the "}" that ends a
+	set of values, and the "}" that ends the list of sets.  Return one of the
+	following:
+	   "Fatal"    if no value is found
+	   "NextDb"   if no value is found, but the next list is found
+	   "Found"    if a value is found
+	   "FoundEnd" if a value is found, and the terminating character also
+				  terminates the value list
+	   "End"	  if the end of the value list is found
+	Also return the value found, and the line and number of the first character
+	not yet parsed.
+	"""
+
 	trailer = ""
 	if (verbose): print "parseValue: line %d = '%s'" % (line+1, lines[line][next:])
-	# isgraph: any printable character except whitespace
-	(found, line, char) = findUnquotedLegalOrTerminator(lines, line, next, curses.ascii.isgraph, "}{")
+	# isgraph: any printable character except whitespace OR COMMA
+	(found, line, char) = findUnquotedLegalOrTerminator(lines, line, next, notWhiteOrComma, "}{")
 	if (not found):
 		print "parseValue: Fatal: didn't find either of }{ (FATAL)"
 		return ("Fatal", line, char, None, trailer)
@@ -148,6 +166,7 @@ def parseValue(lines, line, next, verbose=0):
 		if (char < len(lines[line])): trailer = lines[line][char+1:].strip()
 		return ("End", line, char+1, None, trailer)
 	# Now we know we have a value to parse
+	#print "parseValue: found value at line %d = '%s'" % (line+1, lines[line][char:])
 	retVal = "Found"
 	valueLine = line
 	valueChar = char
@@ -167,13 +186,16 @@ def parseValue(lines, line, next, verbose=0):
 		value = lines[valueLine][valueChar:]
 	return (retVal, line, next, value, trailer)
 
-# Expect something like "{val1, val2, ... valN}", where "valN" might look like
-# "m$(N)", or "blah blah".  We should find as many values as parseMacro() found
-# macro names, but this routine doesn't check that.  Return a list of value
-# lists, or None if something went wrong.  Also return the line and number of
-# the first character not yet parsed.
 
 def parseValueLists(lines, line, next, verbose):
+	"""
+	Expect something like "{val1, val2, ... valN}", where "valN" might look like
+	"m$(N)", or "blah blah".  We should find as many values as parseMacro()
+	found macro names, but this routine doesn't check that.  Return a list of
+	value lists, or None if something went wrong.  Also return the line and
+	number of the first character not yet parsed.
+	"""
+
 	if (verbose): print "parseValueLists: line = '%s'" % (lines[line][next:])
 	dbNum = 0
 	valueListList = [[]]
@@ -215,19 +237,22 @@ def parseValueLists(lines, line, next, verbose):
 	if (verbose): print "parseValueLists: found list = %s" % valueListList[dbNum]
 	return (valueListList, line, next)
 
-# Expect something like "{name1, name2, ... nameN}".  Names are expected to
-# begin with a letter, and not to be quoted.  If we see '}', we can assume it
-# terminates the pattern, and needn't worry about whether it occurs within
-# quotes.  Return one of the following:
-#    "Fatal"    if no macro is found
-#    "Found"    if a macro is found
-#    "FoundEnd" if a macro is found, and the terminating character also
-#               terminates the macro list
-#    "End"      if the end of the macro list was found
-# Also return the macro found, and the line and number of the first character
-# not yet parsed.
 
 def parseMacro(lines, line, next):
+	"""
+	Expect something like "{name1, name2, ... nameN}".  Names are expected to
+	begin with a letter, and not to be quoted.  If we see '}', we can assume it
+	terminates the pattern, and needn't worry about whether it occurs within
+	quotes.  Return one of the following:
+	   "Fatal"    if no macro is found
+	   "Found"    if a macro is found
+	   "FoundEnd" if a macro is found, and the terminating character also
+				  terminates the macro list
+	   "End"	  if the end of the macro list was found
+	Also return the macro found, and the line and number of the first character
+	not yet parsed.
+	"""
+
 	#print "parseMacro: line = '%s'" % (lines[line][next:])
 	(found, line, char) = findLegalOrTerminator(lines, line, next, curses.ascii.isalpha, "}")
 	if (not found): return ("Fatal", line, char, None)
@@ -255,13 +280,16 @@ def parseMacro(lines, line, next):
 		macro = lines[macroLine][macroChar:]
 	return (retVal, line, next, macro)
 
-# Expect something like "{name1, name2, ... nameN}".  Names are expected to
-# begin with a letter, and not to be quoted.  If we see '}', we can assume it
-# terminates the pattern, and needn't worry about whether it occurs within
-# quotes.  Return the macro list, if found, or None.  Also return the line and
-# number of the first character not yet parsed.
 
 def parseMacroList(lines, line, next):
+	"""
+	Expect something like "{name1, name2, ... nameN}".  Names are expected to
+	begin with a letter, and not to be quoted.  If we see '}', we can assume it
+	terminates the pattern, and needn't worry about whether it occurs within
+	quotes.  Return the macro list, if found, or None.  Also return the line and
+	number of the first character not yet parsed.
+	"""
+
 	#print "parseMacroList: line = '%s'" % (lines[line][next:])
 	macroList = []
 	(found, line, char, next) = findTarget(lines, line, next, ["{"])
@@ -274,15 +302,18 @@ def parseMacroList(lines, line, next):
 	if (status == "FoundEnd"): macroList.append(macro)
 	return (macroList, line, next)
 
-# Look for a command of the form
-#     'file templateFileName <blah blah>'
-# Note that the command may be commented out; we're still interested in it,
-# but this complicates the business of parsing, and we might be fooled by a
-# comment that just happens to comtain the word "file".  Minimize this by
-# accepting only a line that contains "#___file", where underscore may be
-# any number of non-alphabetic characters.
 
 def find_file_command(lines, line, next):
+	"""
+	Look for a command of the form
+		'file templateFileName <blah blah>'
+	Note that the command may be commented out; we're still interested in it,
+	but this complicates the business of parsing, and we might be fooled by a
+	comment that just happens to comtain the word "file".  Minimize this by
+	accepting only a line that contains "#___file", where underscore may be any
+	number of non-alphabetic characters.
+	"""
+
 	while (line < len(lines)):
 		leadingComment = ""
 		(found, line, char, next) = findTarget(lines, line, next, "file")
@@ -312,12 +343,15 @@ def find_file_command(lines, line, next):
 	return (False, line, char, next, leadingComment)
 
 
-# Parse a substitutions file.  Return a list of dictionary entries, one entry per
-# template file, with the file content.  We probably should be collecting comments
-# also, but we're not.  However, we are collecting information from commented out
-# template-file commands (substitution blocks).
 
-def parseSubFile(fileName, verbose):
+def parseSubFile(fileName, verbose, ignoreComments=False):
+	"""
+	Parse a substitutions file.  Return a list of dictionary entries, one entry
+	per template file, with the file content.  We probably should be collecting
+	comments also, but we're not.  However, we are collecting information from
+	commented out template-file commands (substitution blocks).
+	"""
+
 	file = open(fileName)
 	lines = file.readlines()
 	line = 0
@@ -325,6 +359,9 @@ def parseSubFile(fileName, verbose):
 	subFileEntry = subFileDictEntry()
 	while (line < len(lines)):
 		(found, line, char, next, leadingComment) = find_file_command(lines, line, next)
+		if ((leadingComment != "") and ignoreComments):
+			line += 1
+			continue
 		if (not found):
 			if (verbose): print "'file' keyword not found.  Done."
 			break
@@ -382,28 +419,35 @@ def parseSubFile(fileName, verbose):
 
 	return subFileEntry
 
-# For each file in the file specification (which might be something like
-# '*.substitutions') call parseSubFile() to collect the file's information
-# into a list of dictionary entries.
 
-def parseSubFiles(subFileDict, filespec, verbose):
+def parseSubFiles(subFileDict, filespec, verbose, ignoreComments=False):
+	"""
+	For each file in the file specification (which might be something like
+	'*.substitutions') call parseSubFile() to collect the file's information
+	into a list of dictionary entries.
+	"""
+
 	subFiles = glob.glob(filespec)
 	for fileName in subFiles:
 		fn = os.path.basename(fileName)
-		subFileDict[fn] = parseSubFile(fileName, max(verbose,0))
+		subFileDict[fn] = parseSubFile(fileName, max(verbose,0), ignoreComments=ignoreComments)
 
 	return (subFileDict)
 
-# Read the substitutions file, fileName, and write a new copy of it, using
-# information from the dictionary entry for that file name.  For each template
-# file (substitutions block) in "fileName", look for an unused templateFileDict
-# entry in the list, subFileDict[fileName].templateFileDict[template-file].
-# If no entry is found, copy from fileName to the new file, but comment the
-# lines out with "#NEW:", and let some EPICS developer decide what to do with it.
-# If an unused entry is found, use the dictionary information instead of what's
-# in fileName.  Mark the dictionary entries we use, so they won't get written twice.
 
 def writeNewSubFile(subFileDict, fileName, maxLineLength=120):
+	"""
+	Read the substitutions file, fileName, and write a new copy of it, using
+	information from the dictionary entry for that file name.  For each template
+	file (substitutions block) in "fileName", look for an unused
+	templateFileDict entry in the list,
+	subFileDict[fileName].templateFileDict[template-file]. If no entry is found,
+	copy from fileName to the new file, but comment the lines out with "#NEW:",
+	and let some EPICS developer decide what to do with it. If an unused entry
+	is found, use the dictionary information instead of what's in fileName. 
+	Mark the dictionary entries we use, so they won't get written twice.
+	"""
+
 	#print "writeNewSubFile: ", fileName
 	if not (os.path.basename(fileName) in subFileDict.keys()):
 		return subFileDict
@@ -461,23 +505,29 @@ def writeNewSubFile(subFileDict, fileName, maxLineLength=120):
 
 	return subFileDict
 
-# For each substitutions file in the file specification, filespec, call
-# writeNewSubFile() to write a new copy of the file.  writeNewSubFile()
-# is expected to update the dictionary by marking all the entries it
-# writes as "used".
 
 def writeNewSubFiles(subFileDict, filespec):
+	"""
+	For each substitutions file in the file specification, filespec, call
+	writeNewSubFile() to write a new copy of the file.  writeNewSubFile() is
+	expected to update the dictionary by marking all the entries it writes as
+	'used'.
+	"""
+
 	subFiles = glob.glob(filespec)
 	for fileName in subFiles:
 		subFileDict = writeNewSubFile(subFileDict, fileName, 120)
 	return (subFileDict)
 
 
-# Write, to outFile, the substitutions block for a given template file from a
-# given template dictionary entry.  Format the lines so they don't exceed
-# maxLineLength characters.  Also format the output macro names and values in
-# columns.
 def writeSubstitutions(templateFileName, dictEntry, outFile, maxLineLength):
+	"""
+	Write, to outFile, the substitutions block for a given template file from a
+	given template dictionary entry.  Format the lines so they don't exceed
+	maxLineLength characters.  Also format the output macro names and values in
+	columns.
+	"""
+
 	s = '%sfile "%s"\n{\n' % (dictEntry.leadingComment, templateFileName)
 	outFile.write(s)
 	pattern = dictEntry.pattern
@@ -549,9 +599,10 @@ def writeSubstitutions(templateFileName, dictEntry, outFile, maxLineLength):
 	outFile.write("}\n")
 
 
-# Write the content of all the substitution files we parsed.
 
 def writeSubFileDictionaries(subFileDict, outFile, maxLineLength):
+	"""Write the content of all the substitution files we've parsed."""
+
 	writeHead(outFile, "substitution files")
 	for subFile in subFileDict.keys():
 		wrotePreamble = False
@@ -565,9 +616,10 @@ def writeSubFileDictionaries(subFileDict, outFile, maxLineLength):
 					wrotePreamble = True
 				writeSubstitutions(templateFile, entry, outFile, maxLineLength)
 
-# Write the unused information collected from substitutions files
 
 def writeUnusedSubFileEntries(subFileDict, outFile, maxLineLength):
+	"""Write the unused information collected from substitutions files"""
+
 	writeHead(outFile, "unused substitution files")
 
 	for subFile in subFileDict.keys():
@@ -591,21 +643,24 @@ usage = "usage info not yet written"
 def main():
 	verbose = 4
 	fileArg = 1
+	ignoreComments = 0
 	if len(sys.argv) < 2:
 		print usage
 	else:
-		if (sys.argv[1][0] == '-'):
-			for i in range(len(sys.argv[1])):
-				print "char %d = '%c'" % (i, sys.argv[1][i])
-				if (sys.argv[1][i] == 'v'):
-					if len(sys.argv[1]) > i+1:
-						i = i + 1
-						verbose = int(sys.argv[1][i])
+		for i in range(1,3):
+			if (sys.argv[i][0] != '-'): break
+			for (j, arg) in enumerate(sys.argv[i]):
+				if (arg == 'v'):
+					if len(arg) > j+1:
+						j += 1
+						verbose = int(arg)
 					else:
 						verbose = 1
-					break
-			fileArg = 2
-
+					break # out of 'for (j, arg)...'
+				elif (arg == 'c'):
+					ignoreComments = 1
+					break # out of 'for (j, arg)...'
+		fileArg = i
 		if (len(sys.argv) > fileArg):
 			oldFileName = sys.argv[fileArg]
 			if not os.path.isfile(oldFileName):
