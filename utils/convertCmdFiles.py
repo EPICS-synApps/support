@@ -1,12 +1,16 @@
 #!/usr/bin/env python
-# This program is intended to help convert an ioc directory from one version
-# of synApps to another.  It takes two arguments, the old directory and the new
-# directory, both of which are assumed to be ioc directories (i.e., they contain
-# st.cmd, or other .cmd files).  The program parses .cmd files in the source directory,
-# and accumulates information.  Then it parses .cmd files in the new directory.
-# For each .cmd file in the new directory, the program writes a .cmd.CVT file,
-# which is the .cmd file modified to agree as closely as seems reasonable with
-# information collected from the old directory.
+
+""" This module is intended to help convert an ioc directory from one version
+of synApps to another.
+
+Invoked as a program, it takes two arguments, the old directory and the new
+directory, both of which are assumed to be ioc directories (i.e., they contain
+st.cmd, or other .cmd files).  The program parses .cmd files in the source directory,
+and accumulates information.  Then it parses .cmd files in the new directory.
+For each .cmd file in the new directory, the program writes a .cmd.CVT file,
+which is the .cmd file modified to agree as closely as seems reasonable with
+information collected from the old directory.
+"""
 
 # Not recognized:
 # 'epicsEnvSet EPICS_CA_MAX_ARRAY_BYTES 64008'
@@ -21,7 +25,11 @@ import curses.ascii
 from conversionUtils import *
 
 
-def parse_cdCommands(d, fileName, verbose):
+def parse_cdCommands(d, fileName, verbose, ignoreComments=False):
+	""" Parse the file 'cdCommands', collecting its information into the
+	dictionary d.envDict, or d.varDict, as appropriate.
+	"""
+
 	file = open(fileName)
 	for rawLine in file:
 		line = rawLine.strip("\t\r\n")
@@ -29,6 +37,7 @@ def parse_cdCommands(d, fileName, verbose):
 		if (isDecoration(line)):continue
 		if (verbose): print "\n'%s'" % line
 		isCommentedOut = (line[0] == '#')
+		if (isCommentedOut and ignoreComments): continue
 		line = line.lstrip("#")
 		words = line.split(' ')
 		if words[0] == "putenv":
@@ -53,7 +62,11 @@ def parse_cdCommands(d, fileName, verbose):
 
 	return (d)
 
-def parse_envPaths(d, fileName, verbose):
+def parse_envPaths(d, fileName, verbose, ignoreComments=False):
+	""" Parse the file 'envPaths', collecting its information into the
+	dictionary d.envDict.
+	"""
+
 	file = open(fileName)
 	for rawLine in file:
 		line = rawLine.strip("\t\r\n")
@@ -61,6 +74,7 @@ def parse_envPaths(d, fileName, verbose):
 		if (isDecoration(line)):continue
 		if (verbose): print "\n'%s'" % line
 		isCommentedOut = (line[0] == '#')
+		if (isCommentedOut and ignoreComments): continue
 		line = line.lstrip("#")
 		words = line.split('(')
 		if words[0] == "epicsEnvSet":
@@ -76,7 +90,11 @@ def parse_envPaths(d, fileName, verbose):
 			d.envDict[varName].append(entry)
 	return (d)
 
-def parseCmdFile(d, fileName, verbose):
+def parseCmdFile(d, fileName, verbose, ignoreComments=False):
+	""" Parse a .cmd file, collecting its information into an instance of
+	class cmdFileDictionaries. 
+	"""
+
 	file = open(fileName)
 	for rawLine in file:
 		line = rawLine.strip("\t\r\n ")
@@ -85,6 +103,7 @@ def parseCmdFile(d, fileName, verbose):
 		if (verbose): print "\n'%s'" % line
 
 		isCommentedOut = (line.strip()[0] == '#')
+		if (isCommentedOut and ignoreComments): continue
 		line = line.lstrip("#")
 
 		if (len(line) == 0): continue
@@ -151,7 +170,6 @@ def parseCmdFile(d, fileName, verbose):
 				entry = dictEntry(varValue, rawLine)
 				if (isCommentedOut): entry.leadingComment = rawLine[0:rawLine.find("epicsEnvSet")]
 				d.envDict[varName].append(entry)
-
 			continue
 
 		(varName, varValue) = isVariableDefinition(line, max(verbose-1,0))
@@ -190,6 +208,15 @@ def parseCmdFile(d, fileName, verbose):
 	return (d)
 
 def writeNewCmdFile(d, fileName, verbose):
+	""" Write a new .cmd file, with information collected from
+	an ioc directory.
+
+	Given all of the information collected from an ioc directory (in the
+	form of the instance ,d, of cmdFileDictionaries) and given the name of a
+	existing .cmd file, make a new copy of the .cmd file (append ".CVT" to
+	the name) by merging information from 'd' with it.
+	"""
+
 	if (verbose): print "writeNewCmdFile: ", fileName
 	file = open(fileName)
 	newFile = open(fileName+".CVT", "w+")
@@ -308,13 +335,16 @@ def writeNewCmdFile(d, fileName, verbose):
 
 
 def writeCmdFileDictionaries(d, reportFile):
-	print "not yet"
+	print "writeCmdFileDictionaries() is not implemented yet"
 
 
-# Write the unused information collected from .cmd files, in most cases with its
-# original formatting.
+
 
 def writeUnusedCmdFileEntries(d, outFile):
+	""" Write the unused information contained in an instance of 'class
+	cmdFileDictionaries', in most cases with its original formatting.
+	"""
+
 
 	writeHead(outFile, "unused dbLoadRecords commands:")
 	writeUnusedEntries(d.dbLoadRecordsDict, outFile)
@@ -337,13 +367,23 @@ def writeUnusedCmdFileEntries(d, outFile):
 	writeHead(outFile, "unused environment-variable commands:")
 	writeUnusedEntries(d.envDict, outFile)
 
-def parseCmdFiles(d, filespec, verbose):
+def parseCmdFiles(d, filespec, verbose, ignoreComments=False):
+	"""	Call parseCmdFile() for all files in filespec, collecting their
+	information into 'dd', an instance of class 'cmdFileDictionaries'.
+	"""
+
 	cmdFiles = glob.glob(filespec)
 	for fileName in cmdFiles:
-		d = parseCmdFile(d, fileName, max(verbose,0))
+		d = parseCmdFile(d, fileName, max(verbose,0), ignoreComments=ignoreComments)
 	return (d)
 
 def writeNewCmdFiles(d, filespec, verbose):
+	""" Call writeNewCmdFile() for all files in filespec, using information
+	from a list of autosaveDictionary instances, 'd', to write the files, and
+	marking each  entry in 'd' as 'used', so its information will be included
+	only once.
+	"""
+
 	cmdFiles = glob.glob(filespec)
 	for fileName in cmdFiles:
 		d = writeNewCmdFile(d, fileName, max(verbose,0))
@@ -351,7 +391,8 @@ def writeNewCmdFiles(d, filespec, verbose):
 
 usage = """
 Usage:    convertCmdFiles.py [options] old_dir [new_dir]
-    options: -v[integer]   (verbose/debug level)
+    option: -v[integer]   (verbose/debug level)
+    option: -c            (ignore comments)
 
 Examples: convertCmdFiles.py <old_dir> <new_dir>
     convertCmdFiles.py <old_dir>
@@ -374,29 +415,38 @@ Synopsis: convertCmdfiles.py examines .cmd files in old_dir, collecting
     a list of the commands found in old_dir.  If new_dir was specified,
     only those commands from old_dir that did not find a place in
     new_dir are listed.
+
+Result: Files named *.CVT are created or overwritten.  The file
+    'convertCmdFiles.out' is created or overwritten.  No other files are
+    modified.
+	
+See also: makeAutosaveFiles.py, convertIocFiles.py
 """
 
 def main():
 	verbose = 0
 	dirArg = 1
+	ignoreComments = 0
 	d = cmdFileDictionaries()
 	subFileDict = {}
 
 	if len(sys.argv) < 2:
 		print usage
 	else:
-		if (sys.argv[1][0] == '-'):
-			for i in range(len(sys.argv[1])):
-				print "char %d = '%c'" % (i, sys.argv[1][i])
-				if (sys.argv[1][i] == 'v'):
-					if len(sys.argv[1]) > i+1:
-						i = i + 1
-						verbose = int(sys.argv[1][i])
+		for i in range(1,3):
+			if (sys.argv[i][0] != '-'): break
+			for (j, arg) in enumerate(sys.argv[i]):
+				if (arg == 'v'):
+					if len(arg) > j+1:
+						j += 1
+						verbose = int(arg)
 					else:
 						verbose = 1
-					break
-			dirArg = 2
-
+					break # out of 'for (j, arg)...'
+				elif (arg == 'c'):
+					ignoreComments = 1
+					break # out of 'for (j, arg)...'
+		dirArg = i
 		if (len(sys.argv) > dirArg):
 			oldDir = sys.argv[dirArg]
 			# user specified an old directory
@@ -404,8 +454,8 @@ def main():
 				print "\n'"+oldDir+"' is not a directory"
 				return
 			filespec = os.path.join(oldDir, "*.cmd")
-			d = parseCmdFiles(d, filespec, verbose)
-			if (verbose): writeCmdFileDictionaries(d, sys.stdout, False)
+			d = parseCmdFiles(d, filespec, verbose, ignoreComments=ignoreComments)
+			if (verbose): writeCmdFileDictionaries(d, sys.stdout)
 
 			dirArg = dirArg + 1
 
@@ -423,12 +473,11 @@ def main():
 			# parse cdCommands or envPaths file
 			file = os.path.join(newDir, "cdCommands")
 			if os.path.isfile(file):
-				d = parse_cdCommands(d, file, verbose)
+				d = parse_cdCommands(d, file, verbose, ignoreComments=ignoreComments)
 			else:
 				file = os.path.join(newDir, "envPaths")
 				if os.path.isfile(file):
 					d = parse_envPaths(d, file, verbose)
-
 
 
 		reportFile = open("convertCmdFiles.out", "w+")
