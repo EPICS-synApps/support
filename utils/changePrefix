@@ -35,6 +35,10 @@ if [ -f ${old}Main.c ]; then
 	mv ${old}Main.c ${new}Main.c
 	doSed "s/${old}/${new}/g" ${new}Main.c
 fi
+if [ -f ${old}Main.cpp ]; then
+	mv ${old}Main.cpp ${new}Main.cpp
+	doSed "s/${old}/${new}/g" ${new}Main.cpp
+fi
 if [ -f ${old}Support.dbd ]; then
 	mv ${old}Support.dbd ${new}Support.dbd
 fi
