@@ -497,11 +497,12 @@ def writeNewSubFile(subFileDict, fileName, maxLineLength=120):
 			fLine = fLine + 1
 		(o, netBrackets, c) = countUnquotedBrackets(lines[line], "{", "}", 0)
 		if not found: newFile.write("#NEW: %s" % (lines[line]))
+		line = line + 1
 		while ((netBrackets > 0) and (line < len(lines))):
-			line = line + 1
 			(o, net, c) = countUnquotedBrackets(lines[line], "{", "}", 0)
 			if not found: newFile.write("#NEW: %s" % (lines[line]))
 			netBrackets = netBrackets + net
+			line = line + 1
 
 	return subFileDict
 
