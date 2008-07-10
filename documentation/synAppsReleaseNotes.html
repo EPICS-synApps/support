@@ -25,17 +25,20 @@ content="text/html; charset=iso-8859-1">
 <tr><td>AUTOSAVE<td>4-2-1<td>4-4
 <tr><td>CALC<td>2-6-3<td>2-6-6
 <tr><td>CAMAC<td>2-5<td>2-5
-<tr><td>CCD<td>1-6<td>1-9
+<tr><td>CCD<td>1-6<td>1-8
 <tr><td>DAC128V<td>2-3<td>2-4
-<tr><td>DXP<td>2-5<td>2-8a
-<tr><td>EBRICK<td>2-0-0<td>cvs
+<tr><td>DXP<td>2-5<td>2-8-1
+<tr><td>EBRICK<td>2-0-0<td>2-2-1
 <tr><td>IP<td>2-7<td>2-8
 <tr><td>IP330<td>2-4<td>2-5
 <tr><td>IPUNIDIG<td>2-4<td>2-5
 <tr><td>LOVE<td>3-2-3<td>3-2-3
 <tr><td>MCA<td>6-9<td>6-11
-<tr><td>MOTOR<td>6-1<td>6-4
+<tr><td>MODBUS<td>Not used<td>1-2
+<tr><td>MOTOR<td>6-1<td>6-3 (eventually, 6-4)
 <tr><td>OPTICS<td>2-5-2<td>2-6
+<tr><td>PILATUS<td>Not used<td>1-5
+
 <tr><td>QUADEM<td>2-3<td>2-4
 <tr><td>SSCAN<td>2-5-3<td>2-6
 <tr><td>STD<td>2-5-4<td>2-6
@@ -101,7 +104,6 @@ client to use autosave to control a list.
 <li>autosave/documentation/autoSaveRestore.html</li>
 <ul>
 <li>v4.4
-<li>minor edits
 <li> v4.3
 <li>nfs required on vxWorks
 <li>more about status PV's; conditions for calling fdbrestore
@@ -112,7 +114,6 @@ client to use autosave to control a list.
 <li>autosave/documentation/autosaveReleaseNotes.html</li>
 <ul>
 <li>v4.4
-<li>minor edits
 <li> v4.3
 <li>reboot_restore now changes empty SPC_CALC strings to '0', as required in 3.14.9
 </ul>
@@ -300,7 +301,6 @@ input link does not disable expression evaluation.
 
 <li>calc/documentation/aCalcoutRecord.html</li>
 <ul>
-<li>minor edits
 <li>minor edits
 </ul>
 
@@ -681,7 +681,6 @@ Replaced sprintf with epicsSnprintf for error checking.
 
 <li>documentation/synApps.readme</li>
 <ul>
-<li>minor edit
 <li>minor edits
 </ul>
 
@@ -3882,6 +3881,7 @@ will never get the data read (because the read is only forced on transition from
 </ul>
 
 <h2>modbus</h2>
+New module
 <ul>
 
 <li>modbus/.cvsignore</li>
@@ -4044,8 +4044,6 @@ will never get the data read (because the read is only forced on transition from
 <li>Additions for serial, minor edits
 <li>Updates for serial protocols
 <li>Removed TCP dependencies
-<li>Minor edits
-<li>Minor edits
 <li>Many additions
 <li>Many additions
 <li>Many changes
@@ -5923,6 +5921,7 @@ be obvious if an old database is being used with a new display file.
 </ul>
 
 <h2>pilatus</h2>
+New module
 <ul>
 
 <li>pilatus/.cvsignore</li>
@@ -6833,14 +6832,12 @@ readability tweaks
 
 <li>std/stdApp/op/adl/ramp_tweak.adl</li>
 <ul>
-<li>Minor edits
 <li>fixed widget sizes
 <li>new file
 </ul>
 
 <li>std/stdApp/op/adl/ramp_tweakSetup.adl</li>
 <ul>
-<li>Minor edits
 <li>fixed widget sizes
 <li>new file
 </ul>
@@ -7768,7 +7765,6 @@ readability tweaks
 <ul>
 <li>Permit choice of whether or not to ignore comments
 <li>Much more complete version
-<li>minor edits
 <li>fixed recognition of dbLoadRecords.  added parsing of cdCommands and envPaths files, and collection of macro parameters from dbLoadRecords
 <li>Explain #??? comments in .cmd.new
 <li>Improved usage comments.  Create convert.out in all cases, with same form.
@@ -7791,7 +7787,6 @@ readability tweaks
 
 <li>utils/makeAutosaveFiles.py</li>
 <ul>
-<li>minor edits
 <li>new file: uses convert*.py to write standard autosave files
 </ul>
 </ul>
