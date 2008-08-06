@@ -18,8 +18,9 @@ content="text/html; charset=iso-8859-1">
 <tr><td>ALLEN_BRADLEY<td>2-1<td>2-1
 <tr><td>ASYN<td>4-6<td>4-9 (eventually, 4-10)
 <tr><td>GENSUB<td>1-6a<td>1-6a
-<tr><td>IPAC<td>2-9<td>2-8
+<tr><td>IPAC<td>2-8<td>2-8
 <tr><td>SNCSEQ<td>2-0-11<td>2-0-11
+<tr><td>STREAM<td>2-2<td>2-2 (intend to use 2-3 with patches)
 <tr><td>VXSTATS<td>1-7-2e<td>1-7-2e (f for EPICS 3.14.9)
 <tr><td>
 <tr><td>AUTOSAVE<td>4-2-1<td>4-4
@@ -47,8 +48,41 @@ content="text/html; charset=iso-8859-1">
 </table>
 
 
-
 <h2>autosave</h2>
+
+<P>Previously, the only way to specify which PV's were to be autosaved was to
+include PV names in a request file read by <tt>create_xxx_monitor_set()</tt>. 
+Now, PV's can also be specified in the databases that are loaded into an ioc.
+
+<P>Autosave reports its status to EPICS PV's if it can.  If this behavior
+is not wanted, it can now be turned off with a function call.
+
+<P>Autosave's status database now contains a PV that indicates directly
+whether or not the save_restore task is functioning.
+
+<P>The calc engine in EPICS 3.14.9 regards an empty calc expression as an error.
+When autosave is asked to restore an empty calc expression, it restores the
+expression '0' instead, which has the same effect but is not treated as an error.
+
+<P>A developer can now specify the file permissions for files that autosave writes.
+This doesn't work on all operating systems.
+
+<P>After failing to write a .sav file, autosave will now retry after
+<tt>save_restoreRetrySeconds</tt>.  Previously, autosave would retry a failed
+write only when the file system was remounted, otherwise waiting until the next
+time a save was triggered.
+
+<P>If an error occurs while a .sav file is being written, that .sav file will
+not be copied to a sequence file.
+
+<P>A save list can now get its file name at run time, from a PV that CA clients
+can change.
+
+<P>See autosave/documentation/autoSaveRestore.html for more information on
+these changes.
+<hr>
+<P>cvs log:
+
 <ul>
 
 <li>autosave/asApp/Db/infoExample.db</li>
@@ -58,6 +92,7 @@ content="text/html; charset=iso-8859-1">
 
 <li>autosave/asApp/Db/save_restoreStatus.db</li>
 <ul>
+<li>give DEAD_SECONDS a default, so database loads don't have to change
 <li>Added SR_deadIfZero PV
 </ul>
 
@@ -85,6 +120,7 @@ content="text/html; charset=iso-8859-1">
 
 <li>autosave/asApp/src/save_restore.c</li>
 <ul>
+<li>make status PV's optional; allow save file name with more than one embedded '.' (Ben Franksen)
 <li>Made SET_FILE_PERMISSIONS false on WIN32; fixed problems when SET_FILE_PERMISSIONS was false
 <li>v5.4 When SET_FILE_PERMISSIONS is true, open() must include O_TRUNC, else .sav file will look corrupted if its length descreases.
 <li>reworked retry; don't write seq while .sav is bad
@@ -104,6 +140,8 @@ client to use autosave to control a list.
 <li>autosave/documentation/autoSaveRestore.html</li>
 <ul>
 <li>v4.4
+<li>save_restoreSet_UseStatusPVs
+<li>minor edits
 <li> v4.3
 <li>nfs required on vxWorks
 <li>more about status PV's; conditions for calling fdbrestore
@@ -114,6 +152,8 @@ client to use autosave to control a list.
 <li>autosave/documentation/autosaveReleaseNotes.html</li>
 <ul>
 <li>v4.4
+<li>save_restoreSet_UseStatusPVs
+<li>minor edits
 <li> v4.3
 <li>reboot_restore now changes empty SPC_CALC strings to '0', as required in 3.14.9
 </ul>
@@ -130,12 +170,62 @@ client to use autosave to control a list.
 </ul>
 
 <h2>calc</h2>
+
+<P>Previously, the calc module required the modules SSCAN, and GENSUB to
+build.  Now the build adjusts itself to the modules that are available.
+
+<P>The function, len(), was added to array calcs.
+
+<P>Previously, the transform record would continue its operation when any of
+its input links propagated an error from the linked record.  Now, the the user
+or database developer can choose whether or not to abort processing when this
+occurs.
+
+<P>A new version of user transforms permits individual transform records to
+be disabled.  (The standard set disables all or none.)
+
+<P>The sCalcout and aCalcout records now honor alarms, and correctly implement
+the IVOA field.  (Thanks to Peter Mueller).
+
+<P>If an sCalcoutRecord link connects to a link field, or if the WAIT field is
+true, and the sCalcoutRecord's link does not have the attribute, 'CA', the
+record now complains to the ioc console.  (Such a link cannot function as intended,
+but the record currently cannot fix the problem.)
+
+<hr>
+<P>cvs log:
+
 <ul>
+
+<li>calc/calcApp/Db/transforms10.db
+<ul>
+<li>individually disabled transforms
+</ul>
+
+<li>calc/calcApp/Db/transforms10_settings.req
+<ul>
+<li>individually disabled transforms
+</ul>
 
 <li>calc/calcApp/Db/transform_settings.req</li>
 <ul>
 <li>Added COPT (calc option) field.  If COPT=0, same as always; if COPT=1,
 input link does not disable expression evaluation.
+</ul>
+
+<li>calc/calcApp/op/adl/Transform.adl
+<ul>
+<li>like userTransforms, but individually disabled
+</ul>
+
+<li>calc/calcApp/op/adl/Transform_full.adl
+<ul>
+<li>like userTransforms, but individually disabled
+</ul>
+
+<li>calc/calcApp/op/adl/Transforms10.adl
+<ul>
+<li>like userTransforms, but individually disabled
 </ul>
 
 <li>calc/calcApp/op/adl/CalcRecord.adl</li>
@@ -346,6 +436,11 @@ input link does not disable expression evaluation.
 </ul>
 
 <h2>ccd</h2>
+
+<P>This module is to be replaced by the <b>areaDetector</b> module.
+
+<hr>
+<P>cvs log:
 <ul>
 
 <li>ccd/makeCCDTar</li>
@@ -691,6 +786,48 @@ Replaced sprintf with epicsSnprintf for error checking.
 </ul>
 
 <h2>dxp</h2>
+
+  <li>Updated code for DXP4C2X to work again.  Based on X10P code from Handel 0.6.47.  This makes the DXP4C2X
+      compatible with the Saturn and the xMAP.
+  <li>Changes in Handel code for Saturn to be compatible with Handel version 0.6.47.  These are mostly
+      minor.  
+      The most important changes are that the Saturn now supports "maxwidth" and "baseline_threshold"
+      as acquisition parameters, so these are now specified in calibrated units (keV), rather than
+      device units.  The dxp record device support (devDxp.c) has been changed to take advantage of this.
+      This change makes the Saturn compatible with the xMAP.
+  <li>Updated documentation to explain how to use udev or hotplug to run the USB Saturn on Linux without
+      root privilege.  Added USB_DEVFS_PATH environment variable to iocSaturn/st.cmd to fix problem with
+      libusb using /proc/bus/usb when it should be using /dev/bus/usb, and thus not getting permissions right.
+  <li>Fixed problem with EraseAll not displaying the newly erased spectra.
+
+
+
+  <li>This is the first release that builds the xMAP support from source code, rather
+      than from a pre-built DLL from XIA.  It uses Handel 0.6.47 from XIA with my modifications to make it work
+      on all supported architectures.
+  <li>Added support for USB 1.0 and USB 2.0 interfaces on Saturn, in addition to existing EPP support.  
+      These are supported on the WIN32, Cygwin, and Linux architectures.  The following software must be 
+      installed on the IOC computer before the USB support will work.
+     <ul>
+       <li>WIN32 and Cygwin:  For USB 1.0 Kepler must be installed to provide the required USB driver.
+           For USB 2.0 the PI-SPEC software package from SII must be installed, because it has the required
+           EZ-USB driver.  I expect that this driver will be available from XIA soon.
+       <li>Linux.  The latest version of the libusb package (0.1.12) must be installed.  This can be quickly installed,
+           but requires root priviledge.  The IOC application must also currently be run as root, because the USB device is
+           created dynamically and cannot be given non-root access in advance. 
+    </ul>
+ <li>Changed the default value of MAXWIDTH in the DXP record from 20 to 4, to be legal on xMAP.
+
+
+  <li>Removed architecture specific DBD files and Makefile rules, requires asyn R4-9.
+  <li>Enhancements and additions to 4 element detector ADL files.
+  <li>dxp4c2x_psl.c (CAMAC module). Added support for all of the same parameters that the Saturn (x10p_psl.c) supports. 
+      With this enhancement the DXP2X now has the same EPICS interface as the Saturn.
+  <li>dxpMED.st. Increased number of detectors to 32, bug fixes thanks to Dave Madden from SLS.
+
+
+<hr>
+<P>cvs log:
 <ul>
 
 <li>dxp/makeStandaloneDXP_tar</li>
@@ -3278,6 +3415,17 @@ Modified location of autosave files
 </ul>
 
 <h2>ip</h2>
+
+<P> Support for new devices:
+	<ul>
+	<li>US Digital Serial Encoder
+	<li>Keithley 8517 Electrometer
+	<li>LakeShore 340 Temperature controller
+	<li>Omega DP41 Digital Panel Meter
+	<li>Pfeiffer TPG261 RS232 Vacuum Controller.
+	</ul>
+<hr>
+<P>cvs log:
 <ul>
 
 <li>ip/documentation/Encoder_AD4.README</li>
@@ -3566,6 +3714,11 @@ Modified location of autosave files
 </ul>
 
 <h2>ipUnidig</h2>
+
+<P> Now builds for RTEMS and Linux.
+<P>Now supports SBS IPOPTOIO8
+<hr>
+<P>cvs log:
 <ul>
 
 <li>ipUnidig/configure/RELEASE</li>
@@ -3646,6 +3799,16 @@ This removed the hardcoded ID references in this database
 </ul>
 
 <h2>mca</h2>
+
+<P>SIS3820 now supported on Linux.
+<P>Build option to use LLC sockets to communicate with Canberra AIM module.
+Currently, this works on vxWorks only.
+<P>MCA record forces ACQG=>1 when acquisition is turned on.  Without this, a
+short dwell time resulted in data never being read.
+<P>Can read compressed or uncompressed data from Canberra.
+
+<hr>
+<P>cvs log:
 <ul>
 
 <li>mca/configure/RELEASE</li>
@@ -3881,7 +4044,17 @@ will never get the data read (because the read is only forced on transition from
 </ul>
 
 <h2>modbus</h2>
-New module
+
+<P>New module.
+
+<P>modbus supports EPICS communication with Programmable Logic Controllers
+(PLCs) via the Modbus protocol over TCP, serial RTU, and serial ASCII links. 
+The modbus software provides a layer between standard EPICS asyn device support,
+and the EPICS asyn TCP/IP or serial port driver. 
+
+
+<hr>
+<P>cvs log:
 <ul>
 
 <li>modbus/.cvsignore</li>
@@ -4414,6 +4587,7 @@ New module
 
 <li>modbus/modbusApp/src/Makefile</li>
 <ul>
+<li>Added LIB_LIBS so it would link on Solaris
 <li>Removed WIN32 specific code
 <li>Different dbd include for WIN32, no local serial ports
 <li>Changed modbusTCP to modbus
@@ -4529,6 +4703,26 @@ Changed printf to asynPrint for connection reporting in doModbusIO.
 </ul>
 
 <h2>motor</h2>
+
+<P>Access security settings for motorRecord fields.
+<P>NTMF field
+<P>New devices:
+<ul>
+<li>SmartMotor
+<LI>Piezosystem jena GmbH EDS
+<li>PI E-516
+<LI>Kohzu SC-800
+<LI>PI C-848
+</ul>
+<P>ACSTech80 supports Alio Hexapod and Direct motion commands 
+<P>All FLOAT fields changed to DOUBLE
+<P>MotorUtil now inits alldone PV to "done"
+<P>64-bit compatibility for many (all?) devices.
+<P>Trajectory scan improvements
+<P><i>Many</i> changes that aren't easily summed up as highlights.
+
+<hr>
+<P>cvs log:
 <ul>
 
 <li>motor/README</li>
@@ -4587,6 +4781,7 @@ Changed printf to asynPrint for connection reporting in doModbusIO.
 
 <li>motor/documentation/motor_release.html</li>
 <ul>
+<li>Add framework for deferred moves to asyn motor common driver layer
 <li>- Added BDST to ASL=0 fields.
 - 64-bit compatibility.
 <li>ASL changes.
@@ -4749,9 +4944,59 @@ Changed printf to asynPrint for connection reporting in doModbusIO.
 <li>64-bit compatibility.
 </ul>
 
+<li>motor/motorApp/AcsTech80Src/ACSTech80Register.cc
+<ul>
+<li>Added support for Alio Hexapod and Direct motion commands
+    Configured at startup via
+	   SPiiPlusConfig(0, "<asyn port>", "<command mode>")
+
+    Where command mode = "BUF","CON" or "DIR"  (see README file)
+</ul>
+
+<li>motor/motorApp/AcsTech80Src/ACSTech80Register.h
+<ul>
+<li>Added support for Alio Hexapod and Direct motion commands
+Configured at startup via
+	SPiiPlusConfig(0, "<asyn port>", "<command mode>")
+
+Where command mode = "BUF","CON" or "DIR"  (see README file)
+</ul>
+
+<li>motor/motorApp/AcsTech80Src/README
+<ul>
+<li>Added support for Alio Hexapod and Direct motion commands
+Configured at startup via
+	SPiiPlusConfig(0, "<asyn port>", "<command mode>")
+
+Where command mode = "BUF","CON" or "DIR"  (see README file)
+</ul>
+
+<li>motor/motorApp/AcsTech80Src/devSPiiPlus.cc
+<ul>
+<li>Added support for Alio Hexapod and Direct motion commands
+Configured at startup via
+	SPiiPlusConfig(0, "<asyn port>", "<command mode>")
+
+Where command mode = "BUF","CON" or "DIR"  (see README file)
+</ul>
+
 <li>motor/motorApp/AcsTech80Src/drvSPiiPlus.cc</li>
 <ul>
+<li>Added support for Alio Hexapod and Direct motion commands
+Configured at startup via
+	SPiiPlusConfig(0, "<asyn port>", "<command mode>")
+
+Where command mode = "BUF","CON" or "DIR"  (see README file)
 <li>Changed from strtok_r to epicsStrtok_r to work on win32
+</ul>
+
+<li>motor/motorApp/AcsTech80Src/drvSPiiPlus.h
+<ul>
+<li>Added support for Alio Hexapod and Direct motion commands
+Configured at startup via
+	SPiiPlusConfig(0, "<asyn port>", "<command mode>")
+
+Where command mode = "BUF","CON" or "DIR"  (see README file)
 </ul>
 
 <li>motor/motorApp/Db/.cvsignore</li>
@@ -4923,6 +5168,8 @@ init_controller routine and calling LOAD_POS
 
 <li>motor/motorApp/MotorSrc/devMotorAsyn.c</li>
 <ul>
+<li>Change initialisation order so that autosave is actually dependent on the
+values read back from the controller for asyn motors.
 <li>asyn motor GET_INFO support update.
 <li>Improve error reporting e.g. with bad axis number
 <li>Correct initialisation order in devMotorAsyn.c to make sure autosaved values
@@ -4939,6 +5186,8 @@ init_controller routine and calling LOAD_POS
 
 <li>motor/motorApp/MotorSrc/drvMotorAsyn.c</li>
 <ul>
+<li>Add framework for deferred moves to asyn motor common driver layer
+<li>Add asynUInt32Digital interface support to asyn motors (allows bo & bi records)
 <li>asyn motor GET_INFO support update.
 <li>Add some missing status returns to avoid spurious error messages
 <li>Removed status argument from interrupt callbacks
@@ -4950,6 +5199,7 @@ callback mechanism *requires* that we be asynchronous, or we'll deadlock
 
 <li>motor/motorApp/MotorSrc/drvMotorAsyn.h</li>
 <ul>
+<li>Add framework for deferred moves to asyn motor common driver layer
 <li>asyn motor GET_INFO support update.
 </ul>
 
@@ -5017,6 +5267,7 @@ Do not use epicsThreadSuspendSelf(), but instead wait on an event, in
 
 <li>motor/motorApp/MotorSrc/motor_interface.h</li>
 <ul>
+<li>Add framework for deferred moves to asyn motor common driver layer
 <li>asyn motor GET_INFO support update.
 <li>Documentation updates
 </ul>
@@ -5215,6 +5466,8 @@ xpsgathering -> xps_gathering
 
 <li>motor/motorApp/OmsSrc/devOms58.cc</li>
 <ul>
+<li>Restore MAXv slew acceleration after STOP command.
+<li>Fixed stop acceleration calculation; VBAS adjusted.
 <li>64-bit compatibility.
 </ul>
 
@@ -5232,6 +5485,7 @@ during normalization calculation.
 
 <li>motor/motorApp/OmsSrc/drvMAXv.cc</li>
 <ul>
+<li>Added read commanded velocity to set_status().
 <li>64-bit compatiability.
 <li>Set "update delay" to zero.
 <li>Changed strtok_r to epicsStrtok_r and int8_t to epicsInt8 for portability to Windows
@@ -5659,6 +5913,12 @@ and slew velocity (VELO/S) values by a factor of either 0.1 or 10.
 </ul>
 
 <h2>optics</h2>
+
+<P>New support for XIA PF4 filter/shutter
+<P>Oxford 4-channel x-ray beam position monitor
+<P>New support for an ASRP optical table
+<hr>
+<P>cvs log:
 <ul>
 
 <li>optics/documentation/opticsDocs.html</li>
@@ -5689,6 +5949,21 @@ and slew velocity (VELO/S) values by a factor of either 0.1 or 10.
 <li>optics/documentation/qxbpm.html</li>
 <ul>
 <li>add support for Oxford 4-channel X-ray Beam Position Monitor
+</ul>
+
+<li>optics/opticsApp/Db/ASRPmirrorTable.db
+<ul>
+<li>new support for Australian Synchrotron's mirror table
+</ul>
+
+<li>optics/opticsApp/Db/ASRPmirrorTable_settings.req
+<ul>
+<li>new support for Australian Synchrotron's mirror table
+</ul>
+
+<li>optics/opticsApp/Db/ASRPmirrorTable_softmotor.db
+<ul>
+<li>new support for Australian Synchrotron's mirror table
 </ul>
 
 <li>optics/opticsApp/Db/2slit.db</li>
@@ -5758,6 +6033,16 @@ was in milliseconds, but the serial record was replaced by an asyn record, whose
 <ul>
 <li>vdct screwed up placements; fixed, sort of
 <li>Fixed problems that were causing motor records to be put into alarm: tweakVal records had UDF==1; calcout record had empty CALC expression.
+</ul>
+
+<li>optics/opticsApp/op/adl/ASRPmirrorTable.adl
+<ul>
+<li>new support for Australian Synchrotron's mirror table
+</ul>
+
+<li>optics/opticsApp/op/adl/ASRPmirrorTable_small.adl
+<ul>
+<li>new support for Australian Synchrotron's mirror table
 </ul>
 
 <li>optics/opticsApp/op/adl/XIA_shutter.adl</li>
@@ -5921,7 +6206,12 @@ be obvious if an old database is being used with a new display file.
 </ul>
 
 <h2>pilatus</h2>
-New module
+
+<P>New module: an enhanced EPICS interface to the Dectris <i>Pilatus</i>
+pixel-array detector.
+
+<hr>
+<P>cvs log:
 <ul>
 
 <li>pilatus/.cvsignore</li>
@@ -6414,6 +6704,23 @@ Changed format of bad pixel file
 </ul>
 
 <h2>sscan</h2>
+
+<P>The base name for files written by saveData can now be selected at run time
+by the user.
+
+<P>The sscan record can now post array data to clients during a scan.  By
+default, this capability is disabled, because it may confuse existing
+clients of the sscan record.
+
+<P>If saveData fails to write or update a data file, it can now retry, as
+controlled by PV's.
+
+<P>Previously, the standard scan and saveData records were combined into a
+single database, scan.db.  Now, the preferred databases to load are
+standardScans.db (one or more copies), and saveData.db (one copy only).
+
+<hr>
+<P>cvs log:
 <ul>
 
 <li>sscan/documentation/busyRecord.html</li>
@@ -6589,6 +6896,17 @@ PREFIX_SIZE, currently 10, including null.
 </ul>
 
 <h2>std</h2>
+
+<P>The gpibRecord has been replaced by the asynRecord, which is loaded from the
+asyn module.
+
+<P>New databases: alarmClock, autoShutter, countDownTimer, ramp_tweak, scaler16m
+
+<P>The sseqRecord (string Sequence, a variant of the seq record in EPICS base)
+can now be told to abort the sequence it's executing.
+
+<hr>
+<P>cvs log:
 <ul>
 
 <li>std/documentation/gpibRecord.html</li>
@@ -6599,6 +6917,11 @@ PREFIX_SIZE, currently 10, including null.
 <li>std/documentation/scalerRecord.html</li>
 <ul>
 <li>COUTP field
+</ul>
+
+<li>std/documentation/sseqRecord.html
+<ul>
+<li>abort; lots of edits
 </ul>
 
 <li>std/documentation/stdDoc.html</li>
@@ -6736,6 +7059,16 @@ Added Shutter Opened TimeStamp PV
 <li>Initial release of autoShutter system
 </ul>
 
+<li>std/stdApp/Db/scaler.db
+<ul>
+<li>FREQ macro wasn't in quotes
+</ul>
+
+<li>std/stdApp/Db/scaler16.db
+<ul>
+<li>FREQ wasn't in quotes
+</ul>
+
 <li>std/stdApp/Db/scaler16_settings.req</li>
 <ul>
 <li>replaces scaler_<n>ch_settings.req
@@ -6784,6 +7117,21 @@ MoveCalc - set softmotor NTM OFF while moving.
 <li>std/stdApp/Db/timer_settings.req</li>
 <ul>
 <li>replaces timer.req
+</ul>
+
+<li>std/stdApp/op/adl/VME_DAC.adl
+<ul>
+<li>For DAC's with ramp rate
+</ul>
+
+<li>std/stdApp/op/adl/VME_DAC8.adl
+<ul>
+<li>For DAC's with ramp rate
+</ul>
+
+<li>std/stdApp/op/adl/VME_DAC_rawOut.adl
+<ul>
+<li>For DAC's with ramp rate; to bypass all that stuff
 </ul>
 
 <li>std/stdApp/op/adl/alarmClock.adl</li>
@@ -6852,6 +7200,11 @@ readability tweaks
 <li>some fields could not be selected by MEDM's middle button (which grabs the PV name).
 </ul>
 
+<li>std/stdApp/op/adl/scaler32_full_calc.adl
+<ul>
+<li>calcs for all channels
+</ul>
+
 <li>std/stdApp/op/adl/scaler32_more.adl</li>
 <ul>
 <li>some fields could not be selected by MEDM's middle button (which grabs the PV name).
@@ -6875,6 +7228,33 @@ readability tweaks
 <li>std/stdApp/op/adl/timer_full.adl</li>
 <ul>
 <li>Deleted reset button. (Now use Go to both start and reset.)  Added remainingSecs field.
+</ul>
+
+<li>std/stdApp/op/adl/userStringSeq.adl
+<ul>
+<li>added abort button, busy indicator
+</ul>
+<li>std/stdApp/op/adl/userStringSeq_full.adl
+<ul>
+<li>added abort button, busy indicator
+</ul>
+<li>std/stdApp/op/adl/userStringSeq_help.adl
+<ul>
+<li>better description of abort
+<li>added abort button, busy indicator
+</ul>
+<li>std/stdApp/op/adl/yySseq.adl
+<ul>
+<li>added abort button, busy indicator
+</ul>
+<li>std/stdApp/op/adl/yySseq_full.adl
+<ul>
+<li>added abort button, busy indicator
+</ul>
+<li>std/stdApp/op/adl/yySseq_help.adl
+<ul>
+<li>better description of abort
+<li>added abort button, busy indicator
 </ul>
 
 <li>std/stdApp/src/Makefile</li>
@@ -6932,6 +7312,15 @@ readability tweaks
 <li>COUTP field
 </ul>
 
+<li>std/stdApp/src/sseqRecord.c
+<ul>
+<li>support abort (new PV's ABORT, BUSY)
+<li>preliminary work toward ability to abort an executing sequence
+</ul>
+<li>std/stdApp/src/sseqRecord.dbd
+<ul>
+<li>support abort (new PV's ABORT, BUSY)
+</ul>
 <li>std/stdApp/src/stdSupport.dbd</li>
 <ul>
 <li>Added drvScalerSoft
@@ -7737,6 +8126,12 @@ readability tweaks
 </ul>
 
 <h2>utils</h2>
+
+<P>New utilities to assist in conversion of an EPICS ioc directory from
+one version of EPICS to another.  (See convertIocFiles.py)
+
+<hr>
+<P>cvs log:
 <ul>
 
 <li>utils/.cvsignore</li>
@@ -7792,6 +8187,11 @@ readability tweaks
 </ul>
 
 <h2>vac</h2>
+
+<P>New module to support various vacuum controllers.
+
+<hr>
+<P>cvs log:
 <ul>
 
 <li>vac/Makefile</li>
@@ -7857,6 +8257,7 @@ readability tweaks
 
 <li>vac/documentation/README.txt</li>
 <ul>
+<li>vacSupport.dbd and libvac distinguished for external use
 <li>New
 </ul>
 
@@ -7902,6 +8303,7 @@ readability tweaks
 
 <li>vac/vacApp/src/Makefile</li>
 <ul>
+<li>make required dbd files; use tyGSAsynInit.c from ip, instead of local copy; don't build PROD_IOC
 <li>New
 </ul>
 
@@ -7984,6 +8386,11 @@ readability tweaks
 <ul>
 <li>New
 </ul>
+
+<li>vac/vacApp/src/vacSupport.dbd
+<ul>
+<li>new file for users of this module
+</ul>
 </ul>
 
 <h2>vme</h2>
@@ -8009,6 +8416,11 @@ readability tweaks
 <li>- Added board failure indicator (IK320brdfail).
 - retry "read encoder without referencing" commands on timeout.
 </ul>
+
+<li>vme/iocBoot/iocvme/st.cmd
+<ul>
+<li>Modified Acromag 9440 initialization calls.
+</ul>
 </ul>
 
 <h2>vxStats</h2>
@@ -8021,6 +8433,12 @@ readability tweaks
 </ul>
 
 <h2>xxx</h2>
+
+<P>Many changes to support, comply with, or demonstrate new capabilities in
+other synApps modules.
+
+<hr>
+<P>cvs log:
 <ul>
 
 <li>xxx/release.pl</li>
@@ -8042,7 +8460,7 @@ readability tweaks
 
 <li>xxx/documentation/xxxReleaseNotes.html</li>
 <ul>
-<li>about substitutions files in 3.13.9
+<li>about substitutions files in 3.14.9
 </ul>
 
 <li>xxx/iocBoot/iocCygwin/.cvsignore</li>
@@ -8058,7 +8476,7 @@ readability tweaks
 
 <li>xxx/iocBoot/iocCygwin/motor.substitutions</li>
 <ul>
-<li>3.13.9 will require macros that include masros to be enclosed in quotes
+<li>3.14.9 will require macros that include masros to be enclosed in quotes
 </ul>
 
 <li>xxx/iocBoot/iocCygwin/motorSim.cmd</li>
@@ -8089,7 +8507,7 @@ Added macro DEAD_SECONDS for save_restoreStatus.db
 
 <li>xxx/iocBoot/iocCygwin/scanParms.substitutions</li>
 <ul>
-<li>3.13.9 will require macros that include masros to be enclosed in quotes
+<li>3.14.9 will require macros that include masros to be enclosed in quotes
 </ul>
 
 <li>xxx/iocBoot/iocCygwin/st.cmd</li>
@@ -8112,7 +8530,7 @@ Added macro DEAD_SECONDS for save_restoreStatus.db
 
 <li>xxx/iocBoot/iocLinux/motor.substitutions</li>
 <ul>
-<li>3.13.9 will require macros that include masros to be enclosed in quotes
+<li>3.14.9 will require macros that include masros to be enclosed in quotes
 </ul>
 
 <li>xxx/iocBoot/iocLinux/save_restore.cmd</li>
@@ -8125,7 +8543,7 @@ Added macro DEAD_SECONDS for save_restoreStatus.db
 
 <li>xxx/iocBoot/iocLinux/scanParms.substitutions</li>
 <ul>
-<li>3.13.9 will require macros that include masros to be enclosed in quotes
+<li>3.14.9 will require macros that include masros to be enclosed in quotes
 </ul>
 
 <li>xxx/iocBoot/iocLinux/st.cmd</li>
@@ -8142,12 +8560,24 @@ Added macro DEAD_SECONDS for save_restoreStatus.db
 <li>userCalcOuts
 </ul>
 
+<li>xxx/iocBoot/iocSolaris/motorSim.cmd
+<ul>
+<li>init and load simulated motors
+</ul>
 <li>xxx/iocBoot/iocSolaris/motor.substitutions</li>
 <ul>
 <li>user simulated motor driver
-<li>3.13.9 will require macros that include masros to be enclosed in quotes
+<li>3.14.9 will require macros that include masros to be enclosed in quotes
 </ul>
 
+<li>xxx/iocBoot/iocSolaris/motorSim.substitutions
+<ul>
+<li>init and load simulated motors
+</ul>
+<li>xxx/iocBoot/iocSolaris/saveData.req
+<ul>
+<li>added [basename] (user chooses data-file base name)
+</ul>
 <li>xxx/iocBoot/iocSolaris/save_restore.cmd</li>
 <ul>
 <li>Replaced "$(STARTUP)" with "$(TOP)/iocBoot/$(IOC)"
@@ -8158,16 +8588,21 @@ Added macro DEAD_SECONDS for save_restoreStatus.db
 
 <li>xxx/iocBoot/iocSolaris/scanParms.substitutions</li>
 <ul>
-<li>3.13.9 will require macros that include masros to be enclosed in quotes
+<li>3.14.9 will require macros that include masros to be enclosed in quotes
 </ul>
 
 <li>xxx/iocBoot/iocSolaris/st.cmd</li>
 <ul>
+<li>simulated motors; use motorUtil instead of all_com; changed the way scan and saveData databases are loaded
 <li>Modified PF4 implementation.
 <li>Modified calling sequence for femto snl application.
 <li>added motors, userStringSeqs10
 </ul>
 
+<li>xxx/iocBoot/iocvxWorks/asynRecord.req
+<ul>
+<li>asyn doesn't have this autosave-support file, which is intended to match asyn/db/asynRecord.db
+</ul>
 <li>xxx/iocBoot/iocvxWorks/autoShutter.substitutions</li>
 <ul>
 <li>Change BL macro argument from <Sector ##> to
@@ -8178,6 +8613,7 @@ This removed the hardcoded ID references in autoShutter.vdb
 
 <li>xxx/iocBoot/iocvxWorks/auto_settings.req</li>
 <ul>
+<li>Added ramp_tweak settings
 <li>Modified calling sequence for femto snl application.
 <li>new scan settings file; new deviceCmdReply settings file
 <li>removed mention of interp.sav
@@ -8185,7 +8621,7 @@ This removed the hardcoded ID references in autoShutter.vdb
 
 <li>xxx/iocBoot/iocvxWorks/basic_motor.substitutions</li>
 <ul>
-<li>3.13.9 will require macros that include masros to be enclosed in quotes
+<li>3.14.9 will require macros that include masros to be enclosed in quotes
 </ul>
 
 <li>xxx/iocBoot/iocvxWorks/femto.req</li>
@@ -8215,7 +8651,7 @@ This removed the hardcoded ID references in autoShutter.vdb
 
 <li>xxx/iocBoot/iocvxWorks/motor.substitutions</li>
 <ul>
-<li>3.13.9 will require macros that include masros to be enclosed in quotes
+<li>3.14.9 will require macros that include masros to be enclosed in quotes
 </ul>
 
 <li>xxx/iocBoot/iocvxWorks/pf4bank.req</li>
@@ -8246,26 +8682,31 @@ Added call to save_restoreSet_UseStatusPVs()
 
 <li>xxx/iocBoot/iocvxWorks/scanParms.substitutions</li>
 <ul>
-<li>3.13.9 will require macros that include masros to be enclosed in quotes
+<li>3.14.9 will require macros that include masros to be enclosed in quotes
 </ul>
 
 <li>xxx/iocBoot/iocvxWorks/st.cmd</li>
 <ul>
+<li>Added ramp_tweak, ASRP mirror table, spare busy record
+, load scans and saveData in the standard way, individually disabled user transforms, comments for pf4, more autosave examples
 <li>Modified PF4 implementation.
 <li>Modified calling sequence for femto snl application.
 <li>pzt.db needs PORT= argument.
 <li>arrayCalcSize should have been aCalcArraySize
-<li>3.13.9 will require macros that include masros to be enclosed in quotes
+<li>3.14.9 will require macros that include masros to be enclosed in quotes
 </ul>
 
 <li>xxx/iocBoot/iocvxWorks/vme.cmd</li>
 <ul>
+<li>New scaler database option (better calcs, but not backward compatible with autosaved calcs for standard database)
 <li>- removed Highland V544.
 - added OMS MAXv.
 </ul>
 
 <li>xxx/xxxApp/op/adl/xxx.adl</li>
 <ul>
+<li>scaler with modified calcs; recVME-> recVme; more pf4 attempts; busy record; per-record transform disable; VME_DAC is back for now; ipUnidig_top
+<li>XIA shutter and slit; ASRP mirror table
 <li>Modified PF4 parameters.
 <li>Hooked in femto and PF4 MEDM screens.
 <li>Added Eurotherm 2k
@@ -8273,6 +8714,7 @@ Added call to save_restoreSet_UseStatusPVs()
 
 <li>xxx/xxxApp/src/Makefile</li>
 <ul>
+<li>changed handelSrc to handel (newer versions of dxp build libhandel)
 <li>Modified handel to handelSrc
 <li>Added needed libraries for xMAP on Cygwin and WIN32
 <li>Add USB support for Saturn on Linux
@@ -8303,9 +8745,14 @@ Added call to save_restoreSet_UseStatusPVs()
 
 <li>xxx/xxxApp/src/iocxxx_solarisInclude.dbd</li>
 <ul>
+<li>changed motorRecord.dbd to motorSupport.dbd
 <li>include motorSimSupport.dbd
 </ul>
 
+<li>xxx/xxxApp/src/xxxCommonInclude.dbd
+<ul>
+<li>motorRecord.dbd is already included by motorSupport.dbd
+</ul>
 <li>xxx/xxxApp/src/xxxMain.c</li>
 <ul>
 <li>added epicsExit
