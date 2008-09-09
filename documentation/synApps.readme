@@ -1,4 +1,4 @@
-	synApps 5.2
+	synApps 5.3
 
 synApps is a collection of custom EPICS software (source code, EPICS databases,
 client scripts, MEDM display files, executables, etc.) intended to support most
@@ -13,10 +13,10 @@ members of the EPICS collaboration:
 
 allenBradley v2-1    for communicating with Allen Bradley PLC's (ANL)
 ipac         v2-8    required for IndustryPack support (ANL)
-asyn         v4-6    required by ccd, dac128V, dxp, ip, ip330, ipUnidig, love,
+asyn         v4-9    required by ccd, dac128V, dxp, ip, ip330, ipUnidig, love,
                      mca, motor, optics, quadEM (ANL)
 seq         v2-0-11  for SNL programs in synApps (SLAC)
-stream      v2-1*    configurable device support for message-based devices
+stream      v2-2/3   configurable device support for message-based devices
 vxStats     v1-7-2e  vxWorks statistics modified by us (SNS)
 genSub      v1-6a    the genSub record (Observatory Sciences)
 
@@ -31,7 +31,6 @@ autosave      save-restore
 calc          run-time expression evaluation
 camac         CAMAC support
 ccd           scientific CCD detectors, including Bruker, MAR, and Roper
-              detectors
 config        (directory) build files, including the top-level make file
 dac128V       IndustryPack DAC
 dxp           XIA's DXP digital signal processor
@@ -43,10 +42,12 @@ love          Love controllers
 mca           multichannel analyzers
 motor         motors
 optics        optical table, monochromators, slits, etc.
+pilatus       supports Dectris pixel-array detector
 quadEM        4-channel electrometer
 sscan         sscan record and related software
 std           misc EPICS software
 utils         (directory) miscellaneous tools
+vac           supports vacuum controllers
 vme           vme-specific support
 xxx           sample user-application directory
 
@@ -318,8 +319,7 @@ should be very simple:
 
 3) Set the environment variable EPICS_HOST_ARCH to the architecture (and
    compiler, if there is a choice) on which you are building. I used
-   solaris-sparc-gnu, and linux-x86.  I wasn't able to get solaris-sparc to
-   work.
+   solaris-sparc-gnu, and linux-x86.
 
 4) In support/config, run "make release".
 
@@ -474,30 +474,27 @@ following files will be touched:
 3.1) xxx/iocBoot/ioc*/st.cmd
 ----------------------------
 
-The distribution copy of this file contains commands to load nearly all of the
-compiled software in synApps.  But it loads only those databases consistent
-with a very minimal set of hardware.
+This is the file run by the IOC at boot time.  It loads an executable built in
+the ioc directory (e.g., xxx, or xxx.munch), sets parameters to configure that
+software, makes calls to that software to configure it for a particular set of
+hardware, and loads databases from synApps modules.  Mostly, it sources other
+.cmd files that do these same things.
 
-This file is probably worth studying.  It is reasonably well commented, and it
-contains dbLoadRecords() commands for most of the EPICS databases in synApps.
+This file, and the files it sources, are probably worth studying.  They are
+reasonably well commented, and contain dbLoadRecords() commands for most of
+the EPICS databases in synApps. 
 
 3.2) Motors
 -----------
 
-To load more motors, add lines to the file
-xxx/iocBoot/ioc*/motor.substitutions.
+To load more motors, add lines to the file xxx/iocBoot/ioc*/motor.substitutions.
+For motors controlled by a VME board, edit vme.cmd to specify the hardware
+address, etc.  For motors controlled through a serial connection, edit
+serial.cmd.
 
 If you want the new motors to work with the 'AllStop' button ("xxx:allstop.VAL"
--- see the top-level medm display xxx.adl), select the appropriate version of
-all_com_?.db, or edit and load a customized version of the database.  (As
-delivered, xxxApp loads the database all_com_16.db, which supports 16 motors. 
-support/std/stdApp/Db contains versions for various numbers of motors.)
-
-If you want to manage positions and settings of the new motors using the
-"Save", Restore", and "Compare" buttons on the supplied top-level medm display,
-edit the files xxx/xxxApp/op/burt/settings.req and
-xxx/xxxApp/op/burt/positions.req.  The request files supporting this are not
-well maintained.  Most folks use autosave (next paragraph).
+-- see the top-level medm display xxx.adl), load the database
+$(MOTOR)/db/motorUtil.db, and run the command "motorUtilInit("xxx:")".
 
 If you want the ioc automatically to save positions and settings of the new
 motors, and restore them when the crate reboots, add lines to the files
@@ -618,13 +615,13 @@ details.  A package containing two stringCalcs and an 'asyn' record (called a
 and GPIB-device support.
 
 3.9) array-expression support
-------------------------------
+-----------------------------
 Run-time programming involving arrays and/or numbers can be done with
 userArrayCalcs, which resemble userCalcs closely, but differ in significant
 details.
 
 3.10) sequence support
----------------------
+----------------------
 Run-time programming of sequences is possible using the sseq record and related
 medm displays yySseq.adl
 
@@ -635,9 +632,6 @@ calculations (e.g., to support dichroism experiments) can be done with the
 4step.db database and the related medm display, 4step.adl. The entire
 measurement sequence can be involved in a scan by treating the 4step database
 as you would treat the scaler or mca software.
-
-3.12) Orientation matrix
-------------------------
 
 
 4) Using synApps
@@ -737,18 +731,22 @@ Look for .adl files and copy them to a directory
 Example of use:
     copyAdl $SYNAPPS/support adl_files
 
-==============================================
+convertIocFiles.py
+------------------
+This file, and its dependents are intended to help convert an ioc directory
+from one version of EPICS to another, by collecting data from an existing
+ioc directory, and attempting to correctly edit files in a new ioc directory.
+See utils/HowToUse_convertIocFiles.txt for more.
 
-synApps is available in prebuilt form, on request.  The prebuilt version does
-not have to be built again unless you want to add or modify C code or database
-definition (.dbd) code, or to run it on hardware other than that for which it
-was built.  If you need merely to modify startup files, databases, medm
-displays, autosave files, and the like, then you don't need to build synApps,
-nor do you need to have built EPICS base to use prebuilt synApps.  Further, if
-you don't have to build synApps, and you don't have other reasons for wanting
-to build base or extensions, then you don't need a VxWorks developer's license
-to use the prebuilt distribution.  You still need a VxWorks target license for
-each processor, of course.
+mdautils-src.tar.gz
+-------------------
+This tar file contains utility programs for using data files written by
+the sscan module's "saveData".  These programs were written by Dohn Arms,
+and contributed to synApps.
+
+
+
+==============================================
 
 The custom EPICS software contained in synApps should not be assumed to be
 compatible with the medm displays, burt scripts, etc. of any previous releases
@@ -761,5 +759,5 @@ excerpts from autosave/restore request files, substitution files and st.cmd).
 Tim Mooney (mooney@aps.anl.gov)
 Beamline Controls & Data Acquisition Group
 Advanced Photon Source, Argonne National Laboratory
-01/05/2007
+09/09/2008
 
