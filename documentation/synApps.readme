@@ -34,7 +34,7 @@ ccd           scientific CCD detectors, including Bruker, MAR, and Roper
 config        (directory) build files, including the top-level make file
 dac128V       IndustryPack DAC
 dxp           XIA's DXP digital signal processor
-ebrick        support and sample application for low-cost PC-104 based IOC
+ebrick        support and sample application for low-cost PC-104 and uCDIMM based IOC
 ip            various serial devices
 ip330         IndustryPack ADC
 ipUnidig      IndustryPack digital I/O
