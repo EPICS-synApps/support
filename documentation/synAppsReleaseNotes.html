@@ -6705,6 +6705,12 @@ Changed format of bad pixel file
 
 <h2>sscan</h2>
 
+<P>Removed race conditions affecting callback counters, and added a mutex to
+protect them.  Changed timing of when to renew positioner links from
+now-last_scan_start to now-last_scan_end.
+
+<P>display_fields.adl uses new link-help displays from std R2.6
+
 <P>The base name for files written by saveData can now be selected at run time
 by the user.
 
@@ -6880,6 +6886,11 @@ PREFIX_SIZE, currently 10, including null.
 
 <li>sscan/sscanApp/src/sscanRecord.c</li>
 <ul>
+
+<li>v5.53 Removed race conditions affecting callback counters, and added mutex to
+protect them.  Changed timing of when to renew positioner links from
+now-last_scan_start to now-last_scan_end.
+<li>post arrays during scan
 <li>v5.41 CMND=6,7: like 4,5 but also clear readback PVs
 <li>make sure autosave did not restore an illegal NPTS value after init_record
 </ul>
