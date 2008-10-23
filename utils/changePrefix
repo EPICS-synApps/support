@@ -58,7 +58,7 @@ doSed "s/${old}/${new}/g" Makefile
 
 printf "\r%-50s" "iocBoot/"
 cd ${TOP}/iocBoot
-if [ -f ioc${old} ]; then
+if [ -d ioc${old} ]; then
 	mv ioc${old} ioc${new}
 fi
 for dir in ioc*
