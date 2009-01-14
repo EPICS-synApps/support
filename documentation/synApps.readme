@@ -1,4 +1,4 @@
-	synApps 5.3
+	synApps 5.4
 
 synApps is a collection of custom EPICS software (source code, EPICS databases,
 client scripts, MEDM display files, executables, etc.) intended to support most
@@ -7,18 +7,21 @@ experiment station.  Several instances of this application can work together to
 support an entire SR beamline.  synApps is also intended to underly additional
 software that may be station or beamline specific.
 
-This release of synApps is compatible with EPICS release 3.14.8, Tornado 2.02,
+This release of synApps is compatible with EPICS release 3.14.10, Tornado 2.2,
 and the following EPICS modules/versions produced and maintained by other
 members of the EPICS collaboration:
 
 allenBradley v2-1    for communicating with Allen Bradley PLC's (ANL)
-ipac         v2-8    required for IndustryPack support (ANL)
-asyn         v4-9    required by ccd, dac128V, dxp, ip, ip330, ipUnidig, love,
-                     mca, motor, optics, quadEM (ANL)
-seq         v2-0-11  for SNL programs in synApps (SLAC)
-stream      v2-2/3   configurable device support for message-based devices
-vxStats     v1-7-2e  vxWorks statistics modified by us (SNS)
-genSub      v1-6a    the genSub record (Observatory Sciences)
+ipac         v2-10   required for IndustryPack support (ANL)
+asyn         v4-10   required by many modules (ANL)
+seq         v2-0-12  for SNL programs in synApps (SLAC)
+stream      v2-4     configurable device support for message-based devices
+vxStats     v1-7-2g  vxWorks statistics modified by us (SNS)
+
+Previous versions of synApps included and relied on the genSub module.  In EPICS
+3.14.10, a replacement for the genSub record, called the asub record, is
+included in base, and synApps has been modified to use it instead of the genSub
+record.
 
 For convenience, this distribution includes the module versions listed above,
 in place and ready to build, with minor modifications to build files.  A few of
@@ -27,11 +30,16 @@ MEDM displays, etc.
 
 Here's a list of the modules and directories that actually are part of synApps:
 
+areaDetector  support for area (2-D) detectors, including CCDs, pixel array
+              detectors, and online imaging plates.  This module replaces the
+			  ccd and pilatus modules, which are nevertheless included in this
+			  version of synApps.
 autosave      save-restore
+busy          the busy record, previously supplied by the sscan module
 calc          run-time expression evaluation
 camac         CAMAC support
 ccd           scientific CCD detectors, including Bruker, MAR, and Roper
-config        (directory) build files, including the top-level make file
+configure     (directory) build files, including the top-level make file
 dac128V       IndustryPack DAC
 dxp           XIA's DXP digital signal processor
 ebrick        support and sample application for low-cost PC-104 and uCDIMM based IOC
@@ -40,28 +48,31 @@ ip330         IndustryPack ADC
 ipUnidig      IndustryPack digital I/O
 love          Love controllers
 mca           multichannel analyzers
+modbus        support for ModBus-protocol devices over TCP, serial RTU, and
+              serial ASCII links
 motor         motors
 optics        optical table, monochromators, slits, etc.
 pilatus       supports Dectris pixel-array detector
 quadEM        4-channel electrometer
 sscan         sscan record and related software
 std           misc EPICS software
+stream        Dirk Zimoch's streamDevice, in a module-flavored wrapper
 utils         (directory) miscellaneous tools
 vac           supports vacuum controllers
 vme           vme-specific support
 xxx           sample user-application directory
 
-See config/MASTER_RELEASE for a complete set of compatible module versions. In
+See configure/RELEASE for a complete set of compatible module versions. In
 most cases, there is some negative consequence of using a different version
-than the one specified in MASTER_RELEASE.
+than the one specified in configure/RELEASE.
 
-synApps includes software developed by the Beamline Controls & Data
-Acquisition and the Accelerator Controls groups of the Advanced Photon Source
-(APS); by developers in APS Collaborative Access Teams -- notably, Mark Rivers
-(CARS-CAT); and by developers in the EPICS collaboration outside of the APS --
-notably, those at the Swiss Light Source, the Diamond Light Source, the National
-Synchrotron Light Source, the Australian Light Source, and the Canadian Light
-Source.
+synApps includes software developed by the Beamline Controls & Data Acquisition
+and the Accelerator Controls groups of the Advanced Photon Source (APS); by
+developers in APS Collaborative Access Teams -- notably, Mark Rivers (CARS-CAT);
+and by developers in the EPICS collaboration outside of the APS -- notably,
+those at the Swiss Light Source/Paul Scherrer Institut, the Diamond Light
+Source, the National Synchrotron Light Source, the Australian Light Source, and
+the Canadian Light Source.
 
 Aside from EPICS databases, SNL (State Notation Language) programs, and the
 like, synApps contains the following code:
@@ -69,7 +80,8 @@ like, synApps contains the following code:
 Record support
     aCalcout   calcout record extended to handle array expressions
     busy       utility record: calls recGblFwdLink only when its
-               VAL field makes a transition to zero.
+               VAL field is zero, allowing CA clients, and asyn drivers to
+			   participate in EPICS putNotify (ca_put_callback()) operations.
     camac      user/database interface to CAMAC bus
                Execute a CAMAC CNAF command
     dxp	       XIA's DXP digital signal processor
@@ -103,69 +115,243 @@ Record support
     timestamp  (written by Stephanie Allison/SLAC) Needed by the vxStats
                module, but apparently not available in a published module.
 
-Device/driver support
-	Acromag IP-330 ADC as waveform recorder
-	Acromag AVME9440 digital I/O
-	Advanced Control Systems driver support.
-	AllenBradley PLC (allenBradley module)
-	APS MRD100 
-	Asyn generic device support (asyn module)
-	AVME 9210 analog output
-	Bunch clock generator (Frank Lenkszus)
-	Canberra AIM multichannel analyzer, and various ICB modules
-	Struck STR7201/SIS3806 as multichannel and normal scaler
-	dac128V 8-channel DAC
-	Eurotherm temp controller
-	GP307 GPIB
-	GPIB Heidenhain encoder
-	GPIB Keithley model 199 DMM
-	Generic A32/D32 VME Access 
-	Generic GPIB record
-	Greenspring IP-Unidig digital I/O IP module
-	HP 10895A Laser Axis (interferometer) board
-	Heidenhain AWE1024 encoder interpolator
-	Heidenhain IK320 VME counter/interpolator (Till Straumann/BESSY)
-	Heidenhain ND261 and related serial interface boxes
-	HPS SensaVac 937
-	Love Controllers, via asyn
-	MKS vacuum gauge controller
-	MPC ion pump controller
-	Asyn ICB support, used by Canberra ICB modules
-	Asyn MCA support, used by Canberra AIM multichannel analyzer and
-	Queensgate Piezo drive.
-	Struck STR7201 or SIS 380x, and SIS3820 multi-channel scaler
-	VMI4116 16-bit D/A converter
-	Varoc SSI encoder interface board
-	StringParm device support for various records
-	IP330 ADC
-	Extended PID (epid) record device support
-	motor controllers:
-	   soft support
-	   Intelligent Motion Systems IM483PL, and IM483SM
-	   Physik Instrumente PIC630, PIC844, PIC848, PIC662, PIC862, PIE710
-	   Newport MM3000, MM4000/5, PM500, ESP300, and XPSC8
-	   Oregon Micro Systems VME8/44, VME58, MAXv, and PC68/78
-	   E500 (a CAMAC module)
-	   ACS Tech80 SPiiPlus
-	   Advanced Control Systems MCB-4B
-	   MDrive
-	   MXmotor
-	   Mclennan PM304
-	   Delta Tau PMAC
-	   Micos MoCo
-	   Micro Mo MVP2001
-	   Faulhaber MCDC2805
-	   Oriel EMC18011
-	   Parker/Compumotor PC6K
-	   NewFocus PMNC87xx
-	   ThorLabs MDT695
-	scalers:
-	   Joerger VSC series
-	   Joerger VS series
-	   CAMAC DSP RTC-018 timer and QS-450 quad scaler
-	   Struck STR7201, SIS 38xx
-	soft device support for the aCalcout and sCalcout records
-	XIA dxp 
+Device/driver support in or included with synApps
+record     bus-type	 codename                     username
+----------------------------------------------------------
+acalcout   CONSTANT  devaCalcoutSoft              Soft Channel")
+ai         AB_IO     devAiAb1771Ife               AB-1771IFE")
+ai         AB_IO     devAiAb1771Ife0to5V          AB-1771IFE-0to5Volt")
+ai         AB_IO     devAiAb1771IfeMa             AB-1771IFE-4to20MA")
+ai         AB_IO     devAiAb1771IfeSe             AB-1771IFE-SE")
+ai         AB_IO     devAiAb1771Il                AB-1771IL-Analog In")
+ai         AB_IO     devAiAb1771IrCopper          AB-1771RTD-Copper")
+ai         AB_IO     devAiAb1771IrPlatinum        AB-1771RTD-Platinum")
+ai         AB_IO     devAiAb1771Ixe               AB-1771IXE-Millivolt In")
+ai         AB_IO     devAiAbSlcDcm                AB-SLC500DCM")
+ai         AB_IO     devAiAbSlcDcmSigned          AB-SLC500DCM-Signed")
+ai         BBGPIB_IO devAiAX301                   PZT Bug")
+ai         CONSTANT  devAiTodSeconds              Sec Past Epoch")
+ai         GPIB_IO   devAiGP307Gpib               Vg307 GPIB Instrument")
+ai         GPIB_IO   devAiHeidAWE1024             Heidenhein Encoder")
+ai         GPIB_IO   devAiKeithleyDMM199          KeithleyDMM199")
+ai         GPIB_IO   devGpib                      GPIB init/report")
+ai         INST_IO   asynAiFloat64                asynFloat64")
+ai         INST_IO   asynAiFloat64Average         asynFloat64Average")
+ai         INST_IO   asynAiInt32                  asynInt32")
+ai         INST_IO   asynAiInt32Average           asynInt32Average")
+ai         INST_IO   devAiAb1791                  Allen Bradley 1791")
+ai         INST_IO   devAiAbDcm                   Ab Dcm")
+ai         INST_IO   devAiClusts                  VX stats clusts")
+ai         INST_IO   devAiHeidND261               asyn ai HeidND261")
+ai         INST_IO   devAiMKS                     HPS SensaVac 937")
+ai         INST_IO   devAiMPC                     asyn MPC")
+ai         INST_IO   devAiStats                   VX stats")
+ai         INST_IO   devAiStrParm                 asyn ai stringParm")
+ai         INST_IO   devAiTPG261                  asyn TPG261")
+ai         INST_IO   devAiTelevac                 asyn Televac")
+ai         INST_IO   devInterfaceAI1              InterfaceAI1")
+ai         VME_IO    devAiA32Vme                  Generic A32 VME")
+ai         VME_IO    devAiAvmeMRD                 devAvmeMRD")
+ai         VME_IO    devAiBunchClkGen             APS Bunch Clock")
+ai         VME_IO    devAiVaroc                   ESRF Varoc SSI Encoder Iface")
+ai         VME_IO    devIK320Ai                   Heidenhain IK320")
+ai         VME_IO    devIK320GroupAi              Heidenhain IK320 Group")
+ao         AB_IO     devAoAb1771Ofe               AB-1771OFE")
+ao         AB_IO     devAoAbSlcDcm                AB-SLC500DCM")
+ao         BBGPIB_IO devAoAX301                   PZT Bug")
+ao         GPIB_IO   devAoHeidAWE1024             Heidenhein Encoder")
+ao         GPIB_IO   devAoKeithleyDMM199          KeithleyDMM199")
+ao         INST_IO   asynAoFloat64                asynFloat64")
+ao         INST_IO   asynAoInt32                  asynInt32")
+ao         INST_IO   devAoAb1791                  Allen Bradley 1791")
+ao         INST_IO   devAoAbDcm                   Ab Dcm")
+ao         INST_IO   devAoEurotherm               asyn ao Eurotherm")
+ao         INST_IO   devAoMPC                     asyn MPC")
+ao         INST_IO   devAoStats                   VX stats")
+ao         INST_IO   devAoStrParm                 asyn ao stringParm")
+ao         INST_IO   devAoTPG261                  asyn TPG261")
+ao         INST_IO   devInterfaceAO1              InterfaceAO1")
+ao         VME_IO    devAoA32Vme                  Generic A32 VME")
+ao         VME_IO    devAoAvme9210                AVME-9210")
+ao         VME_IO    devAoBunchClkGen             APS Bunch Clock")
+ao         VME_IO    devAoVMI4116                 VMIVME-4116")
+asyn       INST_IO   asynRecordDevice             asynRecordDevice")
+bi         AB_IO     devBiAb                      AB-Binary Input")
+bi         AB_IO     devBiAb16                    AB-16 bit BI")
+bi         AB_IO     devBiAb32                    AB-32 bit BI")
+bi         GPIB_IO   devBiGP307Gpib               Vg307 GPIB Instrument")
+bi         GPIB_IO   devBiHeidAWE1024             Heidenhein Encoder")
+bi         GPIB_IO   devBiKeithleyDMM199          KeithleyDMM199")
+bi         INST_IO   asynBiInt32                  asynInt32")
+bi         INST_IO   asynBiUInt32Digital          asynUInt32Digital")
+bi         INST_IO   devBiAbDcm                   Ab Dcm")
+bi         INST_IO   devBiMPC                     asyn MPC")
+bi         INST_IO   devBiStrParm                 asyn bi stringParm")
+bi         INST_IO   devBiTPG261                  asyn TPG261")
+bi         INST_IO   devBiTelevac                 asyn Televac")
+bi         VME_IO    devBiA32Vme                  Generic A32 VME")
+bi         VME_IO    devBiAvme9440                AVME9440 I")
+bi         VME_IO    devBiAvmeMRD                 devAvmeMRD")
+bi         VME_IO    devBiBunchClkGen             APS Bunch Clock")
+bi         VME_IO    devBiHP10895LaserAxis        HP interferometer")
+bo         AB_IO     devBoAb                      AB-Binary Output")
+bo         AB_IO     devBoAb16                    AB-16 bit BO")
+bo         AB_IO     devBoAb32                    AB-32 bit BO")
+bo         BBGPIB_IO devBoAX301                   PZT Bug")
+bo         GPIB_IO   devBoGP307Gpib               Vg307 GPIB Instrument")
+bo         GPIB_IO   devBoHeidAWE1024             Heidenhein Encoder")
+bo         GPIB_IO   devBoKeithleyDMM199          KeithleyDMM199")
+bo         INST_IO   asynBoInt32                  asynInt32")
+bo         INST_IO   asynBoUInt32Digital          asynUInt32Digital")
+bo         INST_IO   devBoAbDcm                   Ab Dcm")
+bo         INST_IO   devBoMPC                     asyn MPC")
+bo         INST_IO   devBoStrParm                 asyn bo stringParm")
+bo         INST_IO   devBoTPG261                  asyn TPG261")
+bo         VME_IO    devBoA32Vme                  Generic A32 VME")
+bo         VME_IO    devBoAvme9440                AVME9440 O")
+bo         VME_IO    devBoAvmeMRD                 devAvmeMRD")
+bo         VME_IO    devBoBunchClkGen             APS Bunch Clock")
+bo         VME_IO    devBoHP10895LaserAxis        HP interferometer")
+busy       CONSTANT  devBusySoft                  Soft Channel")
+busy       INST_IO   asynBusyInt32                asynInt32")
+epid       CONSTANT  devEpidSoft                  Soft Channel")
+epid       INST_IO   devEpidFast                  Fast Epid")
+longin     AB_IO     devLiAbSlcDcm                AB-SLC500DCM")
+longin     GPIB_IO   devLiHeidAWE1024             Heidenhein Encoder")
+longin     GPIB_IO   devLiKeithleyDMM199          KeithleyDMM199")
+longin     INST_IO   asynLiInt32                  asynInt32")
+longin     INST_IO   asynLiUInt32Digital          asynUInt32Digital")
+longin     INST_IO   devLiAbDcm                   Ab Dcm")
+longin     INST_IO   devLiStrParm                 asyn li stringParm")
+longin     VME_IO    devLiA32Vme                  Generic A32 VME")
+longin     VME_IO    devLiAvmeMRD                 devAvmeMRD")
+longin     VME_IO    devLiHP10895LaserAxis        HP interferometer")
+longout    AB_IO     devLoAbSlcDcm                AB-SLC500DCM")
+longout    BBGPIB_IO devLoAX301                   PZT Bug")
+longout    GPIB_IO   devLoHeidAWE1024             Heidenhein Encoder")
+longout    GPIB_IO   devLoKeithleyDMM199          KeithleyDMM199")
+longout    INST_IO   asynLoInt32                  asynInt32")
+longout    INST_IO   asynLoUInt32Digital          asynUInt32Digital")
+longout    INST_IO   devLoAbDcm                   Ab Dcm")
+longout    INST_IO   devLoStrParm                 asyn lo stringParm")
+longout    VME_IO    devLoA32Vme                  Generic A32 VME")
+longout    VME_IO    devLoHP10895LaserAxis        HP interferometer")
+mbbi       AB_IO     devMbbiAb                    AB-Binary Input")
+mbbi       AB_IO     devMbbiAb16                  AB-16 bit BI")
+mbbi       AB_IO     devMbbiAb32                  AB-32 bit BI")
+mbbi       AB_IO     devMbbiAbAdapterStat         AB-Adapter Status")
+mbbi       AB_IO     devMbbiAbCardStat            AB-Card Status")
+mbbi       GPIB_IO   devMbbiHeidAWE1024           Heidenhein Encoder")
+mbbi       GPIB_IO   devMbbiKeithleyDMM199        KeithleyDMM199")
+mbbi       INST_IO   asynMbbiInt32                asynInt32")
+mbbi       INST_IO   asynMbbiUInt32Digital        asynUInt32Digital")
+mbbi       INST_IO   devMbbiAbDcm                 Ab Dcm")
+mbbi       INST_IO   devMbbiTPG261                asyn TPG261")
+mbbi       VME_IO    devMbbiA32Vme                Generic A32 VME")
+mbbi       VME_IO    devMbbiAvme9440              AVME9440 I")
+mbbi       VME_IO    devMbbiAvmeMRD               devAvmeMRD")
+mbbi       VME_IO    devMbbiHP10895LaserAxis      HP interferometer")
+mbbiDirect AB_IO     devMbbiDirectAb              AB-Binary Input")
+mbbiDirect AB_IO     devMbbiDirectAb16            AB-16 bit BI")
+mbbiDirect AB_IO     devMbbiDirectAb32            AB-32 bit BI")
+mbbiDirect INST_IO   asynMbbiDirectUInt32Digital  asynUInt32Digital")
+mbbo       AB_IO     devMbboAb                    AB-Binary Output")
+mbbo       AB_IO     devMbboAb16                  AB-16 bit BO")
+mbbo       AB_IO     devMbboAb32                  AB-32 bit BO")
+mbbo       GPIB_IO   devMbboHeidAWE1024           Heidenhein Encoder")
+mbbo       GPIB_IO   devMbboKeithleyDMM199        KeithleyDMM199")
+mbbo       INST_IO   asynMbboInt32                asynInt32")
+mbbo       INST_IO   asynMbboUInt32Digital        asynUInt32Digital")
+mbbo       INST_IO   devMbboAbDcm                 Ab Dcm")
+mbbo       INST_IO   devMbboMPC                   asyn MPC")
+mbbo       INST_IO   devMbboTPG261                asyn TPG261")
+mbbo       VME_IO    devIK320Dir                  Heidenhain IK320 Sign")
+mbbo       VME_IO    devIK320Funct                Heidenhain IK320 Command")
+mbbo       VME_IO    devIK320ModeX3               Heidenhain IK320 X3 Mode")
+mbbo       VME_IO    devMbboA32Vme                Generic A32 VME")
+mbbo       VME_IO    devMbboAvme9440              AVME9440 O")
+mbbo       VME_IO    devMbboHP10895LaserAxis      HP interferometer")
+mbboDirect AB_IO     devMbboDirectAb              AB-Binary Output")
+mbboDirect AB_IO     devMbboDirectAb16            AB-16 bit BO")
+mbboDirect AB_IO     devMbboDirectAb32            AB-32 bit BO")
+mbboDirect INST_IO   asynMbboDirectUInt32Digital  asynUInt32Digital")
+mca        CONSTANT  devMCA_soft                  Soft Channel")
+mca        INST_IO   devMcaAsyn                   asynMCA")
+mca        VME_IO    devSTR7201                   Struck STR7201 MCS")
+motor      CONSTANT  devMotorSoft                 Soft Channel")
+motor      INST_IO   devMotorAsyn                 asynMotor")
+motor      VME_IO    devE500                      E500")
+motor      VME_IO    devESP300                    ESP300")
+motor      VME_IO    devIM483PL                   IM483PL")
+motor      VME_IO    devIM483SM                   IM483SM")
+motor      VME_IO    devMAXv                      OMS MAXv")
+motor      VME_IO    devMCB4B                     ACS MCB-4B")
+motor      VME_IO    devMCDC2805                  MCDC2805")
+motor      VME_IO    devMDrive                    MDrive")
+motor      VME_IO    devMM3000                    MM3000")
+motor      VME_IO    devMM4000                    MM4000")
+motor      VME_IO    devMVP2001                   MVP2001")
+motor      VME_IO    devMicos                     Micos MoCo")
+motor      VME_IO    devMotorSim                  Motor Simulation")
+motor      VME_IO    devOMS                       OMS VME8/44")
+motor      VME_IO    devOms58                     OMS VME58")
+motor      VME_IO    devOmsPC68                   OMS PC68/78")
+motor      VME_IO    devPC6K                      PC6K")
+motor      VME_IO    devPIC630                    PI C630")
+motor      VME_IO    devPIC662                    PIC662")
+motor      VME_IO    devPIC844                    PIC844")
+motor      VME_IO    devPIC848                    PIC848")
+motor      VME_IO    devPIC862                    PIC862")
+motor      VME_IO    devPIE516                    PIE516")
+motor      VME_IO    devPIE710                    PIE710")
+motor      VME_IO    devPIE816                    PIE816")
+motor      VME_IO    devPM304                     Mclennan PM304")
+motor      VME_IO    devPM500                     PM500")
+motor      VME_IO    devPMNC87xx                  PMNC87xx")
+motor      VME_IO    devPmac                      PMAC")
+scalcout   CONSTANT  devsCalcoutSoft              Soft Channel")
+scaler     INST_IO   devScalerAsyn                Asyn Scaler")
+scaler     VME_IO    devScaler                    Joerger VSC8/16")
+scaler     VME_IO    devScalerCamac               CAMAC scaler")
+scaler     VME_IO    devScalerSTR7201             Struck STR7201 Scaler")
+scaler     VME_IO    devScaler_VS                 Joerger VS")
+stringin   CONSTANT  devSiTodString               Time of Day")
+stringin   GPIB_IO   devSiGP307Gpib               Vg307 GPIB Instrument")
+stringin   GPIB_IO   devSiHeidAWE1024             Heidenhein Encoder")
+stringin   GPIB_IO   devSiKeithleyDMM199          KeithleyDMM199")
+stringin   INST_IO   asynSiOctetCmdResponse       asynOctetCmdResponse")
+stringin   INST_IO   asynSiOctetRead              asynOctetRead")
+stringin   INST_IO   asynSiOctetWriteRead         asynOctetWriteRead")
+stringin   INST_IO   devSiMPC                     asyn MPC")
+stringin   INST_IO   devSiSeq                     Sequencer Internals")
+stringin   INST_IO   devSiStrParm                 asyn si stringParm")
+stringin   INST_IO   devSiTPG261                  asyn TPG261")
+stringin   INST_IO   devStringinStats             VX stats")
+stringout  GPIB_IO   devSoHeidAWE1024             Heidenhein Encoder")
+stringout  GPIB_IO   devSoKeithleyDMM199          KeithleyDMM199")
+stringout  INST_IO   asynSoOctetWrite             asynOctetWrite")
+stringout  INST_IO   devSoEurotherm               asyn so Eurotherm")
+stringout  INST_IO   devSoMPC                     asyn MPC")
+stringout  INST_IO   devSoStrParm                 asyn so stringParm")
+stringout  VME_IO    devIK320Parm                 Heidenhain IK320 Parameter")
+swait      CONSTANT  devSWaitIoEvent              Soft Channel")
+waveform   INST_IO   asynFloat32ArrayWfIn         asynFloat32ArrayIn")
+waveform   INST_IO   asynFloat32ArrayWfOut        asynFloat32ArrayOut")
+waveform   INST_IO   asynFloat64ArrayWfIn         asynFloat64ArrayIn")
+waveform   INST_IO   asynFloat64ArrayWfOut        asynFloat64ArrayOut")
+waveform   INST_IO   asynInt16ArrayWfIn           asynInt16ArrayIn")
+waveform   INST_IO   asynInt16ArrayWfOut          asynInt16ArrayOut")
+waveform   INST_IO   asynInt32ArrayWfIn           asynInt32ArrayIn")
+waveform   INST_IO   asynInt32ArrayWfOut          asynInt32ArrayOut")
+waveform   INST_IO   asynInt8ArrayWfIn            asynInt8ArrayIn")
+waveform   INST_IO   asynInt8ArrayWfOut           asynInt8ArrayOut")
+waveform   INST_IO   asynWfOctetCmdResponse       asynOctetCmdResponse")
+waveform   INST_IO   asynWfOctetRead              asynOctetRead")
+waveform   INST_IO   asynWfOctetWrite             asynOctetWrite")
+waveform   INST_IO   asynWfOctetWriteRead         asynOctetWriteRead")
+waveform   VME_IO    devWfBunchClkGen             APS Bunch Clock")
+
+
 
 Miscellaneous C code
 
@@ -200,46 +386,53 @@ the module 'support/xxx', and is customized/extended by the end user to
 particular applications and sets of hardware.  To support several applications,
 you might create several user trees, each supporting several ioc's, and link
 all of those trees to the support tree.  (If you haven't run into the term
-'ioc' yet, it stands for Input/Output Controller.  Typically, this is a VME
+'ioc' yet, it stands for Input/Output Controller.  Initially, this was a VME
 crate with a processor running EPICS under the VxWorks operating system, but
 beginning with EPICS 3.14, an ioc can also be a set of tasks on a workstation
-running Linux, Windows, Mac OS, SunOS, and a few other operating systems.)
+running Linux, Windows, Solaris, RTEMS, Mac OS, and probably other operating systems.)
 Here's what a complete installation might look like (much detail omitted) with
 all the files you will have to edit before you can build or boot an ioc:
 
 support/
+	Makefile
+	Makefile.win32-x86
+	all_adl/
     allenBradley/
+	areaDetector/
     asyn/
+	busy/
     calc/
     camac/
     ccd/
-    config/
-        CONFIG
-        MASTER_RELEASE                       <-- EDIT to build
-        Makefile                             <-- EDIT to build
+    configure/
+        CONFIG_SITE
+        RELEASE                         <-- EDIT to build
+		RELEASE.win32-x86
         ...
     dac128V/
     documentation/
     dxp/
 	ebrick/
-    genSub/
     ip/
     ip330/
     ipUnidig/
     ipac/
+		drvIpac/drvIpac.dbd             <-- EDIT to build
     love/
     mca/
+	modbus/
     motor/
         motorApp/
 	    Makefile                         <-- EDIT to build
     optics/
+	pilatus/
     quadEM/
     seq/
     sscan/
     std/
     stream/
-    TAR/
     utils/
+	vac/
     vme/
     vxStats/
     xxx/
@@ -255,42 +448,41 @@ ioc/
             nfsCommands
             ioc1bma/
                 Makefile
-		camac.cmd
-		canberra_1.cmd
-		canberra_13.cmd
-		canberra_3.cmd
-		dac128V.cmd
-		dxp_16.cmd
-		industryPack.cmd
-		ip330.cmd
-		ipUnidig.cmd
-		quadEM.cmd
-		save_restore.cmd
-		serial.cmd
-		vme.cmd
-		st.cmd
-		basic_motor.substitutions
-		canberra_13.substitutions
-		canberra_3.substitutions
-		dac128V.substitutions
-		dxp_16.substitutions
-		ip330Scan.substitutions
-		ipUnidig.substitutions
-		motor.substitutions
-		picMot.substitutions
-		pid_fast.substitutions
-		pid_slow.substitutions
-		quadEM_pid.substitutions
-		scanParms.substitutions
-		vxStats.substitutions
+		        camac.cmd
+		        canberra_1.cmd
+		        canberra_13.cmd
+		        canberra_3.cmd
+		        dac128V.cmd
+		        dxp_16.cmd
+		        industryPack.cmd
+		        ip330.cmd
+		        ipUnidig.cmd
+		        quadEM.cmd
+		        save_restore.cmd
+		        serial.cmd
+		        vme.cmd
+		        st.cmd
+		        basic_motor.substitutions
+		        canberra_13.substitutions
+		        canberra_3.substitutions
+		        dac128V.substitutions
+		        dxp_16.substitutions
+		        ip330Scan.substitutions
+		        ipUnidig.substitutions
+		        motor.substitutions
+		        picMot.substitutions
+		        pid_fast.substitutions
+		        pid_slow.substitutions
+		        quadEM_pid.substitutions
+		        scanParms.substitutions
+		        vxStats.substitutions
                 auto_positions.req 
                 auto_settings.req
                 autosave/
                 cdCommands or envPaths
                 saveData.req 
             ioc1bmb/
-               <much like ioc1bma>
-
+                <much like ioc1bma>
         release.pl
         start_epics_1bma
         start_epics_1bmb
@@ -298,10 +490,14 @@ ioc/
         1bmbApp/
 
     1id/
-    <much like 1bm>
-    .
-    .
-    .
+        <much like 1bm>
+    ...
+
+
+
+LEFT OFF HERE
+
+
 
 1) Building and configuring a user tree
 =======================================
