@@ -502,12 +502,12 @@ LEFT OFF HERE
 1) Building and configuring a user tree
 =======================================
 
-If you have a built copy of EPICS base 3.14.8 or later, then building synApps
+If you have a built copy of EPICS base 3.14.10 or later, then building synApps
 should be very simple:
 
-1) Edit support/config/MASTER_RELEASE to set the variables SUPPORT and
+1) Edit support/configure/RELEASE to set the variables SUPPORT and
    EPICS_BASE.  SUPPORT should be the full path to the synApps support
-   directory.  Also edit support/config/Makefile to select which modules you
+   directory.  Also edit support/Makefile to select which modules you
    want to build.
 
 2) Edit motor/<version>/motorApp/Makefile to select the motor support you want
@@ -515,18 +515,18 @@ should be very simple:
 
 3) Set the environment variable EPICS_HOST_ARCH to the architecture (and
    compiler, if there is a choice) on which you are building. I used
-   solaris-sparc-gnu, and linux-x86.
+   solaris-sparc, and linux-x86.
 
-4) In support/config, run "make release".
+4) In support, run "make release".
 
-5) In support/config, run make.
+5) In support, run make.
 
 You should use the same GNU Make executable that was used to build EPICS
 base.  You may need $(EPICS_BASE)/bin/<arch> in your path, and you may need
 $(EPICS_BASE)/lib/<arch> in LD_LIBRARY_PATH.
 
-When executed in the support/config directory, "make release" will go to all
-of the modules support/config/Makefile knows about and edit the config/RELEASE
+When executed in the support directory, "make release" will go to all
+of the modules support/Makefile knows about and edit the configure/RELEASE
 files in those modules so that they all build from the same versions of EPICS
 base and other known modules.
 
@@ -535,10 +535,10 @@ have been configured and tested so that you can use it to build a user tree to
 support your iocs.  (I.e., xxx/configure/RELEASE will have correct, absolute
 paths to base and synApps.)  Clean and uninstall xxx, and tar a copy of the
 directory for use as a template.  To use the template, untar it, cd to its
-top-level directory and run changePrefix to change the PV-name prefix from xxx
-to whatever you want.  (Note you must have support/utils in your command path,
-or you could copy utils/changePrefix and utils/doSed to a directory that is in
-your command path.  Note that changePrefix is synApps-version specific.)
+top-level directory and run utils/changePrefix to change the PV-name prefix from
+xxx to whatever you want.  (Note you must have support/utils in your command
+path, or you could copy utils/changePrefix and utils/doSed to a directory that
+is in your command path.  Note that changePrefix is synApps-version specific.)
 
 Here's what I do:
 
@@ -584,7 +584,7 @@ on.
 2) Setting up the ioc (vxWorks)
 ======================================================================
 
-Ensure that $(EPICS_BASE)/bin/<arch>/startCArepeater gets run when your
+Ensure that $(EPICS_BASE)/bin/<arch>/caRepeater gets run when your
 workstation boots.  If you have no way of doing this, you can run it manually
 or put the command in your .login file.
 
@@ -615,8 +615,8 @@ workstation):
 
     boot device          : dc 
     processor number     : 0 
-    host name            : server 
-    file name            : /usr/local/vxWorks/T202/mv2700-asd7
+    host name            : <server> 
+    file name            : /usr/local/vxWorks/T222/mv2700-asd1
     inet on ethernet (e) : xxx.xxx.xxx.xxx:fffffe00 
     inet on backplane (b): 
     host inet (h)        : xxx.xxx.xxx.xxx
@@ -630,7 +630,7 @@ workstation):
 	
 See support/xxx/iocBoot/ioc*/bootParms for other processor types.  If you're
 VME processor has mount access to an 'APSshare' NFS file server, you can specify
-the 'file name', above, as "/APSshare/vw/T202/mv2700-asd7".
+the 'file name', above, as "/APSshare/vw/T222/mv2700-asd1".
 
 
 
@@ -955,5 +955,5 @@ excerpts from autosave/restore request files, substitution files and st.cmd).
 Tim Mooney (mooney@aps.anl.gov)
 Beamline Controls & Data Acquisition Group
 Advanced Photon Source, Argonne National Laboratory
-09/09/2008
+01/15/2009
 
