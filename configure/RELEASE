@@ -1,7 +1,7 @@
 SUPPORT=/home/oxygen/MOONEY/epics/synApps/support
 EPICS_BASE=/home/oxygen/MOONEY/epics/base-3.14.10
 ALLEN_BRADLEY=$(SUPPORT)/allenBradley/2-1
-AREADETECTOR=$(SUPPORT)/areaDetector
+AREA_DETECTOR=$(SUPPORT)/areaDetector
 ASYN=$(SUPPORT)/asyn/4-10
 AUTOSAVE=$(SUPPORT)/autosave
 BUSY=$(SUPPORT)/busy
