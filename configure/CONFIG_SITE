@@ -14,12 +14,22 @@
 #CROSS_COMPILER_TARGET_ARCHS = vxWorks-68040
 
 #Set the following variable to YES if libusb has been installled
-#on the host Linux system, otherwise, set to NO.
+#on the host Linux system for the DSP support module,
+#otherwise, set to NO.
 LINUX_USB_INSTALLED = NO
+export LINUX_USB_INSTALLED
 
 #Set the following variable to YES if libnet has been installled
-#on the host Linux system, otherwise, set to NO.
+#on the host Linux system for the MCA support module, otherwise,
+#set to NO.
 LINUX_NET_INSTALLED = NO
+export LINUX_NET_INSTALLED
+
+#Set the following variable to YES if libtiff has been installled
+#on the host Linux system for the AREADETECTOR support module,
+#otherwise, set to NO.
+LINUX_TIFF_INSTALLED = NO
+export LINUX_TIFF_INSTALLED
 
 # Set this when your IOC and the host use different paths
 # to access the application. This will be needed to boot
