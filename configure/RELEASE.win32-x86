@@ -1,5 +1,5 @@
-SUPPORT=/APSshare/epics/synApps_5_4/support
-EPICS_BASE=/APSshare/epics/base-3.14.10
+SUPPORT=J:/epics/synApps_5_4/support
+EPICS_BASE=H:/epics/base-3.14.10
 ALLEN_BRADLEY=$(SUPPORT)/allenBradley/2-1
 AREA_DETECTOR=$(SUPPORT)/areaDetector/1-4
 ASYN=$(SUPPORT)/asyn/4-10
