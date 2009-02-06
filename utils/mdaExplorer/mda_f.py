@@ -754,10 +754,10 @@ def readMDA(fname=None, maxdim=4, verbose=0, showHelp=0, outFile=None, useNumpy=
 
 ################################################################################
 # skim MDA file to get dimensions (planned and actually acquired), and other info
-def skimScan(file):
-	"""usage: skimScan(file)"""
+def skimScan(dataFile):
+	"""usage: skimScan(dataFile)"""
 	scan = scanDim()	# data structure to hold scan info and data
-	buf = file.read(10000) # enough to read scan header
+	buf = dataFile.read(10000) # enough to read scan header
 	u = Unpacker(buf)
 	scan.rank = u.unpack_int()
 	scan.npts = u.unpack_int()
@@ -790,8 +790,13 @@ def skimMDA(fname=None):
 			print fname, "not found"
 			return None
 
-	file = open(fname, 'rb')
-	buf = file.read(100)		# to read header for scan of up to 5 dimensions
+	try:
+		dataFile = open(fname, 'rb')
+	except:
+		print "mda_f:skimMDA: failed to open file '%s'" % fname
+		return None
+
+	buf = dataFile.read(100)		# to read header for scan of up to 5 dimensions
 	u = Unpacker(buf)
 
 	# read file header
@@ -804,11 +809,11 @@ def skimMDA(fname=None):
 	dimensions = u.unpack_farray(rank, u.unpack_int)
 	isRegular = u.unpack_int()
 	pExtra = u.unpack_int()
-	pmain_scan = file.tell() - (len(buf) - u.get_position())
+	pmain_scan = dataFile.tell() - (len(buf) - u.get_position())
 
 	# collect 1D data
-	file.seek(pmain_scan)
-	scan = skimScan(file)
+	dataFile.seek(pmain_scan)
+	scan = skimScan(dataFile)
 	if (scan == None):
 		print fname, "contains no data"
 		return None
@@ -817,21 +822,21 @@ def skimMDA(fname=None):
 	dim[0].dim = 1
 
 	if (rank > 1):
-		file.seek(dim[0].plower_scans[0])
-		dim.append(skimScan(file))
+		dataFile.seek(dim[0].plower_scans[0])
+		dim.append(skimScan(dataFile))
 		dim[1].dim = 2
 
 	if (rank > 2):
-		file.seek(dim[1].plower_scans[0])
-		dim.append(skimScan(file))
+		dataFile.seek(dim[1].plower_scans[0])
+		dim.append(skimScan(dataFile))
 		dim[2].dim = 3
 
 	if (rank > 3):
-		file.seek(dim[2].plower_scans[0])
-		dim.append(skimScan(file))
+		dataFile.seek(dim[2].plower_scans[0])
+		dim.append(skimScan(dataFile))
 		dim[3].dim = 4
 
-	file.close()
+	dataFile.close()
 	dict = {}
 	dict['filename'] = fname
 	dict['version'] = version
