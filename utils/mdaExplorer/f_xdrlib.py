@@ -2,12 +2,14 @@
 
 See: RFC 1014
 
-Same as xrdlib.py, but unpack_farray is modified to behave differently
-if number of elements is large, and unpacker is unpack_float or unpack_double.
-In these cases, unpack_farray calls unpack_farray_<float|double>, which
-precompile unpackers for the requested number of points, and use them
-for entire arrays.  Thsi requires Python 2.5.
-tmm
+Same as xrdlib.py, which comes with Python, but unpack_farray is modified to
+behave differently if number of elements is large, and unpacker is unpack_float
+or unpack_double. In these cases, unpack_farray calls unpack_farray_float or
+unpack_farray_double, which precompile unpackers for the requested number of
+points, and use them for entire arrays.  This requires Python 2.5.
+
+Tim Mooney
+April, 2008
 """
 from _struct import Struct, error
 import struct
