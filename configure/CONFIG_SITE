@@ -18,17 +18,12 @@
 #otherwise, set to NO.
 LINUX_USB_INSTALLED = NO
 export LINUX_USB_INSTALLED
-CYGWIN_USB_INSTALLED = NO
-export CYGWIN_USB_INSTALLED
 
 #Set the following variable to YES if libnet has been installled
 #on the host Linux system for the MCA support module, otherwise,
 #set to NO.
 LINUX_NET_INSTALLED = NO
 export LINUX_NET_INSTALLED
-
-CYGWIN_NET_INSTALLED = NO
-export CYGWIN_NET_INSTALLED
 
 #Set the following variable to YES if libtiff has been installled
 #on the host Linux system for the AREADETECTOR support module,
