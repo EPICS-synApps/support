@@ -11,12 +11,12 @@ This release of synApps is compatible with EPICS release 3.14.10, Tornado 2.2,
 and the following EPICS modules/versions produced and maintained by other
 members of the EPICS collaboration:
 
-allenBradley v2-1    for communicating with Allen Bradley PLC's (ANL)
-ipac         v2-10   required for IndustryPack support (ANL)
-asyn         v4-10   required by many modules (ANL)
-seq         v2-0-12  for SNL programs in synApps (SLAC)
-stream      v2-4     configurable device support for message-based devices
-vxStats     v1-7-2g  vxWorks statistics modified by us (SNS)
+allenBradley v2-1     for communicating with Allen Bradley PLC's (ANL)
+ipac         v2-10    required for IndustryPack support (ANL)
+asyn         v4-10    required by many modules (ANL)
+seq          v2-0-12  for SNL programs in synApps (SLAC)
+stream       v2-4     configurable device support for message-based devices
+vxStats      v1-7-2g  vxWorks statistics modified by us (SNS)
 
 Previous versions of synApps included and relied on the genSub module.  In EPICS
 3.14.10, a replacement for the genSub record, called the asub record, is
@@ -41,6 +41,7 @@ camac         CAMAC support
 ccd           scientific CCD detectors, including Bruker, MAR, and Roper
 configure     (directory) build files, including the top-level make file
 dac128V       IndustryPack DAC
+delaygen      delay generators
 dxp           XIA's DXP digital signal processor
 ebrick        support and sample application for low-cost PC-104 and uCDIMM based IOC
 ip            various serial devices
@@ -394,8 +395,8 @@ Here's what a complete installation might look like (much detail omitted) with
 all the files you will have to edit before you can build or boot an ioc:
 
 support/
-	Makefile
-	Makefile.win32-x86
+	Makefile                            <-- EDIT to build
+	Makefile.win32-x86                  <-- EDIT to build for WIN32
 	all_adl/
     allenBradley/
 	areaDetector/
@@ -405,11 +406,12 @@ support/
     camac/
     ccd/
     configure/
-        CONFIG_SITE
+        CONFIG_SITE                     <-- EDIT to build
         RELEASE                         <-- EDIT to build
-		RELEASE.win32-x86
+		RELEASE.win32-x86               <-- EDIT to build for WIN32
         ...
     dac128V/
+    delaygen/
     documentation/
     dxp/
 	ebrick/
@@ -423,7 +425,7 @@ support/
 	modbus/
     motor/
         motorApp/
-	    Makefile                         <-- EDIT to build
+	    Makefile                        <-- EDIT to build
     optics/
 	pilatus/
     quadEM/
@@ -441,7 +443,9 @@ ioc/
     1bm/
         Makefile
         bin/
-        config/
+        configure/
+		    RELEASE                     <-- EDIT to build
+		    RELEASE.win32-x86           <-- EDIT to build for WIN32
         dbd/
         iocBoot/
             Makefile
@@ -484,6 +488,7 @@ ioc/
             ioc1bmb/
                 <much like ioc1bma>
         release.pl
+		setup_epics_common
         start_epics_1bma
         start_epics_1bmb
         1bmaApp/
@@ -494,32 +499,119 @@ ioc/
     ...
 
 
+As shown above, the following files can be edited to modify the way the
+synApps support tree is built:
+
+support/Makefile
+    comment out any modules you don't want to build
+
+support/configure/RELEASE
+	edit the definitions of EPICS_BASE and SUPPORT with the correct paths to
+	these directories on your system.  Note that you should run "make release"
+	in the support directory after modifying this file, to propagate the changes
+	down to the modules named in support/Makefile.
+
+support/configure/CONFIG_SITE
+	Edit to set the following variables, which control what will be built:
+	The supported values for these variables are YES and NO.
+
+	LINUX_USB_INSTALLED
+		This controls the build of the dxp module.  If usb is not installed
+		for developers, then parts of dxp/dxpApp/handelSrc will not be built,
+		and the example application executable, dxpApp, will not be built, so
+		dxp/iocBoot cannot be used.
+
+	LINUX_NET_INSTALLED
+		This controls the build of the mca module, specifically, support for
+		the Canberra AIM hardware.
+
+	LINUX_TIFF_INSTALLED
+		This controls the build of the areaDetector module, and is understood
+		to indicate whether libtiff.a, libjpeg.a, and libz.a are all
+		installed.  If they are not installed, areaDetector will not build
+		the following directories that requires them: prosilicaSrc, pilatusSrc,
+		and marCCDSrc.
+
+ipac/<version>/drvIpac/drvIpac.dbd
+	uncomment registrar() commands for IndustryPack carriers you plan to use.
+
+motor/<version>/motorApp/Makefile
+	comment or uncomment to select the motor support you want to build.
+
+The following files must be edited in a user tree
+
+ioc/<appname>/configure/RELEASE
+ioc/<appname>/configure/RELEASE.win32-x86 (WIN32 only)
+	edit the definition of SUPPORT with the correct path to the support tree
+
+
+0) System configuration
+=======================
+
+Before building synApps, you should ensure that your system has the
+libraries, header files, etc. required to build the modules you want
+to build.  Here's the list:
+
+Linux:
+------
+libtiff.a (areaDetector)
+libjpeg.a (areaDetector)
+libz.a    (areaDetector)
+libusb.a  (dxp)
+
+Cygwin:
+-------
+  <li>base
+    <ul>
+        <li>All default components
+    </ul>
+  <li>devel
+    <ul> 
+      <li>gcc-core
+      <li>gcc-g++
+      <li>libncurses-devel
+      <li>make
+      <li>readline
+    </ul>
+  <li>interpreters
+    <ul>
+      <li>perl
+    </ul>
+  <li>libs
+    <ul>
+      <li>ncurses
+      <li>sunrpc
+    </ul>
+
+
+DLPORTIO (dxp)
+
+Windows:
+--------
+DLPORTIO (dxp)
 
 LEFT OFF HERE
 
-
-
-1) Building and configuring a user tree
-=======================================
+1) Building and configuring the support tree
+============================================
 
 If you have a built copy of EPICS base 3.14.10 or later, then building synApps
 should be very simple:
 
-1) Edit support/configure/RELEASE to set the variables SUPPORT and
-   EPICS_BASE.  SUPPORT should be the full path to the synApps support
-   directory.  Also edit support/Makefile to select which modules you
-   want to build.
+1) Edit support/Makefile, support/configure/RELEASE, and
+   support/configure/CONFIG_SITE, as noted above.
 
-2) Edit motor/<version>/motorApp/Makefile to select the motor support you want
-   to build.
+2) Edit ipac/<version>/drvIpac/drvIpac.dbd, and
+   motor/<version>/motorApp/Makefile, as noted above
 
 3) Set the environment variable EPICS_HOST_ARCH to the architecture (and
    compiler, if there is a choice) on which you are building. I used
-   solaris-sparc, and linux-x86.
+   solaris-sparc, linux-x86, and cygwin-x86.
 
 4) In support, run "make release".
 
-5) In support, run make.
+5) In support, run make.  (You should be able to use "make -j" to build
+   synApps much more quickly than it has previously built.)
 
 You should use the same GNU Make executable that was used to build EPICS
 base.  You may need $(EPICS_BASE)/bin/<arch> in your path, and you may need
@@ -529,6 +621,9 @@ When executed in the support directory, "make release" will go to all
 of the modules support/Makefile knows about and edit the configure/RELEASE
 files in those modules so that they all build from the same versions of EPICS
 base and other known modules.
+
+2) Building and configuring a user tree
+========================================
 
 Once synApps' support directory has built without errors, the xxx module will
 have been configured and tested so that you can use it to build a user tree to
@@ -581,7 +676,7 @@ just configured, and boot the crate.  If you don't know how to do this, read
 on.
 
 
-2) Setting up the ioc (vxWorks)
+3) Setting up the ioc (vxWorks)
 ======================================================================
 
 Ensure that $(EPICS_BASE)/bin/<arch>/caRepeater gets run when your
@@ -634,7 +729,7 @@ the 'file name', above, as "/APSshare/vw/T222/mv2700-asd1".
 
 
 
-3) Fitting synApps to a particular set of hardware
+4) Fitting synApps to a particular set of hardware
 ======================================================
 
 This happens in the user tree.  Generally, you must tell "EPICS" what hardware
@@ -667,7 +762,7 @@ following files will be touched:
         a copy of the boot parameters (in case the ioc processor
         crashes in a way that erases nonvolatile memory)
 
-3.1) xxx/iocBoot/ioc*/st.cmd
+4.1) xxx/iocBoot/ioc*/st.cmd
 ----------------------------
 
 This is the file run by the IOC at boot time.  It loads an executable built in
@@ -680,7 +775,7 @@ This file, and the files it sources, are probably worth studying.  They are
 reasonably well commented, and contain dbLoadRecords() commands for most of
 the EPICS databases in synApps. 
 
-3.2) Motors
+4.2) Motors
 -----------
 
 To load more motors, add lines to the file xxx/iocBoot/ioc*/motor.substitutions.
@@ -696,7 +791,7 @@ If you want the ioc automatically to save positions and settings of the new
 motors, and restore them when the crate reboots, add lines to the files
 xxx/iocBoot/ioc*/auto_settings.req and xxx/iocBoot/ioc*/auto_positions.req.
 
-3.3) Slits
+4.3) Slits
 ----------
 
 To use a pair of motors to control a slit, search for "2slit.db" in
@@ -734,7 +829,7 @@ control a motor also to control a slit, with some limitations.  We hope to use
 soft motor records in front of other positioners (e.g. monochromators, optical
 tables, insertion devices, and DAC channels) in the future.
 
-3.4) Optical tables
+4.4) Optical tables
 -------------------
 Optical tables are controlled by a custom EPICS record (the "table" record),
 used in the database table.db and controlled via medm displays table*.adl.
@@ -752,7 +847,7 @@ table display has an "Init" button, which zeros all offsets before doing a
 offsets to make the current table positions zero without moving or
 recalibrating any motors.
 
-3.5) Monochromators
+4.5) Monochromators
 -------------------
 Several varieties of crystal monochromators are supported in synApps: two
 constant-offset "channel-cut" monochromators, a high-resolution double-crystal
@@ -765,14 +860,14 @@ hrCtl.st, and medm displays hSeq*.adl are involbed in control of the
 high-resolution double-crystal monochromator.  The spherical grating
 monochromator is supported by the database SGM.db and the displays SGM*.adl.
 
-3.6) Filters
+4.6) Filters
 ------------
 The APS standard user filters combine several motors and solenoids to control
 the placement of filter material in the beam path.  The databases
 filterMotor.db and filterLock.db, and the medm displays *filter*.adl are
 involved in this application.
 
-3.7) Basic run-time programming
+4.7) Basic run-time programming
 -------------------------------
 Impromptu coordinated motions and other bits of run-time programming are
 handled by what we call a "userCalc" (actually just a swait record with a nice
@@ -802,7 +897,7 @@ beam energy changes.
 
 - save and automatically subtract shutter-closed offsets from scaler data.
 
-3.8) string-expression support
+4.8) string-expression support
 ------------------------------
 Run-time programming involving strings and/or numbers can be done with
 userStringCalcs, which resemble userCalcs closely, but differ in significant
@@ -810,18 +905,18 @@ details.  A package containing two stringCalcs and an 'asyn' record (called a
 "deviceCmdReply") is also available for run-time programming of simple serial-
 and GPIB-device support.
 
-3.9) array-expression support
+4.9) array-expression support
 -----------------------------
 Run-time programming involving arrays and/or numbers can be done with
 userArrayCalcs, which resemble userCalcs closely, but differ in significant
 details.
 
-3.10) sequence support
+4.10) sequence support
 ----------------------
 Run-time programming of sequences is possible using the sseq record and related
 medm displays yySseq.adl
 
-3.11) multiple-step measurement
+4.11) multiple-step measurement
 -------------------------------
 Up to four measurement steps involving positioners, detectors, and end
 calculations (e.g., to support dichroism experiments) can be done with the
@@ -830,14 +925,14 @@ measurement sequence can be involved in a scan by treating the 4step database
 as you would treat the scaler or mca software.
 
 
-4) Using synApps
+5) Using synApps
 ================
 
-4.1) Boot parameters
+5.1) Boot parameters
 --------------------
 See xxx/iocBoot/ioc*/bootParms for sample boot parameters.
 
-4.2) MEDM
+5.2) MEDM
 ---------
 See the MEDM Operator's Manual for detailed information on the special needs of
 this X11/Motif program.  I'll assume those needs have been met.
@@ -872,7 +967,7 @@ directories that might have medm-display files and includes them in the
 environment variable EPICS_DISPLAY_PATH, cd's to xxxApp/op/adl, and runs MEDM
 with the default top-level display file.
 
-4.3) autosave/restore
+5.3) autosave/restore
 ---------------------
 You must give the crate write permission to xxx/iocBoot/ioc*/autosave so it can
 write the files auto_positions.sav and auto_settings.sav there.  It's also
@@ -893,7 +988,7 @@ function calls inserted into initHooks.o, which is loaded by
 xxx/iocBoot/ioc*/st.cmd.
 
 
-4.4) saveData
+5.4) saveData
 -------------
 saveData is a CA client that monitors sscan records and saves scan data to
 files on as NFS-mounted disk.  The software is configured with the file
