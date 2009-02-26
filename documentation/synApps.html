@@ -9,18 +9,91 @@ content="text/html; charset=iso-8859-1">
 <body bgcolor="#FFFFFF">
 
 <h1>synApps 5.4</h1>
+<hr><h2>Introduction</h2><hr>
 
 <P>synApps is a collection of <a href=www.aps.anl.gov/epics>EPICS</a> software
-(source code, EPICS databases, client scripts, display files, executables,
-etc.) intended to support most of the requirements of an x-ray laboratory or
+intended to support most of the common requirements of an x-ray laboratory or
 synchrotron-radiation beamline.  Because it is EPICS software, synApps is
 extensible by developers and end users, to support new devices and experimental
-techniques.
+techniques.  This extensibility frees synApps to focus on general-purpose
+capabilities and infrastructure, from which application-specific software can be
+built or assembled.
 
-<P>Here's a list of the modules and directories in synApps:
+<P>synApps is organized into modules, whose structure is based on the example
+directory tree produced by the EPICS application, <code>makeBaseApp.pl</code>,
+typically with two additional directories: a documentation directory, and a
+display-file directory. synApps modules typically contain source code, EPICS
+databases and database-definition files, autosave-request files, client scripts,
+display files, libraries and executables, and documentation.
+
+<P>Most synApps modules are intended primarily to export support to other modules. 
+Some synApps modules produce bootable software, in addition to support
+software, but in most cases, this bootable software is primarily for testing,
+and for demonstrating how the support software can be used.  The support
+exported by a module is of the following types, with example names and locations
+from the <b>calc</b> module:
+
+<blockquote>
+<dl>
+<dt>database-definition file, in calc/dbd
+<dd><code>calcSupport.dbd</code>
+
+<P><dt>link library, in calc/lib/&lt;arch&gt;
+<dd><code>libcalc</code>
+
+<P><dt>header files, in calc/include
+<dd><code>transformRecord.h</code><br>...
+
+<P><dt>database files, and associated autosave-request files,
+in calc/calcApp/Db
+<dd><code>userTransforms10.db</code>
+<dd><code>userTransforms10_settings.req</code><br>...
+
+<P><dt>display files, in calc/calcApp//op/adl
+<dd><code>userTransforms10.adl</code>
+
+</dl>
+</blockquote>
+
+One synApps module, the <b>xxx</b> module, is different: it doesn't export
+anything. It only imports support from other modules, and produces bootable
+software to support an EPICS IOC.
+
+<blockquote><i>
+
+If you haven't run into the term 'IOC' yet, two things:
+
+<ol>
+
+<li>IOC it stands for Input/Output Controller.  Initially, this was a VME crate
+with a processor running EPICS under the VxWorks operating system, but beginning
+with EPICS 3.14, an IOC can also be a set of tasks on a workstation running
+Linux, Windows, Cygwin, Solaris, RTEMS, Mac OS, and, no doubt, other operating
+systems.
+
+<li>The </i>EPICS Application Developer's Guide<i> is an essential reference for
+anyone planning to develop or deploy EPICS software.  While you won't need to
+read the guide to build or run synApps, you will need it to understand what
+you've done, to diagnose problems, and to extend synApps in any significant way.
+
+
+</ol>
+</i></blockquote>
+
+
+The <b>xxx</b> module is documentation in runnable form, and also a template
+from which a synApps application can be constructed.  <b>xxx</b> is not
+comprehensive: it doesn't apply all of synApps.  It's usually a little behind
+the rest of synApps, it focusses more on VME crates than on other kinds of IOCs,
+and it's a compromise between what is most widely used and what is most likely
+to build and run out of the box.
+
+<hr><h2>Contents</h2><hr>
+
+<P>Here's a list of the <b>modules</b> and directories in synApps:
 
 <P><table border>
-<tr><th>Module/directory<th>description
+<tr><th><b>Module</b>/<i>directory</i><th>description
 
 <tr><td><b>areaDetector</b><td>Support for area (2-D) detectors, including CCDs, pixel array
               detectors, and online imaging plates.  This module replaces the
@@ -31,7 +104,7 @@ techniques.
 <tr><td><b>calc</b><td>Run-time expression evaluation
 <tr><td><b>camac</b><td>Support for CAMAC hardware
 <tr><td><b>ccd</b><td>Scientific CCD detectors, including Bruker, MAR, and Roper
-<tr><td><b>configure</b><td>(directory) Build files, including the top-level make file
+<tr><td><i>configure</i><td>Build files, including the top-level make file
 <tr><td><b>dac128V</b><td>IndustryPack DAC
 <tr><td><b>delaygen</b><td>Support for delay generators
 <tr><td><b>dxp</b><td>XIA's DXP digital signal processor
@@ -48,20 +121,20 @@ techniques.
 <tr><td><b>pilatus</b><td>Support for the Dectris pixel-array detector
 <tr><td><b>quadEM</b><td>Support for an APS-developed 4-channel electrometer
 <tr><td><b>sscan</b><td>Support for scans (programmed control and data acquisition).
-<tr><td><b>std</b><td>Miscellaneuos EPICS software
+<tr><td><b>std</b><td>Miscellaneous EPICS support
 <tr><td><b>stream</b><td>Dirk Zimoch's streamDevice, in a module-flavored wrapper
-<tr><td><b>utils</b><td>(directory) Miscellaneous tools
+<tr><td><i>utils</i><td>Miscellaneous tools
 <tr><td><b>vac</b><td>Support for vacuum controllers
 <tr><td><b>vme</b><td>Support for VME hardware
 <tr><td><b>xxx</b><td>Sample user-application directory
 </table>
 
 <P>See support/configure/RELEASE for a complete set of compatible module
-versions.
-
-<P>This release of synApps is compatible with EPICS release 3.14.10, and Tornado
-2.2, and the following EPICS modules/versions produced and maintained by other
-members of the EPICS collaboration:
+versions.  This release of synApps is compatible with EPICS release 3.14.10, and
+Tornado 2.2, and the following EPICS modules/versions, which are produced and
+maintained by other members of the EPICS collaboration.  These modules are not
+part of synApps, but their maintainers have permitted us to distribute
+copies along with synApps:
 
 <P><table border>
 <tr><th>Module<th>version<th>description
@@ -85,8 +158,8 @@ display files, etc.
 
 <P>synApps includes software developed by the Beamline Controls & Data
 Acquisition and the Accelerator Controls groups of the Advanced Photon Source
-(APS); by developers in APS Collaborative Access Teams -- notably, Mark Rivers
-(CARS-CAT); and by developers in the EPICS collaboration outside of the APS --
+(APS); by developers in APS Collaborative Access Teams &ndash; notably, Mark Rivers
+(CARS-CAT); and by developers in the EPICS collaboration outside of the APS &ndash;
 notably, those at the Swiss Light Source/Paul Scherrer Institut, the Diamond
 Light Source, the National Synchrotron Light Source, the Australian Light
 Source, and the Canadian Light Source.
@@ -134,7 +207,7 @@ like, synApps contains the following code:
 	module, but apparently not available in a published module.
 </table>
 
-<P><li><h3>Device/driver support in or included with synApps</h3>
+<P><li><h3>Device/driver support in or distributed with synApps</h3>
 <table border>
 <tr><th>record<th>bus-type<th>codename<th>username
 <tr><td>acalcout   <td>CONSTANT  <td>devaCalcoutSoft              <td>Soft Channel
@@ -371,7 +444,7 @@ like, synApps contains the following code:
 <tr><td>waveform   <td>VME_IO    <td>devWfBunchClkGen             <td>APS Bunch Clock
 </table>
 
-<P><li><h3>Miscellaneous C code</h3>
+<P><li><h3>Other C code</h3>
 <dl>
 <dt>aCalcPostfix, aCalcPerform
 	sCalcPostfix, sCalcPerform
@@ -390,8 +463,8 @@ like, synApps contains the following code:
 <P><li><h3>Documentation</h3>
 
 	<P>In addition to this top-level documentation, synApps modules have their
-	own documentation directories, and the xxx module contains examples of
-	how most of the software is loaded and run. Some modules have their own
+	own documentation directories, and the <b>xxx</b> module contains examples
+	of how much of the software is imported, loaded, and run. Some modules have their own
 	example iocBoot directories.
 
 
@@ -401,16 +474,15 @@ like, synApps contains the following code:
 	programs, etc., that some have found useful.
 </ul>
 
-<hr>
-<h2>How to deploy synApps</h2>
+<hr><h2>How to deploy synApps</h2><hr>
 
 <P>Although synApps is distributed as a single 'support' directory, it's
 normally deployed as a two-part system: a 'support' directory, and one or more
 'user' directories.  The support directory can be installed on a read-only file
 system, along with EPICS base and other modules, and used from there by user
-directories, each of which begins as a copy (or a collection of copies) of the
-module 'support/xxx', and is customized/extended to suit a particular
-application and set of hardware.
+directories, each of which typically begins as a copy (or a collection of
+copies) of the <b>xxx</b> module, and is customized/extended to suit a
+particular application and set of hardware.
 
 <P>I'm not being very precise about what is meant by a user directory, because
 there are a number of reasonable variations.  At the simplest, a single copy of
@@ -422,13 +494,6 @@ iocBoot/iocxxx directories.  At APS, we have several top-level user directories,
 each of which contains a number of copies of xxx, most of which, in turn,
 contain multiple xxxApp and iocBoot/iocxxx directories.
 
-<blockquote><i>If you haven't run into the term 'IOC' yet, it stands for
-Input/Output Controller.  Initially, this was a VME crate with a processor
-running EPICS under the VxWorks operating system, but beginning with EPICS 3.14,
-an IOC can also be a set of tasks on a workstation running Linux, Windows,
-Cygwin, Solaris, RTEMS, Mac OS, and, no doubt, other operating systems.</i>
-</blockquote>
-
 <P>Here's what a complete installation might look like (much detail omitted)
 with all the files you will have to edit before you can build or boot an IOC.
 In the following, 'WIN32' means native Windows, as distinguished from Windows
@@ -437,8 +502,8 @@ used via the Cygwin unix-like environment:
 <P><h4> The support directory</h4>
 <pre>
 synApps_5_4/support/
-    Makefile                            <-- EDIT to build
-    Makefile.win32-x86                  <-- EDIT to build for WIN32
+    Makefile                            <&mdash; EDIT to build
+    Makefile.win32-x86                  <&mdash; EDIT to build for WIN32
     all_adl/
     allenBradley/
     areaDetector/
@@ -448,9 +513,9 @@ synApps_5_4/support/
     camac/
     ccd/
     configure/
-        CONFIG_SITE                     <-- EDIT to build
-        RELEASE                         <-- EDIT to build
-        RELEASE.win32-x86               <-- EDIT to build for WIN32
+        CONFIG_SITE                     <&mdash; EDIT to build
+        RELEASE                         <&mdash; EDIT to build
+        RELEASE.win32-x86               <&mdash; EDIT to build for WIN32
         ...
     dac128V/
     delaygen/
@@ -461,13 +526,13 @@ synApps_5_4/support/
     ip330/
     ipUnidig/
     ipac/
-        drvIpac/drvIpac.dbd             <-- EDIT to build
+        drvIpac/drvIpac.dbd             <&mdash; EDIT to build
     love/
     mca/
     modbus/
     motor/
         motorApp/
-            Makefile                    <-- EDIT to build
+            Makefile                    <&mdash; EDIT to build
     optics/
     pilatus/
     quadEM/
@@ -489,8 +554,8 @@ synApps_5_4/ioc/
         Makefile
         bin/
         configure/
-            RELEASE                     <-- EDIT to build
-            RELEASE.win32-x86           <-- EDIT to build for WIN32
+            RELEASE                     <&mdash; EDIT to build
+            RELEASE.win32-x86           <&mdash; EDIT to build for WIN32
         dbd/
         iocBoot/
             Makefile
@@ -562,11 +627,11 @@ the synApps support directory is built:
 
 <P><dt><code>support/configure/RELEASE</code>
 
-	<dd>edit the definitions of EPICS_BASE and SUPPORT with the correct paths to
-	these directories on your system.  Note that you should run <code>make
-	release</code> in the support directory after modifying this file, to
-	propagate the changes down to the modules named in
-	<code>support/Makefile</code>.
+	<dd>edit the definitions of <code>EPICS_BASE</code> and <code>SUPPORT</code>
+	with the correct paths to these directories on your system.  Note that you
+	should run <code>make release</code> in the support directory after
+	modifying this file, to propagate the changes down to the modules named in
+	support/Makefile.
 
 <P><dt><code>support/configure/CONFIG_SITE</code>
 	<dd>Edit to set the following variables, which control what will be built:
@@ -592,7 +657,9 @@ the synApps support directory is built:
 	</dl>
 
 <dt><code>ipac/&lt;version&gt;/drvIpac/drvIpac.dbd</code>
-	<dd>uncomment registrar() commands for IndustryPack carriers you plan to use.
+
+	<dd>uncomment <code>registrar()</code> commands for IndustryPack carriers
+    you plan to use.
 
 <P><dt><code>motor/&lt;version&gt;/motorApp/Makefile</code>
 	<dd>comment or uncomment to select the motor support you want to build.
@@ -606,14 +673,15 @@ the synApps support directory is built:
 <dl>
 <dt><code>ioc/&lt;appname&gt;/configure/RELEASE</code><br>
 <code>ioc/&lt;appname&gt;/configure/RELEASE.win32-x86</code> (WIN32 only)
-	<dd>edit the definition of SUPPORT with the correct path to the support directory
+	<dd>edit the definition of <code>SUPPORT</code> with the correct path to
+	the support directory
 </dl>
 </blockquote>
 
 <P>The association between a user directory, and the support directory on which
-it depends, is made entirely by the file, <code>configure/RELEASE</code>, in the
+it depends, is made entirely by the file, configure/RELEASE, in the
 user directory.  Typically, this file simply includes the
-<code>configure/RELEASE</code> file from the support directory, but it may
+configure/RELEASE file from the support directory, but it may
 differ: it may specify EPICS modules not included in synApps, for example.  Or,
 if the support directory contains more than one built version of a module (the
 original and a bug fix, for example) the user directory can choose which
@@ -630,8 +698,7 @@ selected by a user directory must be self consistent, and the EPICS build will
 ensure this, unless you tell it not to.
 </i></blockquote>
 
-<hr>
-<h2> How to build synApps</h2>
+<hr><h2> How to build synApps</h2><hr>
 <ol>
 <h3><li>System configuration</h3>
 
@@ -701,19 +768,20 @@ need the following components from the following menu headings:
 synApps support directory should be very simple:
 
 <ol>
-<li>Edit <code>support/Makefile</code>, <code>support/configure/RELEASE</code>,
-   and <code>support/configure/CONFIG_SITE</code>, as noted above.
+<li>Edit support/Makefile, support/configure/RELEASE,
+   and support/configure/CONFIG_SITE, as noted above.
 
-<li>Edit <code>ipac/&lt;version&gt;/drvIpac/drvIpac.dbd</code>, and
-   <code>motor/&lt;version&gt;/motorApp/Makefile</code>, as noted above
+<li>Edit ipac/&lt;version&gt;/drvIpac/drvIpac.dbd, and
+   motor/&lt;version&gt;/motorApp/Makefile, as noted above
 
 <li>Set the environment variable <code>EPICS_HOST_ARCH</code> to the architecture (and
-   compiler, if there is a choice) on which you are building. I used
-   <code>solaris-sparc</code>, <code>linux-x86</code>, and <code>cygwin-x86</code>.
+   compiler, if there is a choice) on which you are building. synApps is tested
+   with the architectures <code>solaris-sparc</code>, <code>linux-x86</code>,
+   <code>cygwin-x86</code>, and <code>win32-x86</code>.
 
 <li>In support, run <code>make release</code>.
 
-<li>In support, run <code>make</code>.  (You should be able to use <code>make -j</code> to
+<li>In support, run '<code>make</code>'.  (You should be able to use '<code>make -j</code>' to
 build synApps much more quickly than it has previously built.)
 </ol>
 
@@ -722,30 +790,29 @@ base.  You may need <code>$(EPICS_BASE)/bin/&lt;arch&gt;</code> in your path,
 and you may need <code>$(EPICS_BASE)/lib/&lt;arch&gt;</code> in
 <code>LD_LIBRARY_PATH</code>.
 
-<P>When executed in the support directory, <code>make release</code> will go to all
-of the modules <code>support/Makefile</code> knows about and edit the
-<code>configure/RELEASE</code>
+<P>When executed in the support directory, '<code>make release</code>' will go to
+all of the modules support/Makefile knows about and edit the configure/RELEASE
 files in those modules so that they all build from the same versions of EPICS
 base and other known modules.
 
 <P>Typically, make will not succeed the first time, because you will not have
 all of the required system support.  If you find that you cannot build some
-synApps module, you should comment it out of both <code>support/Makefile</code>,
-and <code>support/configure/RELEASE</code> (<code>RELEASE.win32-x86</code> for WIN32 builds).
+synApps module, you should comment it out of both support/Makefile,
+and support/configure/RELEASE (RELEASE.win32-x86 for WIN32 builds).
 
 <P><h3><li>Building and configuring a user directory</h3>
 
 <P>Once synApps' support directory has built without errors, the <b>xxx</b>
-module will have been configured (<code>xxx/configure/RELEASE</code> will have
+module will have been configured (xxx/configure/RELEASE will have
 correct, absolute paths to base and support) and built, so you can use it as
-an example -- or, better, a template -- for constructing user directories to
+an example &ndash; or, better, a template &ndash; for constructing user directories to
 support your IOCs.  To make a template of xxx, clean and uninstall it, and tar a
 copy of the directory.  To use the template, untar it, cd to its top-level
-directory and run <code>utils/changePrefix</code> to change the PV-name prefix
+directory and run utils/changePrefix to change the PV-name prefix
 from xxx to whatever you want.  (Note you must have support/utils in your
-command path, or you could copy <code>utils/changePrefix</code> and
-<code>utils/doSed</code> to a directory that is in your command path.  Note that
-<code>changePrefix</code> is synApps-version specific.)
+command path, or you could copy utils/changePrefix and
+utils/doSed to a directory that is in your command path.  Note that
+changePrefix is synApps-version specific.)
 
 <P>Here's what I do:
 <pre>
@@ -791,8 +858,7 @@ just configured, and boot the crate.  If you don't know how to do this, read
 on.
 </ol>
 
-<hr>
-<h2>How to make synApps work</h2>
+<hr><h2>How to make synApps work</h2><hr>
 <ol>
 <h3><li>Setting up the IOC (vxWorks)</h3>
 
@@ -919,7 +985,7 @@ motors controlled through a serial connection, edit <code>serial.cmd</code>.
 
 <P>If you want the new motors to work with the 'AllStop' button
 (<code>xxx:allstop.VAL</code>
--- see the top-level MEDM display <code>xxx.adl</code>), load the database
+&ndash; see the top-level MEDM display <code>xxx.adl</code>), load the database
 <code>$(MOTOR)/db/motorUtil.db</code>, and run the command
 <code>motorUtilInit("xxx:")</code>.
 
@@ -1033,7 +1099,7 @@ motor's .VAL field to the theta motor's .VAL field.
 <li>talk to a motor through a nonlinear transformation, e.g.,
 energy-to-Bragg-angle.
 
-<li>close slow feedback loops -- e.g., to adjust a monochromator crystal to
+<li>close slow feedback loops &ndash; e.g., to adjust a monochromator crystal to
 suppress third-order diffraction through the high-heat-load monochromator.
 
 <li>move multichannel-analyzer regions of interest automatically as the incident
@@ -1172,11 +1238,169 @@ the PV name, saveData will use the string instead.
 </ol>
 </ol>
 
-<h2>The synApps utils directory</h2>
-<P>The synApps support/utils directory contains a variety of executables
-that may be useful in administering and/or using synApps.  Some of these tools are
-probably peculiar to the way synApps is used at APS, and may not be of any use
+<hr><h2>How to extend synApps</h2><hr>
 
+<P>Like all EPICS software, synApps can be extended in many ways, and at many
+levels, by EPICS developers.  (That's how the package came to exist in the first
+place.  It started as a single App directory, and folks just added stuff.)  But
+synApps is also intended to be extensible by end users who are not developers. 
+One of the driving notions behind the development of synApps was (and is) to put
+as much capability as seems both wise and practical into the hands of end users
+&ndash; typically, scientists running experiments &ndash; whose backgrounds in
+software development and implementation vary over an extremely wide range, from
+zip to "yikes!".
+
+<P>Here is a list of ways synApps has already been extended by users and
+developers, arranged <i>very</i> roughly according to the amounts of effort,
+skill, and EPICS knowledge required.
+
+
+<ul>
+
+<li>scaler end-calculation customization
+
+<P>This is certainly too simple to be considered an extension &ndash; all you do
+is type something like "<code>(A-B)/I</code>" &ndash; but it's still pretty
+useful, and it demonstrates a technique that will be used for much more
+sophisticated purposes.
+
+<li>scan configuration
+
+<P>The first extension that many users attempt is the programming of a scan. 
+This might also seem more like mere <i>use</i> than extension, but it can become a
+very highly evolved skill, and it is software development in a reasonably
+literal sense.  If you buy into the notion that an EPICS database is essentially
+a program (in a very high-level programming language), then scan configuration
+can be viewed as the simpler end of a continuum.
+
+<li>"userCalc" programming
+
+<P>synApps supports run-time programming of a number of EPICS record types, with
+databases dedicated to this purpose; autosave-request files, intended to
+preserve run-time programming through IOC reboots; display files exposing those
+fields most appropriate for run-time programming; and display files that contain
+documentation intended for run-time reference by end users.
+
+<P>The word "userCalc" has become generic for the records and database fragments
+with which run-time programming is done, and most of the records so used are, in
+fact, calculation records whose expressions can be modified at run time.  But
+synApps also contains records and databases intended for run-time programming of
+sequences of operations, feedback loops, ramping of control parameters, and
+impromptu device support for serial and other message based devices for which no
+real device support has been installed.
+
+<P>In addition to "userCalcs", many synApps records and databases contain
+sections intended primarily for run-time programming by end users.  Examples
+include end-of-acquisition calculations for scalers and digital multimeters;
+region-of-interest summing, and background-subtraction for mca records.
+
+<li>MEDM-display editing
+
+<P>End users know better than anybody what they want in a graphical user
+interface.  One thing they've demonstrated that they want, is the ability to
+have some control over the user interface without having to specify every little
+detail to a programmer. MEDM provides end users with the ability easily to
+create custom displays, and  synApps provides over 600 stock user-interface
+fragments that can be called up from, or included as part of, a user crafted
+display.
+
+<P>MEDM is not the only EPICS display manager, but it is the we used during
+most of the development of synApps.  
+
+<li>IOC command-file editing
+
+<P>An EPICS IOC is populated and configured by ASCII command files, which
+knowledgeable end users can edit to add motors, change default baud rates,
+load additional copies of databases, etc.
+
+<li>Development of client-side scripts
+
+<P>Many synApps end users have written scripts, in languages such as the unix
+shell, Python, SPEC macro, IDL, tcl, perl, and Labview, to simplify and/or
+standardize beamline operations.  Any language can be used for this purpose, if
+it can be fitted with a Channel-Access interface.
+
+<li>EPICS-database development
+
+<P>One very easy step from run-time programming to EPICS-database development
+can be taken by using the wxPython program, <code>support/utils/snapDb.py</code>
+to "freeze" and collection of programmed userCalcs into an independently
+loadable database.  snapDb can also generate a first cut at a user interface for
+the database.
+
+<P>But most EPICS database development is done with a database-configuration
+tool, such as VDCT (though lots of folks just use a text editor).  In any case,
+EPICS-database development typically involves the selection of device support,
+the specification of links and link attributes, and the setting of parameters.
+More sophisticated development also involves the programming of an initialization
+strategy into the database, and maybe the writing of an autosave-request file,
+for it.
+
+<li>Development of subroutines for the <i>sub</i> and <i>aSub</i> record types
+
+<P>This is probably the simplest way to add custom C code to an EPICS
+application.  SynApps contains several examples of this type of code, among them
+are <code>arrayTest.c</code>, <code>interp.c</code>, and <code>subAve.c</code>,
+all in the directory <code>support/calc/calcApp/src</code>.
+
+<li>Development of State-Notation-Language programs
+
+<P>This is probably the next easiest, and next most capable, way of adding
+compiled code to an application.  SNL also introduces (to this list) the notion
+of client-side program development, for an SNL program is a Channel Access
+client, even though it runs on an IOC. Again, synApps has a bunch of examples.
+
+<P>Documentation for SNL can be found in the <b>seq</b> module, a copy of which
+is bundled with synApps (though <b>seq</b> is not part of synApps).
+
+<li>Device-support development
+
+<P>If synApps doesn't contain device support for the device you want to use,
+you can probably find (in synApps or elsewhere) a device-support example that
+has, at least, the structure of the sort of support you will need.
+
+<P>Nobody writes device support from scratch; it's just not an effective way to
+develop.  Everybody tries to find the closest approximation to what they need,
+and modifies it until it serves their purpose.  One important use of the EPICS
+tech-talk email list is to gather suggestions, from folks further up the
+learning curve, on what might be a good piece of code to modify for a particular
+purpose.
+
+<li>Development of client-side GUI programs
+
+<P>This requires a lot of skill, effort, and information.  Developers at this
+level need the <i>EPICS Application Developer's Guide</i>, the <i>Channel Access
+Reference Manual</i> and very good GUI infrastructure.
+
+<li>Module development
+
+<P>This also requires a lot of skill, effort, and information.  Developers at
+this level need the <i>EPICS Application Developer's Guide</i>, and the <i>EPICS
+Record Reference Manual</i>.  One of the very best features of EPICS is the fact
+that experts in module development can collaborate with experts in client-side
+development, even if the developers are unaware of each other.
+
+</ul>
+
+<P>All of the extension strategies described above produce (or, at least
+<i>can</i> produce) results which are <i>fully</i> integrated into the control
+system.  This means that they can be used in further extensions by the same
+techniques.
+
+<P>
+
+
+
+
+
+
+<hr><h2>The synApps utils directory</h2><hr>
+
+<P>The synApps support/utils directory contains a variety of executables that
+may be useful in administering and/or using synApps.  Some of these tools are
+probably peculiar to the way synApps is used at APS.
+
+<blockquote>
 <P><dl>
 <dt>changePrefix, doSed
 
@@ -1229,8 +1453,10 @@ particularly useful for synApps "userCalcs", a collection of various
 record types intended for end users to program at run time. 
 </dl>
 
+</blockquote>
 
-</ol>
+
+
 
 <hr>
 <address> 
@@ -1239,7 +1465,7 @@ record types intended for end users to program at run time.
     (mooney@aps.anl.gov) <br> 
 	Beamline Controls & Data Acquisition Group<br>
 	Advanced Photon Source, Argonne National Laboratory<br>
-    Last modified: February 20, 2009
+    Last modified: February 25, 2009
 </address> 
 </body>
 </html>
