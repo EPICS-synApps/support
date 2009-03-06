@@ -28,6 +28,7 @@ export LINUX_NET_INSTALLED
 #Set the following variable to YES if libtiff.a, libjpeg.a, and
 #libz.a have been installled on the host Linux system for the
 #AREADETECTOR support module.  Otherwise, set to NO.
+#(Eventually, this will modify the build.  For now, it's not used.)
 LINUX_TIFF_INSTALLED = NO
 export LINUX_TIFF_INSTALLED
 
