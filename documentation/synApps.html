@@ -56,7 +56,7 @@ from the <b>calc</b> module:
 <blockquote>
 <dl>
 <dt>database-definition file, in calc/dbd
-<dd><code>calcSupport.dbd</code>
+<dd><code>calcSupport.dbd</code><br>...
 
 <P><dt>link library, in calc/lib/&lt;arch&gt;
 <dd><code>libcalc</code>
@@ -69,8 +69,8 @@ in calc/calcApp/Db
 <dd><code>userTransforms10.db</code>
 <dd><code>userTransforms10_settings.req</code><br>...
 
-<P><dt>display files, in calc/calcApp//op/adl
-<dd><code>userTransforms10.adl</code>
+<P><dt>display files, in calc/calcApp/op/adl
+<dd><code>userTransforms10.adl</code><br>...
 
 </dl>
 </blockquote>
@@ -709,21 +709,24 @@ and <code>make rebuild</code>, in the support directory.
 	<code>NO</code>.
 	<dl>
 	<dt><code>LINUX_USB_INSTALLED</code>
-		<dd>This controls the build of the <b>dxp</b> module.  If usb is not installed
-		for developers, then parts of dxp/dxpApp/handelSrc will not be built,
-		and the example application executable, dxpApp, will not be built, so
-		dxp/iocBoot cannot be used.
+
+		<dd>This controls the build of the <b>dxp</b> module.  If usb is not
+		installed for developers, then parts of dxp/dxpApp/handelSrc will not be
+		built, and the example application executable, dxpApp, will not be
+		built, so dxp/iocBoot cannot be used.
 
 	<dt><code>LINUX_NET_INSTALLED</code>
-		<dd>This controls the build of the <b>mca</b> module, specifically, support for
-		the Canberra AIM hardware.
+
+		<dd>This controls the build of the <b>mca</b> module, specifically,
+		support for the Canberra AIM hardware.
 
 	<dt><code>LINUX_TIFF_INSTALLED</code>
-		<dd>This controls the build of the areaDetector module, and is understood
-		to indicate whether libtiff.a, libjpeg.a, and libz.a are all
-		installed.  If they are not installed, areaDetector will not build
-		the following directories that requires them: prosilicaSrc, pilatusSrc,
-		and marCCDSrc.
+
+		<dd>This controls the build of the areaDetector module, and is
+		understood to indicate whether libtiff.a, libjpeg.a, and libz.a are all
+		installed.  If they are not installed, areaDetector will not build, and
+		xxx will not try to use areaDetector.
+
 	</dl>
 
 <dt><code>ipac/&lt;version&gt;/drvIpac/drvIpac.dbd</code>
