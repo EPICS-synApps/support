@@ -250,7 +250,9 @@ def writeNewCmdFile(d, fileName, verbose):
 						fullname = os.path.join(path, dbFile)
 						newFile.write("%sdbLoadRecords(\"%s\", \"%s\")\n" % (entry.leadingComment,fullname, entry.value))
 						break
-			if not found: newFile.write("#NEW: " + rawLine)
+			if not found:
+				if (not isCommentedOut): newFile.write("#NEW: ")
+				newFile.write(rawLine)
 			continue
 
 		substitutionsFile = isdbLoadTemplateCall(line, max(verbose-1,0))
@@ -264,7 +266,10 @@ def writeNewCmdFile(d, fileName, verbose):
 						entry.used = True
 						newFile.write("%sdbLoadTemplate(\"%s\")\n" % (entry.leadingComment, substitutionsFile))
 						break
-			if not found: newFile.write("#NEW: " + rawLine)
+			#if not found: newFile.write("#NEW: " + rawLine)
+			if not found:
+				if (not isCommentedOut): newFile.write("#NEW: ")
+				newFile.write(rawLine)
 			continue
 
 		(funcName, argString) = isFunctionCall(line, max(verbose-1,0))
@@ -282,7 +287,10 @@ def writeNewCmdFile(d, fileName, verbose):
 						entry.used = True
 						newFile.write("%s%s(%s)\n" % (entry.leadingComment, funcName, entry.value))
 						break
-			if not found: newFile.write("#NEW: " + rawLine)
+			#if not found: newFile.write("#NEW: " + rawLine)
+			if not found:
+				if (not isCommentedOut): newFile.write("#NEW: ")
+				newFile.write(rawLine)
 			continue
 
 		(varName, varValue) = isVariableDefinition(line, max(verbose-1,0))
@@ -296,7 +304,10 @@ def writeNewCmdFile(d, fileName, verbose):
 						entry.used = True
 						newFile.write("%s%s = %s\n" % (entry.leadingComment, varName, entry.value))
 						break
-			if not found: newFile.write("#NEW: " + rawLine)
+			#if not found: newFile.write("#NEW: " + rawLine)
+			if not found:
+				if (not isCommentedOut): newFile.write("#NEW: ")
+				newFile.write(rawLine)
 			continue
 
 		(progName, argString) = isSeqCommand(line, max(verbose-1,0))
@@ -310,7 +321,10 @@ def writeNewCmdFile(d, fileName, verbose):
 						entry.used = True
 						newFile.write("%sseq %s, %s\n" % (entry.leadingComment, progName, entry.value))
 						break
-			if not found: newFile.write("#NEW: " + rawLine)
+			#if not found: newFile.write("#NEW: " + rawLine)
+			if not found:
+				if (not isCommentedOut): newFile.write("#NEW: ")
+				newFile.write(rawLine)
 			continue
 
 		scriptName = isScriptCommand(line, max(verbose-1,0))
@@ -324,7 +338,10 @@ def writeNewCmdFile(d, fileName, verbose):
 						entry.used = True
 						newFile.write("%s< %s\n" % (entry.leadingComment, scriptName))
 						break
-			if not found: newFile.write("#NEW: " + rawLine)
+			#if not found: newFile.write("#NEW: " + rawLine)
+			if not found:
+				if (not isCommentedOut): newFile.write("#NEW: ")
+				newFile.write(rawLine)
 			continue
 
 		newFile.write(rawLine)
