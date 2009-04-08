@@ -93,7 +93,7 @@ def collectAllInfo(directory=".", verbose=0):
 usage = """
 Usage:    convertIocFiles.py [options] old_dir [new_dir]
     option: -v[integer]   (verbose/debug level)
-    option: -c            (ignore comments)
+    option: -c            (do not ignore comments)
 
 Examples: convertIocFiles.py <old_dir> <new_dir>
     convertIocFiles.py <old_dir>"
@@ -125,7 +125,7 @@ Result: Files named <existing-file>.CVT are created or overwritten.  The
 def main():
 	verbose = 0
 	dirArg = 1
-	ignoreComments = 0
+	ignoreComments = 1
 	d = cmdFileDictionaries()
 	subFileDict = {}
 	dd = {}
@@ -144,7 +144,7 @@ def main():
 						verbose = 1
 					break # out of 'for (j, arg)...'
 				elif (arg == 'c'):
-					ignoreComments = 1
+					ignoreComments = 0
 					break # out of 'for (j, arg)...'
 		dirArg = i
 		if (len(sys.argv) > dirArg):
