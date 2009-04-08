@@ -504,11 +504,14 @@ def writeNewAutosaveFile(d, asFileName, verbose):
 						entry.used = True
 						newFile.write("%sfile %s %s\n" % (entry.leadingComment, fileName, entry.value))
 						break
-			if not found: newFile.write("#NEW: " + rawLine)
+			#if not found: newFile.write("#NEW: " + rawLine)
+			if not found:
+				if (not isCommentedOut): newFile.write("#NEW: ")
+				newFile.write(rawLine)
 		else:
 			# just a pvName
 			pvName = words[0]
-			if isCommentedOut and len(words) > 1: continue
+			#if isCommentedOut and len(words) > 1: continue
 			found = False
 			if pvName in d.asPvDict.keys():
 				for entry in d.asPvDict[pvName]:
@@ -516,8 +519,10 @@ def writeNewAutosaveFile(d, asFileName, verbose):
 						found = True
 						entry.used = True
 						newFile.write(rawLine)
-			else:
-				newFile.write("#NEW: " + rawLine)
+			if not found:
+				#newFile.write("#NEW: " + rawLine)
+				if (not isCommentedOut): newFile.write("#NEW: ")
+				newFile.write(rawLine)
 			continue
 
 	file.close()
