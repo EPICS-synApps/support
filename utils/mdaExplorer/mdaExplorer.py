@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+# wish list:
+# survey mda files should list dates
+# survey mda files should update if new files are added to directory
+# would like to be able to display a file while it is being written
+
 import os
 import sys
 import time
@@ -1842,6 +1847,7 @@ class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthM
 		self.InsertColumn(2, "type")
 		self.InsertColumn(3, "dimensions")
 		self.InsertColumn(4, "detectors")
+		self.InsertColumn(5, "date last modified")
 
 		# fill list
 		i = 0
@@ -1855,6 +1861,7 @@ class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthM
 					sizeStr = "%.1fk" % (float(size)/1024)
 				else:
 					sizeStr = str(size)
+				fileDate = time.ctime(os.stat(f).st_mtime)
 				d = mda.skimMDA(f)
 				if d != None:
 					acq_dimensions = d[0]['acquired_dimensions']
@@ -1871,7 +1878,7 @@ class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthM
 	
 					fileType = str(d[0]['rank'])+"D"
 	
-					self.itemDataMap[i] = (f, sizeStr, fileType, dimensionStr, detectorStr)
+					self.itemDataMap[i] = (f, sizeStr, fileType, dimensionStr, detectorStr, fileDate)
 					i += 1
 		# Add one last item duplicating column-head text, because that doesn't get
 		# autosized
@@ -1880,7 +1887,8 @@ class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthM
 			"size",
 			"type",
 			"dimensions",
-			"detectors"
+			"detectors",
+			"date last modified"
 		)
 		self.lastKey = i
 
@@ -1892,14 +1900,15 @@ class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthM
 			self.SetStringItem(i, 2, data[2])
 			self.SetStringItem(i, 3, data[3])
 			self.SetStringItem(i, 4, data[4])
+			self.SetStringItem(i, 5, data[5])
 			self.SetItemData(i, i)
 		self.SetItemTextColour(self.lastKey, "red")
 
-		listmix.ColumnSorterMixin.__init__(self, 5)
+		listmix.ColumnSorterMixin.__init__(self, 6)
 
 		self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnItemSelected, self)
 
-		for i in range(4):
+		for i in range(5):
 			self.SetColumnWidth(i, wx.LIST_AUTOSIZE)
 
 	def OnItemSelected(self, event):
@@ -1962,6 +1971,12 @@ class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthM
 					elif int1 < int2:
 						cmpVal = -1
 						break
+		elif col == 5:
+			seconds1 = time.mktime(time.strptime(item1,"%c"))
+			seconds2 = time.mktime(time.strptime(item2,"%c"))
+			cmpVal = 0
+			if (seconds1 > seconds2): cmpVal = 1
+			if (seconds1 < seconds2): cmpVal = -1
 
 		if cmpVal == 0:
 			item1 = self.itemDataMap[key1][0]
@@ -1979,7 +1994,7 @@ class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthM
 
 class DirListFrame(wx.Frame):
 	def __init__(self, parent, directory):
-		wx.Frame.__init__(self, parent, -1, "MDA Survey")
+		wx.Frame.__init__(self, parent, -1, "MDA Survey", size=(500,-1))
 		panel = wx.Panel(self, -1, style=wx.WANTS_CHARS)
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		title = wx.StaticText(panel, -1, "MDA files in: %s" % directory)
