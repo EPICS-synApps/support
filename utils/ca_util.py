@@ -2,7 +2,8 @@
 # Tim Mooney 12/05/2008
 
 
-"""ca_util.py is a wrapper around CaChannel that allows the caller to write, e.g.,
+"""ca_util.py is a wrapper around CaChannel that allows the caller to write,
+e.g.,
     caget("xxx:m1")
 instead of having to write
     m1 = CaChannel()
@@ -83,22 +84,81 @@ defaultRetries = 3
 readCheckTolerance = None	# 'None" means don't check
 
 def set_ca_util_defaults(timeout=None, retries=None, read_check_tolerance=None):
+	"""
+	usage: old = set_ca_util_defaults(timeout=None, retries=None,
+	             read_check_tolerance=None)
+	alternate: set_ca_util_defaults(defaultsList), where defaultsList is like
+	the list returned by get_ca_util_defaults()
+	Setting an argument to the string "NONE" disables it.
+	Returns the list of previous default values:
+	    [defaultTimeout, defaultRetries, readCheckTolerance]
+	"""
 	global defaultTimeout, defaultRetries, readCheckTolerance
+	old = [defaultTimeout, defaultRetries, readCheckTolerance]
+	if type(timeout) == type([]):
+		argList = timeout
+		timeout = argList[0]
+		retries = argList[1]
+		read_check_tolerance = argList[2]
 	if (timeout!=None) : defaultTimeout = timeout
 	if (retries!=None) : defaultRetries = retries
 	if (read_check_tolerance!=None) : readCheckTolerance = read_check_tolerance
+	return old
+
+def get_ca_util_defaults():
+	"""
+	usage: myList = get_ca_util_defaults()
+	myList is set to [defaultTimeout, defaultRetries, readCheckTolerance]
+	"""
+	global defaultTimeout, defaultRetries, readCheckTolerance
+	return [defaultTimeout, defaultRetries, readCheckTolerance]
+
+def set_ca_util_default_timeout(timeout=None):
+	"""
+	usage: old = set_ca_util_default_timeout(timeout=None)
+	If timeout == "NONE", then ca_util doesn't specify any timeout in
+	calls to underlying software.
+	Returns previous default timeout.
+	"""
+	global defaultTimeout
+	old = defaultTimeout
+	defaultTimeout = timeout
+	return old
 
 def get_ca_util_default_timeout():
 	global defaultTimeout
 	return defaultTimeout
 
+def set_ca_util_default_retries(retries=None):
+	"""
+	usage: old = set_ca_util_default_retries(retries=None)
+	If retries == "NONE", then ca_util doesn't do any retries.
+	Returns previous default retries.
+	"""
+	global defaultRetries
+	old = defaultRetries
+	defaultRetries = retries
+	return old
+
 def get_ca_util_default_retries():
 	global defaultRetries
 	return defaultRetries
 
+def set_ca_util_default_read_check_tolerance(read_check_tolerance=None):
+	"""
+	usage: old = set_ca_util_default_read_check_tolerance(read_check_tolerance=None)
+	If read_check_tolerance == "NONE", then ca_util doesn't compare the value
+	it reads to the value it wrote.
+	Returns previous default tolerance.
+	"""
+	global readCheckTolerance
+	old = readCheckTolerance
+	readCheckTolerance = read_check_tolerance
+	return old
+
 def get_ca_util_default_read_check_tolerance():
 	global readCheckTolerance
-	return (readCheckTolerance)
+	return readCheckTolerance
 
 
 #######################################################################
@@ -127,15 +187,15 @@ EXCEPTION_READBACK_DISAGREES = 1
 EXCEPTION_NOT_CONNECTED      = 2
 
 class ca_utilException(Exception):
-    def __init__(self, *args):
-        Exception.__init__(self, *args)
-        self.errorNumber = args[0]
+	def __init__(self, *args):
+		Exception.__init__(self, *args)
+		self.errorNumber = args[0]
 
-    def __int__(self):
-        return int(self.errorNumber)
+	def __int__(self):
+		return int(self.errorNumber)
 
-    def __str__(self):
-        return ca_utilExceptionStrings[self.errorNumber]
+	def __str__(self):
+		return ca_utilExceptionStrings[self.errorNumber]
 
 
 #######################################################################
@@ -172,15 +232,19 @@ def checkName(name, timeout=None, retries=None):
 	if not name:
 		raise ca_utilException, EXCEPTION_NULL_NAME
 		return
-	if ((timeout==None) and (defaultTimeout != None)): timeout = defaultTimeout
-	if ((retries==None) and (defaultRetries >= 0 )): retries = defaultRetries
+
+	if ((timeout == None) and (defaultTimeout != None)): timeout = defaultTimeout
+	if (timeout == "NONE"): timeout = None
+
+	if ((retries == None) and (defaultRetries != None)): retries = defaultRetries
+	if ((retries == None) or (retries == "NONE")): retries = 0
 
 	tries = 0
 	while (not cadict.has_key(name)) and (tries <= retries):
 		# Make a new entry in the PV-name dictionary
 		try:
 			channel = CaChannel.CaChannel()
-			channel.setTimeout(timeout)
+			if (timeout != None): channel.setTimeout(timeout)
 			channel.searchw(name)
 			cadict[name] = cadictEntry(channel)
 		except CaChannel.CaChannelException, status:
@@ -202,8 +266,6 @@ def castate(name=None, timeout=None, retries=None):
 	global cadict, defaultTimeout, defaultRetries
 
 	if not name: return "Null name has no state"
-	if ((timeout==None) and (defaultTimeout != None)): timeout = defaultTimeout
-	if ((retries==None) and (defaultRetries != None)): retries = defaultRetries
 
 	# The only reliable way to check the *current* state of a PV is to attempt to use it.
 	try:
@@ -240,7 +302,8 @@ def castate(name=None, timeout=None, retries=None):
 
 #######################################################################
 def caget(name, timeout=None, retries=None, req_type=None, req_count=None):
-	"""usage: val = caget("xxx:m1.VAL", timeout=None, retries=None, req_type=None, req_count=None)"""
+	"""usage: val = caget("xxx:m1.VAL", timeout=None, retries=None,
+	                req_type=None, req_count=None)"""
 
 	global cadict, defaultTimeout, defaultRetries
 
@@ -249,9 +312,10 @@ def caget(name, timeout=None, retries=None, req_type=None, req_count=None):
 		raise ca_utilException, EXCEPTION_NULL_NAME
 		return 0
 	if ((timeout==None) and (defaultTimeout != None)): timeout = defaultTimeout
+	if (timeout == "NONE"): timeout = None
 	if ((retries==None) and (defaultRetries != None)): retries = defaultRetries
-
-	retries = min(retries,0)
+	if ((retries == None) or (retries == "NONE")): retries = 0
+	retries = max(retries,0)
 	retry = retries + 1
 	success = 0
 
@@ -273,7 +337,7 @@ def caget(name, timeout=None, retries=None, req_type=None, req_count=None):
 				checked = 1
 
 		entry = cadict[name]
-		entry.channel.setTimeout(timeout)
+		if (timeout != None): entry.channel.setTimeout(timeout)
 		if req_type == None:
 			req_type=entry.field_type
 		# kludge for broken DBR_CHAR
@@ -311,10 +375,10 @@ def isNumber(s):
 #######################################################################
 def same(value, readback, native_readback, field_type, read_check_tolerance):
 	"""For internal use by ca_util"""
-	print "ca_util.same(): field_type=%s" % field_type
-	print "ca_util.same(): value='%s'; readback='%s', native_readback='%s'" % (str(value), str(readback), str(native_readback))
-	print "ca_util.same(): type(value)=%s; type(readback)=%s, type(native_readback)=%s" % (type(value),
-		type(readback), type(native_readback))
+	#print "ca_util.same(): field_type=%s" % field_type
+	#print "ca_util.same(): value='%s'; readback='%s', native_readback='%s'" % (str(value), str(readback), str(native_readback))
+	#print "ca_util.same(): type(value)=%s; type(readback)=%s, type(native_readback)=%s" % (type(value),
+	#	type(readback), type(native_readback))
 
 	if field_type in [ca.DBR_FLOAT, ca.DBR_DOUBLE]:
 		return (abs(float(readback)-float(value)) < read_check_tolerance)
@@ -332,12 +396,16 @@ def same(value, readback, native_readback, field_type, read_check_tolerance):
 #######################################################################
 def caput(name, value, timeout=None, req_type=None, retries=None, read_check_tolerance=None):
 	"""
-	usage: caput("xxx:m1.VAL", new_value, timeout=None, req_type=None, retries=None,
-	       read_check_tolerance=None)
-	If read_check_tolerance != None, then floating point numbers must be
+	usage: caput("xxx:m1.VAL", new_value, timeout=None, req_type=None,
+	       retries=None, read_check_tolerance=None)
+	Put a value, and optionally check that the value arrived safely.
+	If read_check_tolerance == None (or is not supplied) then the default
+	read-check tolerance is used.  If read_check_tolerance == "NONE", then no
+	read check is done.
+	If read_check_tolerance != "NONE", then floating point numbers must be
 	closer than the tolerance, and other types must agree exactly.
-	Note that defaults for timeout, retries, and read_check_tolerance can be set
-	for all ca_util functions, using the command set_ca_util_defaults().
+	Note that defaults for timeout, retries, and read_check_tolerance can be
+	set for all ca_util functions, using the command set_ca_util_defaults().
 	"""
 
 	_caput("caput", name, value, 0, timeout, req_type, retries, read_check_tolerance)
@@ -346,6 +414,7 @@ def caput(name, value, timeout=None, req_type=None, retries=None, read_check_tol
 #######################################################################
 def __ca_util_waitCB(epics_args, user_args):
 	"""Function for internal use by caputw()."""
+	#print "__ca_util_waitCB: %s done\n" % user_args[0]
 	cadict[user_args[0]].callbackReceived = 1
 
 #######################################################################
@@ -355,11 +424,14 @@ def caputw(name, value, wait_timeout=None, timeout=None, req_type=None, retries=
 	usage: caputw("xxx:m1.VAL", new_value, wait_timeout=None, timeout=None,
 	       req_type=None, retries=None, read_check_tolerance=None)
 	Put a value, optionally check that the value arrived safely, and wait (no
-	longer than wait_timeout) for processing to complete.  If
-	read_check_tolerance != None, then floating point numbers must be closer
-	than the tolerance, and other types must agree exactly.
-	Note that defaults for timeout, retries, and read_check_tolerance can be
-	set for all ca_util functions, using the command set_ca_util_defaults().
+	longer than wait_timeout) for processing to complete. If
+	read_check_tolerance == None (or is not supplied) then the default
+	read-check tolerance is used.  If read_check_tolerance == "NONE", then no
+	read check is done. If read_check_tolerance != "NONE", then floating point
+	numbers must be closer than the tolerance, and other types must agree
+	exactly. Note that defaults for timeout, retries, and read_check_tolerance
+	can be set for all ca_util functions, using the command
+	set_ca_util_defaults().
 	"""
 
 	_caput("caputw", name, value, wait_timeout, timeout, req_type, retries, read_check_tolerance)
@@ -375,12 +447,13 @@ def _caput(function, name, value, wait_timeout=None, timeout=None, req_type=None
 		print "%s: no PV name supplied" % function
 		raise ca_utilException, EXCEPTION_NULL_NAME
 		return
-	if ((timeout==None) and (defaultTimeout != None)): timeout = defaultTimeout
-	if ((retries==None) and (defaultRetries != None)): retries = defaultRetries
-	if ((read_check_tolerance==None) and (readCheckTolerance != None)):
+	if ((timeout == None) and (defaultTimeout != None)): timeout = defaultTimeout
+	if ((retries == None) and (defaultRetries != None)): retries = defaultRetries
+	if ((retries == None) or (retries == "NONE")): retries = 0
+	if ((read_check_tolerance == None) and (readCheckTolerance != None)):
 		read_check_tolerance = readCheckTolerance
 
-	retries = min(retries,0)
+	retries = max(retries,0)
 	retry = retries + 1
 	success = 0
 
@@ -400,14 +473,14 @@ def _caput(function, name, value, wait_timeout=None, timeout=None, req_type=None
 		else:
 			if req_type == None:
 				req_type=entry.field_type
-			entry.channel.setTimeout(timeout)
+			if ((timeout != None) and (timeout != "NONE")): entry.channel.setTimeout(timeout)
 			entry.callbackReceived = 0 # in case we're doing caputw()
 			#value = convertToType(value, req_type)
 			try:
 				if function == "caput":
 					entry.channel.putw(value, req_type=req_type)
 				else: #caputw
-					entry.channel.array_put_callback(value,req_type,entry.element_count,__ca_util_waitCB,name)
+					retval = entry.channel.array_put_callback(value,req_type,entry.element_count,__ca_util_waitCB,name)
 			except CaChannel.CaChannelException, status:
 				print "put() threw an exception (%s)" % status
 				if ((int(status) == ca.ECA_BADTYPE) or (int(status) == ca.ECA_DISCONN)):
@@ -420,7 +493,7 @@ def _caput(function, name, value, wait_timeout=None, timeout=None, req_type=None
 					entry.callbackReceived = 1
 					return
 			else:
-				if read_check_tolerance == None:
+				if ((read_check_tolerance == None) or (read_check_tolerance == "NONE")):
 					success = True
 				else:
 					if timeout:
@@ -429,23 +502,23 @@ def _caput(function, name, value, wait_timeout=None, timeout=None, req_type=None
 						ca.pend_io(1.0)
 					readback_success = False
 					count = 0
-					while not readback_success and count < retries:
+					while ((not readback_success) and (count < retries+1)):
 						try:
 							readback = caget(name, req_type=req_type)
 							native_readback = caget(name)
 							readback_success = True
 							if same(value, readback, native_readback, entry.field_type, read_check_tolerance):
 								success = True
-								#print "SAME\n"
+								#print "%s: Success\n" % (function)
 							else:
 								print "%s: readback '%s' disagrees with the value '%s' we wrote." % (function, readback, value)
 								raise ca_utilException, EXCEPTION_READBACK_DISAGREES
 								entry.callbackReceived = 1
 						except CaChannel.CaChannelException, status:
-							print "caput: exception during readback."
+							print "%s: exception during readback." % (function)
 							count += 1
 
-	if success and (function == caputw):
+	if success and (function == "caputw"):
 		start_time = time.time()
 		timed_out = 0
 		while (not entry.callbackReceived) and (not timed_out):
@@ -482,8 +555,9 @@ def camonitor(name, function, user_args=None, timeout=None, retries=None):
 	if not user_args: user_args = name
 	if ((timeout==None) and (defaultTimeout != None)): timeout = defaultTimeout
 	if ((retries==None) and (defaultRetries != None)): retries = defaultRetries
+	if ((retries == None) or (retries == "NONE")): retries = 0
 
-	retries = min(retries,0)
+	retries = max(retries,0)
 	retry = retries + 1
 	success = 0
 
@@ -501,7 +575,7 @@ def camonitor(name, function, user_args=None, timeout=None, retries=None):
 				checked = 1
 
 		entry = cadict[name]
-		entry.channel.setTimeout(timeout)
+		if ((timeout != None) and (timeout != "NONE")): entry.channel.setTimeout(timeout)
 		try:
 			entry.channel.add_masked_array_event(entry.field_type,entry.element_count,ca.DBE_VALUE, function, user_args)
 		except CaChannel.CaChannelException, status:
@@ -535,7 +609,7 @@ def caunmonitor(name, timeout=None):
 		return
 
 	channel = cadict[name].channel
-	channel.setTimeout(timeout)
+	if ((timeout != None) and (timeout != "NONE")): channel.setTimeout(timeout)
 	try:
 		channel.clear_event()
 	except CaChannel.CaChannelException, status:
