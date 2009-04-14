@@ -52,6 +52,7 @@ import matplotlib.cbook as cbook
 from matplotlib.widgets import Cursor
 from matplotlib.widgets import MultiCursor
 
+TIME_FORMAT = "%c" # Use Locale's time format
 DEBUG = False
 
 # We're going to have positioner and detector checkbox lists, and we have to
@@ -1861,7 +1862,7 @@ class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthM
 					sizeStr = "%.1fk" % (float(size)/1024)
 				else:
 					sizeStr = str(size)
-				fileDate = time.ctime(os.stat(f).st_mtime)
+				fileDate = time.strftime(TIME_FORMAT, time.localtime(os.stat(f).st_mtime))
 				d = mda.skimMDA(f)
 				if d != None:
 					acq_dimensions = d[0]['acquired_dimensions']
@@ -1972,8 +1973,8 @@ class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthM
 						cmpVal = -1
 						break
 		elif col == 5:
-			seconds1 = time.mktime(time.strptime(item1,"%c"))
-			seconds2 = time.mktime(time.strptime(item2,"%c"))
+			seconds1 = time.mktime(time.strptime(item1,TIME_FORMAT))
+			seconds2 = time.mktime(time.strptime(item2,TIME_FORMAT))
 			cmpVal = 0
 			if (seconds1 > seconds2): cmpVal = 1
 			if (seconds1 < seconds2): cmpVal = -1
