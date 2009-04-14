@@ -230,11 +230,11 @@ def writeNewCmdFile(d, fileName, verbose):
 			newFile.write(rawLine)
 			continue
 		if (verbose): print "\n'%s'" % strippedLine
-
+		
 		isCommentedOut = (rawLine[0] == '#')
 		line = strippedLine.lstrip("#")
 
-		if (len(line) == 0):
+		if (isCommentedOut or (len(line) == 0)):
 			newFile.write(rawLine);
 			continue
 
