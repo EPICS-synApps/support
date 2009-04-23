@@ -10,6 +10,7 @@ content="text/html; charset=iso-8859-1">
 
 <h1 align="center">synApps 5.4.2 Release Notes</h1>
 <h2>Module changes from R5-4-1 to R5-4-2</h2>
+<table border>
 <tr><td>SSCAN<td>2-6-4<td>2-6-5
 </table border>
 <P>Minor improvements in utils/convertIocFiles, and utils/mdaExplorer
@@ -74,16 +75,568 @@ from &lt;name&gt; to remove dependencies that are not needed when the modules
 are used only to provide support (and not to also implement an example of
 that support).  For modules that do not have an example, see the xxx module.
 
-<P>See individual module documentation directories for module-specific release
-notes.
+<h3>areaDetector</h3>
+<blockquote>
+New module
+</blockquote>
 
-<h2>Utils directory</h2>
+<h3>asyn</h3>
+<blockquote>
+Switched from version 4.6 to 4.10
+</blockquote>
+
+<h3>autosave</h3>
+<blockquote>
+<h4>4.5</h4>
+<ul>
+<li> Previously, autosave restored auto_positions.sav and auto_settings.sav
+if no save file had been specified in a call to set_pass<i>n</i>_restoreFile().
+Now, autosave does not restore anything you don't tell it to restore.
+<li>Can now build with tornado 2.2.2.
+<li>save_restore.c:write_it() was calling open(), fdopen(), fclose(), and
+close(), in that order, and this worked routinely.  However, some doc suggests
+close() should not be called, and we found a task suspended in the close() call,
+so the call has been deleted.
+</ul>
+
+<h4>4.4</h4>
+<ul>
+<li>If file close fails, retry once.  (Previously, would retry up to 100 times.)
+<li>If file write (including close) fails, retry after save_restoreRetrySeconds
+(default value is 60 seconds).  Previously, would retry only after the file
+system was remounted, or the next time the set was triggered.
+<li>New function save_restoreSet_RetrySeconds(int seconds).
+<li>Don't copy .sav file to .sav&lt;n&gt; (i.e., don't write sequence files) if .sav
+file write failed.
+<li>new function save_restoreSet_UseStatusPVs(int ok)
+<li>allow save-file name with more than one embedded '.' character.
+</ul>
+</blockquote>
+
+<h3>busy</h3>
+<blockquote>
+<h4>1.2</h4>
+New module
+</blockquote>
+
+<h3>calc</h3>
+<blockquote>
+<h4>2.7</h4>
+<ul>
+<li>Instead of the genSub record, the calc module now uses the aSub record
+in EPICS base (3.14.10 and higher).  Thanks to Eric Norum for detailing the
+required changes.
+<li>transform record exports transformRecordDebug, and calcSupport.dbd names it.
+<li>new .adl files yyArrayCalc*.adl
+<li>CalcRecord*.adl: deleted link-valid fields, which don't exist for calc record.
+</ul>
+</blockquote>
+
+<h3>camac</h3>
+<blockquote>
+No changes
+</blockquote>
+
+<h3>ccd</h3>
+<blockquote>
+    NOTE: This module is <b>now obsolete</b> and has been replaced by the <a href="http://cars.uchicago.edu/software/epics/areaDetector.html/">
+      areaDetector module.</a>
+
+<h4>1.10</h4>
+  <ul>
+    <li>Added code to support parallel make.</li>
+    <li>Use new "busy" module for busy record support, not in sscan module any longer.</li>
+    <li>NOTE: The new version of roperServer in R1-9 and R1-10 may not work on some Windows
+      systems. The older server from R1-8 and before can still be used in this case.</li>
+  </ul>
+<h4>1.9</h4>
+  <ul>
+    <li>Converted roperServer from Visual Basic 6 to Visual Basic .NET 2003.</li>
+    <li>Fixed bug in roperServer that caused it to treat 16-bit data as signed rather
+      than unsigned.</li>
+  </ul>
+</blockquote>
+
+
+<h3>dac128V</h3>
+<blockquote>
+No changes
+</blockquote>
+
+<h3>delaygen</h3>
+<blockquote>
+New module
+</blockquote>
+
+<h3>dxp</h3>
+<blockquote>
+<h4>2.9</h4>
+  <ul>
+    <li>Fixed problems with DXP4C2X. It was not correctly downloading FiPPI files when
+      peaking time was changed.</li>
+    <li>Fixed problems with logging errors and warnings on vxWorks. Previously the output
+      from XIA routines was lost after the startup script completed, because vxWorks closes
+      and reopens stdout.</li>
+    <li>Fixed memory leaks in XIA's code on Saturn and DXP4C2X when reading baseline histogram.</li>
+    <li>Added support for parallel make</li>
+    <li>Added "busy" module for busy record, moved from sscan.</li>
+  </ul>
+</blockquote>
+ 
+<h3>ebrick</h3>
+<blockquote>
+</blockquote>
+
+<h3>ip</h3>
+<blockquote>
+<h4>2.9</h4>
+<ul>
+<li>pico_small.adl - use asyn record instead of serial
+<li>devMPC.c - increased timeout, and defend against timeout; fixed bug when reading volts and return string length < 4
+</ul>
+</blockquote>
+
+<h3>ip330</h3>
+<blockquote>
+No changes
+</blockquote>
+
+<h3>ipUnidig</h3>
+<blockquote>
+<h4>2.6</h4>
+<ul>
+   <li>drvIpUnidig.c - fixed bug in report function; fixed bug that led to records
+   being processed on every poll until first interrupt.
+</ul>
+</blockquote>
+
+<h3>love</h3>
+<blockquote>
+<h4>3.2.4</h4>
+<UL>
+	<LI>Corrected a problem when communication would timeout.
+	<LI>Modified MEDM screen field colors.
+	<LI>Added .req file for save/restore.
+</UL>
+</blockquote>
+
+<h3>mca</h3>
+<blockquote>
+No changes
+</blockquote>
+
+<h3>modbus</h3>
+<blockquote>
+<h4>1.3</h4>
+  <ul>
+    <li>Changed modbusInterpose.c to replace pasynOctet->writeRaw() and pasynOctet->readRaw()
+      with pasynOctet->write() and pasynOctet->read(), because the raw routines have been
+      removed in asyn R4-10.</li>
+    <li>Changed the driver to use the asynStandardInterfaces interfaces added to asyn
+      in R4-10.</li>
+  </ul>
+</blockquote>
+
+<h3>motor</h3>
+<blockquote>
+<h4>6.4.3</h4>
+<div align="left">
+  <p>
+  <u><b>Backlash after a new target position</b></u>
+  </p>
+  <P>
+  A change in R6-4 prevented the motor from doing its' backlash move when a motor 
+  move was interrupted by a new target position.  The user would see a "tdir" 
+  message in the iocsh and the motor would move to the target position minus the 
+  backlash distance.
+  </P>
+</div>
+<div align="left">
+  <p>
+  <u><b>Multiple STOP commands</b></u>
+  </p>
+  <P>
+  A modification was made to prevent multiple STOP commands from occurring while the 
+  motor was decelerating to a stop.
+  </P>
+</div>
+
+<h4>6.4.2</h4>
+<div align="left">
+  <p>
+  <u><b>OMS MAXv home switch status</b></u>
+  </p>
+  <p>
+  Dirk Zimoch (PSI) fixed a bug in the OMS MAXv driver that caused the home switch 
+  status in the response string to be overwritten.
+  </p>
+</div>
+
+<div align="left">
+  <p>
+  <u><b>asyn motor</b></u>
+  </p>
+  <p>
+  Matthew Pearson (Diamond) discovered a bug in the Newport XPS asyn motor port 
+  drive that was causing idle polling to interfere with setting positions and 
+  preventing auto save/restore from working.  This fix was copied to the other 
+  asyn motor port drives in the motor record distribution; i.e., attocube ANC 150 
+  (drvANC150Asyn.cc) and the motor simulator (drvMotorSim.c).
+  </p>
+</div>
+
+<div align="left">
+  <p>
+  <u><b>old device drive architecture</b></u>
+  </p>
+  <p>
+  A problem was introduced in R6-4 (fixed in R6-4-2) of the old motor record 
+  device drive architecture.  If during the move of one or more motors the motor 
+  task did not issue an OS delay during status updates, it could potentially not 
+  respond to any further motor commands.
+  </p>
+</div>
+
+<br>
+
+<h4>6.4.2</h4>
+<div align="left">
+  <p>
+  <u><b>64-bit compatiablity</b></u>
+  </p>
+  <p>
+  Fixed 64 bit compile problems with the PI E816 and Aerotech Ensemble device 
+  drivers.
+  </p>
+</div>
+
+<h4>6.4.1</h4>
+<div align="left">
+  <p>
+  <u><b>64-bit compatiablity</b></u>
+  </p>
+  <p>
+  Fixed 64 bit compile problems with the PI E816 and Aerotech Ensemble device 
+  drivers.
+  </p>
+</div>
+
+<h4>6.4</h4>
+<center>
+  <h4><u>Modifications to Existing Features</u></h4>
+</CENTER>
+
+<DIV align="left">
+  <P>
+  <U><B>Stale SET position data from OMS VME58 controllers.</B></U>
+  </P>
+  <p>
+  A problem with certain OMS VME58 firmware versions (2.24-8S and all 2.35 
+  versions) has arisen since modifications made under R6-3.  When the user sets 
+  the motor record's position, the previous target and readback positions are read 
+  from the controller on the next update.  This occurs with the previous release (R6-3) 
+  because the "stale data delay" was changed from 10ms to zero for the drvOms58 
+  driver.
+  </P>
+  <P>
+  With this release the driver searches all VME58 board ID's for either 2.24-8S or 
+  any 2.35 version.  If any board is found with these versions, the "stale data 
+  delay" is set to a non-zero value for all VME58 boards in the system.
+  </p>
+  <P>
+  <U><B>"tdir=" error messages</B></U>
+  </P>
+  <p>
+  A problem was reported by Emma Shepherd (Diamond) with the previous release if 
+  the "Use RDBL Link" field (URIP) was set to "Yes".  The NTM logic was sending 
+  stop commands and issuing the "tdir=.." message to the console if the RDBL link 
+  was used.  This error was the result of changes to the NTM logic in R6-3.
+  </p>
+  <p>
+  With this release, the NTM logic is restored to using feedback rather than 
+  reference positions.  In addition, an "NTM deadband factor" field (NTMF) is 
+  added to allow the user to set the NTM deadband as follows;
+  </p>
+  <p>
+  NTM deadband = NTMF * (|BDST| + RDBD)
+  </p>
+  <p>
+  NTMF must be >= 2. If properly configured, the NTM deadband prevents NTM 
+  logic from issuing a STOP command at the end of a DC motor move that overshoots 
+  its' target position.
+  </p>
+  
+  <p>
+  <U><B>Access Security Level changes</B></U>
+  </p>
+  
+  <p>
+  Major changes have been made to the Access Security Level (ASL) attribute of the 
+  motor record fields. With previous releases, the following fields were set to 
+  ASL=0; FOF, VOF, SSET, SUSE, VBAS, VMAX, SBAS, SMAX, UREV and MRES.  All other 
+  fields were set to ASL=1 by default.
+  </p>
+  <p>
+  With this release, the policy is to set all the fields that the user requires to 
+  do the following to ASL = 0;
+  <ul>
+    <li>
+      move a motor; (VAL, DVAL, RVAL, TWF, TWR, TWV, RLV, JOGF, JOGR)
+    </li>
+    <li>
+      stop a motor; (STOP, SPMG)
+    </li>
+    <li>
+      enable/disable motor torque; (CNEN)
+    </li>
+    <li>
+      set the position of a motor; (SSET, SUSE, SET)
+    </li>
+    <li>
+      set the "user" offset of a motor; (FOF, VOF, FOFF,OFF)
+    </li>
+    <li>
+      update the status of a motor; (STUP)
+    </li>
+    <li>
+      adjust or turn off backlash; (BDST)
+    </li>
+  </ul>
+  </p>
+  <p>
+  All other fields are set to ASL = 1.
+  </p>
+  <p>
+  This means that out of the list of fields that were previously set to ASL=0; 
+  VBAS, VMAX, SBAS, SMAX, UREV and MRES are now set to ASL=1.
+  </p>
+
+  <p>
+  <U><B>OMS MAXv A24/A32 VMEbus addressing bug fix</B></U>
+  </p>
+  <p>
+  Previous releases had a problem with the OMS MAXv device driver when it was 
+  configured for more than one board, and, either A24 or A32 addressing was 
+  specified. The driver was not sizing the address space occupied by each MAXv 
+  correctly.
+  </p>
+
+  <p>
+  <u><b>asyn motor archtecture updates</b></u>
+  </p>
+  <p>
+  <li>
+    Motor record GET_INFO commands were not supported by the asyn motor archtecture 
+    in previous releases.
+  </li>
+  <li>
+    A motor record bug was fixed that caused unscheduled retries to occur with asyn 
+    motor.
+  </li>
+  </p>
+
+</DIV>
+
+<CENTER>
+  <H4><U>New Features</U></H4>
+</CENTER>
+
+<DIV align="left">
+  <P>
+  <U><B>Deferred moves for asyn motors</B></U>
+  </P>
+  <P>
+  The asyn motor framework now supports a flag to indicate that moves should be
+  deferred.  When at zero, moves proceed as normal.  When set to one, moves
+  should be deferred and remembered by the controller driver, but not executed
+  immediately. When set back to zero, the controller driver should then start
+  all the moves (or at least moves to the last requested demand positions) that
+  have been deferred, as near to simultaneously as is possible for the
+  particular model of controller. The flag is implemented per-controller, so
+  all axes on a particular controller instance are affected, but axes on other
+  controllers via the same driver are unaffected.
+  </P>
+  <P>
+  It is the responsibility of the motor controller driver to actually provide
+  such functionality, or to give an error if the parameter is not recognised.
+  Currently the Newport XPS controller driver and the Delta Tau PMAC driver
+  (in the tpmac module available from Diamond) support this.
+  </P>
+  <P>
+  To use the flag, connect to any asyn port/addr combination on the controller,
+  using the parameter "DEFER". e.g. for a bo record, use DTYP=asynUInt32Digital,
+  OUT=@asynMask(port,1,1)DEFER, ZNAM="Go", ONAM="Defer"
+  </P>
+  <P>
+  <U><B>64-bit compatiablity</B></U>
+  </P>
+  <p>
+  Previous releases of the motor record distribution would not compile for 64-bit 
+  platforms.  Numerous minor modifications were made for this release to attain 64-bit 
+  compatibility.  Note that at the time of writing (03/14/08), this release was 
+  successfully compiled on a Linux Fedora Core 6 x86_64 host using gcc version 
+  4.1.2, but there are bugs.  Since EPICS base (R3.14.9) has not had all the bugs 
+  wrung out (Mantis ID's #309, #310), there are no immediate plans to debug 64-bit 
+  related problems.
+  </p>
+  
+  <U><B>attocube systems AG ANC150</B></U>
+  </P>
+  <p>
+  Ron Sluiter added support for the attocube systems AG ANC150 Piezo Step 
+  Controller.  
+  </p>
+
+  <u><b>Aerotech's Ensemble</b></u>
+  </p>
+  <p>
+  Chad Weimer (Aerotech) added support for Aerotech's Ensemble family of digital 
+  servo controllers.
+  </p>
+  
+  <u><b>Physik Instrumente GmbH & Co. Model E-816</b></u>
+  </p>
+  <p>
+  John Hammonds added support of the Physik Instrumente (PI) GmbH & Co. E-816 
+  motor controller.
+  </p>
+</DIV>
+</blockquote>
+
+
+
+<h3>optics</h3>
+<blockquote>
+<h4>2.6.1</h4>
+<ul>
+<li>Added support for a multilayer monochromator
+<li>XIA_shutter.db  - user command was sometimes overwritten by a poll and dropped
+</ul>
+</blockquote>
+
+<h3>pilatus</h3>
+<blockquote>
+<h4>1.6</h4>
+  <ul>
+    <li>Notice that this module <b>will no longer be supported</b>, users should convert
+      to the <a href="http://cars.uchicago.edu/software/epics/areaDetector.html">areaDetector</a>
+      module.</li>
+    <li>Use the busy record from the new "busy" module, moved from the sscan module.</li>
+    <li>Support parallel make (make -j).</li>
+  </ul>
+</blockquote>
+
+<h3>quadEM</h3>
+<blockquote>
+No changes
+</blockquote>
+
+<h3>sscan</h3>
+<blockquote>
+
+<h4>2.6.5</h4>
+<ul>
+<li>Check all chid's before using them.
+<li>Modified saveData so that, when it finds the filename it would like to use
+(e.g., base_0001.mda) already in use, it writes, e.g., base_0001_01.mda,
+instead of base_0001.mda_01, as it used to do.
+</ul>
+
+
+
+<h4>2.6.4</h4>
+<ul>
+<li>In 2.6.3, saveData crashed under tornado 2.2, because a vxWorks XDR
+structure changed.  Now we define an old and a new structure, and identify the
+correct structure by its size.
+</ul>
+
+
+<h4>2.6.3</h4>
+<ul>
+<li>scanDetPlot.adl - added count
+<li> don't build busy record (split out into separate module) but retain a copy
+here for a while, since the busy module has new different version
+<li>saveData.c - don't include nfsDrv.h (which is renamed in tornado 2.2.2); instead, define nfsMount, nfsUnmount by hand.
+<li>sscanRecord.c - handle DBRprecision definition in EPICS 3.14.10; scanOnce() arg cast
+</ul>
+
+
+
+<h4>2.6.2</h4>
+<ul>
+
+<li>Removed race conditions affecting callback counters, and added mutex to
+protect them.  Changed timing of when to renew positioner links from
+now-last_scan_start to now-last_scan_end.
+
+<li>display_fields.adl uses new link-help displays from std R2.6
+
+</ul>
+
+
+<h4>2.6.1</h4>
+<ul>
+
+<li>The sscan record didn't correctly handle reads or writes to PnPA, for n>1.
+As a result, table scans did not work with positioners 2-4.
+
+<li>saveData didn't fail correctly when it could not find the [basename] section
+in its initialization file, and when it failed to connect to the basename PV.
+Instead, it aborted its initialization, and failed to connect to sscan records.
+
+</ul>
+</blockquote>
+
+<h3>std</h3>
+<blockquote>
+<H4>2.7</H4>
+<ul>
+<li>yySeq.adl, yySeq_full.adl - new files
+<li>genSub-record dependency replaced by aSub record in base 3.14.10
+</ul>
+</blockquote>
+
+<h3>stream</h3>
+<blockquote>
+Switched from 2.2 to 2.4
+</blockquote>
+
+<h3>utils</h3>
+<blockquote>
 <ul>
 <li>New directory mdautils-src
 <li>New directory mdaExplorer
 <li>New directory mdaPythonUtils
 <li>New directory snapDb
 </ul>
+</blockquote>
+
+<h3>vac</h3>
+<blockquote>
+<h4>1.2</h4>
+<UL>
+	<LI>new files: vacApp/op/adl/Pump.adl, .../Pump_sp.adl, .../VacSen.adl
+	<li>Db/vs.db, Db/digitelPump.db - added SCAN field
+</UL>
+</blockquote>
+
+<h3>vme</h3>
+<blockquote>
+<H4>2.6</H4>
+<ul>
+<li>removed iocBoot example, and associated build in src
+<li>use devScaler_debug.c for VSC-series scalers, because many of the new series
+have hardware trouble.
+</ul>
+</blockquote>
+
+<h3>vxStats</h3>
+<blockquote>
+No changes
+</blockquote>
+
+
 
 <h1 align="center">synApps 5.3 Release Notes</h1>
 
