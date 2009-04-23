@@ -142,7 +142,7 @@ you've done, to diagnose problems, and to extend synApps in any significant way.
 <tr><td><b>dac128V</b><td>Support for an IndustryPack DAC module.
 
 <tr><td><b>delaygen</b><td>Support for delay generators, including the SRS
-	DG645, Colby Instruments PDL100A
+	DG645, Colby Instruments PDL100A, and Gigabaudics PADL3.
 
 <tr><td><b>dxp</b><td>Support for X-Ray Instrumentation Associates's DXP digital
 signal processor
@@ -845,10 +845,11 @@ synApps support directory should be very simple:
 <li>Edit ipac/&lt;version&gt;/drvIpac/drvIpac.dbd, and
    motor/&lt;version&gt;/motorApp/Makefile, as noted above.
 
-<li>Set the environment variable <code>EPICS_HOST_ARCH</code> to the architecture (and
-   compiler, if there is a choice) on which you are building. synApps is tested
-   with the architectures <code>solaris-sparc</code>, <code>linux-x86</code>,
-   <code>cygwin-x86</code>, and <code>win32-x86</code>.
+<li>Set the environment variable <code>EPICS_HOST_ARCH</code> to the
+   architecture (and compiler, if there is a choice) on which you are building.
+   synApps is tested with the architectures <code>solaris-sparc</code>,
+   <code>solaris-x86</code>, <code>linux-x86</code>, <code>cygwin-x86</code>,
+   and <code>win32-x86</code>.
 
 <li>In support, run '<code>make release</code>'.
 
@@ -1387,7 +1388,7 @@ other kinds:
 <br><code>deviceCmdReply.db, deviceCmdReply_settings.req, deviceCmdReply*.adl</code>
 
 <P><li>a 1-4 step sequence of <i>set-conditions/acquire-data/calculate</i> operations (in <b>std</b>)
-<br><code>4step.db, auto_4step_settings.req, 4step.adl</code>
+<br><code>4step.db, 4step_settings.req, 4step.adl</code>
 
 </ul>
 
