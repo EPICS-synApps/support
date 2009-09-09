@@ -776,7 +776,7 @@ def skimScan(dataFile):
 	scan.nt = u.unpack_int()
 	return scan
 
-def skimMDA(fname=None):
+def skimMDA(fname=None, verbose=False):
 	"""usage skimMDA(fname=None)"""
 	#print "skimMDA: filename=", fname
 	dim = []
@@ -815,7 +815,7 @@ def skimMDA(fname=None):
 	dataFile.seek(pmain_scan)
 	scan = skimScan(dataFile)
 	if (scan == None):
-		print fname, "contains no data"
+		if verbose: print fname, "contains no data"
 		return None
 
 	dim.append(scan)
