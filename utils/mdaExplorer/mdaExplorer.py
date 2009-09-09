@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 # wish list:
-# survey mda files should list dates
 # survey mda files should update if new files are added to directory
 # would like to be able to display a file while it is being written
 
@@ -54,6 +53,7 @@ from matplotlib.widgets import MultiCursor
 
 TIME_FORMAT = "%c" # Use Locale's time format
 DEBUG = False
+DIRLIST_TIME_MS = 10000
 
 # We're going to have positioner and detector checkbox lists, and we have to
 # keep their id's separate, but we also want the id's to correspond with 
@@ -212,6 +212,7 @@ def select2DAxisData(frame, dimension, indexList):
 	if indexList == None:
 		indexList = [None, None, None]
 
+	#print "select2DAxisData: dimension=", dimension, " indexList=", indexList
 	nIx = min(dimension, len(indexList)) # indexList may have unneeded element
 	for i in range(1, nIx+1):
 		if indexList[i-1] == None:
@@ -906,9 +907,15 @@ class CanvasFrame(wx.Frame):
 				if isinstance(y[i].data, list) or isinstance(y[i].data, tuple):
 					y[i].data = numpy.array(y[i].data, copy = 0)
 				data = select2DSlice(y[i].data, self.indexList, self.widthList)
-				im = ax.imshow(data, extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
+				if frame.plot2D_autoAspect:
+					im = ax.imshow(data, aspect='auto', extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
+				else:
+					im = ax.imshow(data, extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
 			else:
-				im = ax.imshow(y[i].data, extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
+				if frame.plot2D_autoAspect:
+					im = ax.imshow(y[i].data, aspect='auto', extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
+				else:
+					im = ax.imshow(y[i].data, extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
 			if frame.plot2D_withColorBar:
 				fig.colorbar(im)
 
@@ -931,7 +938,9 @@ class CanvasFrame(wx.Frame):
 		wSpace = 0.5
 		if (frame.plot2D_withLabels or frame.plot2D_withAxes or frame.plot2D_withSharedAxes) :
 			(hSpace, wSpace) = self.calcPlotSpace(rows, columns)
-		fig.subplots_adjust(left=.15, right=.9, bottom=.1, top=.9, wspace=wSpace, hspace=hSpace)
+		# The following puts color bars on top of plots
+		if not frame.plot2D_withColorBar:
+			fig.subplots_adjust(left=.15, right=.9, bottom=.1, top=.9, wspace=wSpace, hspace=hSpace)
 
 		self.draw()
 		self.Show()
@@ -1007,7 +1016,10 @@ class CanvasFrame(wx.Frame):
 			if isinstance(y[i].data, list) or isinstance(y[i].data, tuple):
 				y[i].data = numpy.array(y[i].data, copy = 0)
 			data = select2DSlice(y[i].data, self.indexList, self.widthList)
-			im = ax.imshow(data, extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
+			if frame.plot2D_autoAspect:
+				im = ax.imshow(data, aspect='auto', extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
+			else:
+				im = ax.imshow(data, extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
 			if frame.plot2D_withColorBar:
 				fig.colorbar(im)
 
@@ -1123,7 +1135,10 @@ class CanvasFrame(wx.Frame):
 			if (len(self.axes)==0):
 				ax = fig.add_subplot(rows, columns, i+1)
 			else:
-				ax = fig.add_subplot(rows, columns, i+1, sharex=self.axes[0])
+				if frame.plot1D_withSharedAxes:
+					ax = fig.add_subplot(rows, columns, i+1, sharex=self.axes[0], sharey=self.axes[0])
+				else:
+					ax = fig.add_subplot(rows, columns, i+1, sharex=self.axes[0])
 			self.axes.append(ax)
 
 			if frame.plot1D_withAxes == False:
@@ -1834,12 +1849,40 @@ def num(s):
 	else:
 		return float(s)
 
+def makeFileDescription(f,d):
+	fileDate = time.strftime(TIME_FORMAT, time.localtime(os.stat(f).st_mtime))
+	size = os.stat(f).st_size
+	if size > 1024*1024:
+		sizeStr = "%.1fM" % (float(size)/(1024*1024))
+	elif size > 1024:
+		sizeStr = "%.1fk" % (float(size)/1024)
+	else:
+		sizeStr = str(size)
+
+	acq_dimensions = d[0]['acquired_dimensions']
+	dimensions = d[0]['dimensions']
+	dimensionStr = ""
+	detectorStr = ""
+	for j in range(len(dimensions)):
+		if dimensionStr != "":
+			dimensionStr += ", "
+		dimensionStr += "%d" % (acq_dimensions[j])
+		if detectorStr != "":
+			detectorStr += ", "
+		detectorStr += "%d" % (d[j+1].nd)
+	
+	fileType = str(d[0]['rank'])+"D"
+	return (sizeStr, fileType, dimensionStr, detectorStr, fileDate)
+
 class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthMixin):
 	def __init__(self, parent, user, directory):
 		wx.ListCtrl.__init__(
 			self, parent, -1, style=wx.LC_REPORT|wx.LC_HRULES|wx.LC_VRULES)
 		listmix.ListCtrlAutoWidthMixin.__init__(self)
+		self.frame = user
 		self.itemDataMap = {}
+		self.listedFiles = []
+		self.mostRecentFileTime = 0.0
 
 		self.user = user
 		self.directory = directory
@@ -1855,34 +1898,16 @@ class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthM
 		files = os.listdir(directory)
 		for f in files:
 			if f.find(".mda") != -1:
-				size = os.stat(f).st_size
-				if size > 1024*1024:
-					sizeStr = "%.1fM" % (float(size)/(1024*1024))
-				elif size > 1024:
-					sizeStr = "%.1fk" % (float(size)/1024)
-				else:
-					sizeStr = str(size)
-				fileDate = time.strftime(TIME_FORMAT, time.localtime(os.stat(f).st_mtime))
-				d = mda.skimMDA(f)
+				d = mda.skimMDA(f, verbose=True)
 				if d != None:
-					acq_dimensions = d[0]['acquired_dimensions']
-					dimensions = d[0]['dimensions']
-					dimensionStr = ""
-					detectorStr = ""
-					for j in range(len(dimensions)):
-						if dimensionStr != "":
-							dimensionStr += ", "
-						dimensionStr += "%d" % (acq_dimensions[j])
-						if detectorStr != "":
-							detectorStr += ", "
-						detectorStr += "%d" % (d[j+1].nd)
-	
-					fileType = str(d[0]['rank'])+"D"
-	
+					(sizeStr, fileType, dimensionStr, detectorStr, fileDate) = makeFileDescription(f, d)
 					self.itemDataMap[i] = (f, sizeStr, fileType, dimensionStr, detectorStr, fileDate)
+					self.listedFiles.append(f)
+					self.mostRecentFileTime = max(self.mostRecentFileTime, os.stat(f).st_mtime)
 					i += 1
 		# Add one last item duplicating column-head text, because that doesn't get
 		# autosized
+		self.columnHeadItem = i
 		self.itemDataMap[i] = (
 			"File name",
 			"size",
@@ -1903,7 +1928,7 @@ class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthM
 			self.SetStringItem(i, 4, data[4])
 			self.SetStringItem(i, 5, data[5])
 			self.SetItemData(i, i)
-		self.SetItemTextColour(self.lastKey, "red")
+		self.SetItemTextColour(self.columnHeadItem, "red")
 
 		listmix.ColumnSorterMixin.__init__(self, 6)
 
@@ -1912,10 +1937,53 @@ class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthM
 		for i in range(5):
 			self.SetColumnWidth(i, wx.LIST_AUTOSIZE)
 
+		self.timer = wx.CallLater(DIRLIST_TIME_MS, self.onTimer)
+
+	def onTimer(self):
+		""" Check current directory for files more recent than self.mostRecentFileTime.  If any, add them to list,
+		and update self.mostRecentFileTime with most recent of the new files.  If an updated file is currently being
+		displayed (i.e., if name == self.frame.fileName), then update display.
+		"""
+		files = os.listdir(self.directory)
+		mostRecentNewFileTime = self.mostRecentFileTime
+		for f in files:
+			fileTimeSecs = os.stat(f).st_mtime
+			if fileTimeSecs > self.mostRecentFileTime:
+				mostRecentNewFileTime = max(mostRecentNewFileTime, fileTimeSecs)
+				if f.find(".mda") != -1:
+					d = mda.skimMDA(f)
+					if d != None:
+						if f in self.listedFiles:
+							if self.frame.autoUpdatePlots:
+								fullPathName = os.path.join(self.directory, f)
+								if fullPathName == self.frame.fileName:
+									#self.user.readData(fullPathName)
+									self.frame.data = mda.readMDA(self.frame.fileName, maxdim=self.frame.maxDataDim, verbose=0, showHelp=0, outFile=None, useNumpy=False, readQuick=True)
+									for dimPanel in self.frame.dimPanelList:
+										dimPanel.maybePlot()
+						else:
+							self.lastKey += 1
+							i = self.lastKey
+							(sizeStr, fileType, dimensionStr, detectorStr, fileDate) = makeFileDescription(f, d)
+							self.itemDataMap[i] = (f, sizeStr, fileType, dimensionStr, detectorStr, fileDate)
+							self.listedFiles.append(f)
+							self.mostRecentFileTime = max(self.mostRecentFileTime, fileTimeSecs)
+							# update list
+							self.InsertStringItem(i, f)
+							self.SetStringItem(i, 1, sizeStr)
+							self.SetStringItem(i, 2, fileType)
+							self.SetStringItem(i, 3, dimensionStr)
+							self.SetStringItem(i, 4, detectorStr)
+							self.SetStringItem(i, 5, fileDate)
+							self.SetItemData(i, i)
+		self.mostRecentFileTime = mostRecentNewFileTime
+
+		self.timer.Restart(DIRLIST_TIME_MS)
+
 	def OnItemSelected(self, event):
 		item = event.m_itemIndex
 		#print "OnItemSelected: item=%d %s" % (self.currentItem, self.GetItemText(self.currentItem))
-		if item < self.lastKey:
+		if item != self.columnHeadItem:
 			path = os.path.join(self.directory, self.GetItemText(item))
 			self.SetCursor(wx.StockCursor(wx.CURSOR_WATCH))
 			self.user.readData(path)
@@ -1931,9 +1999,9 @@ class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthM
 	def __ColumnSorter(self, key1, key2):
 		col = self._col
 		ascending = self._colSortFlag[col]
-		if key1 == self.lastKey:
+		if key1 == self.columnHeadItem:
 			return 1
-		if key2 == self.lastKey:
+		if key2 == self.columnHeadItem:
 			return -1
 
 		item1 = self.itemDataMap[key1][col]
@@ -1996,6 +2064,7 @@ class DirList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthM
 class DirListFrame(wx.Frame):
 	def __init__(self, parent, directory):
 		wx.Frame.__init__(self, parent, -1, "MDA Survey", size=(500,-1))
+		self.frame = parent
 		panel = wx.Panel(self, -1, style=wx.WANTS_CHARS)
 		sizer = wx.BoxSizer(wx.VERTICAL)
 		title = wx.StaticText(panel, -1, "MDA files in: %s" % directory)
@@ -2265,10 +2334,12 @@ class TopFrame(wx.Frame):
 		self.plot1D_withAxes = True
 		self.plot1D_withLabels = True
 		self.plot1D_logY = False
+		self.plot1D_withSharedAxes = False
 		self.plot2D_withAxes = False
 		self.plot2D_withLabels = False
 		self.plot2D_withColorBar = False
 		self.plot2D_withSharedAxes = False
+		self.plot2D_autoAspect = False
 		self.showCrossHair = False
 		self.plotEverything = False
 
@@ -2301,6 +2372,8 @@ class TopFrame(wx.Frame):
 		item = subMenu.Append(2044, "with labels", "Show x and y labels", wx.ITEM_CHECK)
 		item.Check(self.plot1D_withLabels)
 		subMenu.Append(2045, "log Y axis", "Y axis is logarithmic", wx.ITEM_CHECK)
+		item = subMenu.Append(2046, "with shared axes", "Zoom/pan affect all images", wx.ITEM_CHECK)
+		item.Check(self.plot1D_withSharedAxes)
 		menu2.AppendMenu(204, "1D plots", subMenu)
 
 		subMenu = wx.Menu()
@@ -2312,6 +2385,8 @@ class TopFrame(wx.Frame):
 		item.Check(self.plot2D_withColorBar)
 		item = subMenu.Append(2054, "with shared axes", "Zoom/pan affect all images", wx.ITEM_CHECK)
 		item.Check(self.plot2D_withSharedAxes)
+		item = subMenu.Append(2055, "auto aspect", "Make square image plots", wx.ITEM_CHECK)
+		item.Check(self.plot2D_autoAspect)
 		menu2.AppendMenu(205, "2D plots", subMenu)
 
 		item = menu2.Append(206, "Show crosshair", "Show crosshair cursor on plots", wx.ITEM_CHECK)
@@ -2322,8 +2397,8 @@ class TopFrame(wx.Frame):
 
 		self.Bind(wx.EVT_MENU, self.on_read3D_Data_MenuSelection, id=201)
 		self.Bind(wx.EVT_MENU, self.on_autoUpdatePlots_MenuSelection, id=203)
-		self.Bind(wx.EVT_MENU_RANGE, self.on_Plot1D_MenuSelection, id=2041, id2=2045)
-		self.Bind(wx.EVT_MENU_RANGE, self.on_plot2D_MenuSelection, id=2051, id2=2054)
+		self.Bind(wx.EVT_MENU_RANGE, self.on_Plot1D_MenuSelection, id=2041, id2=2046)
+		self.Bind(wx.EVT_MENU_RANGE, self.on_plot2D_MenuSelection, id=2051, id2=2055)
 		self.Bind(wx.EVT_MENU, self.on_showCrossHair_MenuSelection, id=206)
 		self.Bind(wx.EVT_MENU, self.on_plotEverything_MenuSelection, id=207)
 
@@ -2332,7 +2407,6 @@ class TopFrame(wx.Frame):
 		item = menu3.Append(301, "Debug", "Execute debug statements", wx.ITEM_CHECK)
 		item.Check(DEBUG)
 		self.Bind(wx.EVT_MENU, self.on_Debug_MenuSelection, id=301)
-		#self.Bind(wx.EVT_MENU_RANGE, self.on_Debug_MenuSelection, id=301, id2=302)
 
 		menuBar = wx.MenuBar()
 		menuBar.Append(menu1, "&File")
@@ -2378,19 +2452,18 @@ class TopFrame(wx.Frame):
 			#self.mainPanel.bottomWin.Layout()
 
 	def on_Debug_MenuSelection(self, event):
-		global DEBUG, COLLAPSIBLE_ENV_PANEL
+		global DEBUG
 		id = event.GetId()
 		if id == 301: DEBUG = event.Checked()
-		if id == 302: COLLAPSIBLE_ENV_PANEL = event.Checked()
-		if id == 303: SurfacePlotStride1 = event.Checked()
 
 	def on_Plot1D_MenuSelection(self, event):
 		id = event.GetId()
 		if id == 2041: self.plot1D_lines = event.Checked()
-		if id == 2042: self.plot1D_points = event.Checked()
-		if id == 2043: self.plot1D_withAxes = event.Checked()
-		if id == 2044: self.plot1D_withLabels = event.Checked()
-		if id == 2045: self.plot1D_logY = event.Checked()
+		elif id == 2042: self.plot1D_points = event.Checked()
+		elif id == 2043: self.plot1D_withAxes = event.Checked()
+		elif id == 2044: self.plot1D_withLabels = event.Checked()
+		elif id == 2045: self.plot1D_logY = event.Checked()
+		elif id == 2046: self.plot1D_withSharedAxes = event.Checked()
 		if self.autoUpdatePlots:
 			for dimPanel in self.dimPanelList:
 				dimPanel.maybePlot()
@@ -2398,9 +2471,10 @@ class TopFrame(wx.Frame):
 	def on_plot2D_MenuSelection(self, event):
 		id = event.GetId()
 		if id == 2051: self.plot2D_withAxes = event.Checked()
-		if id == 2052: self.plot2D_withLabels = event.Checked()
-		if id == 2053: self.plot2D_withColorBar = event.Checked()
-		if id == 2054: self.plot2D_withSharedAxes = event.Checked()
+		elif id == 2052: self.plot2D_withLabels = event.Checked()
+		elif id == 2053: self.plot2D_withColorBar = event.Checked()
+		elif id == 2054: self.plot2D_withSharedAxes = event.Checked()
+		elif id == 2055: self.plot2D_autoAspect = event.Checked()
 		if self.autoUpdatePlots:
 			for dimPanel in self.dimPanelList:
 				dimPanel.maybePlot()
