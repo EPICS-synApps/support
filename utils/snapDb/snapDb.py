@@ -15,6 +15,7 @@ import wx.lib.mixins.listctrl as listmix
 HAVE_CA = True
 try:
 	from ca_util import *
+	import ca
 except:
 	HAVE_CA = False
 
@@ -146,9 +147,14 @@ def openDatabase(fileName, recordNames=[], recordTypes=[], displayStrings=[], re
 
 nowrite_fields = ['PROC', 'UDF']
 
-# I neglected to include the promptgroup attribute for some scalcout fields
+# We're using the existence of a "promptgroup()" entry in the record definition to determine
+# whether a field can be defined in a database, but really promptgroup only says whether the
+# field is *intended* or expected to be defined in a database.  Some records do not have promptgroup
+# entries for fields that we want to define in the database:
 def kludgePromptGroup(recordType, fieldName):
 	if recordType == "scalcout" and fieldName in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']:
+		return True
+	if recordType == "sub" and fieldName in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']:
 		return True
 	return False		
 
@@ -206,15 +212,23 @@ def defineNewDatabase(pvList, dbd_object, fixUserCalcs=True):
 			if 'promptgroup' in fieldDict.keys() or kludgePromptGroup(r.recordType, fieldName):
 				pv = r.recordName+'.'+fieldName
 				#print("trying %s..." % pv)
-				value = caget(pv)
+				try:
+					value = caget(pv)
+				except:
+					value = 0
+				try:
+					string_value = caget(pv,req_type=ca.DBR_STRING)
+				except:
+					string_value = "Caget failed"
 				#print("%s='%s'" % (recordName+'.'+fieldName, value))
-				if dbd.isDefaultValue(value, r.recordType, fieldName, dbd_object):
-					continue
-				if (fixUserCalcs and r.recordName.find(':user') and 
-					fieldName in ['DISA', 'DISV', 'SDIS']):
-					continue
+				if string_value != "Caget failed":
+					if dbd.isDefaultValue(value, r.recordType, fieldName, dbd_object):
+						continue
+					if (fixUserCalcs and r.recordName.find(':user') and 
+						fieldName in ['DISA', 'DISV', 'SDIS']):
+						continue
 				r.fieldNames.append(fieldName)
-				r.fieldValues.append(value)
+				r.fieldValues.append(string_value)
 	return recordInstanceList
 
 def writeNewDatabase(fileName, pvList, dbdFileName, replaceDict=None, fixUserCalcs=True):
