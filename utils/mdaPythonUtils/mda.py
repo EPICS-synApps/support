@@ -667,7 +667,7 @@ def writeMDA(dim, fname=None):
 
 	# Now we have to repack all the scan offsets
 	if (rank > 1): # 2D scan
-		print "m.scan.pLowerScans", m.scan.pLowerScans
+		#print "m.scan.pLowerScans", m.scan.pLowerScans
 		p.reset()
 		p.pack_farray(m.scan.npts, m.scan.pLowerScans, p.pack_int)
 		m.scan.pLowerScansBuf = p.get_buffer()
