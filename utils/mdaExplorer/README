@@ -1,0 +1,3 @@
+mdaExplorer is a GUI program, based on wxPython and matplotlib, for exploring
+MDA files.  The MDA file format is described in the synApps sscan module, and
+is written by that module's saveData program.
