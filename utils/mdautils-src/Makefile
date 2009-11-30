@@ -9,40 +9,34 @@ endif
 CC = gcc
 AR = ar
 CFLAGS = -Wall -O2
+#CFLAGS = -Wall -O2 -g
 
-TARGETS = mda-dump mda-info mda2ascii libmda-load.a
+TARGETS = libmda-load.a mda2ascii mda-dump mda-info mda-ls 
 
 
 all: $(TARGETS)
 
-mda-dump: mda_dump.o mda_loader.o mda-load.h
-	$(CC) mda_dump.o mda_loader.o -o mda-dump $(EXT_LIB)
-
-mda-info: mda_info.c
-	$(CC) mda_info.c -o mda-info $(EXT_LIB)
+libmda-load.a: mda-load.h mda_loader.o
+	$(AR) rcs libmda-load.a mda_loader.o
 
 mda2ascii: mda_ascii.o mda_loader.o mda-load.h
 	$(CC) mda_ascii.o mda_loader.o -o mda2ascii $(EXT_LIB)
 
-libmda-load.a: mda-load.h mda_loader.o
-	$(AR) rcs libmda-load.a mda_loader.o
+mda-dump: mda_dump.o
+	$(CC) mda_dump.o -o mda-dump $(EXT_LIB)
+
+mda-info: mda_info.o mda_loader.o mda-load.h
+	$(CC) mda_info.o mda_loader.o -o mda-info $(EXT_LIB)
+
+mda-ls: mda_ls.o mda_loader.o mda-load.h
+	$(CC) mda_ls.o mda_loader.o -o mda-ls $(EXT_LIB)
+
 
 mda_loader.o: mda-load.h
-mda_dump.o:   mda-load.h
 mda_ascii.o:  mda-load.h
-
-
-.PHONY : doc
-doc: mda2ascii.1 mda-dump.1 mda-info.1
-	groff -man -Tps mda2ascii.1 > mda2ascii.ps
-	groff -man -Thtml mda2ascii.1 > mda2ascii.html
-	ps2pdf mda2ascii.ps
-	groff -man -Tps mda-dump.1 > mda-dump.ps
-	groff -man -Thtml mda-dump.1 > mda-dump.html
-	ps2pdf mda-dump.ps
-	groff -man -Tps mda-info.1 > mda-info.ps
-	groff -man -Thtml mda-info.1 > mda-info.html
-	ps2pdf mda-info.ps
+mda_dump.o:
+mda_info.o:   mda-load.h
+mda_ls.o:     mda-load.h
 
 
 .PHONY : clean

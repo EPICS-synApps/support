@@ -1,11 +1,12 @@
 MDA Utilities
-December 2006
+November 2009
 
 --------------------------------------------------------------
-mda2ascii v0.3.2
-mda-dump v0.1.1
-mda-info v0.1.1
-mda-load library v0.1.1
+mda2ascii v1.0.0
+mda-dump v1.0.0
+mda-info v1.0.0
+mda-ls v1.0.0
+mda-load library v1.0.0
 
 Written by Dohn A. Arms, Argonne National Laboratory
 Send comments to dohnarms@anl.gov
@@ -30,20 +31,26 @@ included).
 
 2) mda-dump - This program will dump to the screen the entire contents
 of an MDA file, exactly as how they appear in the file.  This program
-can be useful for debugging purposes.  The source code is an example
-on how to use the mda_load routines.
+can be useful for debugging purposes, as it prints out information
+immediately after loading it.  It does not use the mda-load library,
+instead using direct functions for reading the file.
 
-3) mda-info - This program will print to the screen a brief set of
-information about an MDA file.  It shows about the file, among other
-things, the time, the dimensionality, and the outermost positioner(s)
-used.  This program does not use the mda-load library, so that the
-entire file is not loaded, and to make it fast.
+3) mda-info - This program will print to the screen information about
+an MDA file.  It shows things such as the time, the dimensionality,
+positioners, detectors, and triggers used.  This program does not load
+the entire file, just the relevant information, making it fast.
 
-4) mda-load library - This is the engine used for reading the MDA
-files.  The library functions are quite simple, as there are only two.
-Accessing the data -- due to the arbitrary dimensional nature of the
-MDA files -- can be complicated, and familiarity with structures and
-pointers in C is a must.  The manual for it is mda-load.pdf, and
+4) mda-ls - This program print to the screen a listing of all the MDA
+files in the current or a specified directory.  It show the name,
+dimensionality, positioners, and optionally the time for each file.
+It is possible to filter the listing to those files including a
+certain positioner, detector, or trigger.
+
+5) mda-load library - This is the engine used for reading the MDA
+files.  The library functions are relatively simple, as there are very
+few.  Accessing the data -- due to the arbitrary dimensional nature of
+the MDA files -- can be complicated, and familiarity with structures
+and pointers in C is a must.  The manual for it is mda-load.pdf, and
 reading mda-load.h can be helpful.  It could be built as a shared
 library, but since it is rather small and different systems utilize
 shared libraries differently, I didn't set this up.
@@ -54,9 +61,9 @@ Requirements:
 -------------
 
 MDA Utilities have been successfully compiled on Linux, Solaris, and
-Mac OS X using gcc, make, and ar.  I am sure it would be simple to
-compile it on other UNIX platforms using other compilers, but I have
-no way to try.
+Mac OS X using gcc, make, and ar.  They have also been compiled on
+Windows using MinGW and MSYS.  I am sure it would be simple to compile
+it on other platforms using other compilers, but I have no way to try.
 
 The only library requirement is access to the standard XDR routines.
 With Linux, they're are part of glibc (Linux's standard C library),
@@ -65,7 +72,10 @@ Library (nsl).  I've been told the utilities compile under Mac OS X
 using the Linux configuration.  So, no extra packages should have to
 be installed.
 
-This will not be ported to Windows (at least by me), so don't ask.
+There are no XDR routines in Windows, and an external library has to
+be used.  I used portablexdr 4.0.11, with a bug fix for floating point
+numbers.  The Makefile has to be modified to link in the library to be
+used as well.
 
 
 
@@ -87,8 +97,10 @@ don't have to install everything; you can simply install the
 executables and forget the rest.
 
 Assume you are installing into the "/usr/local" tree:
-  Copy "mda2ascii", "mda-dump", and "mda-info" to "/usr/local/bin".
-  Copy "mda2ascii.1", "mda-dump.1", and "mda-info.1" to "/usr/local/man/man1".
-  Copy "libmda-load.a" to "/usr/local/lib".  
-  Copy "mda-load.h" to "/usr/local/include".
+Copy "mda2ascii", "mda-dump", "mda-ls", and "mda-info" to
+    "/usr/local/bin".
+Copy "mda2ascii.1", "mda-dump.1", "mda-ls.1", and "mda-info.1" to
+    "/usr/local/man/man1".
+Copy "libmda-load.a" to "/usr/local/lib".  
+Copy "mda-load.h" to "/usr/local/include".
 

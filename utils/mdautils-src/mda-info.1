@@ -1,13 +1,11 @@
-.\" Process this file with
-.\" groff -man -Tascii mda-dump.1
-.\"
-.TH MDA-INFO 1 "August 2005" "MDA Utilities" "MDA Utilities"
+.TH MDA-INFO 1 "November 2009" "MDA Utilities" "MDA Utilities"
 
 .SH NAME
 mda-info \- prints out information about a MDA file
 
 .SH SYNOPSIS
 .B mda-info
+.RB [ \-hv ]
 .I "file"
 
 .SH DESCRIPTION
@@ -16,18 +14,28 @@ is a utility for seeing certain information about MDA files, which are
 created by
 .BR saveData \ in
 .BR EPICS .
-Things like scan time, dimensionality, and the scanned positioner(s)
-are shown.  The only thing
-.B mda-dump
-needs is
+Things such as scan time, dimensionality, positioners, detectors, and
+triggers are shown.  Unless one of the options is used, 
+.B mda-info
+needs only
 .IR "file" ,
-the name of the MDA file.
+the name of the MDA file.  If a file is irregular, it is stated as
+such and the actual overall scan size is shown, taken from the individual
+scans themselves.
 .PP
 This program does not load the entire file, so it's fast.
+
+.SH OPTIONS
+.TP 
+.B \-h
+Show the help screen.
+.TP 
+.B \-v
+Show the version information.
 
 .SH AUTHOR
 Dohn A. Arms <dohnarms@anl.gov>
 
 .SH "SEE ALSO"
-.BR mda2ascii (1), \ mda-dump (1)
+.BR mda2ascii (1), \ mda-dump (1), \ mda-ls (1)
 
