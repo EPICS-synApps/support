@@ -1,3 +1,18 @@
 mdaExplorer is a GUI program, based on wxPython and matplotlib, for exploring
 MDA files.  The MDA file format is described in the synApps sscan module, and
 is written by that module's saveData program.
+
+mdaExplorer.py - This is the main program.
+
+mdaTree.py     - Routines to read an MDA file and collect information into a
+                 tree (an instance of wx.TreeCtrl)
+
+mda_f.py       - A faster version of mda.py, which uses f_xdrlib.py to read
+                 arrays in big chunks, rather than element by element.
+
+f_xdrlib.py    - A modified copy of xdrlib.py, software from Python 2.5 which
+                 uses the Python struct module to convert data from an XDR
+				 file to native Python variables
+
+InstallSteps*.txt - The procedure I went through to install Python 2.5 and all
+                    the python-related stuff needed to run mdaExplorer.
