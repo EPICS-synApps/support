@@ -1,0 +1,55 @@
+Note that the build location has changed from previous versions of synApps.
+Now, you run make in support, and it references configure/RELEASE.
+The directory, config, no longer exists.
+
+==============================================================================
+        SITE CONFIGURATION
+==============================================================================
+Edit the following for your site:
+
+configure/CONFIG_SITE
+
+        - Set the values of variables to indicate what resources your system
+        has.  The synApps build has a limited ability to adjust itself to
+        accommodate different system configurations.
+        
+
+configure/RELEASE
+configure/RELEASE.win32-x86 (for win32-x86 only)
+
+        - Specify paths to EPICS base and to modules. After modifying this file,
+        run "make release" in support to propagate changes to all module RELEASE
+        files.  (For win32-x86, run "make -f Makefile.win32-x86 release".)
+
+Makefile
+Makefile.win32-x86 (for win32-x86 only)
+        - Select modules to build.
+        Add/delete support modules by adding/deleting
+        '#' to the two entries for each support module;  
+                SUPPORT_DIRS += $(module)
+                RELEASE_FILES += $(module)/configure/RELEASE
+
+To build synApps:
+        set EPICS_HOST_ARCH appropriately (e.g., solaris-sparc)
+        make release
+        make
+
+NOTE that 'make' implies GNU make throughout this file.
+
+To rebuild synApps:
+        set EPICS_HOST_ARCH appropriately
+        make release
+        make clean uninstall
+        make
+
+"make release" ensures that all the modules have consistent paths in
+their RELEASE files.
+
+
+==============================================================================
+After adding a module
+1) edit support/configure/RELEASE
+2) edit support/Makefile
+3) run "make release" in support
+4) run "make rebuild" in any module that uses the new module
+==============================================================================
