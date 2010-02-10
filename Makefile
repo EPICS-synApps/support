@@ -1,8 +1,8 @@
 #FILENAME:	Makefile
 #USAGE:		Top Makefile
-#Version:	$Revision: 1.5 $
+#Version:	$Revision: 1.6 $
 #Modified By:	$Author: mooney $
-#Last Modified:	$Date: 2009-01-14 16:32:29 $
+#Last Modified:	$Date: 2009-01-14 18:59:44 $
 #NOTES- The "DIRS" order is based on compile time dependencies.
 #     - The user must modify SUPPORT and EPICS_BASE in the
 #       <synApps>/support/configure directory for the local configuration.
@@ -42,10 +42,6 @@ RELEASE_FILES += $(SSCAN)/configure/RELEASE
 DIRS += $(AUTOSAVE)
 RELEASE_FILES += $(AUTOSAVE)/configure/RELEASE
 
-DIRS += $(BUSY)
-RELEASE_FILES += $(BUSY)/configure/RELEASE
-$(BUSY)_DEPEND_DIRS = $(ASYN)
-
 ###### 2nd Tier Support Modules - Only Depend on 1st Tier ########
 
 DIRS += $(ASYN)
@@ -57,6 +53,10 @@ RELEASE_FILES += $(CALC)/configure/RELEASE
 $(CALC)_DEPEND_DIRS = $(SSCAN)
 
 ################### 3rd Tier Support Modules #####################
+
+DIRS += $(BUSY)
+RELEASE_FILES += $(BUSY)/configure/RELEASE
+$(BUSY)_DEPEND_DIRS = $(ASYN)
 
 DIRS += $(MOTOR)
 RELEASE_FILES += $(MOTOR)/configure/RELEASE
