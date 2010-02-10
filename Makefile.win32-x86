@@ -1,0 +1,28 @@
+
+DIRS += $(DXP)
+RELEASE_FILES += $(DXP)/configure/RELEASE.win32-x86
+
+DIRS += $(QUADEM)
+RELEASE_FILES += $(QUADEM)/configure/RELEASE.win32-x86
+
+DIRS += $(XXX)
+RELEASE_FILES += $(XXX)/configure/RELEASE.win32-x86
+
+DIRS += $(CARS)
+RELEASE_FILES += $(CARS)/configure/RELEASE.win32-x86
+
+all install clean rebuild inc depends build uninstall release:
+	echo SUPPORT=$(SUPPORT)
+	echo ' '
+	echo EPICS_BASE=$(EPICS_BASE)
+	echo ' '
+	echo MASTER_FILES=$(MASTER_FILES)
+	echo ' '
+	echo RELEASE_FILES=$(RELEASE_FILES)
+	echo ' '
+	$(PERL) makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILES) $(RELEASE_FILES)
+
+# per jba, to support actions normally defined in RULES_TOP 
+ACTIONS += uninstall distclean cvsclean realuninstall
+
+include $(SUPPORT)/config/RULES_DIRS
