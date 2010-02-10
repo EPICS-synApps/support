@@ -1,6 +1,6 @@
 Note that the build location has changed from previous versions of synApps.
 Now, you run make in support, and it references configure/RELEASE.
-The directory, config, is no longer used at all.
+The directory, config, no longer exists.
 
 ==============================================================================
         SITE CONFIGURATION
@@ -8,9 +8,8 @@ The directory, config, is no longer used at all.
 Edit the following for your site:
 
 configure/RELEASE - Specify paths to EPICS base and to modules.
-        After modifying this file, run
-                make release
-		is support to propagate changes to all module RELEASE files.
+        After modifying this file, run "make release" in support to propagate
+		changes to all module RELEASE files.
         
 Makefile - Select modules to build.
         Add/delete support modules by adding/deleting
@@ -19,7 +18,7 @@ Makefile - Select modules to build.
                 RELEASE_FILES += $(module)/configure/RELEASE
 
 To build synApps:
-        set EPICS_HOST_ARCH appropriately (e.g., solaris-sparc-gnu)
+        set EPICS_HOST_ARCH appropriately (e.g., solaris-sparc)
         make release
         make
 
@@ -40,6 +39,7 @@ After adding a module
 1) edit support/configure/RELEASE
 2) edit support/Makefile
 3) run "make release" in support
+4) run "make rebuild" in any module that uses the new module
 ==============================================================================
 
            COMPILERS
