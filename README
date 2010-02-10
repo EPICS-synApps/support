@@ -1,3 +1,87 @@
-To build, go to config and look at the README file.  The config
-directory contains code to write consistent paths in all modules'
-RELEASE files.
+==============================================================================
+        SITE CONFIGURATION
+==============================================================================
+Edit the following for your site:
+
+configure/RELEASE - Specify module paths.
+        After modifying this file, run
+                make release
+		is support to propagate changes to all module RELEASE files.
+        
+Makefile - Select modules to build.
+        Add/delete support modules by adding/deleting
+        '#' to the two entries for each support module;  
+                DIRS += $(module)
+                RELEASE_FILES += $(module)/configure/RELEASE
+
+To build synApps:
+        set EPICS_HOST_ARCH appropriately (e.g., solaris-sparc-gnu)
+        make release
+        make
+
+To rebuild synApps:
+        set EPICS_HOST_ARCH appropriately
+        make release
+        make clean uninstall
+        make
+
+"make release" ensures that all the modules have consistent paths in
+their RELEASE files.
+
+
+==============================================================================
+After adding a module
+1) edit support/configure/RELEASE
+2) edit support/Makefile
+3) run "make release" in support
+==============================================================================
+
+           COMPILERS
+           ---------
+
+This version of synApps was successfully built with the following compilers.
+
+
+linux-x86
+=========
+bcdapc2% gcc -v
+Using built-in specs.
+Target: i386-redhat-linux
+Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-libgcj-multifile --enable-languages=c,c++,objc,java,f95,ada --enable-java-awt=gtk --with-java-home=/usr/lib/jvm/java-1.4.2-gcj-1.4.2.0/jre --host=i386-redhat-linux
+Thread model: posix
+gcc version 4.0.2 20051125 (Red Hat 4.0.2-8)
+
+solaris-sparc
+=============
+Reading specs from /usr/sfw/lib/gcc/sparc-sun-solaris2.10/3.4.3/specs
+Configured with: /sfw10/builds/build/sfw10-patch/usr/src/cmd/gcc/gcc-3.4.3/configure --prefix=/usr/sfw --with-as=/usr/ccs/bin/as --without-gnu-as --with-ld=/usr/ccs/bin/ld --without-gnu-ld --enable-languages=c,c++ --enable-shared
+Thread model: posix
+gcc version 3.4.3 (csl-sol210-3_4-branch+sol_rpath)
+
+
+vxWorks-68040-debug
+vxWorks-68040
+==================
+wheaties% /APSshare/vw/tornado202/host/sun4-solaris2/bin/cc68k -v
+gcc driver version cygnus-2.7.2-960126 egcs-971225 tornado 2.0 executing gcc version cygnus-2.7.2-960126
+
+
+vxWorks-ppc604
+vxWorks-ppc604_long
+vxWorks-ppc604_long-debug
+==================
+wheaties% /APSshare/vw/tornado202/host/sun4-solaris2/bin/ccppc -v
+gcc driver version cygnus-2.7.2-960126 egcs-971225 tornado 2.0 executing gcc version cygnus-2.7.2-960126
+
+cygwin-x86
+==========
+
+
+==============================================================================
+
+	   KNOWN PROBLEMS
+	   --------------
+
+ 
+
+
