@@ -1,4 +1,4 @@
-ote that the build location has changed from previous versions of synApps.
+Note that the build location has changed from previous versions of synApps.
 Now, you run make in support, and it references configure/RELEASE.
 The directory, config, no longer exists.
 
@@ -7,11 +7,16 @@ The directory, config, no longer exists.
 ==============================================================================
 Edit the following for your site:
 
-configure/RELEASE - Specify paths to EPICS base and to modules.
-        After modifying this file, run "make release" in support to propagate
-		changes to all module RELEASE files.
-        
-Makefile - Select modules to build.
+configure/RELEASE
+configure/RELEASE.win32-x86 (for win32-x86 only)
+
+		- Specify paths to EPICS base and to modules. After modifying this file,
+		run "make release" in support to propagate changes to all module RELEASE
+		files.  (For win32-x86, run "make -f Makefile.win32-x86 release".)
+
+Makefile
+Makefile.win32-x86 (for win32-x86 only)
+        - Select modules to build.
         Add/delete support modules by adding/deleting
         '#' to the two entries for each support module;  
                 DIRS += $(module)
