@@ -1,8 +1,8 @@
 #FILENAME:	Makefile
 #USAGE:		Top Makefile
-#Version:	$Revision: 1.11 $
+#Version:	$Revision: 1.12 $
 #Modified By:	$Author: mooney $
-#Last Modified:	$Date: 2009-03-03 20:03:04 $
+#Last Modified:	$Date: 2009-03-06 18:11:47 $
 #NOTES- The "DIRS" order is based on compile time dependencies.
 #     - The user must modify SUPPORT and EPICS_BASE in the
 #       <synApps>/support/configure directory for the local configuration.
@@ -139,9 +139,9 @@ DIRS += $(DXP)
 RELEASE_FILES += $(DXP)/configure/RELEASE
 $(DXP)_DEPEND_DIRS = $(ASYN) $(CAMAC) $(MCA) $(BUSY)
 
-DIRS += $(AREA_DETECTOR)
+#DIRS += $(AREA_DETECTOR)
+#$(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(SSCAN) $(MCA)
 RELEASE_FILES += $(AREA_DETECTOR)/configure/RELEASE
-$(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(SSCAN) $(MCA)
 
 DIRS += $(QUADEM)
 RELEASE_FILES += $(QUADEM)/configure/RELEASE
