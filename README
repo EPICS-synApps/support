@@ -1,4 +1,4 @@
-Note that the build location has changed from previous versions of synApps.
+ote that the build location has changed from previous versions of synApps.
 Now, you run make in support, and it references configure/RELEASE.
 The directory, config, no longer exists.
 
@@ -41,40 +41,3 @@ After adding a module
 3) run "make release" in support
 4) run "make rebuild" in any module that uses the new module
 ==============================================================================
-
-           COMPILERS
-           ---------
-
-This version of synApps was successfully built with the following compilers.
-
-
-linux-x86
-=========
-bcdapc2% gcc -v
-Using built-in specs.
-Target: i386-redhat-linux
-old Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-libgcj-multifile --enable-languages=c,c++,objc,java,f95,ada --enable-java-awt=gtk --with-java-home=/usr/lib/jvm/java-1.4.2-gcj-1.4.2.0/jre --host=i386-redhat-linux
-old Thread model: posix
-old gcc version 4.0.2 20051125 (Red Hat 4.0.2-8)
-
-solaris-sparc
-=============
-CC: Sun C++ 5.9 SunOS_sparc Patch 124863-08 2008/10/16
-
-vxWorks-ppc604
-vxWorks-ppc604_long
-vxWorks-ppc604_long-debug
-==================
-wheaties% /APSshare/vw/tornado202/host/sun4-solaris2/bin/ccppc -v
-gcc version gcc-2.96 (2.96+ MW/LM) 19990621 AltiVec VxWorks 5.5
-
-cygwin-x86
-==========
-
-
-==============================================================================
-
-	   KNOWN PROBLEMS
-	   --------------
-
- 
