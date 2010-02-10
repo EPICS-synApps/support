@@ -1,8 +1,8 @@
 #FILENAME:	Makefile
 #USAGE:		Top Makefile
-#Version:	$Revision: 1.10 $
+#Version:	$Revision: 1.11 $
 #Modified By:	$Author: mooney $
-#Last Modified:	$Date: 2009-02-19 21:41:55 $
+#Last Modified:	$Date: 2009-03-03 20:03:04 $
 #NOTES- The "DIRS" order is based on compile time dependencies.
 #     - The user must modify SUPPORT and EPICS_BASE in the
 #       <synApps>/support/configure directory for the local configuration.
@@ -157,9 +157,9 @@ DIRS += $(XXX)
 RELEASE_FILES += $(XXX)/configure/RELEASE
 $(XXX)_DEPEND_DIRS = $(SUPPORT_DIRS)
 
-DIRS += $(IP_USE)
-RELEASE_FILES += $(IP_USE)/configure/RELEASE
-$(IP_USE)_DEPEND_DIRS = $(SUPPORT_DIRS)
+#DIRS += $(IP_USE)
+#RELEASE_FILES += $(IP_USE)/configure/RELEASE
+#$(IP_USE)_DEPEND_DIRS = $(SUPPORT_DIRS)
 
 
 
