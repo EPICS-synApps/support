@@ -1,8 +1,8 @@
 #FILENAME:	Makefile
 #USAGE:		Top Makefile
-#Version:	$Revision: 1.9 $
+#Version:	$Revision: 1.10 $
 #Modified By:	$Author: mooney $
-#Last Modified:	$Date: 2009-01-16 19:13:11 $
+#Last Modified:	$Date: 2009-02-19 21:41:55 $
 #NOTES- The "DIRS" order is based on compile time dependencies.
 #     - The user must modify SUPPORT and EPICS_BASE in the
 #       <synApps>/support/configure directory for the local configuration.
@@ -108,6 +108,10 @@ $(VAC)_DEPEND_DIRS = $(ASYN) $(IPAC)
 
 
 ################### 4th Tier Support Modules #####################
+
+DIRS += $(DELAYGEN)
+RELEASE_FILES += $(DELAYGEN)/configure/RELEASE
+$(DELAYGEN)_DEPEND_DIRS = $(ASYN) $(STD)
 
 DIRS += $(CAMAC)
 RELEASE_FILES += $(CAMAC)/configure/RELEASE
