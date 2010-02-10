@@ -1,8 +1,8 @@
 #FILENAME:	Makefile
 #USAGE:		Top Makefile
-#Version:	$Revision: 1.3 $
+#Version:	$Revision: 1.4 $
 #Modified By:	$Author: mooney $
-#Last Modified:	$Date: 2008-12-10 22:25:06 $
+#Last Modified:	$Date: 2009-01-07 18:11:04 $
 #NOTES- The "DIRS" order is based on compile time dependencies.
 #     - The user must modify SUPPORT and EPICS_BASE in the
 #       <synApps>/support/configure directory for the local configuration.
@@ -41,9 +41,6 @@ RELEASE_FILES += $(SSCAN)/configure/RELEASE
 
 DIRS += $(AUTOSAVE)
 RELEASE_FILES += $(AUTOSAVE)/configure/RELEASE
-
-#DIRS += $(GENSUB)
-#RELEASE_FILES += $(GENSUB)/configure/RELEASE
 
 ###### 2nd Tier Support Modules - Only Depend on 1st Tier ########
 
