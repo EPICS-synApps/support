@@ -1,3 +1,7 @@
+Note that the build location has changed from previous versions of synApps.
+Now, you run make in support, and it references configure/RELEASE.
+The directory, config, is no longer used at all.
+
 ==============================================================================
         SITE CONFIGURATION
 ==============================================================================
