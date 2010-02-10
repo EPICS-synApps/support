@@ -1,8 +1,8 @@
 #FILENAME:	Makefile
 #USAGE:		Top Makefile
-#Version:	$Revision: 1.2 $
+#Version:	$Revision: 1.3 $
 #Modified By:	$Author: mooney $
-#Last Modified:	$Date: 2008-12-08 20:47:12 $
+#Last Modified:	$Date: 2008-12-10 22:25:06 $
 #NOTES- The "DIRS" order is based on compile time dependencies.
 #     - The user must modify SUPPORT and EPICS_BASE in the
 #       <synApps>/support/configure directory for the local configuration.
@@ -22,7 +22,7 @@ MASTER_FILE = $(TOP)/configure/RELEASE
 
 include $(TOP)/configure/CONFIG
 
-###### 1st Tier Modules - Only Depend on EPICS BASE ######
+###### 1st Tier Support Modules - Only Depend on EPICS BASE ######
 
 DIRS += $(VXSTATS)
 RELEASE_FILES += $(VXSTATS)/configure/RELEASE
@@ -45,7 +45,7 @@ RELEASE_FILES += $(AUTOSAVE)/configure/RELEASE
 #DIRS += $(GENSUB)
 #RELEASE_FILES += $(GENSUB)/configure/RELEASE
 
-###### 2nd Tier Modules - Only Depend on 1st Tier ########
+###### 2nd Tier Support Modules - Only Depend on 1st Tier ########
 
 DIRS += $(ASYN)
 RELEASE_FILES += $(ASYN)/configure/RELEASE
@@ -55,7 +55,7 @@ DIRS += $(CALC)
 RELEASE_FILES += $(CALC)/configure/RELEASE
 $(CALC)_DEPEND_DIRS = $(SSCAN)
 
-################### 3rd Tier Modules #####################
+################### 3rd Tier Support Modules #####################
 
 DIRS += $(MOTOR)
 RELEASE_FILES += $(MOTOR)/configure/RELEASE
@@ -109,7 +109,7 @@ DIRS += $(BUSY)
 RELEASE_FILES += $(BUSY)/configure/RELEASE
 $(BUSY)_DEPEND_DIRS = $(ASYN)
 
-################### 4th Tier Modules #####################
+################### 4th Tier Support Modules #####################
 
 DIRS += $(CAMAC)
 RELEASE_FILES += $(CAMAC)/configure/RELEASE
@@ -131,11 +131,11 @@ DIRS += $(PILATUS)
 RELEASE_FILES += $(PILATUS)/configure/RELEASE
 $(PILATUS)_DEPEND_DIRS = $(ASYN) $(SNCSEQ) $(STREAM)
 
-################### 5th Tier Modules #####################
+################### 5th Tier Support Modules #####################
 
 DIRS += $(DXP)
 RELEASE_FILES += $(DXP)/configure/RELEASE
-$(DXP)_DEPEND_DIRS = $(ASYN) $(CAMAC) $(MCA) $BUSY)
+$(DXP)_DEPEND_DIRS = $(ASYN) $(CAMAC) $(MCA) $(BUSY)
 
 DIRS += $(AREADETECTOR)
 RELEASE_FILES += $(AREADETECTOR)/configure/RELEASE
@@ -145,10 +145,25 @@ DIRS += $(QUADEM)
 RELEASE_FILES += $(QUADEM)/configure/RELEASE
 $(QUADEM)_DEPEND_DIRS = $(ASYN) $(MCA)
 
-NOT_XXX_DIRS = $(DIRS)
+################### End of Support-Modules #####################
+
+SUPPORT_DIRS = $(DIRS)
+
+################### User Modules #####################
+
 DIRS += $(XXX)
 RELEASE_FILES += $(XXX)/configure/RELEASE
-$(XXX)_DEPEND_DIRS = $(NOT_XXX_DIRS)
+$(XXX)_DEPEND_DIRS = $(SUPPORT_DIRS)
+
+DIRS += $(IP_USE)
+RELEASE_FILES += $(IP_USE)/configure/RELEASE
+$(IP_USE)_DEPEND_DIRS = $(ASYN) $(IPAC) $(SNCSEQ)
+
+DIRS += $(CAMAC_USE)
+RELEASE_FILES += $(CAMAC_USE)/configure/RELEASE
+$(CAMAC_USE)_DEPEND_DIRS = $(MOTOR) $(STD) $(SSCAN) $(VME) $(AUTOSAVE)
+
+
 
 ACTIONS += uninstall realuninstall distclean cvsclean
 
@@ -160,6 +175,8 @@ release:
 	echo EPICS_BASE=$(EPICS_BASE)
 	echo ' '
 	echo MASTER_FILE=$(MASTER_FILE)
+	echo ' '
+	echo DIRS=$(DIRS)
 	echo ' '
 	echo RELEASE_FILES=$(RELEASE_FILES)
 	echo ' '
