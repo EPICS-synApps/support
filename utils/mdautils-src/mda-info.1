@@ -1,0 +1,33 @@
+.\" Process this file with
+.\" groff -man -Tascii mda-dump.1
+.\"
+.TH MDA-INFO 1 "August 2005" "MDA Utilities" "MDA Utilities"
+
+.SH NAME
+mda-info \- prints out information about a MDA file
+
+.SH SYNOPSIS
+.B mda-info
+.I "file"
+
+.SH DESCRIPTION
+.B mda-info
+is a utility for seeing certain information about MDA files, which are
+created by
+.BR saveData \ in
+.BR EPICS .
+Things like scan time, dimensionality, and the scanned positioner(s)
+are shown.  The only thing
+.B mda-dump
+needs is
+.IR "file" ,
+the name of the MDA file.
+.PP
+This program does not load the entire file, so it's fast.
+
+.SH AUTHOR
+Dohn A. Arms <dohnarms@anl.gov>
+
+.SH "SEE ALSO"
+.BR mda2ascii (1), \ mda-dump (1)
+

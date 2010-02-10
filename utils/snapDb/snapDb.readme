@@ -1,0 +1,108 @@
+snapDb is an EPICS application-development tool, intended to capture the content
+of a collection of live EPICS records (running in an IOC), and write a loadable
+database that will re-create that collection of records, typically with
+different record names.  snapDb can also write MEDM-display files for the record
+collection.
+
+But why?  To understand the intended use of snapDb, a little background in the
+synApps' notion of a "userCalc" seems called for.  Typically, a synApps IOC
+loads a collection of records that are not committed in advance to any purpose,
+but instead are intended to be programmed at run time.  Initially, ten 'swait'
+records (similar to calcout records) were loaded into each synApps IOC; they
+were used mostly individually, and mostly for things like unit conversions and
+normalization.  But soon, users began to build little software machines from
+these co-called  "userCalcs", and they found the need for other kinds of
+records.  Now, many synApps IOC's load sets of swait, transform, calcout,
+scalcout, acalcout, and sseq records; and "userCalc" has become a generic term
+for any record intended to be programmed at run time.
+
+For some EPICS application developers who use synApps, userCalcs have become a
+development tool for prototyping and testing databases or database fragments. 
+snapDb is intended to support this method of application development, by
+removing some of the drudgery of converting a collection of userCalcs into a
+loadable database, and of building MEDM-display files to support the database.
+
+snapDb needs to read a .dbd file to find out what fields are associated with
+the record types it encounters.  You can tell it what .dbd file to read either
+by making the menu selection "File/Open DBD file", or by setting the environment
+variable SNAPDB_DBDFILE before starting snapDb.
+
+Environment variables:
+---------------------
+On startup, snapDb will look for the following environment variables.  If they
+are found, it will process the values of the variables.
+
+SNAPDB_DBDFILE			- path to a .dbd file
+	same as making the menu selection "File/Open DBD file"
+	example: "/home/oxygen/MOONEY/epics/synApps/support/xxx/dbd/iocxxxVX.dbd"
+SNAPDB_REPLACEMENTS		- list of macro replacements
+	same as typing the replacements into the "add new replacement" box.
+	example: "xxx:=$(P"
+SNAPDB_DISPLAYINFOFILE
+	same as making the menu selection "File/Read displayInfo file"
+	example: "/home/oxygen/MOONEY/pythonlib/snapDb_displayInfo.txt"
+EPICS_DISPLAY_PATH
+	example: [same as used by MEDM]
+
+System Requirements:
+-------------------
+snapDb.py requires the following:
+	wxPython	GUI
+	CaChannel	EPICS CA interface for Python
+	ca_util.py	thin layer on top of CaChannel (included with snapDb.py)
+	dbd.py		reads EPICS .dbd files (included with snapDb.py)
+
+Supplementary files:
+-------------------
+snapDb contains a dictionary that tells it how to make an medm display,
+or medm related-display button, for each record type.  You can replace
+this dictionary with a file, and tell snapDb to read the file.  The
+file displayInfo.txt contains the same information hard-wired into
+snapDb.
+
+displayInfo.txt
+--------------------------------------------------------------------
+#rtype		adl file				prefix_macro	recordname_macro
+aSub		anyRecord.adl			P				R
+acalcout	yyArrayCalc.adl			P				C
+ai			anyRecord.adl			P				R
+ao			anyRecord.adl			P				R
+asyn		asynRecord.adl			P				R
+bi			anyRecord.adl			P				R
+bo			anyRecord.adl			P				R
+busy		busyRecord.adl			P				B
+calc		CalcRecord.adl			P				C
+calcout		yyCalcoutRecord.adl		P				C
+compress	anyRecord.adl			P				R
+dfanout		anyRecord.adl			P				R
+epid		pid_control.adl			P				PID
+event		anyRecord.adl			P				R
+fanout		anyRecord.adl			P				R
+longin		anyRecord.adl			P				R
+longout		anyRecord.adl			P				R
+mbbi		anyRecord.adl			P				R
+mbbiDirect	anyRecord.adl			P				R
+mbbo		anyRecord.adl			P				R
+mbboDirect	anyRecord.adl			P				R
+mca			anyRecord.adl			P				R
+motor		motorx.adl				P				M
+permissive	anyRecord.adl			P				R
+scalcout	yysCalcoutRecord.adl	P				C
+scaler		anyRecord.adl			P				R
+scanparm	anyRecord.adl			P				R
+sel			anyRecord.adl			P				R
+seq			yySeq.adl				P				S
+sscan		scanAux.adl				P				S
+sseq		yySseq.adl				P				S
+state		anyRecord.adl			P				R
+stringin	anyRecord.adl			P				R
+stringout	anyRecord.adl			P				R
+sub			anyRecord.adl			P				R
+subArray	anyRecord.adl			P				R
+swait		yyWaitRecord.adl		P				C
+table		anyRecord.adl			P				R
+timestamp	anyRecord.adl			P				R
+transform	yyTransform.adl			P				T
+vme			anyRecord.adl			P				R
+waveform	anyRecord.adl			P				R
+--------------------------------------------------------------------
