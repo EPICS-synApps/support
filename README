@@ -1,0 +1,3 @@
+To build, go to config and look at the README file.  The config
+directory contains code to write consistent paths in all modules'
+RELEASE files.
