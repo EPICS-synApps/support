@@ -11,7 +11,7 @@ calc		CalcRecord.adl			P				C
 calcout		yyCalcoutRecord.adl		P				C
 compress	anyRecord.adl			P				R
 dfanout		anyRecord.adl			P				R
-epid		pid_control.adl			P				PID
+epid		async_pid_control.adl	P				PID
 event		anyRecord.adl			P				R
 fanout		anyRecord.adl			P				R
 longin		anyRecord.adl			P				R
