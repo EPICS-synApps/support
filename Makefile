@@ -86,9 +86,9 @@ SUPPORT_DIRS += $(IP)
 RELEASE_FILES += $(IP)/configure/RELEASE
 $(IP)_DEPEND_DIRS = $(ASYN) $(IPAC) $(SNCSEQ)
 
-SUPPORT_DIRS += $(CCD)
-RELEASE_FILES += $(CCD)/configure/RELEASE
-$(CCD)_DEPEND_DIRS = $(BUSY) $(ASYN) $(SNCSEQ)
+#SUPPORT_DIRS += $(CCD)
+#RELEASE_FILES += $(CCD)/configure/RELEASE
+#$(CCD)_DEPEND_DIRS = $(BUSY) $(ASYN) $(SNCSEQ)
 
 SUPPORT_DIRS += $(OPTICS)
 RELEASE_FILES += $(OPTICS)/configure/RELEASE
@@ -106,6 +106,9 @@ SUPPORT_DIRS += $(VAC)
 RELEASE_FILES += $(VAC)/configure/RELEASE
 $(VAC)_DEPEND_DIRS = $(ASYN) $(IPAC)
 
+SUPPORT_DIRS += $(SOFTGLUE)
+RELEASE_FILES += $(SOFTGLUE)/configure/RELEASE
+$(SOFTGLUE)_DEPEND_DIRS = $(ASYN) $(IPAC)
 
 ################### 4th Tier Support Modules #####################
 
@@ -129,15 +132,15 @@ $(VME)_DEPEND_DIRS = $(STD)
 #!RELEASE_FILES += $(EBRICK)/configure/RELEASE
 #!$(EBRICK)_DEPEND_DIRS = $(STD)
 
-SUPPORT_DIRS += $(PILATUS)
-RELEASE_FILES += $(PILATUS)/configure/RELEASE
-$(PILATUS)_DEPEND_DIRS = $(ASYN) $(SNCSEQ) $(STREAM)
+#SUPPORT_DIRS += $(PILATUS)
+#RELEASE_FILES += $(PILATUS)/configure/RELEASE
+#$(PILATUS)_DEPEND_DIRS = $(ASYN) $(SNCSEQ) $(STREAM)
 
 ################### 5th Tier Support Modules #####################
 
-SUPPORT_DIRS += $(DXP)
-RELEASE_FILES += $(DXP)/configure/RELEASE
-$(DXP)_DEPEND_DIRS = $(ASYN) $(CAMAC) $(MCA) $(BUSY)
+#SUPPORT_DIRS += $(DXP)
+#RELEASE_FILES += $(DXP)/configure/RELEASE
+#$(DXP)_DEPEND_DIRS = $(ASYN) $(CAMAC) $(MCA) $(BUSY)
 
 ifeq ($(EPICS_HOST_ARCH), linux-x86)
 ifeq ($(LINUX_TIFF_INSTALLED), YES)
