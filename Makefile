@@ -86,10 +86,6 @@ SUPPORT_DIRS += $(IP)
 RELEASE_FILES += $(IP)/configure/RELEASE
 $(IP)_DEPEND_DIRS = $(ASYN) $(IPAC) $(SNCSEQ)
 
-#SUPPORT_DIRS += $(CCD)
-#RELEASE_FILES += $(CCD)/configure/RELEASE
-#$(CCD)_DEPEND_DIRS = $(BUSY) $(ASYN) $(SNCSEQ)
-
 SUPPORT_DIRS += $(OPTICS)
 RELEASE_FILES += $(OPTICS)/configure/RELEASE
 $(OPTICS)_DEPEND_DIRS = $(ASYN)
@@ -132,30 +128,21 @@ $(VME)_DEPEND_DIRS = $(STD)
 #!RELEASE_FILES += $(EBRICK)/configure/RELEASE
 #!$(EBRICK)_DEPEND_DIRS = $(STD)
 
-#SUPPORT_DIRS += $(PILATUS)
-#RELEASE_FILES += $(PILATUS)/configure/RELEASE
-#$(PILATUS)_DEPEND_DIRS = $(ASYN) $(SNCSEQ) $(STREAM)
-
 ################### 5th Tier Support Modules #####################
 
-#SUPPORT_DIRS += $(DXP)
-#RELEASE_FILES += $(DXP)/configure/RELEASE
-#$(DXP)_DEPEND_DIRS = $(ASYN) $(CAMAC) $(MCA) $(BUSY)
-
-ifeq ($(EPICS_HOST_ARCH), linux-x86)
-ifeq ($(LINUX_TIFF_INSTALLED), YES)
 SUPPORT_DIRS += $(AREA_DETECTOR)
-$(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(SSCAN) $(MCA)
-endif
-else
-SUPPORT_DIRS += $(AREA_DETECTOR)
-$(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(SSCAN) $(MCA)
-endif
 RELEASE_FILES += $(AREA_DETECTOR)/configure/RELEASE
+$(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(SSCAN) $(MCA)
 
 SUPPORT_DIRS += $(QUADEM)
 RELEASE_FILES += $(QUADEM)/configure/RELEASE
 $(QUADEM)_DEPEND_DIRS = $(ASYN) $(MCA)
+
+################### 6th Tier Support Modules #####################
+
+SUPPORT_DIRS += $(DXP)
+RELEASE_FILES += $(DXP)/configure/RELEASE
+$(DXP)_DEPEND_DIRS = $(AREA_DETECTOR) $(ASYN) $(CAMAC) $(MCA) $(BUSY)
 
 ################### End of Support-Modules #####################
 
