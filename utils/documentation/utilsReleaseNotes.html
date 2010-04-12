@@ -1,53 +1,60 @@
-<html>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type"
-content="text/html; charset=iso-8859-1">
-<title>utilsReleaseNotes</title>
+  <title>utilsReleaseNotes</title>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type" />
 </head>
-
-<body bgcolor="#FFFFFF">
-
-<h1 align="center">utils Release Notes</h1>
-
-<h2 align="center">synApps release 5-5</h2>
-<P> Added utils/documentation
-<P>Added burt.py, python support for writing the content of a burt
-snapshot file to a running IOC.  burt.py cannot write a snapshot file.
-<ul>
-<li>mdaExplorer:
-	<ul>
-	<li>Survey MDA files checks directory periodically for new files.
-	<li>Add file description to directory list.
-	<li>Can scale 2D plots for square image.
-	<li>Color bar was displayed on top of image.
-	</ul>
-
-<li>snapDb
-	<ul>
-	<li>Handle sub-record fields A-L, which have no promptgroup property, but are
-	permitted to be written in .db files.
-	<li>Don't crash if caget fails to get a value.
-	<li>Get value as number, for comparison with default value, and as string, for
-		writing to file.
-	</ul>
-
-<li>mdautils-src
-	<ul>
-	<li>Nov 2009 distribution from Dohn Arms
-	</ul>
-
-<li>convertIocFiles
-	<ul>
-	<li>New directory in which all convertIocFiles related support is
-	collected.
-	</ul>
-
-</ul>
-<address>
-    Suggestions and Comments to: <br>
-    <a href="mailto:mooney@aps.anl.gov">Tim Mooney </a>:
-    (mooney@aps.anl.gov) <br>
-</address>
+<body>
+  <h1 style="text-align: center">
+    utils Release Notes</h1>
+  <h2 style="text-align: center">
+    April 12, 2010</h2>
+  <ul>
+    <li>Added cygwinScripts directory, containing scripts to configure the Cygwin bash
+      shell for building for the cyginx-86 and win32-x86 architectures.</li>
+  </ul>
+  <h2 style="text-align: center">
+    synApps release 5-5</h2>
+  <p>
+    Added utils/documentation</p>
+  <p>
+    Added burt.py, python support for writing the content of a burt snapshot file to
+    a running IOC. burt.py cannot write a snapshot file.</p>
+  <ul>
+    <li>mdaExplorer:
+      <ul>
+        <li>Survey MDA files checks directory periodically for new files.</li>
+        <li>Add file description to directory list.</li>
+        <li>Can scale 2D plots for square image.</li>
+        <li>Color bar was displayed on top of image.</li>
+      </ul>
+    </li>
+    <li>snapDb
+      <ul>
+        <li>Handle sub-record fields A-L, which have no promptgroup property, but are permitted
+          to be written in .db files.</li>
+        <li>Don't crash if caget fails to get a value.</li>
+        <li>Get value as number, for comparison with default value, and as string, for writing
+          to file.</li>
+      </ul>
+    </li>
+    <li>mdautils-src
+      <ul>
+        <li>Nov 2009 distribution from Dohn Arms</li>
+      </ul>
+    </li>
+    <li>convertIocFiles
+      <ul>
+        <li>New directory in which all convertIocFiles related support is collected.</li>
+      </ul>
+    </li>
+  </ul>
+  <address>
+    Suggestions and Comments to:
+    <br />
+    <a href="mailto:mooney@aps.anl.gov">Tim Mooney </a>: (mooney@aps.anl.gov)
+    <br />
+  </address>
 </body>
 </html>
