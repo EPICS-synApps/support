@@ -3,6 +3,7 @@ SUPPORT=/home/oxygen/MOONEY/epics/synAppsSVN/support
 EPICS_BASE=home/oxygen/MOONEY/epics/base-3.14.11
 #/usr/local/iocapps/cvsroot/modules/bus/allenBradley
 ALLEN_BRADLEY=$(SUPPORT)/allenBradley/export09092009
+# Guess: not tagged
 AREA_DETECTOR=$(SUPPORT)/areaDetector/1-6
 #https://svn.aps.anl.gov/epics/asyn/
 ASYN=$(SUPPORT)/asyn/4-13
