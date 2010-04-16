@@ -8,7 +8,7 @@ content="text/html; charset=iso-8859-1">
 
 <body bgcolor="#FFFFFF">
 
-<h1>synApps 5.4</h1>
+<h1>synApps 5.5</h1>
 <hr><h2>Introduction</h2><hr>
 
 <P>synApps is a collection of <a href=http://www.aps.anl.gov/epics>EPICS</a> software
@@ -79,9 +79,9 @@ One synApps module, the <b>xxx</b> module, is different: it doesn't export
 anything. It imports support from other modules, and produces bootable software
 to support an EPICS <i>IOC</i>.  The <b>xxx</b> module is documentation in
 runnable form, and also a template from which a synApps application can be
-constructed.  <b>xxx</b> is not comprehensive: it doesn't apply all of synApps. 
-It's usually a little behind the rest of synApps, it focusses more on VME crates
-than on other kinds of IOCs, and it's a compromise between what is most widely
+constructed.  <b>xxx</b> is not comprehensive: it doesn't apply all of synApps; 
+it's usually a little behind the rest of synApps; it focusses more on VME crates
+than on other kinds of IOCs; and it's a compromise between what is most widely
 used and what is most likely to build and run out of the box.
 
 <blockquote><i>
@@ -134,9 +134,6 @@ you've done, to diagnose problems, and to extend synApps in any significant way.
 
 <tr><td><b>camac</b><td>Support for CAMAC hardware.
 
-<tr><td><b>ccd</b><td>Scientific CCD detectors, including Bruker, MAR, and
-	Roper.  (Superceded by the <b>areaDetector</b> module.)
-
 <tr><td><i>configure</i><td>Build files
 
 <tr><td><b>dac128V</b><td>Support for an IndustryPack DAC module.
@@ -169,10 +166,10 @@ devices.
 
 <tr><td><b>optics</b><td>Support for optical tables, monochromators, slits, etc.
 
-<tr><td><b>pilatus</b><td>Support for the Dectris pixel-array detector. 
-	(Superceded by the <b>areaDetector</b> module.)
-
 <tr><td><b>quadEM</b><td>Support for an APS-developed 4-channel electrometer
+
+<tr><td><b>softGlue</b><td>Support for user-programmed "wiring" of custom FPGA
+	content loaded into an Acromag IP-EP201 module.
 
 <tr><td><b>sscan</b><td>Support for scans (programmed control and data
 	acquisition).
@@ -198,7 +195,7 @@ devices.
 </table>
 
 <P>See support/configure/RELEASE for a complete set of compatible module
-versions.  This release of synApps is compatible with EPICS release 3.14.10,
+versions.  This release of synApps is compatible with EPICS release 3.14.11,
 Tornado 2.2, and the following EPICS modules/versions, which are produced and
 maintained by other members of the EPICS collaboration.  These modules are not
 part of synApps, but their maintainers have permitted us to distribute copies
@@ -206,20 +203,23 @@ along with synApps:
 
 <P><table border>
 <tr><th>Module<th>version<th>description
-<tr><td><b>allenBradley</b><td>v2-1<td>for communicating with Allen Bradley PLC's (ANL)
-<tr><td><b>ipac</b><td>v2-10<td>required for IndustryPack support (ANL)
-<tr><td><b>asyn</b><td>v4-10<td>required by many modules (ANL)
+<tr><td><b>allenBradley</b><td>export09092009<td>for communicating with Allen Bradley PLC's (ANL)
+<tr><td><b>ipac</b><td>v2-11<td>required for IndustryPack support (ANL)
+<tr><td><b>asyn</b><td>v4-13<td>required by many modules (ANL)
 <tr><td><b>seq</b><td>v2-0-12<td>for SNL programs in synApps (SLAC)
-<tr><td><b>stream</b><td>v2-4<td>configurable device support for message-based devices (PSI)
-<tr><td><b>vxStats</b><td>v1-7-2g<td>vxWorks statistics, modified by us (SNS)
+<tr><td><b>stream</b><td>v2-4-1<td>configurable device support for message-based devices (PSI)
+<tr><td><b>vxStats</b><td>v1-7-2h<td>vxWorks statistics, modified by us (SNS)
 </table>
 
 <blockquote>
 
-<P>Previous versions of synApps included and relied on the <b>genSub</b> module.  In
-EPICS 3.14.10, a replacement for the genSub record, called the asub record, is
-included in base, and synApps has been modified to use it instead of the genSub
-record.
+<P>Previous versions of synApps included and relied on the <b>genSub</b>,
+<b>ccd</b>, and <b>pilatus</b> modules.  Beginning with EPICS 3.14.10, a replacement for the
+genSub record, called the asub record, is included in base, and synApps has been
+modified to use it instead of the genSub record.  The <b>ccd</b> and
+<b>pilatus</b> modules have been replaced by the <b>areaDetector</b> module.
+
+</blockquote>
 
 <P>For convenience, this distribution includes the module versions listed above,
 in place and ready to build, with minor modifications to build files.  A few of
@@ -230,33 +230,32 @@ display files, etc.
 Acquisition and the Accelerator Controls groups of the Advanced Photon Source
 (APS); by developers in APS Collaborative Access Teams &ndash; notably, Mark
 Rivers (CARS-CAT); and by developers in the EPICS collaboration outside of the
-APS &ndash; notably, those at the Stanford Linear Accelerator Center, the Swiss
-Light Source/Paul Scherrer Institut, the Diamond Light Source, the National
+APS &ndash; notably, those at the Diamond Light Source, the Stanford Linear
+Accelerator Center, the Swiss Light Source/Paul Scherrer Institut, the National
 Synchrotron Light Source, the Australian Light Source, and the Canadian Light
 Source.
 
-</blockquote>
 
 <P>Aside from EPICS databases, SNL (State Notation Language) programs, and the
 like, synApps contains the following code:
 
 <ul>
-<li><h3>Record support</h3>
+<li><h3>Record support in or distributed with synApps</h3>
 <table border>
 <tr><th>Record<th>Description
-<tr><td><b>aCalcout</b><td>calcout record extended to handle array expressions
+<tr><td><b>acalcout</b><td>calcout record extended to handle array expressions
+<tr><td><b>asyn</b><td>provide access to nearly all of the features of the
+    asyn facility
 <tr><td><b>busy</b><td>utility record: calls recGblFwdLink only when its
 	VAL field is zero, allowing CA clients, and asyn drivers to
-	participate in EPICS putNotify (ca_put_callback()) operations.
-<tr><td><b>dxp</b><td>XIA's DXP digital signal processor
-	Set/read signal-processor parameters
+	participate in EPICS putNotify (ca_put_callback()) operations
 <tr><td><b>epid</b><td>Extended version of the PID record, previously in EPICS base.
 	Intended for implementing feedback loops
 <tr><td><b>mca</b><td>support for multichannel analyzers, and some other
 	array-valued detectors
 <tr><td><b>motor</b><td>stepper and servo motors, "soft" motor
-<tr><td><b>sCalcout</b><td>calcout record extended to handle string expressions,
-	links, and values.
+<tr><td><b>scalcout</b><td>calcout record extended to handle string expressions,
+	links, and values
 <tr><td><b>scaler</b><td>scaler bank
 <tr><td><b>sscan</b><td>Replaces the scan record (Ned Arnold/APS) previously in EPICS
 	base. This version uses a modified version of recDynLlib that supports
@@ -315,6 +314,7 @@ like, synApps contains the following code:
 <tr><td>ai         <td>INST_IO   <td>devAiTPG261                  <td>asyn TPG261
 <tr><td>ai         <td>INST_IO   <td>devAiTelevac                 <td>asyn Televac
 <tr><td>ai         <td>INST_IO   <td>devInterfaceAI1              <td>InterfaceAI1
+<tr><td>ai         <td>INST_IO   <td>devaiStream                  <td>stream
 <tr><td>ai         <td>VME_IO    <td>devAiA32Vme                  <td>Generic A32 VME
 <tr><td>ai         <td>VME_IO    <td>devAiAvmeMRD                 <td>devAvmeMRD
 <tr><td>ai         <td>VME_IO    <td>devAiBunchClkGen             <td>APS Bunch Clock
@@ -354,6 +354,7 @@ like, synApps contains the following code:
 <tr><td>bi         <td>INST_IO   <td>devBiStrParm                 <td>asyn bi stringParm
 <tr><td>bi         <td>INST_IO   <td>devBiTPG261                  <td>asyn TPG261
 <tr><td>bi         <td>INST_IO   <td>devBiTelevac                 <td>asyn Televac
+<tr><td>bi         <td>INST_IO   <td>devbiStream                  <td>stream
 <tr><td>bi         <td>VME_IO    <td>devBiA32Vme                  <td>Generic A32 VME
 <tr><td>bi         <td>VME_IO    <td>devBiAvme9440                <td>AVME9440 I
 <tr><td>bi         <td>VME_IO    <td>devBiAvmeMRD                 <td>devAvmeMRD
@@ -372,14 +373,18 @@ like, synApps contains the following code:
 <tr><td>bo         <td>INST_IO   <td>devBoMPC                     <td>asyn MPC
 <tr><td>bo         <td>INST_IO   <td>devBoStrParm                 <td>asyn bo stringParm
 <tr><td>bo         <td>INST_IO   <td>devBoTPG261                  <td>asyn TPG261
+<tr><td>bo         <td>INST_IO   <td>devboStream                  <td>stream
 <tr><td>bo         <td>VME_IO    <td>devBoA32Vme                  <td>Generic A32 VME
 <tr><td>bo         <td>VME_IO    <td>devBoAvme9440                <td>AVME9440 O
 <tr><td>bo         <td>VME_IO    <td>devBoAvmeMRD                 <td>devAvmeMRD
 <tr><td>bo         <td>VME_IO    <td>devBoBunchClkGen             <td>APS Bunch Clock
 <tr><td>bo         <td>VME_IO    <td>devBoHP10895LaserAxis        <td>HP interferometer
 <tr><td>busy       <td>CONSTANT  <td>devBusySoft                  <td>Soft Channel
+<tr><td>busy       <td>CONSTANT  <td>devBusySoftRaw               <td>Raw Soft Channel
 <tr><td>busy       <td>INST_IO   <td>asynBusyInt32                <td>asynInt32
+<tr><td>calcout    <td>INST_IO   <td>devcalcoutStream             <td>stream
 <tr><td>epid       <td>CONSTANT  <td>devEpidSoft                  <td>Soft Channel
+<tr><td>epid       <td>CONSTANT  <td>devEpidSoftCB                <td>Async Soft Channel
 <tr><td>epid       <td>INST_IO   <td>devEpidFast                  <td>Fast Epid
 <tr><td>longin     <td>AB_IO     <td>devLiAbSlcDcm                <td>AB-SLC500DCM
 <tr><td>longin     <td>GPIB_IO   <td>devLiHeidAWE1024             <td>Heidenhein Encoder
@@ -388,6 +393,7 @@ like, synApps contains the following code:
 <tr><td>longin     <td>INST_IO   <td>asynLiUInt32Digital          <td>asynUInt32Digital
 <tr><td>longin     <td>INST_IO   <td>devLiAbDcm                   <td>Ab Dcm
 <tr><td>longin     <td>INST_IO   <td>devLiStrParm                 <td>asyn li stringParm
+<tr><td>longin     <td>INST_IO   <td>devlonginStream              <td>stream
 <tr><td>longin     <td>VME_IO    <td>devLiA32Vme                  <td>Generic A32 VME
 <tr><td>longin     <td>VME_IO    <td>devLiAvmeMRD                 <td>devAvmeMRD
 <tr><td>longin     <td>VME_IO    <td>devLiHP10895LaserAxis        <td>HP interferometer
@@ -399,6 +405,7 @@ like, synApps contains the following code:
 <tr><td>longout    <td>INST_IO   <td>asynLoUInt32Digital          <td>asynUInt32Digital
 <tr><td>longout    <td>INST_IO   <td>devLoAbDcm                   <td>Ab Dcm
 <tr><td>longout    <td>INST_IO   <td>devLoStrParm                 <td>asyn lo stringParm
+<tr><td>longout    <td>INST_IO   <td>devlongoutStream             <td>stream
 <tr><td>longout    <td>VME_IO    <td>devLoA32Vme                  <td>Generic A32 VME
 <tr><td>longout    <td>VME_IO    <td>devLoHP10895LaserAxis        <td>HP interferometer
 <tr><td>mbbi       <td>AB_IO     <td>devMbbiAb                    <td>AB-Binary Input
@@ -412,6 +419,7 @@ like, synApps contains the following code:
 <tr><td>mbbi       <td>INST_IO   <td>asynMbbiUInt32Digital        <td>asynUInt32Digital
 <tr><td>mbbi       <td>INST_IO   <td>devMbbiAbDcm                 <td>Ab Dcm
 <tr><td>mbbi       <td>INST_IO   <td>devMbbiTPG261                <td>asyn TPG261
+<tr><td>mbbi       <td>INST_IO   <td>devmbbiStream                <td>stream
 <tr><td>mbbi       <td>VME_IO    <td>devMbbiA32Vme                <td>Generic A32 VME
 <tr><td>mbbi       <td>VME_IO    <td>devMbbiAvme9440              <td>AVME9440 I
 <tr><td>mbbi       <td>VME_IO    <td>devMbbiAvmeMRD               <td>devAvmeMRD
@@ -420,6 +428,7 @@ like, synApps contains the following code:
 <tr><td>mbbiDirect <td>AB_IO     <td>devMbbiDirectAb16            <td>AB-16 bit BI
 <tr><td>mbbiDirect <td>AB_IO     <td>devMbbiDirectAb32            <td>AB-32 bit BI
 <tr><td>mbbiDirect <td>INST_IO   <td>asynMbbiDirectUInt32Digital  <td>asynUInt32Digital
+<tr><td>mbbiDirect <td>INST_IO   <td>devmbbiDirectStream          <td>stream
 <tr><td>mbbo       <td>AB_IO     <td>devMbboAb                    <td>AB-Binary Output
 <tr><td>mbbo       <td>AB_IO     <td>devMbboAb16                  <td>AB-16 bit BO
 <tr><td>mbbo       <td>AB_IO     <td>devMbboAb32                  <td>AB-32 bit BO
@@ -430,6 +439,7 @@ like, synApps contains the following code:
 <tr><td>mbbo       <td>INST_IO   <td>devMbboAbDcm                 <td>Ab Dcm
 <tr><td>mbbo       <td>INST_IO   <td>devMbboMPC                   <td>asyn MPC
 <tr><td>mbbo       <td>INST_IO   <td>devMbboTPG261                <td>asyn TPG261
+<tr><td>mbbo       <td>INST_IO   <td>devmbboStream                <td>stream
 <tr><td>mbbo       <td>VME_IO    <td>devIK320Dir                  <td>Heidenhain IK320 Sign
 <tr><td>mbbo       <td>VME_IO    <td>devIK320Funct                <td>Heidenhain IK320 Command
 <tr><td>mbbo       <td>VME_IO    <td>devIK320ModeX3               <td>Heidenhain IK320 X3 Mode
@@ -440,18 +450,22 @@ like, synApps contains the following code:
 <tr><td>mbboDirect <td>AB_IO     <td>devMbboDirectAb16            <td>AB-16 bit BO
 <tr><td>mbboDirect <td>AB_IO     <td>devMbboDirectAb32            <td>AB-32 bit BO
 <tr><td>mbboDirect <td>INST_IO   <td>asynMbboDirectUInt32Digital  <td>asynUInt32Digital
+<tr><td>mbboDirect <td>INST_IO   <td>devmbboDirectStream          <td>stream
 <tr><td>mca        <td>CONSTANT  <td>devMCA_soft                  <td>Soft Channel
 <tr><td>mca        <td>INST_IO   <td>devMcaAsyn                   <td>asynMCA
 <tr><td>mca        <td>VME_IO    <td>devSTR7201                   <td>Struck STR7201 MCS
 <tr><td>motor      <td>CONSTANT  <td>devMotorSoft                 <td>Soft Channel
 <tr><td>motor      <td>INST_IO   <td>devMotorAsyn                 <td>asynMotor
 <tr><td>motor      <td>VME_IO    <td>devE500                      <td>E500
+<tr><td>motor      <td>VME_IO    <td>devEMC18011                  <td>EMC18011
 <tr><td>motor      <td>VME_IO    <td>devESP300                    <td>ESP300
+<tr><td>motor      <td>VME_IO    <td>devEnsemble                  <td>Ensemble
 <tr><td>motor      <td>VME_IO    <td>devIM483PL                   <td>IM483PL
 <tr><td>motor      <td>VME_IO    <td>devIM483SM                   <td>IM483SM
 <tr><td>motor      <td>VME_IO    <td>devMAXv                      <td>OMS MAXv
 <tr><td>motor      <td>VME_IO    <td>devMCB4B                     <td>ACS MCB-4B
 <tr><td>motor      <td>VME_IO    <td>devMCDC2805                  <td>MCDC2805
+<tr><td>motor      <td>VME_IO    <td>devMDT695                    <td>MDT695
 <tr><td>motor      <td>VME_IO    <td>devMDrive                    <td>MDrive
 <tr><td>motor      <td>VME_IO    <td>devMM3000                    <td>MM3000
 <tr><td>motor      <td>VME_IO    <td>devMM4000                    <td>MM4000
@@ -470,11 +484,17 @@ like, synApps contains the following code:
 <tr><td>motor      <td>VME_IO    <td>devPIE516                    <td>PIE516
 <tr><td>motor      <td>VME_IO    <td>devPIE710                    <td>PIE710
 <tr><td>motor      <td>VME_IO    <td>devPIE816                    <td>PIE816
+<tr><td>motor      <td>VME_IO    <td>devPIJEDS                    <td>PIJEDS
 <tr><td>motor      <td>VME_IO    <td>devPM304                     <td>Mclennan PM304
 <tr><td>motor      <td>VME_IO    <td>devPM500                     <td>PM500
 <tr><td>motor      <td>VME_IO    <td>devPMNC87xx                  <td>PMNC87xx
 <tr><td>motor      <td>VME_IO    <td>devPmac                      <td>PMAC
+<tr><td>motor      <td>VME_IO    <td>devSC800                     <td>SC-800
+<tr><td>motor      <td>VME_IO    <td>devSPiiPlus                  <td>SPiiPlus
+<tr><td>motor      <td>VME_IO    <td>devSmartMotor                <td>SmartMotor
+<tr><td>motor      <td>VME_IO    <td>devSoloist                   <td>Soloist
 <tr><td>scalcout   <td>CONSTANT  <td>devsCalcoutSoft              <td>Soft Channel
+<tr><td>scalcout   <td>INST_IO   <td>devscalcoutStream            <td>stream
 <tr><td>scaler     <td>INST_IO   <td>devScalerAsyn                <td>Asyn Scaler
 <tr><td>scaler     <td>VME_IO    <td>devScaler                    <td>Joerger VSC8/16
 <tr><td>scaler     <td>VME_IO    <td>devScalerCamac               <td>CAMAC scaler
@@ -492,12 +512,15 @@ like, synApps contains the following code:
 <tr><td>stringin   <td>INST_IO   <td>devSiStrParm                 <td>asyn si stringParm
 <tr><td>stringin   <td>INST_IO   <td>devSiTPG261                  <td>asyn TPG261
 <tr><td>stringin   <td>INST_IO   <td>devStringinStats             <td>VX stats
+<tr><td>stringin   <td>INST_IO   <td>devstringinStream            <td>stream
 <tr><td>stringout  <td>GPIB_IO   <td>devSoHeidAWE1024             <td>Heidenhein Encoder
 <tr><td>stringout  <td>GPIB_IO   <td>devSoKeithleyDMM199          <td>KeithleyDMM199
 <tr><td>stringout  <td>INST_IO   <td>asynSoOctetWrite             <td>asynOctetWrite
+<tr><td>stringout  <td>INST_IO   <td>asynSoftGlue                 <td>softGlue
 <tr><td>stringout  <td>INST_IO   <td>devSoEurotherm               <td>asyn so Eurotherm
 <tr><td>stringout  <td>INST_IO   <td>devSoMPC                     <td>asyn MPC
 <tr><td>stringout  <td>INST_IO   <td>devSoStrParm                 <td>asyn so stringParm
+<tr><td>stringout  <td>INST_IO   <td>devstringoutStream           <td>stream
 <tr><td>stringout  <td>VME_IO    <td>devIK320Parm                 <td>Heidenhain IK320 Parameter
 <tr><td>swait      <td>CONSTANT  <td>devSWaitIoEvent              <td>Soft Channel
 <tr><td>waveform   <td>INST_IO   <td>asynFloat32ArrayWfIn         <td>asynFloat32ArrayIn
@@ -514,6 +537,7 @@ like, synApps contains the following code:
 <tr><td>waveform   <td>INST_IO   <td>asynWfOctetRead              <td>asynOctetRead
 <tr><td>waveform   <td>INST_IO   <td>asynWfOctetWrite             <td>asynOctetWrite
 <tr><td>waveform   <td>INST_IO   <td>asynWfOctetWriteRead         <td>asynOctetWriteRead
+<tr><td>waveform   <td>INST_IO   <td>devwaveformStream            <td>stream
 <tr><td>waveform   <td>VME_IO    <td>devWfBunchClkGen             <td>APS Bunch Clock
 </table>
 
@@ -572,7 +596,7 @@ with all the files you will have to edit before you can build or boot an IOC:
 
 <P><h4> The support directory</h4>
 <pre>
-synApps_5_4/support/
+synApps/support/
     Makefile                            <&mdash; EDIT to build
     Makefile.win32-x86                  <&mdash; EDIT to build for win32-x86
     all_adl/
@@ -582,7 +606,6 @@ synApps_5_4/support/
     busy/
     calc/
     camac/
-    ccd/
     configure/
         CONFIG_SITE                     <&mdash; EDIT to build
         RELEASE                         <&mdash; EDIT to build
@@ -605,9 +628,9 @@ synApps_5_4/support/
         motorApp/
             Makefile                    <&mdash; EDIT to build
     optics/
-    pilatus/
     quadEM/
     seq/
+    softGlue/
     sscan/
     std/
     stream/
@@ -620,7 +643,7 @@ synApps_5_4/support/
 </pre>
 <P><h4> The user-directory tree</h4>
 <pre>
-synApps_5_4/ioc/
+synApps/ioc/
     1bm/
         Makefile
         bin/
@@ -835,7 +858,7 @@ need the following components from the following menu headings:
 <P><h3><li>Building and configuring the support directory</h3>
 
 
-<P>If you have a built copy of EPICS base 3.14.10 or later, then building the
+<P>If you have a built copy of EPICS base 3.14.11 or later, then building the
 synApps support directory should be very simple:
 
 <ol>
