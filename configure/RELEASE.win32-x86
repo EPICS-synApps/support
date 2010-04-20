@@ -1,6 +1,8 @@
 SUPPORT=J:/epics/synApps_5_5/support
 EPICS_BASE=H:/epics/base-3.14.11
 #/usr/local/iocapps/cvsroot/modules/bus/allenBradley
+# Guess: not tagged
+#ALLEN_BRADLEY=$(SUPPORT)/allenBradley-2-3
 ALLEN_BRADLEY=$(SUPPORT)/allenBradley-09092009
 # Guess: not tagged
 #AREA_DETECTOR=$(SUPPORT)/areaDetector-1-6
