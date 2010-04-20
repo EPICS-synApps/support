@@ -20,7 +20,6 @@ DXP=$(SUPPORT)/dxp-04202010
 IP=$(SUPPORT)/ip-2-10
 IP330=$(SUPPORT)/ip330-2-6
 #https://svn.aps.anl.gov/epics/ipac/
-# Guess: not released
 IPAC=$(SUPPORT)/ipac-2-11
 IPUNIDIG=$(SUPPORT)/ipUnidig-2-7
 LOVE=$(SUPPORT)/love-3-2-4
