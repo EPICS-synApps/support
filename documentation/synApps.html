@@ -587,9 +587,10 @@ the <b>xxx</b> module, which supports a single IOC, is a user directory.  If
 several IOC's cooperate to serve a single application (such as a synchrotron
 beamline), one might make several independent copies of <b>xxx</b>, or one might
 extend a single <b>xxx</b> copy to contain multiple xxxApp directories, and
-multiple iocBoot/iocxxx directories.  At APS, we have several top-level user
-directories, each of which contains a number of copies of <b>xxx</b>, most of
-which, in turn, contain multiple xxxApp and iocBoot/iocxxx directories.
+multiple iocBoot/iocxxx directories.  At APS, the BCDA group maintains around
+100 top-level user directories (for each version of synApps) each of which
+contains a number of copies of <b>xxx</b>, and most of which, in turn, contain
+multiple xxxApp and iocBoot/iocxxx directories.
 
 <P>Here's what a complete installation might look like (much detail omitted)
 with all the files you will have to edit before you can build or boot an IOC:
@@ -653,9 +654,9 @@ synApps/ioc/
         dbd/
         iocBoot/
             Makefile
-            nfsCommands
+            nfsCommands                 <&mdash; EDIT to run
             ioc1bma/
-                Makefile
+                Makefile                <&mdash; EDIT to build
                 camac.cmd
                 canberra_1.cmd
                 canberra_13.cmd
@@ -743,13 +744,6 @@ and <code>make rebuild</code>, in the support directory.
 		<dd>This controls the build of the <b>mca</b> module, specifically,
 		support for the Canberra AIM hardware.
 
-	<dt><code>LINUX_TIFF_INSTALLED</code>
-
-		<dd>This controls the build of the areaDetector module, and is
-		understood to indicate whether libtiff.a, libjpeg.a, and libz.a are all
-		installed.  If they are not installed, areaDetector will not build, and
-		xxx will not try to use areaDetector.
-
 	</dl>
 
 <dt><code>ipac/&lt;version&gt;/drvIpac/drvIpac.dbd</code>
@@ -771,6 +765,8 @@ and <code>make rebuild</code>, in the support directory.
 <code>ioc/&lt;appname&gt;/configure/RELEASE.win32-x86</code> (win32-x86 only)
 	<dd>edit the definition of <code>SUPPORT</code> with the correct path to
 	the support directory
+<dt><code>ioc/&lt;appname&gt;/iocBoot/&lt;iocname&gt;/Makefile</code><br>
+	<dd>edit to specify the architecture that is to be built
 </dl>
 </blockquote>
 
@@ -812,8 +808,10 @@ that they don't even remember configuring.
 <ul>
 <li>Linux:
 <dl>
-<dt>libtiff.a,libjpeg.a, libz.a, and associated header files<dd>needed for the
-<b>areaDetector</b> module
+<dt>libtiff.a,libjpeg.a, libz.a, libsz.a, libNexus.a, libhdf5.a, libnetCDF.a,
+and associated header files<dd>needed for the
+<b>areaDetector</b> module.  Note that versions of these files are included in
+<b>areaDetector</b> for some architectures. 
 <dt>libusb.a, and associated header files<dd>needed for the <b>dxp</b> module
 </dl>
 
@@ -1587,9 +1585,9 @@ record types intended for end users to program at run time.
     Suggestions and Comments to: <br> 
     <a href="mailto:mooney@aps.anl.gov">Tim Mooney </a>:
     (mooney@aps.anl.gov) <br> 
-	Beamline Controls & Data Acquisition Group<br>
+	Software Services Group<br>
 	Advanced Photon Source, Argonne National Laboratory<br>
-    Last modified: March 3, 2009
+    Last modified: April 16, 2010
 </address> 
 </body>
 </html>
