@@ -27,12 +27,6 @@ export LINUX_USB_INSTALLED
 LINUX_NET_INSTALLED = NO
 export LINUX_NET_INSTALLED
 
-#Set the following variable to YES if libtiff.a, libjpeg.a, and
-#libz.a have been installled on the host Linux system for the
-#AREADETECTOR support module.  Otherwise, set to NO.
-LINUX_TIFF_INSTALLED = NO
-export LINUX_TIFF_INSTALLED
-
 # Set this when your IOC and the host use different paths
 # to access the application. This will be needed to boot
 # from a Microsoft FTP server or with some NFS mounts.
