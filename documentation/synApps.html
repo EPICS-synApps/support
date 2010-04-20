@@ -657,39 +657,54 @@ synApps/ioc/
             nfsCommands                 <&mdash; EDIT to run
             ioc1bma/
                 Makefile                <&mdash; EDIT to build
+                areaDetector.cmd
+                asynRecord.req
+                asynRecord.substitutions
+                autoShutter.substitutions
+                auto_13mca_settings.req
+                auto_3mca_settings.req
+                auto_positions.req
+                auto_settings.req
+                autosave/
+                basic_motor.substitutions
+                bootParms
                 camac.cmd
                 canberra_1.cmd
                 canberra_13.cmd
+                canberra_13.substitutions
                 canberra_3.cmd
+                canberra_3.substitutions
+                cdCommands or envPaths
                 dac128V.cmd
-                dxp_16.cmd
+                dac128V.substitutions
+                femto.req
+                gpib.cmd
                 industryPack.cmd
                 ip330.cmd
-                ipUnidig.cmd
-                quadEM.cmd
-                save_restore.cmd
-                serial.cmd
-                vme.cmd
-                st.cmd
-                basic_motor.substitutions
-                canberra_13.substitutions
-                canberra_3.substitutions
-                dac128V.substitutions
-                dxp_16.substitutions
+                ip330PIDFast.substitutions
                 ip330Scan.substitutions
+                ipUnidig.cmd
                 ipUnidig.substitutions
                 motor.substitutions
+                orient_xtals.substitutions
+                pf4bank.req
+                pf4common.req
                 picMot.substitutions
-                pid_fast.substitutions
                 pid_slow.substitutions
+                pseudoMotor.substitutions
+                quadEM.cmd
                 quadEM_pid.substitutions
+                saveData.req
+                save_restore.cmd
                 scanParms.substitutions
+                serial.cmd
+                softGlue.cmd
+                softGlue.substitutions
+                softMotor.substitutions
+                st.cmd
+                standardScans.substitutions
+                vme.cmd
                 vxStats.substitutions
-                auto_positions.req 
-                auto_settings.req
-                autosave/
-                cdCommands or envPaths
-                saveData.req 
             ioc1bmb/
             ioc1bmc/
             ioc1bmd/
@@ -868,14 +883,13 @@ synApps support directory should be very simple:
 
 <li>Set the environment variable <code>EPICS_HOST_ARCH</code> to the
    architecture (and compiler, if there is a choice) on which you are building.
-   synApps is tested with the architectures <code>solaris-sparc</code>,
-   <code>solaris-x86</code>, <code>linux-x86</code>, <code>cygwin-x86</code>,
-   and <code>win32-x86</code>.
+   synApps is tested with the architectures <code>solaris-sparc-gnu</code>,
+   <code>linux-x86_64</code>, <code>cygwin-x86</code>, and <code>win32-x86</code>.
 
 <li>In support, run '<code>make release</code>'.
 
-<li>In support, run '<code>make</code>'.  (You should be able to use '<code>make -j</code>' to
-build synApps much more quickly than it has previously built.)
+<li>In support, run '<code>make</code>'.  (You should be able to use
+    '<code>make -j</code>' to build synApps more quickly.)
 </ol>
 
 <P>You should use the same GNU Make executable that was used to build EPICS
@@ -1587,7 +1601,7 @@ record types intended for end users to program at run time.
     (mooney@aps.anl.gov) <br> 
 	Software Services Group<br>
 	Advanced Photon Source, Argonne National Laboratory<br>
-    Last modified: April 16, 2010
+    Last modified: April 20, 2010
 </address> 
 </body>
 </html>
