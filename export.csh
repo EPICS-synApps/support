@@ -3,6 +3,7 @@ mkdir synApps_5_5
 cd synApps_5_5
 svn export $SVN/support/tags/synApps_5_5 support
 cd support
+# modules
 svn export $SVN/areaDetector/trunk areaDetector-04202010
 svn export $SVN/dxp/trunk dxp-04202010
 svn export $SVN/autosave/tags/R4-6 autosave-4-6
@@ -10,6 +11,7 @@ svn export $SVN/busy/tags/R1-3 busy-1-3
 svn export $SVN/calc/tags/R2-8 calc-2-8
 svn export $SVN/camac/tags/R2-6 camac-2-6
 svn export $SVN/dac128V/tags/R2-6 dac128V-2-6
+svn export $SVN/delaygen/tags/R1-0-5 delaygen-1-0-5
 svn export $SVN/ip/tags/R2-10 ip-2-10
 svn export $SVN/ip3300/tags/R2-6 ip330-2-6
 svn export $SVN/ip330/tags/R2-6 ip330-2-6
@@ -28,7 +30,7 @@ svn export $SVN/vac/tags/R1-3 vac-1-3
 svn export $SVN/vme/tags/R2-7 vme-2-7
 svn export $SVN/vxStats/tags/R1-7-2h vxStats-1-7-2h
 svn export $SVN/xxx/tags/R5-5 xxx-5-5
-
+# other directories
 svn export $SVN/configure/tags/synApps_5_5 configure
 svn export $SVN/utils/tags/R5-5 utils
 svn export $SVN/documentation/tags/R5-5 documentation
