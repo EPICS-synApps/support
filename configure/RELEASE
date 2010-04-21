@@ -2,10 +2,10 @@
 SUPPORT=/home/oxygen/MOONEY/epics/synApps_5_5/support
 EPICS_BASE=/home/oxygen/MOONEY/epics/base-3.14.11
 #/usr/local/iocapps/cvsroot/modules/bus/allenBradley
-ALLEN_BRADLEY=$(SUPPORT)/allenBradley-09092009
+#ALLEN_BRADLEY=$(SUPPORT)/allenBradley-09092009
 # Guess: not tagged
 #AREA_DETECTOR=$(SUPPORT)/areaDetector-1-6
-AREA_DETECTOR=$(SUPPORT)/areaDetector-04202010
+AREA_DETECTOR=$(SUPPORT)/areaDetector-s55
 #https://svn.aps.anl.gov/epics/asyn/
 ASYN=$(SUPPORT)/asyn-4-13
 AUTOSAVE=$(SUPPORT)/autosave-4-6
@@ -16,7 +16,7 @@ DAC128V=$(SUPPORT)/dac128V-2-6
 DELAYGEN=$(SUPPORT)/delaygen-1-0-5
 # Guess: not tagged
 #DXP=$(SUPPORT)/dxp-3-0
-DXP=$(SUPPORT)/dxp-04202010
+DXP=$(SUPPORT)/dxp-s55
 IP=$(SUPPORT)/ip-2-10
 IP330=$(SUPPORT)/ip330-2-6
 #https://svn.aps.anl.gov/epics/ipac/
@@ -25,11 +25,9 @@ IPUNIDIG=$(SUPPORT)/ipUnidig-2-7
 LOVE=$(SUPPORT)/love-3-2-4
 # Guess: not tagged
 #MCA=$(SUPPORT)/mca-6-12
-MCA=$(SUPPORT)/mca-04202010
+MCA=$(SUPPORT)/mca-s55
 MODBUS=$(SUPPORT)/modbus-2-0
-# Guess: not tagged
-#MOTOR=$(SUPPORT)/motor-6-5
-MOTOR=$(SUPPORT)/motor-04202010
+MOTOR=$(SUPPORT)/motor-6-5
 OPTICS=$(SUPPORT)/optics-2-7
 QUADEM=$(SUPPORT)/quadEM-2-4-1
 #http://epics.web.psi.ch/software/sequencer/
