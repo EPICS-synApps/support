@@ -1,3 +1,4 @@
+#!/bin/csh
 setenv SVN https://subversion.xor.aps.anl.gov/synApps
 mkdir synApps_5_5
 cd synApps_5_5
