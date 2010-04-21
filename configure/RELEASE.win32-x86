@@ -1,0 +1,44 @@
+SUPPORT=J:/epics/synApps_5_5/support
+EPICS_BASE=H:/epics/base-3.14.11
+#/usr/local/iocapps/cvsroot/modules/bus/allenBradley
+# Guess: not tagged
+#ALLEN_BRADLEY=$(SUPPORT)/allenBradley-2-3
+ALLEN_BRADLEY=$(SUPPORT)/allenBradley-09092009
+# Guess: not tagged
+#AREA_DETECTOR=$(SUPPORT)/areaDetector-1-6
+AREA_DETECTOR=$(SUPPORT)/areaDetector-s55
+#https://svn.aps.anl.gov/epics/asyn/
+ASYN=$(SUPPORT)/asyn-4-13
+AUTOSAVE=$(SUPPORT)/autosave-4-6
+BUSY=$(SUPPORT)/busy-1-3
+CALC=$(SUPPORT)/calc-2-8
+CAMAC=$(SUPPORT)/camac-2-6
+DAC128V=$(SUPPORT)/dac128V-2-6
+DELAYGEN=$(SUPPORT)/delaygen-1-0-5
+# Guess: not tagged
+#DXP=$(SUPPORT)/dxp-3-0
+DXP=$(SUPPORT)/dxp-s55
+IP=$(SUPPORT)/ip-2-10
+IP330=$(SUPPORT)/ip330-2-6
+#https://svn.aps.anl.gov/epics/ipac/
+# Guess: not released
+IPAC=$(SUPPORT)/ipac-2-11
+IPUNIDIG=$(SUPPORT)/ipUnidig-2-7
+LOVE=$(SUPPORT)/love-3-2-4
+# Guess: not tagged
+#MCA=$(SUPPORT)/mca-6-12
+MCA=$(SUPPORT)/mca-s55
+MODBUS=$(SUPPORT)/modbus-2-0
+MOTOR=$(SUPPORT)/motor-6-5
+OPTICS=$(SUPPORT)/optics-2-7
+QUADEM=$(SUPPORT)/quadEM-2-4-1
+#http://epics.web.psi.ch/software/sequencer/
+SNCSEQ=$(SUPPORT)/seq-2-0-12
+SOFTGLUE=$(SUPPORT)/softGlue-1-0
+SSCAN=$(SUPPORT)/sscan-2-6-6
+STD=$(SUPPORT)/std-2-8
+STREAM=$(SUPPORT)/stream-2-4-1
+VAC=$(SUPPORT)/vac-1-3
+VME=$(SUPPORT)/vme-2-7
+VXSTATS=$(SUPPORT)/vxStats-1-7-2h
+XXX=$(SUPPORT)/xxx-5-5
