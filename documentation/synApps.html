@@ -116,8 +116,7 @@ you've done, to diagnose problems, and to extend synApps in any significant way.
 
 <tr><td><b>areaDetector</b><td>Support for area (i.e., 2-D, or image) detectors,
 	including CCDs, pixel array detectors, and online imaging plates.  This
-	module replaces the <b>ccd</b> and <b>pilatus</b> modules (which are nevertheless included
-	in this version of synApps, though they will no longer be supported).
+	module replaces the <b>ccd</b> and <b>pilatus</b> modules.
 
 <tr><td><b>autosave</b><td>Support for saving software parameters at run time,
 	and restoring them during the next reboot.  Autosave is also a way to
@@ -1046,8 +1045,11 @@ GPIB, you must match port names to hardware devices, set serial-port parameters,
 and specify GPIB addresses.  For any IndustryPack modules, you must specify the
 IP carrier and slot into which you've loaded those modules.
 
+<P><h4>Overview</h4>
+
 <P>In a complete job of fitting synApps to an IOC's hardware, all of the
 following files will be touched:
+<blockquote>
 <dl>
 <dt><code>xxx/iocBoot/ioc*/st.cmd</code>
 <dd>This is the ioc's startup script, and it loads the other .cmd files 
@@ -1069,6 +1071,9 @@ following files will be touched:
 <dd>a copy of the boot parameters (in case the IOC processor
         crashes in a way that erases nonvolatile memory)
 </dl>
+</blockquote>
+
+<P><h4>In more detail</h4>
 
 <P><ul>
 <li><code>xxx/iocBoot/ioc*/st.cmd</code>
@@ -1218,7 +1223,7 @@ beam energy changes.
 
 </ul>
 
-<P><li>string-expression support
+<P><li>String-expression support
 
 <P>Run-time programming involving strings and/or numbers can be done with
 userStringCalcs, which resemble userCalcs closely, but differ in significant
@@ -1226,13 +1231,13 @@ details.  A package containing two stringCalcs and an 'asyn' record (called a
 "deviceCmdReply") is also available for run-time programming of simple support
 for serial and other message-based devices.
 
-<P><li>array-expression support
+<P><li>Array-expression support
 
 <P>Run-time programming involving arrays and/or numbers can be done with
 userArrayCalcs, which resemble userCalcs closely, but differ in significant
 details.
 
-<P><li>scan support
+<P><li>Scan support
 
 <P>Scans of up to five dimensions are supported by the
 <code>standardScans.db</code> database.  Scan data is written to disk by the
@@ -1255,12 +1260,12 @@ records that are <i>not</i> named in <code>saveData.req</code> are completely ou
 restriction.  The data they accumulate is not written to disk by saveData, so
 saveData is not involved in their operation.)
 
-<P><li>sequence support
+<P><li>Sequence support
 
 <P>Run-time programming of sequences is possible using the sseq record and related
 MEDM displays <code>yySseq.adl</code>
 
-<P><li>multiple-step measurement
+<P><li>Multiple-step measurement
 
 <P>Up to four measurement steps involving positioners, detectors, and end
 calculations (e.g., to support dichroism experiments) can be done with the
@@ -1362,7 +1367,7 @@ the first place.  It started as a single App directory, and folks just added
 stuff.)  But synApps pushes the idea a little bit further toward end users who
 are not developers.  One of the driving notions behind the development of
 synApps was to put as much of EPICS' flexibility and power as seems both wise
-and practical, into the hands of end users &ndash; typically, scientists running
+and practical into the hands of end users &ndash; typically, scientists running
 experiments &ndash; whose backgrounds in software development and implementation
 vary over a wide range.
 
@@ -1390,7 +1395,7 @@ can be viewed as the simpler end of a continuum.
 
 <li>"userCalc" programming
 
-<P>synApps encourages run-time programming of a number of EPICS record types,
+<P>synApps facilitates run-time programming of a number of EPICS record types,
 by providing the following kinds of support:
 <ul>
 <li>databases dedicated to this purpose
@@ -1479,7 +1484,7 @@ support/calc/calcApp/src.
 
 <li>Development of State-Notation-Language programs
 
-<P>This is probably the next easiest, and next most capable, way of adding
+<P>This is probably the next easiest, and the next most capable, way of adding
 compiled code to an application.  SNL also introduces (to this list) the notion
 of client-side program development, for an SNL program is a Channel Access
 client, even though it runs on an IOC. Again, synApps has a bunch of examples,
