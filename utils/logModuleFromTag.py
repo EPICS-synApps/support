@@ -35,15 +35,23 @@ def tags(module, verbose=False):
 			tagList.append(tag.strip('/'))
 		return(tagList)
 
+def highestTag(module, dir):
+	maxTag = -1
+	tagList = commands.getoutput("svn ls -v %s/%s/%s" % (SVN,module,dir)).split('\n')
+	for tag in tagList:
+		maxTag = max(maxTag, int(tag.split()[0]))
+	return maxTag
+		
+
 def log(module, tag1, tag2=None):
 	# Find the difference between tag1 and tag2, or between tag1 and trunk
 	if tag2 == None:
-		tagRevNum = int(commands.getoutput("svn ls -v %s/%s/tags/%s" % (SVN,module,tag1)).split()[0])
-		trunkRevNum = int(commands.getoutput("svn ls -v %s/%s/trunk" % (SVN,module)).split()[0])
+		tagRevNum = highestTag(module, 'tags/'+tag1)
+		trunkRevNum = highestTag(module, 'trunk')
 		l = commands.getoutput("svn log -v -r %d:%d %s/%s" % (tagRevNum, trunkRevNum, SVN, module))
 	else:
-		tag1RevNum = int(commands.getoutput("svn ls -v %s/%s/tags/%s" % (SVN,module,tag1)).split()[0])
-		tag2RevNum = int(commands.getoutput("svn ls -v %s/%s/tags/%s" % (SVN,module,tag2)).split()[0])
+		tag1RevNum = highestTag(module, 'tags/'+tag1)
+		tag2RevNum = highestTag(module, 'tags/'+tag2)
 		l = commands.getoutput("svn log -v -r %d:%d %s/%s" % (tag1RevNum, tag2RevNum, SVN, module))
 	l = l.split('\n')
 	return(l)
