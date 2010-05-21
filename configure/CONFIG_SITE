@@ -16,7 +16,7 @@
 #CROSS_COMPILER_TARGET_ARCHS = vxWorks-68040
 
 #Set the following variable to YES if libusb has been installled
-#on the host Linux system for the DSP support module,
+#on the host Linux system for the DXP support module,
 #otherwise, set to NO.
 LINUX_USB_INSTALLED = NO
 export LINUX_USB_INSTALLED
