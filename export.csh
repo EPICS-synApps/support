@@ -6,12 +6,13 @@ svn export $SVN/support/tags/synApps_5_5 support
 cd support
 # modules
 svn export $SVN/areaDetector/tags/synApps_5_5 areaDetector-s55
-svn export $SVN/autosave/tags/R4-6 autosave-4-6
+svn export $SVN/autosave/tags/R4-7 autosave-4-7
 svn export $SVN/busy/tags/R1-3 busy-1-3
 svn export $SVN/calc/tags/R2-8 calc-2-8
 svn export $SVN/camac/tags/R2-6 camac-2-6
 svn export $SVN/dac128V/tags/R2-6 dac128V-2-6
 svn export $SVN/delaygen/tags/R1-0-5 delaygen-1-0-5
+svn export $SVN/documentation/tags/synApps_5_5 documentation
 svn export $SVN/dxp/tags/synApps_5_5 dxp-s55
 svn export $SVN/ip/tags/R2-10 ip-2-10
 svn export $SVN/ip330/tags/R2-6 ip330-2-6
