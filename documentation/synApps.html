@@ -226,13 +226,13 @@ the modules have suffered more substantial modifications to fix problems, add
 display files, etc.
 
 <P>synApps includes software developed by the Beamline Controls & Data
-Acquisition and the Accelerator Controls groups of the Advanced Photon Source
-(APS); by developers in APS Collaborative Access Teams &ndash; notably, Mark
-Rivers (CARS-CAT); and by developers in the EPICS collaboration outside of the
-APS &ndash; notably, those at the Diamond Light Source, the Stanford Linear
-Accelerator Center, the Swiss Light Source/Paul Scherrer Institut, the National
-Synchrotron Light Source, the Australian Light Source, and the Canadian Light
-Source.
+Acquisition, Software Services, and Accelerator Controls groups of the Advanced
+Photon Source (APS); by developers in APS Collaborative Access Teams &ndash;
+notably, Mark Rivers (CARS-CAT); and by developers in the EPICS collaboration
+outside of the APS &ndash; notably, those at the Diamond Light Source, the
+Stanford Linear Accelerator Center, the Swiss Light Source/Paul Scherrer
+Institut, the National Synchrotron Light Source, the Australian Light Source,
+and the Canadian Light Source.
 
 
 <P>Aside from EPICS databases, SNL (State Notation Language) programs, and the
@@ -734,12 +734,13 @@ and <code>make rebuild</code>, in the support directory.
 <blockquote>
 <dl>
 <dt><code>support/Makefile</code>
-    <dd>comment out any modules you don't want to build
+    <dd>Comment out any modules you don't want to build
 
 <P><dt><code>support/configure/RELEASE</code>
 
-	<dd>edit the definitions of <code>EPICS_BASE</code> and <code>SUPPORT</code>
-	with the correct paths to these directories on your system.  
+	<dd>Edit the definitions of <code>EPICS_BASE</code> and <code>SUPPORT</code>
+	with the correct paths to these directories on your system.<br>
+	Comment out any modules you don't want to build.
 
 <P><dt><code>support/configure/CONFIG_SITE</code>
 	<dd>Edit to set the following variables, which control what will be built:
@@ -1025,7 +1026,7 @@ server, you can specify the 'file name', above, as
 
 <P>synApps includes hundreds of display files intended for use with the
 EPICS display manager, MEDM.  Other EPICS display managers exist, and I once did
-a mass automated translation of MEDM display files to the EDL display manager's
+a mass automated translation of MEDM display files to the EDM display manager's
 file format, using software developed by others.  This translation was only
 partially satisfactory, but we don't have the resources to do the job better or
 more generically.  In this documentation, I'll limit attention to MEDM display
@@ -1131,7 +1132,7 @@ decreases.
 <P>The <code>2slit.db</code> database allows users to move either the slit
 virtual motors or the actual motors, and it keeps all the readback values
 current regardless of how the actual motors got moved or recalibrated. But it
-does not automatically reset the slit *drive* values when the actual motors are
+does not automatically reset the slit <b>drive</b> values when the actual motors are
 used.  This must be done manually, using the "SYNC" button on the
 <code>2slit.adl</code> display.  Pressing this button causes the database to
 read the actual motor drive values and set the slit-drive values accordingly.
@@ -1184,8 +1185,8 @@ and the displays <code>SGM*.adl</code>.
 <P><li>Filters
 <P>The APS standard user filters combine several motors and solenoids to control
 the placement of filter material in the beam path.  The databases
-<code>filterMotor.db</code> and <code>filterLock.db</code>, and the MEDM displays <code>*filter*.adl</code> are
-involved in this application.
+<code>filterMotor.db</code> and <code>filterLock.db</code>, and the MEDM displays
+<code>*filter*.adl</code> are involved in this application.
 
 <P><li>Basic run-time programming
 
@@ -1300,7 +1301,7 @@ with, separated by spaces, as follows:
 
 <P>If you want to use arrays larger than 16000 bytes (e.g., MCA spectra of more
 than 4000 channels, or scans of more than 2000 data points), you must set the
-environment variable <code>EPICS_CA_MAX_ARRAY_BYTES</code>, in *both* the IOC and
+environment variable <code>EPICS_CA_MAX_ARRAY_BYTES</code>, in <b>both</b> the IOC and
 workstation, to the size of the largest array you plan to send over the
 network, plus the size of the extra data channel access might be asked to
 include with the array.  On a Unix system, for example, you might say
@@ -1606,7 +1607,7 @@ record types intended for end users to program at run time.
     (mooney@aps.anl.gov) <br> 
 	Software Services Group<br>
 	Advanced Photon Source, Argonne National Laboratory<br>
-    Last modified: April 20, 2010
+    Last modified: May 21, 2010
 </address> 
 </body>
 </html>
