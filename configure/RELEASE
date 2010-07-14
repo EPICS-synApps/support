@@ -1,4 +1,16 @@
+#FILENAME:      RELEASE
+#USAGE:         Specify directory paths to synApps support modules
+#Version:       $Revision$
+#Modified By:   $Author$
+#Last Modified: $Date$
+#HeadURL:       $URL$
+
 # Status: working toward synApps 5.5
+
+#NOTES
+#     - To remove modules from the build, delete or comment out the
+#       module name.
+
 SUPPORT=/home/oxygen/MOONEY/epics/synApps_5_5/support
 EPICS_BASE=/home/oxygen/MOONEY/epics/base-3.14.11
 #/usr/local/iocapps/cvsroot/modules/bus/allenBradley
