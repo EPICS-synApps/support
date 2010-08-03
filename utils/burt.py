@@ -45,6 +45,8 @@ def write(snapFile, verbose=0):
 
 		# parse lines of the form: <name> <num> <value>
 		words = rawLine.split(' ',2)
+		if len(words) < 3 :
+			continue
 		words[2] = words[2].strip('\n').lstrip(' ')
 		if verbose: print "words=", words
 		if int(words[1]) != 1:
