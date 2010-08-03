@@ -45,26 +45,25 @@ def write(snapFile, verbose=0):
 
 		# parse lines of the form: <name> <num> <value>
 		words = rawLine.split(' ',2)
-		if len(words) == 3:
-			if int(words[1]) != 1:
-				print "burt.py: Not ready for arrays"
-			words[2] = words[2].strip('\n').lstrip(' ')
-			if verbose: print "words=", words
-			if int(words[1]) != 1:
-				print "burt.py: Not ready for arrays"
-			else:
-				if words[2] == '\\0': words[2] = ""
-				if (len(words[2]) > 1) and (words[2][0] == '"') and (words[2][-1] == '"'):
-					words[2] = words[2].strip('"')
-				if words[2] == ' ': words[2] = ""
+		if len(words) < 3 :
+			continue
+		words[2] = words[2].strip('\n').lstrip(' ')
+		if verbose: print "words=", words
+		if int(words[1]) != 1:
+			print "burt.py: Not ready for arrays"
+		else:
+			if words[2] == '\\0': words[2] = ""
+			if (len(words[2]) > 1) and (words[2][0] == '"') and (words[2][-1] == '"'):
+				words[2] = words[2].strip('"')
+			if words[2] == ' ': words[2] = ""
+			if verbose:
+				print "\ncaput('%s', '%s')" % (words[0], words[2])
+			try:
+				caput(words[0], words[2], req_type=ca.DBR_STRING, timeout=3, retries=10, read_check_tolerance=0.001)
+			except:
+				failed_puts[words[0]] = words[2]
 				if verbose:
-					print "\ncaput('%s', '%s')" % (words[0], words[2])
-				try:
-					caput(words[0], words[2], req_type=ca.DBR_STRING, timeout=3, retries=10, read_check_tolerance=0.001)
-				except:
-					failed_puts[words[0]] = words[2]
-					if verbose:
-						print formatExceptionInfo()
+					print formatExceptionInfo()
 	file.close()
 	for key in failed_puts.keys():
 		print "failed to set '%s' to the value '%s'" % (key, failed_puts[key])
