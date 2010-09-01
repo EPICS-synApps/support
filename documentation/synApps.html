@@ -1,14 +1,15 @@
 <html>
 
 <head>
-<meta http-equiv="Content-Type"
-content="text/html; charset=iso-8859-1">
-<title>synApps</title>
+	<meta http-equiv="Content-Type"
+	content="text/html; charset=iso-8859-1">
+	<title>synApps</title>
+
 </head>
 
 <body bgcolor="#FFFFFF">
 
-<h1>synApps 5.5</h1>
+<h1>synApps 5.5.1</h1>
 <hr><h2>Introduction</h2><hr>
 
 <P>synApps is a collection of <a href=http://www.aps.anl.gov/epics>EPICS</a> software
@@ -204,9 +205,9 @@ along with synApps:
 <tr><th>Module<th>version<th>description
 <tr><td><b>allenBradley</b><td>export09092009<td>for communicating with Allen Bradley PLC's (ANL)
 <tr><td><b>ipac</b><td>v2-11<td>required for IndustryPack support (ANL)
-<tr><td><b>asyn</b><td>v4-13<td>required by many modules (ANL)
+<tr><td><b>asyn</b><td>v4-14<td>required by many modules (ANL)
 <tr><td><b>seq</b><td>v2-0-12<td>for SNL programs in synApps (SLAC)
-<tr><td><b>stream</b><td>v2-4-1<td>configurable device support for message-based devices (PSI)
+<tr><td><b>stream</b><td>20200615<td>configurable device support for message-based devices (PSI)
 <tr><td><b>vxStats</b><td>v1-7-2h<td>vxWorks statistics, modified by us (SNS)
 </table>
 
@@ -335,6 +336,7 @@ like, synApps contains the following code:
 <tr><td>ao         <td>INST_IO   <td>devAoStrParm                 <td>asyn ao stringParm
 <tr><td>ao         <td>INST_IO   <td>devAoTPG261                  <td>asyn TPG261
 <tr><td>ao         <td>INST_IO   <td>devInterfaceAO1              <td>InterfaceAO1
+<tr><td>ao         <td>INST_IO   <td>devaoStream                  <td>stream
 <tr><td>ao         <td>VME_IO    <td>devAoA32Vme                  <td>Generic A32 VME
 <tr><td>ao         <td>VME_IO    <td>devAoAvme9210                <td>AVME-9210
 <tr><td>ao         <td>VME_IO    <td>devAoBunchClkGen             <td>APS Bunch Clock
@@ -734,14 +736,14 @@ and <code>make rebuild</code>, in the support directory.
 <blockquote>
 <dl>
 <dt><code>support/Makefile</code>
-    <dd>Comment out any modules you don't want to build
+    <dd>Comment out any modules you don't want to build.
 
 <P><dt><code>support/configure/RELEASE</code>
 
 	<dd>Edit the definitions of <code>EPICS_BASE</code> and <code>SUPPORT</code>
 	with the correct paths to these directories on your system.<br>
 	Comment out any modules you don't want to build.
-
+	
 <P><dt><code>support/configure/CONFIG_SITE</code>
 	<dd>Edit to set the following variables, which control what will be built:
 	The supported values for these variables are <code>YES</code> and
@@ -801,7 +803,23 @@ module <b>b</b>, and module <b>b</b> depends on module <b>c</b>, then <b>a</b>
 also depends on <b>c</b>, and it must specify the same version of <b>c</b> that
 <b>b</b> specifies.)  The complete set of modules selected by a user directory
 must be self consistent, and the EPICS build will ensure this, unless you tell
-it not to. </i></blockquote>
+it not to.
+
+<P>For completeness, the format of a RELEASE-file path definition is
+"<code>&lt;name&gt;=&lt;path&gt;</code>", where &lt;name&gt; is an arbitrary
+string, and &lt;path&gt; is an absolute directory name (starts with '/' on a
+unix host, or with a drive name such as 'C:' on Windows).  Although &lt;name&gt;
+is arbitrary, you should be consistent.  Generally, the EPICS build doesn't care
+what paths are named, because it's just going to collect them all into a list,
+and use the list to search for libraries, .dbd files, etc.  But, in the module
+consistency check mentioned above, the name does matter, because EPICS can't
+check that all modules in a build are using the same version of, say, the asyn
+module, unless they all use the same &lt;name&gt; for it.  Also, in the xxx
+module, &lt;name&gt; is used extensively to find display files (that is, to set
+the EPICS_DISPLAY_PATH environment variable), and to specify databases, autosave
+request files, etc., when an ioc is booting.
+
+</i></blockquote>
 
 <hr><h2> How to build synApps</h2><hr>
 <ol>
@@ -1607,7 +1625,7 @@ record types intended for end users to program at run time.
     (mooney@aps.anl.gov) <br> 
 	Software Services Group<br>
 	Advanced Photon Source, Argonne National Laboratory<br>
-    Last modified: May 21, 2010
+    Last modified: Sept 1, 2010
 </address> 
 </body>
 </html>
