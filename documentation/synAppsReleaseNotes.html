@@ -7,6 +7,70 @@ content="text/html; charset=iso-8859-1">
 </head>
 
 <body bgcolor="#FFFFFF">
+
+<h1 align="center">synApps 5.5.1 Release Notes</h1>
+<h2>Version changes from R5-5 to R5-5-1</h2>
+<table border>
+
+<tr><td>module<td>old version<td>new version<highlights>
+<tr><td>EPICS_BASE<td>3.14.11<td>3.14.11<td>&nbsp;
+<tr><td>ALLEN_BRADLEY<td>09092009<td>09092009<td>&nbsp;
+<tr><td>AREA_DETECTOR<td>synApps_5_5<td>1-6<td>PerkinElmer, EPICS_AD_Viewer, marCCD (manual,TwoTheta, baseline stabilization), NDPluginStats, Bruker APEX2, FastSweep, new plugins, FindingAreaComponents
+<tr><td>ASYN<td>4-13<td>4-14<td>asynPortDriver, testIPServerApp, vxi11, asynDriver(SyncIO, connection management) 
+<tr><td>AUTOSAVE<td>4-6<td>4-7<td>bug fix for array valued PV's
+<tr><td>BUSY<td>1-3<td>1-3<td>&nbsp;
+<tr><td>CALC<td>2-8<td>2-8<td>&nbsp;
+<tr><td>CAMAC<td>2-6<td>2-6<td>&nbsp;
+<tr><td>DAC128V<td>2-6<td>2-6<td>&nbsp;
+<tr><td>DELAYGEN<td>1-0-5<td>1-0-5<td>&nbsp;
+<tr><td>DXP<td>synApps_5_5<td>3-0<td>&nbsp;
+<tr><td>IP<td>2-10<td>2-10<td>&nbsp;
+<tr><td>IP330<td>2-6<td>2-7<td>&nbsp;
+<tr><td>IPAC<td>2-11<td>2-11<td>&nbsp;
+<tr><td>IPUNIDIG<td>2-7<td>2-7<td>&nbsp;
+<tr><td>LOVE<td>3-2-4<td>3-2-4<td>&nbsp;
+<tr><td>MCA<td>synApps_5_5<td>6-12-1<td>mcaSISSupport.dbd changed to mcaSTR7201Support.dbd, docs, drvFastSweep 
+<tr><td>MODBUS<td>2-0<td>2-0<td>&nbsp;
+<tr><td>MOTOR<td>6-5<td>6-5-1<td>Aerotech Ensemble, OMS MAXv, OMS MAXnet
+<tr><td>OPTICS<td>2-7<td>2-7<td>&nbsp;
+<tr><td>QUADEM<td>2-4-1<td>2-4-1<td>&nbsp;
+<tr><td>SNCSEQ<td>2-0-12<td>2-0-12<td>&nbsp;
+<tr><td>SOFTGLUE<td>1-0<td>2-0<td>load FPGA; Drag-And-Drop signal connect; name*, 0!, 1! syntax; interrupts; docs
+<tr><td>SSCAN<td>2-6-6<td>2-6-7<td>bug fix: fly scans with no det triggers;
+<tr><td>STD<td>2-8<td>2-9<td>&nbsp;
+<tr><td>STREAM<td>2-4-1<td>20100615<td>&nbsp;
+<tr><td>VAC<td>1-3<td>1-3<td>&nbsp;
+<tr><td>VME<td>2-7<td>2-7<td>&nbsp;
+<tr><td>VXSTATS<td>1-7-2h<td>1-7-2h<td>&nbsp;
+<tr><td>XXX<td>5-5<td>5-5-1<td>&nbsp;
+
+</table>
+
+<P>Build notes
+<ul>
+<li>softGlue 1.1 doesn't always build correctly when make is run with the "-j"
+option (parallel make).  The problem is in base/configure/RULES.Db, which uses
+the same temporary file name, msi.tmp, for every invocation of msi.  Replacing
+"msi.tmp" with "$*.tmp" in RULES.Db seems to fix the problem.
+
+<li>On my solaris machine, apex2Src/Makefile needed the following lines added:
+<pre>
+# solaris
+apex2DetectorApp_LIBS_solaris += NeXus hdf5_cpp hdf5
+apex2DetectorApp_SYS_LIBS_solaris   += tiff
+apex2DetectorApp_LIBS_solaris   += jpeg sz z
+</pre>
+
+<li>On my linux-x86_64 machine, apex2Src didn't build until I added the following
+lines to configure/CONFIG:
+<pre>
+ifeq (Linux, $(OS_CLASS))
+  SHARED_LIBRARIES=NO
+endif
+</pre>
+
+</ul>
+
 <h1 align="center">synApps 5.5 Release Notes</h1>
 <h2>Version changes from R5-4-2 to R5-5</h2>
 <table border>
