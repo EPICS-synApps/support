@@ -48,10 +48,10 @@ content="text/html; charset=iso-8859-1">
 
 <P>Build notes
 <ul>
-<li>softGlue 1.1 doesn't always build correctly when make is run with the "-j"
+<li>softGlue 1.1+ doesn't always build correctly when make is run with the "-j"
 option (parallel make).  The problem is in base/configure/RULES.Db, which uses
 the same temporary file name, msi.tmp, for every invocation of msi.  Replacing
-"msi.tmp" with "$*.tmp" in RULES.Db seems to fix the problem.
+"msi.tmp" with "$*.tmp" in RULES.Db fixes the problem.
 
 <li>On my solaris machine, apex2Src/Makefile needed the following lines added:
 <pre>
