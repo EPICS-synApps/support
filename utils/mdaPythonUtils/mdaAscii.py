@@ -136,19 +136,27 @@ def main():
 			print
 
 		# 2D data
-		print "# 2D data"
-		for i in range(d[2].np):
-			print "\n# Positioner %d (.%s) PV:'%s' desc:'%s'" % (i, d[2].p[i].fieldName, d[2].p[i].name, d[2].p[i].desc)
-			for j in range(d[1].curr_pt):
-				for k in range(d[2].curr_pt):
-					print "%f" % d[2].p[i].data[j][k],
-				print
+		if rank >= 2:
+			print "# 2D data"
+			for i in range(d[2].np):
+				print "\n# Positioner %d (.%s) PV:'%s' desc:'%s'" % (i, d[2].p[i].fieldName, d[2].p[i].name, d[2].p[i].desc)
+				for j in range(d[1].curr_pt):
+					for k in range(d[2].curr_pt):
+						print "%f" % d[2].p[i].data[j][k],
+					print
 
-		for i in range(d[2].nd):
-			print "\n# Detector %d (.%s) PV:'%s' desc:'%s'" % (i, d[2].d[i].fieldName, d[2].d[i].name, d[2].d[i].desc)
-			for j in range(d[1].curr_pt):
-				for k in range(d[2].curr_pt):
-					print "%f" % d[2].d[i].data[j][k],
-				print
+			for i in range(d[2].nd):
+				print "\n# Detector %d (.%s) PV:'%s' desc:'%s'" % (i, d[2].d[i].fieldName, d[2].d[i].name, d[2].d[i].desc)
+				for j in range(d[1].curr_pt):
+					for k in range(d[2].curr_pt):
+						try:
+							print "%f" % d[2].d[i].data[j][k],
+						except IndexError:
+							print "Index Error printing 'd[2].d[i].data[j][k]'"
+							print "... i=%d,j=%d,k=%d" % (i,j,k)
+							print "... len(d[2].d)=", len(d[2].d)
+							print "... len(d[2].d[i].data)=", len(d[2].d[i].data)
+							print "... len(d[2].d[i].data[j])=", len(d[2].d[i].data[j])
+					print
 if __name__ == "__main__":
         main()
