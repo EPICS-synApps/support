@@ -1,5 +1,5 @@
 /*************************************************************************\
-* Copyright (c) 2009 UChicago Argonne, LLC,
+* Copyright (c) 2010 UChicago Argonne, LLC,
 *               as Operator of Argonne National Laboratory.
 * This file is distributed subject to a Software License Agreement
 * found in file LICENSE that is included with this distribution. 
@@ -22,6 +22,13 @@
   1.0.0 -- October 2009
            Release with vastly changed mda-utils.
            Renamed structures to give them "mda_" prefix.
+  1.0.1 -- June 2010
+           Added checking in header code to make sure there were no screwy
+           dimensions, by looking for 0xFFFFFFFF in one of them.
+  1.0.2 -- August 2010
+           Use offsets to load scans, as bad files sometimes have them out 
+           of order.
+  1.1   -- November 2010
 
  */
 
@@ -92,6 +99,18 @@ static struct mda_header *header_read( XDR *xdrs)
 
   if( !xdr_long(xdrs, &(header->extra_pvs_offset) )) 
     return NULL;
+
+  {  // need to do error checking on dimensions!
+    int i;
+
+    for( i = 0; i < header->data_rank; i++)
+      if(  header->dimensions[i] == 0xFFFFFFFF) // -1 is it was short, not long
+        {
+          free( header);
+          free( header->dimensions);
+          return NULL;
+        }
+  }
 
   return header;
 }
@@ -271,7 +290,14 @@ static struct mda_scan *scan_read(XDR *xdrs, int recursive)
       for( i = 0 ; (i < scan->requested_points) && 
 	     (scan->offsets[i] != 0); i++)
 	/* it recurses here */
-	scan->sub_scans[i] = scan_read(xdrs, recursive);
+        {
+          if( xdr_getpos( xdrs) != scan->offsets[i])
+            {
+              if( !xdr_setpos( xdrs,scan->offsets[i] ) )
+                return NULL;
+            }
+          scan->sub_scans[i] = scan_read(xdrs, recursive);
+        }
     }
   else
     scan->sub_scans = NULL;
@@ -402,6 +428,8 @@ struct mda_file *mda_load( FILE *fptr)
     return NULL;
   if( mda->header->extra_pvs_offset)
     {
+      if( !xdr_setpos( &xdrstream, mda->header->extra_pvs_offset ))
+        return NULL;
       if( (mda->extra = extra_read( &xdrstream)) == NULL)
 	return NULL;
     }
@@ -695,6 +723,14 @@ struct mda_fileinfo *mda_info_load( FILE *fptr)
                    fileinfo->data_rank, sizeof( long), (xdrproc_t) xdr_long))
     return NULL;
 
+  for( i = 0; i < fileinfo->data_rank; i++)
+    if(  fileinfo->dimensions[i] == 0xFFFFFFFF) // -1 is it was short, not long
+      {
+        free(fileinfo->dimensions);
+        free(fileinfo);
+        return NULL;
+      }
+
   if( !xdr_short(&xdrstream, &(fileinfo->regular) ))
     return NULL;
 
@@ -715,7 +751,7 @@ struct mda_fileinfo *mda_info_load( FILE *fptr)
         malloc( sizeof(struct mda_scaninfo ));
 
       if( !xdr_short(&xdrstream, &(fileinfo->scaninfos[i]->scan_rank) ))
-	return NULL;
+        return NULL;
 
       if( !xdr_long(&xdrstream, &(fileinfo->scaninfos[i]->requested_points) ))
 	return NULL;
@@ -756,7 +792,7 @@ struct mda_fileinfo *mda_info_load( FILE *fptr)
       if( !xdr_short(&xdrstream, &(fileinfo->scaninfos[i]->number_triggers)))
 	return NULL;
 
-      
+     
       fileinfo->scaninfos[i]->positioners = (struct mda_positioner **) 
 	malloc( fileinfo->scaninfos[i]->number_positioners * 
 		sizeof(struct mda_positioner *));
@@ -786,7 +822,6 @@ struct mda_fileinfo *mda_info_load( FILE *fptr)
 	       trigger_read( &xdrstream)) == NULL )
 	    return NULL;
 	}
-
 
       if( offsets != NULL)
 	{

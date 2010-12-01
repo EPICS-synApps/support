@@ -1,11 +1,11 @@
-.TH MDA2ASCII 1 "November 2009" "MDA Utilities" "MDA Utilities"
+.TH MDA2ASCII 1 "November 2010" "MDA Utilities" "MDA Utilities"
 
 .SH NAME
 mda2ascii \- convert EPICS MDA files to ASCII format
 
 .SH SYNOPSIS
 .B mda2ascii
-.RB [ \-hvmtfe1 ]
+.RB [ \-hvmtfe1a ]
 .RB [ \-x\c
 .IR "\ extension" ]
 .RB [ \-d\c
@@ -20,9 +20,7 @@ mda2ascii \- convert EPICS MDA files to ASCII format
 .RB [ \-i\ 
 .IR "dimension"
 .RB | \ \- ]
-.I "\ mdafile\ "
-.RI [ "mdafile"
-.IR "..." ]
+.IR "\ mdafile\ " [ "..." ]
 
 .SH DESCRIPTION
 .B mda2ascii
@@ -87,6 +85,17 @@ each scan is merged into a single output file.  An overall header is
 added at the start of the file, the scans are all separated by
 dividers, and another divider is added before the first scan of every
 dimensionality.
+.TP
+.B \-a
+Write out all the scans, even those that are not considered truly
+finished.  This only really matters for a multidimensional data file,
+where the overall scan was aborted before finishing.  Technically,
+only those lower-dimensional scans under the completed
+highest-dimensional scans are considered complete.  However, there may
+be incomplete scans under the highest dimensional scan that was
+running, and this option outputs those scans.  Those scans tend to
+have bad values in the higher dimensional areas, so take care with these
+scans.
 .TP
 .BI \-x \ extension
 Change the extension used for automatically naming files.

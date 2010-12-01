@@ -1,5 +1,5 @@
 /*************************************************************************\
-* Copyright (c) 2009 UChicago Argonne, LLC,
+* Copyright (c) 2010 UChicago Argonne, LLC,
 *               as Operator of Argonne National Laboratory.
 * This file is distributed subject to a Software License Agreement
 * found in file LICENSE that is included with this distribution. 
@@ -7,6 +7,7 @@
 
 
 /*
+ 
   Written by Dohn A. Arms, Argonne National Laboratory
   Send comments to dohnarms@anl.gov
   
@@ -24,6 +25,13 @@
            Added -e, which writes Extra PV information to a separate file
            Added to -m extra columns that show higher dimensional indices
            Made porting to Windows friendlier (but not trivial)
+  1.0.1 -- August 2010
+           Print out all exisiting scans (even if they SHOULDN'T be there).
+  1.0.2 -- November 2010
+           Add -a switch  to make printing out incomplete scans an option, 
+               not the default.
+  1.1   -- November 2010
+
 */
 
 
@@ -42,11 +50,11 @@
 
 #include "mda-load.h"
 
-#define VERSION       "1.0.0 (November 2009)"
-#define VERSIONNUMBER "1.0.0"
+#define VERSION       "1.1.0 (November 2010)"
+#define VERSIONNUMBER "1.1.0"
 
 
-enum { MERGE, TRIM, FRIENDLY, EXTRA, SINGLE, STDOUT, DIMENSION };
+enum { MERGE, TRIM, FRIENDLY, EXTRA, SINGLE, STDOUT, ALL, DIMENSION };
 enum { COMMENT, SEPARATOR, BASE, EXTENSION, DIRECTORY };
 
 
@@ -298,7 +306,9 @@ int printer( struct mda_file *mda, int option[], char *argument[])
   int  *log_dim = NULL;   // the width of the maximum scan number (for files)
   char *filename = NULL;
   char  name_format[16];
-  
+
+  // used to tell if we are in unfinished scans, to be marked as such
+  int unfinished;
 
   int first;  // flag used to indicate if this is the first scan
   int dim_first;
@@ -380,6 +390,8 @@ int printer( struct mda_file *mda, int option[], char *argument[])
           filename = (char *) malloc( i * sizeof(char));
         }
 
+      unfinished = 0;
+
       dim_first = 1;
       for(;;) // infinite loop
         {
@@ -399,7 +411,7 @@ int printer( struct mda_file *mda, int option[], char *argument[])
             {
               scan_array[i+1] = scan_array[i]->sub_scans[scan_pos[i]];
               if( scan_array[i+1] == NULL)
-                goto GetOut; 
+                goto Iterate; 
             }
           scan = scan_array[depth];  // scan is now the 1-D scan
 
@@ -498,6 +510,11 @@ int printer( struct mda_file *mda, int option[], char *argument[])
                 Here we walk through the upper dimensions and pick out the
                 corresponding values for this particular 1-D scan.
               */
+
+              if( unfinished)
+                fprintf( output, "!!!!!!!!!! "
+                         "Subscan of Incomplete %d-D Scan Point "
+                         "!!!!!!!!!!\n\n", mda->header->data_rank);
               for( i = 0; i < depth; i++)
                 {
                   fprintf( output, "%s %i-D Scan Point\n", comment, 
@@ -799,7 +816,6 @@ int printer( struct mda_file *mda, int option[], char *argument[])
                             fprintf( output,"%s%.9g", argument[SEPARATOR], 
                                      (scan_array[k]->detectors_data[j])
                                      [scan_pos[k]]);
-                          // next line had bug, changed j to k
                         }
                     }
                   for( j = 0; j < scan->number_positioners; j++)
@@ -829,9 +845,20 @@ int printer( struct mda_file *mda, int option[], char *argument[])
             }
           if( j < 0)
             break; // done
+
+          // show unfinished scans is option asks for it only
+          if( scan_pos[0] == mda->scan->last_point)
+            {
+              if( !option[ALL] )
+                break; // get out
+              else
+                unfinished = 1;
+            }
+          // there can't be any scans at this point
+          if( scan_pos[0] > mda->scan->last_point)
+            break;
         }
 
-    GetOut:
       free( log_dim);
       free( filename);
  
@@ -848,7 +875,7 @@ int printer( struct mda_file *mda, int option[], char *argument[])
 
 void helper(void)
 {
-  printf("Usage: mda2ascii [-hvmtfe1] [-x EXTENSION] [-d DIRECTORY] "
+  printf("Usage: mda2ascii [-hvmtfe1a] [-x EXTENSION] [-d DIRECTORY] "
 	 "[-o OUTPUT | -]\n"
          "         [-c COMMENTER] [-s SEPARATOR] "
          "[-i DIMENSION | -] FILE [FILE ...]\n"
@@ -866,6 +893,9 @@ void helper(void)
 	 "An overall\n"
 	 "    header is at start of file, and scans are separated by "
 	 "dividers.\n"
+	 "-a  Write out all scans, even those that are not considered "
+         "truly finished,\n"
+	 "    normally due to an aborted scan.  These scans can be faulty.\n"
 	 "-x  Set output file's extension (default: \"asc\").\n"
 	 "-d  Set output file's directory (default: current directory).\n"
 	 "-o  Specify output file, limiting number of input MDA files "
@@ -895,18 +925,19 @@ void version(void)
 {
   printf( "mda2ascii %s\n"
           "\n"
-          "Copyright (c) 2009 UChicago Argonne, LLC,\n"
+          "Copyright (c) 2010 UChicago Argonne, LLC,\n"
           "as Operator of Argonne National Laboratory.\n"
           "\n"
           "Written by Dohn Arms, dohnarms@anl.gov.\n", VERSION);
 }
 
 
+
 int main( int argc, char *argv[])
 {
   int flag;
 
-  int   option[7] = { 0, 0, 0, 0, 0, 0, 0 };
+  int   option[8] = { 0, 0, 0, 0, 0, 0, 0 , 0};
   char *argument[5] = { NULL, NULL, NULL, NULL, NULL };
   char *outname = NULL;
 
@@ -931,7 +962,7 @@ int main( int argc, char *argv[])
 
   dim_flag = 1;
   option[DIMENSION] = -1;
-  while((flag = getopt( argc, argv, "hvmtfe1c:s:x:d:i:o:")) != -1)
+  while((flag = getopt( argc, argv, "hvmtfe1ac:s:x:d:i:o:")) != -1)
     {
       switch(flag)
 	{
@@ -960,6 +991,9 @@ int main( int argc, char *argv[])
 	case '1':
 	  option[SINGLE] = 1;  
           option[EXTRA] = 0;  // impossible if single file
+	  break;
+	case 'a':
+	  option[ALL] = 1;
 	  break;
         case 'i':
           // default is -1, just detectors
@@ -994,6 +1028,7 @@ int main( int argc, char *argv[])
 	    free( argument[DIRECTORY] );
 	  argument[DIRECTORY] = strdup( optarg);
 #ifdef WINDOWS
+// have to turn blackslashes in directory paths to forward slashes
           {
             char *p;
             p = argument[DIRECTORY];

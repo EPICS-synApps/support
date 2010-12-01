@@ -1,4 +1,4 @@
-.TH MDA-INFO 1 "November 2009" "MDA Utilities" "MDA Utilities"
+.TH MDA-INFO 1 "November 2010" "MDA Utilities" "MDA Utilities"
 
 .SH NAME
 mda-info \- prints out information about a MDA file
@@ -15,8 +15,10 @@ created by
 .BR saveData \ in
 .BR EPICS .
 Things such as scan time, dimensionality, positioners, detectors, and
-triggers are shown.  Unless one of the options is used, 
-.B mda-info
+triggers are shown.  For each trigger, positioner, and detector there
+is both a number and, located in parentheses, the PV field number used
+in saveData.  Unless one of the options is used,
+.B mda-info 
 needs only
 .IR "file" ,
 the name of the MDA file.  If a file is irregular, it is stated as

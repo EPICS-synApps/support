@@ -1,5 +1,5 @@
 /*************************************************************************\
-* Copyright (c) 2009 UChicago Argonne, LLC,
+* Copyright (c) 2010 UChicago Argonne, LLC,
 *               as Operator of Argonne National Laboratory.
 * This file is distributed subject to a Software License Agreement
 * found in file LICENSE that is included with this distribution. 
@@ -19,8 +19,9 @@
                  without loading the entire file.
   0.2.1 -- March 2009
            Removed several memory leaks.
-  1.0.0 -- October 2009
+  1.0   -- October 2009
            Renamed structures.
+  1.1   -- November 2010
 
  */
 

@@ -43,3 +43,26 @@ mda_ls.o:     mda-load.h
 clean:
 	-rm *.o $(TARGETS)
 
+
+prefix = /usr/local
+bindir = $(prefix)/bin
+mandir = $(prefix)/man
+includedir = $(prefix)/include
+libdir = $(prefix)/lib
+
+install : all
+	-mkdir -p $(bindir)
+	-mkdir -p $(mandir)
+	-mkdir -p $(includedir)
+	-mkdir -p $(libdir)
+	cp mda-ls $(bindir)/
+	cp mda-info $(bindir)/
+	cp mda-dump $(bindir)/
+	cp mda2ascii $(bindir)/
+	cp libmda-load.a $(libdir)/
+	cp mda-load.h $(includedir)/
+	cp documentation/mda-ls.1 $(mandir)/man1/
+	cp documentation/mda-info.1 $(mandir)/man1/
+	cp documentation/mda-dump.1 $(mandir)/man1/
+	cp documentation/mda2ascii.1 $(mandir)/man1/
+

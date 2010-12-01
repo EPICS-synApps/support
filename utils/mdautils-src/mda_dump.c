@@ -1,5 +1,5 @@
 /*************************************************************************\
-* Copyright (c) 2009 UChicago Argonne, LLC,
+* Copyright (c) 2010 UChicago Argonne, LLC,
 *               as Operator of Argonne National Laboratory.
 * This file is distributed subject to a Software License Agreement
 * found in file LICENSE that is included with this distribution. 
@@ -14,9 +14,12 @@
   0.1   -- July 2005
   0.1.1 -- December 2006
            Added support for files that have more than 32k points
-  1.0.0 -- November 2008
+  1.0.0 -- November 2009
            Basically gutted the old code, getting rid of mda-load library
            in order to access data directly
+  1.0.1 -- August 2010
+           Show actual offset of the scan and PV Extras as encountered
+  1.1   -- November 2010
 
  */
 
@@ -33,8 +36,8 @@
 
 #include <unistd.h>
 
-#define VERSION       "1.0.0 (November 2009)"
-#define VERSIONNUMBER "1.0.0"
+#define VERSION       "1.1.0 (November 2010)"
+#define VERSIONNUMBER "1.1.0"
 
 
 
@@ -56,7 +59,6 @@ static bool_t xdr_counted_string( XDR *xdrs, char **p)
     return 0;
 
   //  printf("length = %ld\n", length);
-
 
   /* If reading, obtain room for the string */
   if (mode)
@@ -320,10 +322,11 @@ void mda_dump_scan( XDR *xdrs)
   if( rank > 1)
     for( i = 0; i < req_pts; i++)
       {
-	if( offsets[i] == 0)
-	  break;
-	print( "\n\n%i-D Subscan #%i\n\n", rank - 1, i+1);
-	mda_dump_scan( xdrs);
+      if( offsets[i] == 0)
+          break;
+        print( "\n\n%i-D Subscan #%i\n", rank - 1, i+1);
+        print( "Offset = %li\n\n", xdr_getpos( xdrs) );
+        mda_dump_scan( xdrs);
       }
 
 }
@@ -340,6 +343,7 @@ void mda_dump_extra( XDR *xdrs)
 
   count = 0;
 
+  print( "\n\nExtra PV Offset = %li", xdr_getpos( xdrs) );
 
   pvs = si_print( xdrs, "\n\nNumber of Extra PV's = %i.\n");
   if( pvs < 0)
@@ -553,7 +557,7 @@ void version(void)
 {
   printf("mda-dump %s\n"
          "\n"
-         "Copyright (c) 2009 UChicago Argonne, LLC,\n"
+         "Copyright (c) 2010 UChicago Argonne, LLC,\n"
          "as Operator of Argonne National Laboratory.\n"
          "\n"
          "Written by Dohn Arms, dohnarms@anl.gov.\n",

@@ -1,5 +1,5 @@
 /*************************************************************************\
-* Copyright (c) 2009 UChicago Argonne, LLC,
+* Copyright (c) 2010 UChicago Argonne, LLC,
 *               as Operator of Argonne National Laboratory.
 * This file is distributed subject to a Software License Agreement
 * found in file LICENSE that is included with this distribution. 
@@ -11,11 +11,12 @@
   Written by Dohn A. Arms, Argonne National Laboratory
   Send comments to dohnarms@anl.gov
   
-  0.1.0   --   May 2009
-  1.0.0   --   October 2009
+  0.1.0 -- May 2009
+  1.0.0 -- October 2009
                Added Search capabilities
-  1.0.1   --   November 2009
+  1.0.1 -- November 2009
                Redid directory scanning code to not use scandir()
+  1.1   -- November 2010
 
  */
 
@@ -32,7 +33,7 @@
 #include "mda-load.h"
 
 
-#define VERSION "1.0.0 (November 2009)"
+#define VERSION "1.1.0 (November 2010)"
 
 
 // this function relies too much on the input format not changing
@@ -105,7 +106,7 @@ void version(void)
 {
   printf( "mda-ls %s\n"
           "\n"
-          "Copyright (c) 2009 UChicago Argonne, LLC,\n"
+          "Copyright (c) 2010 UChicago Argonne, LLC,\n"
           "as Operator of Argonne National Laboratory.\n"
           "\n"
           "Written by Dohn Arms, dohnarms@anl.gov.\n", VERSION);
@@ -172,6 +173,8 @@ int mda_dir(const char *dirname, char ***namelist )
     return 0;
 
   *namelist = (char **) malloc( count * sizeof( char *) );
+  if( *namelist == NULL)
+    return -1;
   for( i = count - 1; i >= 0 ; i--)
     { 
       entry = head;
