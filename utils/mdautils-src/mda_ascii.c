@@ -31,6 +31,9 @@
            Add -a switch  to make printing out incomplete scans an option, 
                not the default.
   1.1   -- November 2010
+  1.1.1 -- December 2010
+           Forgot to comment out warning generated with incomplete scans 
+               and -a.
 
 */
 
@@ -50,8 +53,8 @@
 
 #include "mda-load.h"
 
-#define VERSION       "1.1.0 (November 2010)"
-#define VERSIONNUMBER "1.1.0"
+#define VERSION       "1.1.1 (December 2010)"
+#define VERSIONNUMBER "1.1.1"
 
 
 enum { MERGE, TRIM, FRIENDLY, EXTRA, SINGLE, STDOUT, ALL, DIMENSION };
@@ -512,9 +515,9 @@ int printer( struct mda_file *mda, int option[], char *argument[])
               */
 
               if( unfinished)
-                fprintf( output, "!!!!!!!!!! "
+                fprintf( output, "%s !!!!!!!!!! "
                          "Subscan of Incomplete %d-D Scan Point "
-                         "!!!!!!!!!!\n\n", mda->header->data_rank);
+                         "!!!!!!!!!!\n\n", comment, mda->header->data_rank);
               for( i = 0; i < depth; i++)
                 {
                   fprintf( output, "%s %i-D Scan Point\n", comment, 
