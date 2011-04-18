@@ -1135,16 +1135,25 @@ as the horizontal and vertical members of a four-jaw slit.  The MEDM displays
 <code>2slit*.adl</code> and <code>4slit*.adl</code> are involved in these
 applications.
 
-<P>The slit database makes the following assumptions about the two motors
-attached to the individual slit leaves:
+<P>The slit database can make either of two sets of assumptions about the two
+motors attached to the individual slit leaves, depending on the value of the
+macro "RELTOCENTER" that may be supplied when loading the 2slit.db database.
+
+<P>If "RELTOCENTER=0" is supplied, or if RELTOCENTER is omitted altogether: 
 <ul>
-<li>Both of them have the same engineering units.
-<li>Their .VAL fields are in the same coordinate system.  I.e., if the slit is
-closed, both motors have the same value.
+<li>Both motors have the same engineering units.
+<li>Both motors are in the same coordinate system.  When the center position is
+increased, both motors' .VAL fields increase.
 <li>The APS standard beamline coordinate system is used.  Positive Z is the beam
 direction; positive Y is upward; positive X is outward from the storage ring.
-So then, if I open a slit, one motor's .VAL field increases and the other's
-decreases.
+</ul>
+
+<P>If "RELTOCENTER=1" is supplied:
+<ul>
+<li>Both motors have the same engineering units.
+<li>Their .VAL fields increase as the slit opens.
+<li>The APS standard beamline coordinate system is used.  Positive Z is the beam
+direction; positive Y is upward; positive X is outward from the storage ring.
 </ul>
 
 <P>The <code>2slit.db</code> database allows users to move either the slit
