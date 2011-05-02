@@ -12,20 +12,21 @@ import string
 import Tkinter
 import copy
 
+# scanDim holds all of the data associated with a single execution of a single sscan record.
 class scanDim:
 	def __init__(self):
-		self.rank = 0
-		self.dim = 0
-		self.npts = 0
-		self.curr_pt = 0
-		self.plower_scans = 0
-		self.name = ""
-		self.time = ""
-		self.np = 0
+		self.rank = 0			# [1..n]  1 means this is the "innermost" or only scan dimension
+		self.dim = 0			# dimensionality of data (numerically same as rank)
+		self.npts = 0			# number of data points planned
+		self.curr_pt = 0		# number of data points actually acquired
+		self.plower_scans = 0	# file offsets of next lower rank scans
+		self.name = ""			# name of sscan record that acquired the data
+		self.time = ""			# time at which scan (dimension) started
+		self.np = 0				# number of positioners
 		self.p = []				# list of scanPositioner instances
-		self.nd = 0
+		self.nd = 0				# number of detectors
 		self.d = []				# list of scanDetector instances
-		self.nt = 0
+		self.nt = 0				# number of detector triggers
 		self.t = []				# list of scanTrigger instances
 
 	def __str__(self):
@@ -37,18 +38,21 @@ class scanDim:
 
 		return s
 
+# scanPositioner holds all the information associated with a single positioner, and
+# all the data written and acquired by that positioner during an entire (possibly
+# multidimensional) scan.
 class scanPositioner:
 	def __init__(self):
-		self.number = 0
-		self.fieldName = ""
-		self.name = ""
-		self.desc = ""
-		self.step_mode = ""
-		self.unit = ""
-		self.readback_name = ""
-		self.readback_desc = ""
-		self.readback_unit = ""
-		self.data = []
+		self.number = 0				# positioner number in sscan record
+		self.fieldName = ""			# name of sscanRecord PV
+		self.name = ""				# name of EPICS PV this positioner wrote to
+		self.desc = ""				# description of 'name' PV
+		self.step_mode = ""			# 'LINEAR', 'TABLE', or 'FLY'
+		self.unit = ""				# units of 'name' PV
+		self.readback_name = ""		# name of EPICS PV this positioner read from, if any
+		self.readback_desc = ""		# description of 'readback_name' PV
+		self.readback_unit = ""		# units of 'readback_name' PV
+		self.data = []				# list of values written to 'name' PV.  If rank==2, lists of lists, etc.
 
 	def __str__(self):
 		s = "positioner %d (%s), desc:%s, unit:%s\n" % (self.number, self.name,
@@ -58,31 +62,35 @@ class scanPositioner:
 		s = s + "data:%s" % (str(self.data))
 		return s
 
+# scanDetector holds all the information associated with a single detector, and
+# all the data acquired by that detector during an entire (possibly multidimensional) scan.
 class scanDetector:
 	def __init__(self):
-		self.number = 0
-		self.fieldName = ""
-		self.name = ""
-		self.desc = ""
-		self.unit = ""
-		self.data = []
+		self.number = 0			# detector number in sscan record
+		self.fieldName = ""		# name of sscanRecord PV
+		self.name = ""			# name of EPICS PV this detector read from
+		self.desc = ""			# description of 'name' PV
+		self.unit = ""			# units of 'name' PV
+		self.data = []			# list of values read from 'name' PV.  If rank==2, lists of lists, etc.
 
 	def __str__(self):
 		s = "detector %d (%s), desc:%s, unit:%s, data:%s\n" % (self.number,
 			self.name, self.desc, self.unit, str(self.data))
 		return s
 
+# scanTrigger holds all the information associated with a single detector trigger.
 class scanTrigger:
 	def __init__(self):
-		self.number = 0
-		self.name = ""
-		self.command = 0.0
+		self.number = 0			# detector-trigger number in sscan record
+		self.name = ""			# name of sscanRecord PV
+		self.command = 0.0		# value written to 'name' PV
 
 	def __str__(self):
 		s = "trigger %d (%s), command=%f\n" % (self.number,
 			self.name, self.command)
 		return s
 
+# scanBuf is a private data structure used to assemble data that will be written to an MDA file.
 class scanBuf:
 	def __init__(self):
 		self.npts = 0
@@ -95,6 +103,7 @@ class scanBuf:
 		self.data = None
 		self.inner = []	# inner scans, if any
 
+# mdaBuf is a private data structure used to assemble data that will be written to an MDA file.
 class mdaBuf:
 	def __init__(self):
 		self.header = None
@@ -102,12 +111,16 @@ class mdaBuf:
 		self.scan = None
 		self.extraPV = None	# extraPV section
 
+# Given a detector number, return the name of the associated sscanRecord PV, 'D01'-'D99'.
+# (Currently, only 70 detectors are ever used.)
 def detName(i):
 	if i < 100:
 		return "D%02d"%(i+1)
 	else:
 		return "?"
 
+# Given a detector number, return the name of the associated sscanRecord PV, for the
+# old sscanRecord, which had only 15 detectors 'D1'-'DF'.
 def oldDetName(i):
 	if i < 15:
 		return string.upper("D%s"%(hex(i+1)[2]))
@@ -116,12 +129,17 @@ def oldDetName(i):
 	else:
 		return "?"
 
+# Given a positioner number, , return the name of the associated sscanRecord PV, "P1'-'P4' 
 def posName(i):
 	if i < 4:
 		return "P%d" % (i+1)
 	else:
 		return "?"
 
+# Read data resulting from start-to-finish execution of a single sscan record.
+# For a 1D scan file, this routine is called once.  For a 2D scan file, this
+# routine is called once for the outer scan, and then <outerscan>.curr_pt times
+# for the inner scans.
 def readScan(file, v):
 	scan = scanDim()
 	buf = file.read(10000) # enough to read scan header
@@ -223,6 +241,8 @@ def readScan(file, v):
 
 	return scan
 
+# readMDA reads an entire scan file into a data structure, which is built as the file
+# is read and returned to caller.
 def readMDA(fname=None, maxdim=4, verbose=0, help=0):
 	dim = []
 
@@ -352,7 +372,7 @@ def readMDA(fname=None, maxdim=4, verbose=0, help=0):
 
 	# Collect scan-environment variables into a dictionary
 	dict = {}
-	dict['sampleEntry'] = ("description", "unit string", "value", "EPICS_type")
+	dict['sampleEntry'] = ("description", "unit string", "value", "EPICS_type", "count")
 	dict['filename'] = fname
 	dict['version'] = version
 	dict['scan_number'] = scan_number
