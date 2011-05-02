@@ -21,7 +21,9 @@ Here's the blurb from the code:
 
 You must have an old ioc directory and a new ioc directory.
 
-The old ioc directory is assumed to be a correctly configured working directory, containing no unused files.  Nothing in the old directory will be modified or overwritten.
+The old ioc directory is assumed to be a correctly configured working directory,
+containing no unused files.  Nothing in the old directory will be modified or
+overwritten.
 
 The new directory is assumed to be a syntactically correct example of how to use
 everything that is available to an ioc, in the new software version.  Nothing in
@@ -31,7 +33,10 @@ you should get them out of the new directory.  If the new directory is correct
 except for the prefix, you can use synApps/support/utils/changePrefix on (an
 unbuilt copy of) it.
 
-Both ioc directories must have a correctly configured cdCommands (or envPaths) files, and convertIocFiles.py will use the directory names therein to search for autosave-request files.  In practice, this means you should get the configure/RELEASE file right, and run make in the ioc directory.
+Both ioc directories must have a correctly configured cdCommands (or envPaths)
+files, and convertIocFiles.py will use the directory names therein to search for
+autosave-request files.  In practice, this means you should get the
+configure/RELEASE file right, and run make in the ioc directory.
 
 'cd' to the new directory.
 type
@@ -54,11 +59,17 @@ files.  convertIocFiles.out contains lists of all the commands in the old
 directory that have no analog in the new directory.  You probably need to find a
 place for at least some of these commands.
 
-In the unlikely event that convertIocFiles has done a perfect job on a configuration file, I just replace the configuration file by the .CVT version.  In the next best case, I usually use
+In the unlikely event that convertIocFiles has done a perfect job on a
+configuration file, I just replace the configuration file by the .CVT version.
+In the next best case, I usually use
 
 	tkdiff <configuration file> <configuration file>.CVT
 
-to make a merge file, and overwrite <configuration file> with the merge result.  For some files, however, I find the .CVT version useless and simply delete it.  convertIocFiles.py does a lousy job of converting MPF commands to asyn commands, for example, and I normally do files that contain such commands by hand.  In the end, I'm left with no .CVT files.
+to make a merge file, and overwrite <configuration file> with the merge result.
+For some files, however, I find the .CVT version useless and simply delete it.
+convertIocFiles.py does a lousy job of converting MPF commands to asyn commands,
+for example, and I normally do files that contain such commands by hand.  In the
+end, I'm left with no .CVT files.
 
 At this point, I normally run convertIocFiles.py again, and this time look at
 convertIocFiles.out, which contains all the commands from the old directory that
