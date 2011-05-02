@@ -38,6 +38,7 @@ def tags(module, verbose=False):
 def highestTag(module, dir):
 	maxTag = -1
 	tagList = commands.getoutput("svn ls -v %s/%s/%s" % (SVN,module,dir)).split('\n')
+	print "tagList:", tagList
 	for tag in tagList:
 		maxTag = max(maxTag, int(tag.split()[0]))
 	return maxTag
