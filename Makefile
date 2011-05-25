@@ -37,7 +37,8 @@ endef
 
 ###### 1st Tier Support Modules - Only Depend on EPICS BASE ######
 
-MODULE_LIST  = VXSTATS SNCSEQ ALLEN_BRADLEY
+#MODULE_LIST  = VXSTATS SNCSEQ ALLEN_BRADLEY
+MODULE_LIST  = DEVIOCSTATS SNCSEQ ALLEN_BRADLEY
 MODULE_LIST += IPAC SSCAN AUTOSAVE
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
@@ -52,7 +53,7 @@ $(CALC)_DEPEND_DIRS = $(SSCAN)
 ################### 3rd Tier Support Modules #####################
 
 MODULE_LIST  = BUSY MOTOR STD DAC128V IP330 IPUNIDIG LOVE
-MODULE_LIST += IP OPTICS STREAM MODBUS VAC SOFTGLUE
+MODULE_LIST += IP OPTICS STREAM MODBUS VAC SOFTGLUE QUADEM
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(BUSY)_DEPEND_DIRS     = $(ASYN)
@@ -68,6 +69,7 @@ $(STREAM)_DEPEND_DIRS   = $(ASYN) $(CALC) $(SSCAN)
 $(MODBUS)_DEPEND_DIRS   = $(ASYN)
 $(VAC)_DEPEND_DIRS      = $(ASYN) $(IPAC)
 $(SOFTGLUE)_DEPEND_DIRS = $(ASYN) $(IPAC)
+$(QUADEM)_DEPEND_DIRS   = $(ASYN)
 
 ################### 4th Tier Support Modules #####################
 
@@ -83,11 +85,10 @@ $(EBRICK)_DEPEND_DIRS   = $(STD)
 
 ################### 5th Tier Support Modules #####################
 
-MODULE_LIST = AREA_DETECTOR QUADEM
+MODULE_LIST = AREA_DETECTOR
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(SSCAN) $(MCA)
-$(DXP)_DEPEND_DIRS           = $(AREA_DETECTOR) $(ASYN) $(CAMAC) $(MCA) $(BUSY)
 
 ################### 6th Tier Support Modules #####################
 
