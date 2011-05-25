@@ -38,6 +38,6 @@ svn export $SVN/documentation/tags/R5-5 documentation
 
 
 # get allenBradley-09092009 from ?
-svn export https://svn.aps.anl.gov/epics/asyn/tags/R4-13 asyn-4-13
+svn export https://svn.aps.anl.gov/epics/asyn/tags/R4-16 asyn-4-16
 svn export https://svn.aps.anl.gov/epics/ipac/tags/V2-11 ipac-2-11
 # get seq-2-0-12 from http://epics.web.psi.ch/software/sequencer/
