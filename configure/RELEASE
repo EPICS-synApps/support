@@ -11,45 +11,44 @@
 #     - To remove modules from the build, delete or comment out the
 #       module name.
 
-SUPPORT=/home/oxygen/MOONEY/epics/synApps_5_5/support
-EPICS_BASE=/home/oxygen/MOONEY/epics/base-3.14.11
+SUPPORT_TOP=/corvette/home/epics/devel
+EPICS_BASE=/corvette/usr/local/epics/base-3.14.12.1
+# Uncomment the line defining SUPPORT if you want "make release" to replace the SUPPORT macros
+# in all configure/RELEASE files. 
+# Leave it commented to use SUPPORT_TOP/configure/SUPPORT.$(EPICS_HOST_ARCH) to
+# determine the SUPPORT path when building
+#SUPPORT=/corvette/home/epics/devel
 #/usr/local/iocapps/cvsroot/modules/bus/allenBradley
-#ALLEN_BRADLEY=$(SUPPORT)/allenBradley-09092009
-# Guess: not tagged
-#AREA_DETECTOR=$(SUPPORT)/areaDetector-1-6
-AREA_DETECTOR=$(SUPPORT)/areaDetector-s55
+ALLEN_BRADLEY=$(SUPPORT_TOP)/allenBradley-2-2
+AREA_DETECTOR=$(SUPPORT_TOP)/areaDetector-1-7beta1
 #https://svn.aps.anl.gov/epics/asyn/
-ASYN=$(SUPPORT)/asyn-4-13
-AUTOSAVE=$(SUPPORT)/autosave-4-6
-BUSY=$(SUPPORT)/busy-1-3
-CALC=$(SUPPORT)/calc-2-8
-CAMAC=$(SUPPORT)/camac-2-6
-DAC128V=$(SUPPORT)/dac128V-2-6
-DELAYGEN=$(SUPPORT)/delaygen-1-0-5
-# Guess: not tagged
-#DXP=$(SUPPORT)/dxp-3-0
-DXP=$(SUPPORT)/dxp-s55
-IP=$(SUPPORT)/ip-2-10
-IP330=$(SUPPORT)/ip330-2-6
+ASYN=$(SUPPORT_TOP)/asyn-4-17
+AUTOSAVE=$(SUPPORT_TOP)/autosave-4-7
+BUSY=$(SUPPORT_TOP)/busy-1-3
+CALC=$(SUPPORT_TOP)/calc-2-8
+CAMAC=$(SUPPORT_TOP)/camac-2-6
+DAC128V=$(SUPPORT_TOP)/dac128V-2-6
+DELAYGEN=$(SUPPORT_TOP)/delaygen-1-0-5
+DXP=$(SUPPORT_TOP)/dxp-3-0
+IP=$(SUPPORT_TOP)/ip-2-10
+IP330=$(SUPPORT_TOP)/ip330-2-6
 #https://svn.aps.anl.gov/epics/ipac/
-IPAC=$(SUPPORT)/ipac-2-11
-IPUNIDIG=$(SUPPORT)/ipUnidig-2-7
-LOVE=$(SUPPORT)/love-3-2-4
-# Guess: not tagged
-#MCA=$(SUPPORT)/mca-6-12
-MCA=$(SUPPORT)/mca-s55
-MODBUS=$(SUPPORT)/modbus-2-0
-MOTOR=$(SUPPORT)/motor-6-5
-OPTICS=$(SUPPORT)/optics-2-7
-QUADEM=$(SUPPORT)/quadEM-2-4-1
+IPAC=$(SUPPORT_TOP)/ipac-2-11
+IPUNIDIG=$(SUPPORT_TOP)/ipUnidig-2-7
+LOVE=$(SUPPORT_TOP)/love-3-2-4
+MCA=$(SUPPORT_TOP)/mca-6-12-4
+MODBUS=$(SUPPORT_TOP)/modbus-2-1
+MOTOR=$(SUPPORT_TOP)/motor-6-5-2
+OPTICS=$(SUPPORT_TOP)/optics-2-7
+QUADEM=$(SUPPORT_TOP)/quadEM-2-4-1
 #http://epics.web.psi.ch/software/sequencer/
-SNCSEQ=$(SUPPORT)/seq-2-0-12
-SOFTGLUE=$(SUPPORT)/softGlue-1-0
-SSCAN=$(SUPPORT)/sscan-2-6-6
-STD=$(SUPPORT)/std-2-8
-STREAM=$(SUPPORT)/stream-2-4-1
-VAC=$(SUPPORT)/vac-1-3
-VME=$(SUPPORT)/vme-2-7
-VXSTATS=$(SUPPORT)/vxStats-1-7-2h
-XXX=$(SUPPORT)/xxx-5-5
+SNCSEQ=$(SUPPORT_TOP)/seq-2-0-12
+SOFTGLUE=$(SUPPORT_TOP)/softGlue-2-1
+SSCAN=$(SUPPORT_TOP)/sscan-2-6-6
+STD=$(SUPPORT_TOP)/std-2-9
+STREAM=$(SUPPORT_TOP)/stream-2-4-1
+VAC=$(SUPPORT_TOP)/vac-1-3
+VME=$(SUPPORT_TOP)/vme-2-7
+VXSTATS=$(SUPPORT_TOP)/vxStats-1-7-2h
+XXX=$(SUPPORT_TOP)/xxx-5-5
 
