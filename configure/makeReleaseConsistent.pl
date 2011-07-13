@@ -100,7 +100,7 @@ while ($line = <IN>)
     }
     if ($macro ne "" && $macro eq "SUPPORT")
     {
-	$post = $supporttop . $post;
+	$post = "\$(SUPPORT)" . $post;
     }
     if ($macro ne "" && $macro eq "GATEWAY")
     {
