@@ -27,6 +27,8 @@ MASTER_FILE = $(TOP)/configure/RELEASE
 
 include $(TOP)/configure/CONFIG
 
+DIRS := $(DIRS) $(filter-out $(DIRS), configure)
+
 define  MODULE_defined
   ifdef $(1)
   SUPPORT_DIRS  += $($(1))
@@ -119,7 +121,7 @@ endif
 
 ACTIONS += uninstall realuninstall distclean cvsclean
 
-include $(EPICS_BASE)/configure/RULES_TOP
+include $(TOP)/configure/RULES_TOP
 
 release:
 	echo SUPPORT=$(SUPPORT)
