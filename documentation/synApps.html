@@ -9,7 +9,7 @@
 
 <body bgcolor="#FFFFFF">
 
-<h1>synApps 5.5.1</h1>
+<h1>synApps 5.6</h1>
 <hr><h2>Introduction</h2><hr>
 
 <P>synApps is a collection of <a href=http://www.aps.anl.gov/epics>EPICS</a> software
@@ -113,7 +113,7 @@ you've done, to diagnose problems, and to extend synApps in any significant way.
 <P>Here's a list of the <b>modules</b> and directories in synApps:
 
 <P><table border>
-<tr><th><b>Module</b>/<i>directory</i><th>description
+<tr><td><b>Module</b>/<i>directory</i><th><b>description</b>
 
 <tr><td><b>areaDetector</b><td>Support for area (i.e., 2-D, or image) detectors,
 	including CCDs, pixel array detectors, and online imaging plates.  This
@@ -208,7 +208,11 @@ along with synApps:
 <tr><td><b>asyn</b><td>v4-14<td>required by many modules (ANL)
 <tr><td><b>seq</b><td>v2-0-12<td>for SNL programs in synApps (SLAC)
 <tr><td><b>stream</b><td>20200615<td>configurable device support for message-based devices (PSI)
-<tr><td><b>vxStats</b><td>v1-7-2h<td>vxWorks statistics, modified by us (SNS)
+<tr><td><b>vxStats</b><td>v1-7-2h<td>vxWorks statistics, modified by us (SNS)<br>
+<b>This module has been replaced by devIocStats, and will be removed from the
+next version of synApps.</b>
+<tr><td><b>devIocStats</b><td>v3-1-5<td>IOC statistics, replaces vxStats (SNS)<br>
+source: http://sourceforge.net/projects/epics/files/devIocStats/
 </table>
 
 <blockquote>
