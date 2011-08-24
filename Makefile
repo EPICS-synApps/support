@@ -75,31 +75,32 @@ $(QUADEM)_DEPEND_DIRS   = $(ASYN)
 
 ################### 4th Tier Support Modules #####################
 
-MODULE_LIST  = DELAYGEN CAMAC MCA VME EBRICK
-MODULE_LIST += 
+#MODULE_LIST  = DELAYGEN CAMAC MCA VME EBRICK
+MODULE_LIST  = DELAYGEN CAMAC MCA VME
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(DELAYGEN)_DEPEND_DIRS = $(STD) $(STREAM)
 $(CAMAC)_DEPEND_DIRS    = $(MOTOR) $(STD)
 $(MCA)_DEPEND_DIRS      = $(BUSY) $(CALC) $(STD)
 $(VME)_DEPEND_DIRS      = $(STD)
-$(EBRICK)_DEPEND_DIRS   = $(STD)
+#$(EBRICK)_DEPEND_DIRS   = $(STD)
 
 ################### 5th Tier Support Modules #####################
 
+ifneq ($(OS_CLASS), solaris)
 MODULE_LIST = AREA_DETECTOR
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(SSCAN) $(MCA)
-
+endif
 ################### 6th Tier Support Modules #####################
 
-ifdef DXP
-SUPPORT_DIRS += $(DXP)
-RELEASE_FILES += $(DXP)/configure/RELEASE
+ifneq ($(OS_CLASS), solaris)
+MODULE_LIST = DXP
+$(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
+
 $(DXP)_DEPEND_DIRS = $(AREA_DETECTOR) $(ASYN) $(CAMAC) $(MCA) $(BUSY)
 endif
-
 ################### End of Support-Modules #####################
 
 DIRS = $(SUPPORT_DIRS)
@@ -111,13 +112,6 @@ DIRS += $(XXX)
 RELEASE_FILES += $(XXX)/configure/RELEASE
 $(XXX)_DEPEND_DIRS = $(SUPPORT_DIRS)
 endif
-
-ifdef IP_USE
-DIRS += $(IP_USE)
-RELEASE_FILES += $(IP_USE)/configure/RELEASE
-$(IP_USE)_DEPEND_DIRS = $(SUPPORT_DIRS)
-endif
-
 
 ACTIONS += uninstall realuninstall distclean cvsclean
 
