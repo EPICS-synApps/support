@@ -1,5 +1,5 @@
 #!/bin/sh
-# changePrefix v5.2
+# changePrefix for synApps 5.6
 if [ $# -lt 2 ]; then
 	printf "%s\n" "usage: changePrefix old new"
 	printf "%s\n" "example: changePrefix xxx 1bma"
@@ -19,14 +19,33 @@ fi
 
 TOP=`pwd`
 
-printf "\r%-50s" "start_epics_${new}"
-mv start_epics_${old} start_epics_${new}
-doSed "s!/${old}!/${new}!g" start_epics_${new}
-doSed "s/${old}.adl/${new}.adl/g" start_epics_${new}
-doSed "s/=${old}:/=${new}:/g" start_epics_${new}
-doSed "s/ioc${old}/ioc${new}/g" start_epics_${new}
-doSed "s/${old}App/${new}App/g" start_epics_${new}
-chmod a+x start_epics_${new}
+if [ -f start_epics_${old} ]; then
+	printf "\r%-50s" "start_epics_${new}"
+	mv start_epics_${old} start_epics_${new}
+	doSed "s!/${old}!/${new}!g" start_epics_${new}
+	doSed "s/${old}.adl/${new}.adl/g" start_epics_${new}
+	doSed "s/=${old}:/=${new}:/g" start_epics_${new}
+	doSed "s/ioc${old}/ioc${new}/g" start_epics_${new}
+	doSed "s/${old}App/${new}App/g" start_epics_${new}
+	chmod a+x start_epics_${new}
+fi
+
+if [ -f start_epics_${old}.bash ]; then
+	printf "\r%-50s" "start_epics_${new}.bash"
+	mv start_epics_${old}.bash start_epics_${new}.bash
+	doSed "s!/${old}!/${new}!g" start_epics_${new}.bash
+	doSed "s/${old}.adl/${new}.adl/g" start_epics_${new}.bash
+	doSed "s/=${old}:/=${new}:/g" start_epics_${new}.bash
+	doSed "s/ioc${old}/ioc${new}/g" start_epics_${new}.bash
+	doSed "s/${old}App/${new}App/g" start_epics_${new}.bash
+	chmod a+x start_epics_${new}.bash
+fi
+
+if [ -f setup_epics_common ]; then
+	printf "\r%-50s" "setup_epics_common"
+	doSed "s!/${old}!/${new}!g" setup_epics_common
+	doSed "s/${old}App/${new}App/g" setup_epics_common
+fi
 
 printf "\r%-50s" "${new}App/src"
 mv ${old}App ${new}App
@@ -78,6 +97,13 @@ for dir in ioc*
 		doSed "/registerRecordDeviceDriver/s/${old}/${new}/g" $file
 		doSed "/shellPromptSet/s/${old}/${new}/g" $file
 	done
+	if [ -f *.iocsh ]; then
+		for file in *.iocsh
+		do
+			printf "\r%-50s" "$file"
+			doSed "s/${old}:/${new}:/g" $file
+		done
+	fi
 	for file in auto*.req
 	do
 		printf "\r%-50s" "$file"
@@ -86,6 +112,7 @@ for dir in ioc*
 	for file in *.substitutions
 	do
 		printf "\r%-50s" "$file"
+		doSed "s/${old}/${new}/g" $file
 		doSed "s/${old}:/${new}:/g" $file
 		doSed "s/${old}App/${new}App/g" $file
 	done
@@ -108,18 +135,33 @@ for dir in ioc*
 	fi
 done
 
-printf "\r%-50s" "${new}App/op"
-cd ${TOP}/${new}App/op
-mv adl/${old}\.adl adl/${new}.adl
-for file in adl/*.adl
+printf "\r%-50s" "${new}App/op/adl"
+cd ${TOP}/${new}App/op/adl
+mv ${old}\.adl ${new}\.adl
+for file in *.adl
 do
 	printf "\r%-50s" "$file"
 	doSed "s/${old}:/${new}:/g" $file
 	doSed "s/${old}App/${new}App/g" $file
 	doSed "s/${old}\.adl/${new}.adl/g" $file
 done
+
+cd ${TOP}/${new}App/op
+if [ -d opi ]; then
+	printf "\r%-50s" "${new}App/op/opi"
+	cd opi
+	for file in *.opi
+	do
+		printf "\r%-50s" "$file"
+		doSed "s/${old}/${new}/g" $file
+	done
+fi
+
+cd ${TOP}/${new}App/op
 if [ -d burt ]; then
-	for file in burt/*
+	printf "\r%-50s" "${new}App/op/burt"
+	cd burt
+	for file in *
 	do
 		printf "\r%-50s" "$file"
 		doSed "s/${old}/${new}/g" $file
