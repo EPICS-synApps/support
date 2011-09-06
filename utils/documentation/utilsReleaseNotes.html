@@ -8,6 +8,27 @@
 <body>
   <h1 style="text-align: center">
     utils Release Notes</h1>
+
+  <h2 style="text-align: center">
+    synApps release 5-6</h2>
+  <ul>
+
+	<li>logModuleFromTag.py, releaseNotesFromTag.py: Don't rely on 'svn ls -v' output to write highest
+		revision number first.  Search all rev nums for highest.
+
+    <li>burt.py: Ignore lines with fewer than two words.  Don't even parse array lines
+
+	<li>mdaAscii.py:  check rank before trying to print out 2D data.  Diagnostics and IndexError
+		exception for 2D printout.
+
+    <li>mdautils-src: updated to version 1.1
+
+    <li>tranFiles.py: new program to automate data-file translation
+
+
+
+  </ul>
+
   <h2 style="text-align: center">
     synApps release 5-5</h2>
   <ul>
