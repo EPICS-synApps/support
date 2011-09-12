@@ -87,15 +87,14 @@ $(VME)_DEPEND_DIRS      = $(STD)
 
 ################### 5th Tier Support Modules #####################
 
-ifneq ($(OS_CLASS), solaris)
+ifneq (solaris,$(findstring solaris, $(EPICS_HOST_ARCH)))
 MODULE_LIST = AREA_DETECTOR
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(SSCAN) $(MCA)
 endif
 ################### 6th Tier Support Modules #####################
-
-ifneq ($(OS_CLASS), solaris)
+ifneq (solaris,$(findstring solaris, $(EPICS_HOST_ARCH)))
 MODULE_LIST = DXP
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
