@@ -640,11 +640,19 @@ need the following components from the following menu headings:
 		<li>libs
 		<ul>
 			<li>ncurses
-		<li>sunrpc (needed for the <b>asyn</b> and <b>sscan</b> modules)
+
+		<li>sunrpc (needed for the <b>asyn</b> and <b>sscan</b> modules).  In
+			cygwin 1.7, rpc was replaced by libtirpc: instead of linking with
+			librpc, you link with libtirpc.  EPICS base 3.14.12.1 defines
+			CYGWIN_RPC_LIB (configure/os/CONFIG.Common.cygwin-x86) to handle this.
+
 		</ul>
 		<li>misc
 		<ul>
 			<li>DLPORTIO (needed for the <b>dxp</b> module)
+			<li>the sequencer (version 2.1) uses re2c, which is not a standard part of
+				cygwin.  You must install re2c version 0.13.3 or higher.  This is
+				available from http://re2c.org/.
 		</ul>
 	</ul>
 
