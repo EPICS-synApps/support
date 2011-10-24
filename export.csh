@@ -13,11 +13,11 @@ svn export $SVN/camac/tags/R2-7 camac-2-7
 svn export $SVN/dac128V/tags/R2-7 dac128V-2-7
 svn export $SVN/delaygen/tags/R1-0-6 delaygen-1-0-6
 svn export $SVN/dxp/tags/R3-1 dxp-3-1
-svn export $SVN/ip/tags/R2-11 ip-2-11
+svn export $SVN/ip/tags/R2-12 ip-2-12
 svn export $SVN/ip330/tags/R2-7 ip330-2-7
 svn export $SVN/ipUnidig/tags/R2-8 ipUnidig-2-8
 svn export $SVN/love/tags/R3-2-5 love-3-2-5
-svn export $SVN/mca/tags/R7-0 mca-7-0
+svn export $SVN/mca/tags/R7-0 mca-7-1
 svn export $SVN/modbus/tags/R2-3 modbus-2-3
 svn export $SVN/motor/tags/R6-6-2 motor-6-6-2
 svn export $SVN/optics/tags/R2-8 optics-2-8
