@@ -83,7 +83,7 @@ $(DELAYGEN)_DEPEND_DIRS = $(STD) $(STREAM)
 $(CAMAC)_DEPEND_DIRS    = $(MOTOR) $(STD)
 $(MCA)_DEPEND_DIRS      = $(BUSY) $(CALC) $(STD)
 $(VME)_DEPEND_DIRS      = $(STD)
-#$(EBRICK)_DEPEND_DIRS   = $(STD)
+#$(EBRICK)_DEPEND_DIRS   = $(STD) $(CALC)
 
 ################### 5th Tier Support Modules #####################
 # The conditional below should be a target arch, but those are not
