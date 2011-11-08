@@ -1,0 +1,6 @@
+$(P)$(R)NumPoints
+$(P)$(R)Dwell
+$(P)$(R)Frequency
+$(P)$(R)ExtTrigger
+$(P)$(R)ExtClock
+$(P)$(R)Continuous

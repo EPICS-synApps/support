@@ -1,0 +1,399 @@
+# save/restore V5.5	Automatically generated - DO NOT MODIFY - 110804-094423
+C9513:scaler1.TP 2
+C9513:scaler1.TP1 1
+C9513:scaler1.CONT 0
+C9513:scaler1.DLY1 0
+C9513:scaler1.RAT1 0
+C9513:scaler1.PREC 3
+C9513:scaler1.FREQ 5000000
+C9513:scaler1.RATE 10
+C9513:scaler1.DLY 0
+C9513:scaler1.COUT 
+C9513:scaler1_calcEnable.VAL 0
+C9513:scaler1_calc_ctrl.VAL 0
+C9513:scaler1_calc1.CALC A
+C9513:scaler1_calc2.CALC b
+C9513:scaler1_calc3.CALC C
+C9513:scaler1_calc4.CALC D
+C9513:scaler1_calc5.CALC E
+C9513:scaler1_calc6.CALC F
+C9513:scaler1_calc7.CALC G
+C9513:scaler1_calc8.CALC H
+C9513:scaler1.NM1 
+C9513:scaler1.PR1 10000000
+C9513:scaler1.G1 1
+C9513:scaler1.NM2 
+C9513:scaler1.PR2 0
+C9513:scaler1.G2 0
+C9513:scaler1.NM3 
+C9513:scaler1.PR3 0
+C9513:scaler1.G3 0
+C9513:scaler1.NM4 
+C9513:scaler1.PR4 0
+C9513:scaler1.G4 0
+C9513:scaler1.NM5 
+C9513:scaler1.PR5 0
+C9513:scaler1.G5 0
+C9513:scaler1.NM6 
+C9513:scaler1.PR6 0
+C9513:scaler1.G6 0
+C9513:scaler1.NM7 
+C9513:scaler1.PR7 0
+C9513:scaler1.G7 0
+C9513:scaler1.NM8 
+C9513:scaler1.PR8 0
+C9513:scaler1.G8 0
+C9513:scaler1.NM9 
+C9513:scaler1.PR9 0
+C9513:scaler1.G9 0
+C9513:scaler1.NM10 
+C9513:scaler1.PR10 0
+C9513:scaler1.G10 0
+C9513:scaler1.NM11 
+C9513:scaler1.PR11 0
+C9513:scaler1.G11 0
+C9513:scaler1.NM12 
+C9513:scaler1.PR12 0
+C9513:scaler1.G12 0
+C9513:scaler1.NM13 
+C9513:scaler1.PR13 0
+C9513:scaler1.G13 0
+C9513:scaler1.NM14 
+C9513:scaler1.PR14 0
+C9513:scaler1.G14 0
+C9513:scaler1.NM15 
+C9513:scaler1.PR15 0
+C9513:scaler1.G15 0
+C9513:scaler1.NM16 
+C9513:scaler1.PR16 0
+C9513:scaler1.G16 0
+C9513:scaler1.NM17 
+C9513:scaler1.PR17 0
+C9513:scaler1.G17 0
+C9513:scaler1.NM18 
+C9513:scaler1.PR18 0
+C9513:scaler1.G18 0
+C9513:scaler1.NM19 
+C9513:scaler1.PR19 0
+C9513:scaler1.G19 0
+C9513:scaler1.NM20 
+C9513:scaler1.PR20 0
+C9513:scaler1.G20 0
+C9513:scaler1.NM21 
+C9513:scaler1.PR21 0
+C9513:scaler1.G21 0
+C9513:scaler1.NM22 
+C9513:scaler1.PR22 0
+C9513:scaler1.G22 0
+C9513:scaler1.NM23 
+C9513:scaler1.PR23 0
+C9513:scaler1.G23 0
+C9513:scaler1.NM24 
+C9513:scaler1.PR24 0
+C9513:scaler1.G24 0
+C9513:scaler1.NM25 
+C9513:scaler1.PR25 0
+C9513:scaler1.G25 0
+C9513:scaler1.NM26 
+C9513:scaler1.PR26 0
+C9513:scaler1.G26 0
+C9513:scaler1.NM27 
+C9513:scaler1.PR27 0
+C9513:scaler1.G27 0
+C9513:scaler1.NM28 
+C9513:scaler1.PR28 0
+C9513:scaler1.G28 0
+C9513:scaler1.NM29 
+C9513:scaler1.PR29 0
+C9513:scaler1.G29 0
+C9513:scaler1.NM30 
+C9513:scaler1.PR30 0
+C9513:scaler1.G30 0
+C9513:scaler1.NM31 
+C9513:scaler1.PR31 0
+C9513:scaler1.G31 0
+C9513:scaler1.NM32 
+C9513:scaler1.PR32 0
+C9513:scaler1.G32 0
+C9513:scaler1.NM33 
+C9513:scaler1.PR33 0
+C9513:scaler1.G33 0
+C9513:scaler1.NM34 
+C9513:scaler1.PR34 0
+C9513:scaler1.G34 0
+C9513:scaler1.NM35 
+C9513:scaler1.PR35 0
+C9513:scaler1.G35 0
+C9513:scaler1.NM36 
+C9513:scaler1.PR36 0
+C9513:scaler1.G36 0
+C9513:scaler1.NM37 
+C9513:scaler1.PR37 0
+C9513:scaler1.G37 0
+C9513:scaler1.NM38 
+C9513:scaler1.PR38 0
+C9513:scaler1.G38 0
+C9513:scaler1.NM39 
+C9513:scaler1.PR39 0
+C9513:scaler1.G39 0
+C9513:scaler1.NM40 
+C9513:scaler1.PR40 0
+C9513:scaler1.G40 0
+C9513:scaler1.NM41 
+C9513:scaler1.PR41 0
+C9513:scaler1.G41 0
+C9513:scaler1.NM42 
+C9513:scaler1.PR42 0
+C9513:scaler1.G42 0
+C9513:scaler1.NM43 
+C9513:scaler1.PR43 0
+C9513:scaler1.G43 0
+C9513:scaler1.NM44 
+C9513:scaler1.PR44 0
+C9513:scaler1.G44 0
+C9513:scaler1.NM45 
+C9513:scaler1.PR45 0
+C9513:scaler1.G45 0
+C9513:scaler1.NM46 
+C9513:scaler1.PR46 0
+C9513:scaler1.G46 0
+C9513:scaler1.NM47 
+C9513:scaler1.PR47 0
+C9513:scaler1.G47 0
+C9513:scaler1.NM48 
+C9513:scaler1.PR48 0
+C9513:scaler1.G48 0
+C9513:scaler1.NM49 
+C9513:scaler1.PR49 0
+C9513:scaler1.G49 0
+C9513:scaler1.NM50 
+C9513:scaler1.PR50 0
+C9513:scaler1.G50 0
+C9513:scaler1.NM51 
+C9513:scaler1.PR51 0
+C9513:scaler1.G51 0
+C9513:scaler1.NM52 
+C9513:scaler1.PR52 0
+C9513:scaler1.G52 0
+C9513:scaler1.NM53 
+C9513:scaler1.PR53 0
+C9513:scaler1.G53 0
+C9513:scaler1.NM54 
+C9513:scaler1.PR54 0
+C9513:scaler1.G54 0
+C9513:scaler1.NM55 
+C9513:scaler1.PR55 0
+C9513:scaler1.G55 0
+C9513:scaler1.NM56 
+C9513:scaler1.PR56 0
+C9513:scaler1.G56 0
+C9513:scaler1.NM57 
+C9513:scaler1.PR57 0
+C9513:scaler1.G57 0
+C9513:scaler1.NM58 
+C9513:scaler1.PR58 0
+C9513:scaler1.G58 0
+C9513:scaler1.NM59 
+C9513:scaler1.PR59 0
+C9513:scaler1.G59 0
+C9513:scaler1.NM60 
+C9513:scaler1.PR60 0
+C9513:scaler1.G60 0
+C9513:scaler1.NM61 
+C9513:scaler1.PR61 0
+C9513:scaler1.G61 0
+C9513:scaler1.NM62 
+C9513:scaler1.PR62 0
+C9513:scaler1.G62 0
+C9513:scaler1.NM63 
+C9513:scaler1.PR63 0
+C9513:scaler1.G63 0
+C9513:scaler1.NM64 
+C9513:scaler1.PR64 0
+C9513:scaler1.G64 0
+C9513:Module:BoWord 15
+C9513:Chip1:FOutDivider 0
+C9513:Chip1:FOutSource 11
+C9513:Chip1:Compare1 0
+C9513:Chip1:Compare2 0
+C9513:Chip1:TimeOfDay 0
+C9513:Chip1:AlarmReg1 0
+C9513:Chip1:AlarmReg2 0
+C9513:Chip2:FOutDivider 0
+C9513:Chip2:FOutSource 11
+C9513:Chip2:Compare1 0
+C9513:Chip2:Compare2 0
+C9513:Chip2:TimeOfDay 0
+C9513:Chip2:AlarmReg1 0
+C9513:Chip2:AlarmReg2 0
+C9513:Counter1:GateControl 0
+C9513:Counter1:CounterEdge 0
+C9513:Counter1:CountSource 11
+C9513:Counter1:SpecialGate 0
+C9513:Counter1:ReloadSource 0
+C9513:Counter1:RecycleMode 1
+C9513:Counter1:BCDMode 0
+C9513:Counter1:CountDirection 1
+C9513:Counter1:OutputControl 1
+C9513:Counter1:LoadReg 2
+C9513:Counter1:HoldReg 500
+C9513:Counter1:PollCounter 1
+C9513:Counter2:GateControl 0
+C9513:Counter2:CounterEdge 0
+C9513:Counter2:CountSource 11
+C9513:Counter2:SpecialGate 0
+C9513:Counter2:ReloadSource 0
+C9513:Counter2:RecycleMode 1
+C9513:Counter2:BCDMode 0
+C9513:Counter2:CountDirection 1
+C9513:Counter2:OutputControl 0
+C9513:Counter2:LoadReg 0
+C9513:Counter2:HoldReg 0
+C9513:Counter2:PollCounter 1
+C9513:Counter3:GateControl 0
+C9513:Counter3:CounterEdge 0
+C9513:Counter3:CountSource 11
+C9513:Counter3:SpecialGate 0
+C9513:Counter3:ReloadSource 0
+C9513:Counter3:RecycleMode 1
+C9513:Counter3:BCDMode 0
+C9513:Counter3:CountDirection 1
+C9513:Counter3:OutputControl 0
+C9513:Counter3:LoadReg 0
+C9513:Counter3:HoldReg 0
+C9513:Counter3:PollCounter 0
+C9513:Counter4:GateControl 0
+C9513:Counter4:CounterEdge 0
+C9513:Counter4:CountSource 11
+C9513:Counter4:SpecialGate 0
+C9513:Counter4:ReloadSource 0
+C9513:Counter4:RecycleMode 1
+C9513:Counter4:BCDMode 0
+C9513:Counter4:CountDirection 1
+C9513:Counter4:OutputControl 0
+C9513:Counter4:LoadReg 0
+C9513:Counter4:HoldReg 0
+C9513:Counter4:PollCounter 0
+C9513:Counter5:GateControl 0
+C9513:Counter5:CounterEdge 0
+C9513:Counter5:CountSource 11
+C9513:Counter5:SpecialGate 0
+C9513:Counter5:ReloadSource 0
+C9513:Counter5:RecycleMode 1
+C9513:Counter5:BCDMode 0
+C9513:Counter5:CountDirection 1
+C9513:Counter5:OutputControl 0
+C9513:Counter5:LoadReg 0
+C9513:Counter5:HoldReg 0
+C9513:Counter5:PollCounter 0
+C9513:Counter6:GateControl 0
+C9513:Counter6:CounterEdge 0
+C9513:Counter6:CountSource 11
+C9513:Counter6:SpecialGate 0
+C9513:Counter6:ReloadSource 0
+C9513:Counter6:RecycleMode 1
+C9513:Counter6:BCDMode 0
+C9513:Counter6:CountDirection 1
+C9513:Counter6:OutputControl 0
+C9513:Counter6:LoadReg 0
+C9513:Counter6:HoldReg 0
+C9513:Counter6:PollCounter 0
+C9513:Counter7:GateControl 0
+C9513:Counter7:CounterEdge 0
+C9513:Counter7:CountSource 11
+C9513:Counter7:SpecialGate 0
+C9513:Counter7:ReloadSource 0
+C9513:Counter7:RecycleMode 1
+C9513:Counter7:BCDMode 0
+C9513:Counter7:CountDirection 1
+C9513:Counter7:OutputControl 0
+C9513:Counter7:LoadReg 0
+C9513:Counter7:HoldReg 0
+C9513:Counter7:PollCounter 0
+C9513:Counter8:GateControl 0
+C9513:Counter8:CounterEdge 0
+C9513:Counter8:CountSource 11
+C9513:Counter8:SpecialGate 0
+C9513:Counter8:ReloadSource 0
+C9513:Counter8:RecycleMode 1
+C9513:Counter8:BCDMode 0
+C9513:Counter8:CountDirection 1
+C9513:Counter8:OutputControl 0
+C9513:Counter8:LoadReg 0
+C9513:Counter8:HoldReg 0
+C9513:Counter8:PollCounter 0
+C9513:Counter9:GateControl 0
+C9513:Counter9:CounterEdge 0
+C9513:Counter9:CountSource 11
+C9513:Counter9:SpecialGate 0
+C9513:Counter9:ReloadSource 0
+C9513:Counter9:RecycleMode 1
+C9513:Counter9:BCDMode 0
+C9513:Counter9:CountDirection 1
+C9513:Counter9:OutputControl 0
+C9513:Counter9:LoadReg 0
+C9513:Counter9:HoldReg 0
+C9513:Counter9:PollCounter 0
+C9513:Counter10:GateControl 0
+C9513:Counter10:CounterEdge 0
+C9513:Counter10:CountSource 11
+C9513:Counter10:SpecialGate 0
+C9513:Counter10:ReloadSource 0
+C9513:Counter10:RecycleMode 1
+C9513:Counter10:BCDMode 0
+C9513:Counter10:CountDirection 1
+C9513:Counter10:OutputControl 0
+C9513:Counter10:LoadReg 0
+C9513:Counter10:HoldReg 0
+C9513:Counter10:PollCounter 0
+C9513:PulseGen1:PulsePeriod 2e-005
+C9513:PulseGen1:PulseWidth 5e-007
+C9513:PulseGen1:PulseDelay 0
+C9513:PulseGen1:PulseIdleState 0
+C9513:PulseGen1:PulseCount 0
+C9513:PulseGen2:PulsePeriod 0.001
+C9513:PulseGen2:PulseWidth 0.0001
+C9513:PulseGen2:PulseDelay 0
+C9513:PulseGen2:PulseIdleState 0
+C9513:PulseGen2:PulseCount 0
+C9513:PulseGen3:PulsePeriod 0.001
+C9513:PulseGen3:PulseWidth 0.0001
+C9513:PulseGen3:PulseDelay 0
+C9513:PulseGen3:PulseIdleState 0
+C9513:PulseGen3:PulseCount 0
+C9513:PulseGen4:PulsePeriod 0.001
+C9513:PulseGen4:PulseWidth 0.0001
+C9513:PulseGen4:PulseDelay 0
+C9513:PulseGen4:PulseIdleState 0
+C9513:PulseGen4:PulseCount 0
+C9513:PulseGen5:PulsePeriod 0.001
+C9513:PulseGen5:PulseWidth 0.0001
+C9513:PulseGen5:PulseDelay 0
+C9513:PulseGen5:PulseIdleState 0
+C9513:PulseGen5:PulseCount 0
+C9513:PulseGen6:PulsePeriod 0.001
+C9513:PulseGen6:PulseWidth 0.0001
+C9513:PulseGen6:PulseDelay 0
+C9513:PulseGen6:PulseIdleState 0
+C9513:PulseGen6:PulseCount 0
+C9513:PulseGen7:PulsePeriod 0.001
+C9513:PulseGen7:PulseWidth 0.0001
+C9513:PulseGen7:PulseDelay 0
+C9513:PulseGen7:PulseIdleState 0
+C9513:PulseGen7:PulseCount 0
+C9513:PulseGen8:PulsePeriod 0.001
+C9513:PulseGen8:PulseWidth 0.0001
+C9513:PulseGen8:PulseDelay 0
+C9513:PulseGen8:PulseIdleState 0
+C9513:PulseGen8:PulseCount 0
+C9513:PulseGen9:PulsePeriod 0.001
+C9513:PulseGen9:PulseWidth 0.0001
+C9513:PulseGen9:PulseDelay 0
+C9513:PulseGen9:PulseIdleState 0
+C9513:PulseGen9:PulseCount 0
+C9513:PulseGen10:PulsePeriod 0.001
+C9513:PulseGen10:PulseWidth 0.0001
+C9513:PulseGen10:PulseDelay 0
+C9513:PulseGen10:PulseIdleState 0
+C9513:PulseGen10:PulseCount 0
+<END>

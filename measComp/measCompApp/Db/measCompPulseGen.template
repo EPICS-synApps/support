@@ -1,0 +1,77 @@
+# Database for C9513.  This database is loaded for each pulse generator
+# Mark Rivers
+# July 26, 2011
+
+###################################################################
+#  Pulse start/stop                                               # 
+###################################################################
+record(bo, "$(P)$(R)Run")
+{
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PULSE_START")
+    field(ZNAM, "Stop")
+    field(ZSV,  "NO_ALARM")
+    field(ONAM, "Run")
+    field(OSV,  "MINOR")
+}
+
+###################################################################
+#  Pulse frequency                                                # 
+###################################################################
+record(ao, "$(P)$(R)Period")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PULSE_PERIOD")
+    field(VAL,  "0.001")
+    field(PREC, "5")
+}
+
+###################################################################
+#  Pulse width                                                    # 
+###################################################################
+record(ao, "$(P)$(R)Width")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PULSE_WIDTH")
+    field(VAL,  "0.0001")
+    field(PREC, "7")
+}
+
+###################################################################
+#  Pulse delay                                                    # 
+###################################################################
+record(ao, "$(P)$(R)Delay")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PULSE_DELAY")
+    field(VAL,  "0.")
+    field(PREC, "7")
+}
+
+###################################################################
+#  Pulse count                                                    # 
+###################################################################
+record(longout, "$(P)$(R)Count")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PULSE_COUNT")
+}
+
+###################################################################
+#  Pulse idle state                                               # 
+###################################################################
+record(bo, "$(P)$(R)IdleState")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PULSE_IDLE_STATE")
+    field(ZNAM, "Low")
+    field(ONAM, "High")
+    field(VAL,  "0")
+}
+
+

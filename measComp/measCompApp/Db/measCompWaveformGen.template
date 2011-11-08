@@ -1,0 +1,119 @@
+# Database for Measurement Computing waveform generator
+# Mark Rivers
+# November 6, 2011
+
+###################################################################
+#  Number of points to use                                        # 
+###################################################################
+record(longout, "$(P)$(R)NumPoints")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_NUM_POINTS")
+}
+
+###################################################################
+#  Timebase waveform record                                       #
+###################################################################
+record(waveform, "$(P)$(R)TimeWF")
+{
+    field(FTVL, "FLOAT")
+    field(DTYP, "asynFloat32ArrayIn")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_TIME_WF")
+    field(NELM, "$(MAX_POINTS)")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Current point                                                  # 
+###################################################################
+record(longin, "$(P)$(R)CurrentPoint")
+{
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_CURRENT_POINT")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Time per point                                                 # 
+###################################################################
+record(ao, "$(P)$(R)Dwell")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_DWELL")
+    field(VAL,  "0.001")
+    field(PREC, "$(PREC)")
+}
+
+###################################################################
+#  Actual time per point                                          # 
+###################################################################
+record(ai, "$(P)$(R)ActualDwell")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_ACTUAL_DWELL")
+    field(PREC, "$(PREC)")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Frequency                                                      # 
+###################################################################
+record(ao, "$(P)$(R)Frequency")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_FREQ")
+    field(VAL,  "1000.")
+    field(PREC, "$(PREC)")
+}
+
+###################################################################
+#  External trigger                                               # 
+###################################################################
+record(bo, "$(P)$(R)ExtTrigger")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_EXT_TRIGGER")
+    field(ZNAM, "Internal")
+    field(ONAM, "External")
+}
+
+###################################################################
+#  External clock                                                 # 
+###################################################################
+record(bo, "$(P)$(R)ExtClock")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_EXT_CLOCK")
+    field(ZNAM, "Internal")
+    field(ONAM, "External")
+}
+
+###################################################################
+#  External trigger                                               # 
+###################################################################
+record(bo, "$(P)$(R)Continuous")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_CONTINUOUS")
+    field(ZNAM, "One-shot")
+    field(ONAM, "Continuous")
+}
+
+###################################################################
+#  Run                                                            # 
+###################################################################
+record(busy, "$(P)$(R)Run")
+{
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_RUN")
+    field(ZNAM, "Stop")
+    field(ONAM, "Run")
+}
+
+
