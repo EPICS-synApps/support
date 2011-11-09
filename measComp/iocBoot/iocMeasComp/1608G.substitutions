@@ -94,6 +94,28 @@ pattern
 {   1608G:,  Ai16, 1608G_1,   15,  -10., -10.,  10.,  10.,    3,   "Passive",   4}
 }
 
+# Waveform digitzer
+file "$(MEASCOMP)/measCompApp/Db/measCompWaveformDig.template"
+{
+pattern
+{     P,       R,          PORT,    ADDR,  MAX_POINTS,  PREC, TIMEOUT}
+{   1608G:,  WaveDig,    1608G_1,     0,     1000000,     4,        1}
+}
+file "$(MEASCOMP)/measCompApp/Db/measCompWaveformDigN.template"
+{
+pattern
+{     P,       R,          PORT,    ADDR,  MAX_POINTS,  PREC, TIMEOUT}
+{   1608G:,  WaveDig1,   1608G_1,     0,     1000000,     4,        1}
+{   1608G:,  WaveDig2,   1608G_1,     1,     1000000,     4,        1}
+{   1608G:,  WaveDig3,   1608G_1,     2,     1000000,     4,        1}
+{   1608G:,  WaveDig4,   1608G_1,     3,     1000000,     4,        1}
+{   1608G:,  WaveDig5,   1608G_1,     4,     1000000,     4,        1}
+{   1608G:,  WaveDig6,   1608G_1,     5,     1000000,     4,        1}
+{   1608G:,  WaveDig7,   1608G_1,     6,     1000000,     4,        1}
+{   1608G:,  WaveDig8,   1608G_1,     7,     1000000,     4,        1}
+}
+
+
 # Analog outputs
 file "$(MEASCOMP)/measCompApp/Db/measCompAnalogOut.template"
 {
