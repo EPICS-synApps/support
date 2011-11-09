@@ -16,7 +16,7 @@ record(waveform, "$(P)$(R)InternalWF")
 {
     field(FTVL, "FLOAT")
     field(DTYP, "asynFloat32ArrayIn")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_INTERNAL_WF")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_INT_WF")
     field(NELM, "$(MAX_POINTS)")
     field(SCAN, "I/O Intr")
 }

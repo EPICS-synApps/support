@@ -5,11 +5,33 @@
 ###################################################################
 #  Number of points to use                                        # 
 ###################################################################
-record(longout, "$(P)$(R)NumPoints")
+record(longin, "$(P)$(R)NumPoints")
+{
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_NUM_POINTS")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Number of points to use for user-defined waveforms             # 
+###################################################################
+record(longout, "$(P)$(R)UserNumPoints")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_NUM_POINTS")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_USER_NUM_POINTS")
+    field(VAL,  "1000")
+}
+
+###################################################################
+#  Number of points to use for pre-defined waveforms             # 
+###################################################################
+record(longout, "$(P)$(R)IntNumPoints")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_INT_NUM_POINTS")
+    field(VAL,  "1000")
 }
 
 ###################################################################
@@ -47,25 +69,26 @@ record(ao, "$(P)$(R)Dwell")
 }
 
 ###################################################################
-#  Actual time per point                                          # 
+#  Internal waveform frequency                                    # 
 ###################################################################
-record(ai, "$(P)$(R)ActualDwell")
-{
-    field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_ACTUAL_DWELL")
-    field(PREC, "$(PREC)")
-    field(SCAN, "I/O Intr")
-}
-
-###################################################################
-#  Frequency                                                      # 
-###################################################################
-record(ao, "$(P)$(R)Frequency")
+record(ao, "$(P)$(R)IntFrequency")
 {
     field(PINI, "YES")
     field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_FREQ")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_INT_FREQ")
     field(VAL,  "1000.")
+    field(PREC, "$(PREC)")
+}
+
+###################################################################
+#  User waveform dwell time                                       # 
+###################################################################
+record(ao, "$(P)$(R)UserDwell")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_USER_DWELL")
+    field(VAL,  "0.001")
     field(PREC, "$(PREC)")
 }
 

@@ -1,6 +1,7 @@
-$(P)$(R)NumPoints
-$(P)$(R)Dwell
-$(P)$(R)Frequency
+$(P)$(R)UserNumPoints
+$(P)$(R)IntNumPoints
+$(P)$(R)UserDwell
+$(P)$(R)IntFrequency
 $(P)$(R)ExtTrigger
 $(P)$(R)ExtClock
 $(P)$(R)Continuous
