@@ -1,0 +1,10 @@
+###################################################################
+#  User-defined waveform record                                   #
+###################################################################
+record(waveform, "$(P)$(R)VoltWF")
+{
+    field(FTVL, "FLOAT")
+    field(DTYP, "asynFloat32ArrayOut")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEDIG_VOLT_WF")
+    field(NELM, "$(MAX_POINTS)")
+}
