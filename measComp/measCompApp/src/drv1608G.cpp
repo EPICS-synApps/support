@@ -57,6 +57,7 @@ typedef enum {
 #define waveDigContinuousString   "WAVEDIG_CONTINUOUS"
 #define waveDigRunString          "WAVEDIG_RUN"
 #define waveDigTimeWFString       "WAVEDIG_TIME_WF"
+#define waveDigReadWFString       "WAVEDIG_READ_WF"
 // Waveform digitizer parameters - per input
 #define waveDigVoltWFString       "WAVEDIG_VOLT_WF"
 
@@ -152,6 +153,7 @@ protected:
   int waveDigContinuous_;
   int waveDigRun_;
   int waveDigTimeWF_;
+  int waveDigReadWF_;
   // Waveform digitizer parameters - per input
   int waveDigVoltWF_;
 
@@ -201,6 +203,7 @@ private:
   int startPulseGenerator();
   int startWaveformGenerator();
   int startWaveformDigitizer();
+  int readWaveformDigitizer();
   int defineWaveform(int channel);
 };
 
@@ -254,6 +257,7 @@ USB1608G::USB1608G(const char *portName, int boardNum, int maxInputPoints, int m
   createParam(waveDigContinuousString,         asynParamInt32, &waveDigContinuous_);
   createParam(waveDigRunString,                asynParamInt32, &waveDigRun_);
   createParam(waveDigTimeWFString,      asynParamFloat32Array, &waveDigTimeWF_);
+  createParam(waveDigReadWFString,             asynParamInt32, &waveDigReadWF_);
   // Waveform digitizer parameters - per input
   createParam(waveDigVoltWFString,      asynParamFloat32Array, &waveDigVoltWF_);
 
@@ -562,7 +566,35 @@ int USB1608G::startWaveformDigitizer()
   }
   return 0;
 }
- 
+
+int USB1608G::readWaveformDigitizer()
+{
+  int firstChan, numChans;
+  int currentPoint;
+  int i, ichan=0, ipoint=0;
+  unsigned short *pAnalogIn = (unsigned short *)inputMemHandle_;
+  static const char *functionName = "readWaveformDigitizer";
+  
+  getIntegerParam(waveDigFirstChan_,    &firstChan);
+  getIntegerParam(waveDigNumChans_,     &numChans);
+  getIntegerParam(waveDigCurrentPoint_, &currentPoint);
+  for (i=0; i<currentPoint; i++) {
+    // Assume +-10V range for now
+    waveDigBuffer_[firstChan + ichan][ipoint] = (epicsFloat32) ((*pAnalogIn++ - 32768)*20./65536.);
+    if (++ichan >= numChans) {
+      ichan=0;
+      ipoint++;
+    }
+ }
+  for (i=firstChan; i<numChans; i++) {
+    asynPrint(pasynUserSelf, ASYN_TRACE_FLOW,
+      "%s:%s:, doing callbacks on input %d, first value=%f\n", 
+      driverName, functionName, i, waveDigBuffer_[i][0]);
+    doCallbacksFloat32Array(waveDigBuffer_[i], currentPoint, waveDigVoltWF_, i);
+  }
+  return 0;
+}    
+
 
 asynStatus USB1608G::getBounds(asynUser *pasynUser, epicsInt32 *low, epicsInt32 *high)
 {
@@ -584,10 +616,11 @@ asynStatus USB1608G::writeInt32(asynUser *pasynUser, epicsInt32 value)
   int addr;
   int function = pasynUser->reason;
   int status=0;
-  int waveGenRunning;
+  int waveGenRunning, waveDigRunning;
   static const char *functionName = "writeInt32";
 
   getIntegerParam(waveGenRun_, &waveGenRunning);
+  getIntegerParam(waveDigRun_, &waveDigRunning);
 
   this->getAddress(pasynUser, &addr);
   setIntegerParam(addr, function, value);
@@ -607,9 +640,16 @@ asynStatus USB1608G::writeInt32(asynUser *pasynUser, epicsInt32 value)
      status = cbCLoad32(boardNum_, addr, 0);
   }
 
-  // Analog input functions
+  // Waveform digitizer functions
   else if (function == waveDigRun_) {
-    startWaveformDigitizer();
+    if ((value) && !waveDigRunning)
+      status = startWaveformDigitizer();
+    else if (!value && waveDigRunning) 
+      status = cbStopBackground(boardNum_, AIFUNCTION);
+  }
+  
+  else if (function == waveDigReadWF_) {
+    readWaveformDigitizer();
   }
   
   // Analog output functions
@@ -623,6 +663,7 @@ asynStatus USB1608G::writeInt32(asynUser *pasynUser, epicsInt32 value)
     status = cbAOut(boardNum_, addr, BIP10VOLTS, value);
   }
 
+  // Waveform generator functions
   else if (function == waveGenRun_) {
     if ((value) && !waveGenRunning)
       status = startWaveformGenerator();
@@ -665,12 +706,15 @@ asynStatus USB1608G::readInt32(asynUser *pasynUser, epicsInt32 *value)
   int status=0;
   unsigned short shortVal;
   int range;
+  int waveDigRunning;
   static const char *functionName = "readInt32";
 
   this->getAddress(pasynUser, &addr);
 
   // Analog input function
   if (function == analogInValue_) {
+    getIntegerParam(waveDigRun_, &waveDigRunning);
+    if (waveDigRunning) return asynSuccess;
     getIntegerParam(addr, analogInRange_, &range);
     status = cbAIn(boardNum_, addr, range, &shortVal);
     *value = shortVal;
@@ -898,8 +942,6 @@ void USB1608G::pollerThread()
     status = cbGetStatus(boardNum_, &aiStatus, &aiCount, &aiIndex, AIFUNCTION);
     setIntegerParam(waveDigRun_, aiStatus);
     setIntegerParam(waveDigCurrentPoint_, aiIndex);
-    
-    // If the waveform digitizer is running then read the data, convert to float and do array callbacks
     
     for (i=0; i<MAX_SIGNALS; i++) {
       callParamCallbacks(i);
