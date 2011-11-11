@@ -76,7 +76,8 @@ typedef enum {
 #define waveGenExtClockString     "WAVEGEN_EXT_CLOCK"
 #define waveGenContinuousString   "WAVEGEN_CONTINUOUS"
 #define waveGenRunString          "WAVEGEN_RUN"
-#define waveGenTimeWFString       "WAVEGEN_TIME_WF"
+#define waveGenUserTimeWFString   "WAVEGEN_USER_TIME_WF"
+#define waveGenIntTimeWFString    "WAVEGEN_INT_TIME_WF"
 // Waveform generator parameters - per output
 #define waveGenWaveTypeString     "WAVEGEN_WAVE_TYPE"
 #define waveGenEnableString       "WAVEGEN_ENABLE"
@@ -120,6 +121,7 @@ public:
   virtual asynStatus writeUInt32Digital(asynUser *pasynUser, epicsUInt32 value, epicsUInt32 mask);
   virtual asynStatus readFloat32Array(asynUser *pasynUser, epicsFloat32 *value, size_t nElements, size_t *nIn);
   virtual asynStatus writeFloat32Array(asynUser *pasynUser, epicsFloat32 *value, size_t nElements);
+  virtual asynStatus readFloat64Array(asynUser *pasynUser, epicsFloat64 *value, size_t nElements, size_t *nIn);
   virtual void report(FILE *fp, int details);
   // These should be private but are called from C
   virtual void pollerThread(void);
@@ -172,7 +174,8 @@ protected:
   int waveGenExtClock_;
   int waveGenContinuous_;
   int waveGenRun_;
-  int waveGenTimeWF_;
+  int waveGenUserTimeWF_;
+  int waveGenIntTimeWF_;
   // Waveform generator parameters - per output
   int waveGenWaveType_;
   int waveGenEnable_;
@@ -194,16 +197,28 @@ private:
   int forceCallback_;
   size_t maxInputPoints_;
   size_t maxOutputPoints_;
-  epicsFloat32 *waveDigBuffer_[NUM_ANALOG_IN];
+  epicsFloat64 *waveDigBuffer_[NUM_ANALOG_IN];
+  epicsFloat32 *waveDigTimeBuffer_;
   epicsFloat32 *waveGenIntBuffer_[NUM_ANALOG_OUT];
   epicsFloat32 *waveGenUserBuffer_[NUM_ANALOG_OUT];
-  epicsFloat32 *waveGenTimeBuffer_;
+  epicsFloat32 *waveGenUserTimeBuffer_;
+  epicsFloat32 *waveGenIntTimeBuffer_;
   HGLOBAL inputMemHandle_;
   HGLOBAL outputMemHandle_;
+  
+  int numWaveGenChans_;
+  int numWaveDigChans_;
+  int waveGenRunning_;
+  int waveDigRunning_;
   int startPulseGenerator();
-  int startWaveformGenerator();
-  int startWaveformDigitizer();
-  int readWaveformDigitizer();
+  int stopPulseGenerator();
+  int startWaveGen();
+  int stopWaveGen();
+  int computeWaveGenTimes();
+  int startWaveDig();
+  int stopWaveDig();
+  int readWaveDig();
+  int computeWaveDigTimes();
   int defineWaveform(int channel);
 };
 
@@ -217,15 +232,19 @@ static void pollerThreadC(void * pPvt)
 
 USB1608G::USB1608G(const char *portName, int boardNum, int maxInputPoints, int maxOutputPoints)
   : asynPortDriver(portName, MAX_SIGNALS, NUM_PARAMS, 
-      asynInt32Mask | asynUInt32DigitalMask | asynInt32ArrayMask | asynFloat32ArrayMask | asynFloat64Mask | asynDrvUserMask,
-      asynInt32Mask | asynUInt32DigitalMask | asynInt32ArrayMask | asynFloat32ArrayMask | asynFloat64Mask, 
+      asynInt32Mask | asynUInt32DigitalMask | asynInt32ArrayMask | asynFloat32ArrayMask | asynFloat64ArrayMask | asynFloat64Mask | asynDrvUserMask,
+      asynInt32Mask | asynUInt32DigitalMask | asynInt32ArrayMask | asynFloat32ArrayMask | asynFloat64ArrayMask | asynFloat64Mask, 
       ASYN_MULTIDEVICE, 1, /* ASYN_CANBLOCK=0, ASYN_MULTIDEVICE=1, autoConnect=1 */
       0, 0),  /* Default priority and stack size */
     boardNum_(boardNum),
     pollTime_(DEFAULT_POLL_TIME),
     forceCallback_(1),
     maxInputPoints_(maxInputPoints),
-    maxOutputPoints_(maxOutputPoints)
+    maxOutputPoints_(maxOutputPoints),
+    numWaveGenChans_(1),
+    numWaveDigChans_(1),
+    waveGenRunning_(0),
+    waveDigRunning_(0)
 {
   int i;
   static const char *functionName = "USB1608G";
@@ -276,7 +295,8 @@ USB1608G::USB1608G(const char *portName, int boardNum, int maxInputPoints, int m
   createParam(waveGenExtClockString,           asynParamInt32, &waveGenExtClock_);
   createParam(waveGenContinuousString,         asynParamInt32, &waveGenContinuous_);
   createParam(waveGenRunString,                asynParamInt32, &waveGenRun_);
-  createParam(waveGenTimeWFString,      asynParamFloat32Array, &waveGenTimeWF_);
+  createParam(waveGenUserTimeWFString,  asynParamFloat32Array, &waveGenUserTimeWF_);
+  createParam(waveGenIntTimeWFString,   asynParamFloat32Array, &waveGenIntTimeWF_);
   // Waveform generator parameters - per output
   createParam(waveGenWaveTypeString,           asynParamInt32, &waveGenWaveType_);
   createParam(waveGenEnableString,             asynParamInt32, &waveGenEnable_);
@@ -293,15 +313,22 @@ USB1608G::USB1608G(const char *portName, int boardNum, int maxInputPoints, int m
 
   // Allocate memory for the input and output buffers
   for (i=0; i<NUM_ANALOG_IN; i++) {
-    waveDigBuffer_[i]  = (epicsFloat32 *) calloc(maxInputPoints_,  sizeof(epicsFloat32));
+    waveDigBuffer_[i]  = (epicsFloat64 *) calloc(maxInputPoints_,  sizeof(epicsFloat64));
   }
   for (i=0; i<NUM_ANALOG_OUT; i++) {
     waveGenIntBuffer_[i]  = (epicsFloat32 *) calloc(maxOutputPoints_, sizeof(epicsFloat32));
     waveGenUserBuffer_[i] = (epicsFloat32 *) calloc(maxOutputPoints_, sizeof(epicsFloat32));
   }
-  waveGenTimeBuffer_ = (epicsFloat32 *) calloc(maxOutputPoints_, sizeof(epicsFloat32));
-  inputMemHandle_  = cbWinBufAlloc(maxInputPoints  * NUM_ANALOG_IN);
+  waveGenUserTimeBuffer_ = (epicsFloat32 *) calloc(maxOutputPoints_, sizeof(epicsFloat32));
+  waveGenIntTimeBuffer_  = (epicsFloat32 *) calloc(maxOutputPoints_, sizeof(epicsFloat32));
+  waveDigTimeBuffer_     = (epicsFloat32 *) calloc(maxInputPoints_,  sizeof(epicsFloat32));
+  inputMemHandle_  = cbScaledWinBufAlloc(maxInputPoints  * NUM_ANALOG_IN);
   outputMemHandle_ = cbWinBufAlloc(maxOutputPoints * NUM_ANALOG_OUT);
+  
+  // Set values of some parameters that need to be set because init record order is not predictable
+  setIntegerParam(waveGenUserNumPoints_, 1);
+  setIntegerParam(waveGenIntNumPoints_, 1);
+  setIntegerParam(waveDigNumPoints_, 1);
 
   /* Start the thread to poll counters and digital inputs and do callbacks to 
    * device support */
@@ -352,6 +379,11 @@ int USB1608G::startPulseGenerator()
   setDoubleParam(timerNum, pulseWidth_, width);
   setDoubleParam(timerNum, pulseDelay_, delay);
   return status;
+}
+
+int USB1608G::stopPulseGenerator()
+{
+  return cbPulseOutStop(boardNum_, 0);
 }
 
 int USB1608G::defineWaveform(int channel)
@@ -425,12 +457,12 @@ int USB1608G::defineWaveform(int channel)
   return 0;
 }
  
-int USB1608G::startWaveformGenerator()
+int USB1608G::startWaveGen()
 {
   int status=0;
   int numPoints;
   int enable;
-  int firstChan=-1, lastChan, numChans, firstType;
+  int firstChan=-1, lastChan, firstType;
   long pointsPerSecond;
   int waveType;
   int extTrigger, extClock, continuous;
@@ -440,7 +472,7 @@ int USB1608G::startWaveformGenerator()
   double dwell;
   epicsFloat32* inPtr[NUM_ANALOG_OUT];
   epicsUInt16 *outPtr = (epicsUInt16 *)outputMemHandle_;
-  static const char *functionName = "startWaveformGenerator";
+  static const char *functionName = "startWaveGen";
   
   getIntegerParam(waveGenExtTrigger_, &extTrigger);
   getIntegerParam(waveGenExtClock_,   &extClock);
@@ -495,15 +527,10 @@ int USB1608G::startWaveformGenerator()
   if (extTrigger) options |= EXTTRIGGER;
   if (extClock)   options |= EXTCLOCK;
   if (continuous) options |= CONTINUOUS;
-  numChans = lastChan - firstChan + 1;
-  status = cbAOutScan(boardNum_, firstChan, lastChan, numChans*numPoints, &pointsPerSecond, BIP10VOLTS,
+  numWaveGenChans_ = lastChan - firstChan + 1;
+  status = cbAOutScan(boardNum_, firstChan, lastChan, numWaveGenChans_*numPoints, &pointsPerSecond, BIP10VOLTS,
                       outputMemHandle_, options);
-  if (status == 0) {
-    asynPrint(pasynUserSelf, ASYN_TRACE_FLOW,
-      "%s:%s: called cbAOutScan, firstChan=%d, lastChan=%d, numPoints=%d, pointsPerSecond=%d, options=0x%x\n",
-      driverName, functionName, firstChan, lastChan, numPoints, pointsPerSecond, options);
-    return status;
-  }
+
   if (status) {
     asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
       "%s:%s: ERROR calling cbAOutScan, firstChan=%d, lastChan=%d, numPoints=%d, pointsPerSecond=%d, options=0x%x, status=%d\n",
@@ -511,19 +538,47 @@ int USB1608G::startWaveformGenerator()
     return status;
   }
 
+  waveGenRunning_ = 1;
+  asynPrint(pasynUserSelf, ASYN_TRACE_FLOW,
+    "%s:%s: called cbAOutScan, firstChan=%d, lastChan=%d, numPoints=%d, pointsPerSecond=%d, options=0x%x\n",
+    driverName, functionName, firstChan, lastChan, numPoints, pointsPerSecond, options);
+
   // Convert back from pointsPerSecond to dwell, since value might have changed
   dwell = (1. / pointsPerSecond);
   setDoubleParam(waveGenDwell_, dwell);
-  // Construct the timebase array which is used by clients for display
-  for (i=0; i<numPoints; i++) {
-    waveGenTimeBuffer_[i] = (epicsFloat32) (i * dwell);
-  }
-  doCallbacksFloat32Array(waveGenTimeBuffer_, numPoints, waveGenTimeWF_, 0);
   return status;
 }
   
+int USB1608G::stopWaveGen()
+{
+  waveGenRunning_ = 0;
+  setIntegerParam(waveGenRun_, 0);
+  return cbStopBackground(boardNum_, AOFUNCTION);
+}
 
-int USB1608G::startWaveformDigitizer()
+int USB1608G::computeWaveGenTimes()
+{
+  int numPoints, i;
+  double dwell, freq;
+  
+  getIntegerParam(waveGenUserNumPoints_, &numPoints);
+  getDoubleParam(waveGenUserDwell_, &dwell);
+  for (i=0; i<numPoints; i++) {
+    waveGenUserTimeBuffer_[i] = (epicsFloat32) (i * dwell);
+  }
+  doCallbacksFloat32Array(waveGenUserTimeBuffer_, numPoints, waveGenUserTimeWF_, 0);
+
+  getIntegerParam(waveGenIntNumPoints_, &numPoints);
+  getDoubleParam(waveGenIntFreq_, &freq);
+  dwell = (1. / freq / numPoints);
+  for (i=0; i<numPoints; i++) {
+    waveGenIntTimeBuffer_[i] = (epicsFloat32) (i * dwell);
+  }
+  doCallbacksFloat32Array(waveGenIntTimeBuffer_, numPoints, waveGenIntTimeWF_, 0);
+  return 0;
+}
+
+int USB1608G::startWaveDig()
 {
   int firstChan, lastChan, numChans, numPoints;
   int extTrigger, extClock, continuous;
@@ -531,11 +586,12 @@ int USB1608G::startWaveformDigitizer()
   int options;
   long pointsPerSecond;
   double dwell;
-  static const char *functionName = "startWaveformDigitizer";
+  static const char *functionName = "startWaveDig";
   
   getIntegerParam(waveDigNumPoints_,  &numPoints);
   getIntegerParam(waveDigFirstChan_,  &firstChan);
   getIntegerParam(waveDigNumChans_,   &numChans);
+  numWaveDigChans_ = numChans;
   getIntegerParam(waveDigExtTrigger_, &extTrigger);
   getIntegerParam(waveDigExtClock_,   &extClock);
   getIntegerParam(waveDigContinuous_, &continuous);
@@ -543,57 +599,79 @@ int USB1608G::startWaveformDigitizer()
   pointsPerSecond = (long)((1. / dwell) + 0.5);
   
   options                  = BACKGROUND;
+  options                 |= SCALEDATA;
   if (extTrigger) options |= EXTTRIGGER;
   if (extClock)   options |= EXTCLOCK;
   if (continuous) options |= CONTINUOUS;
-  lastChan = firstChan + numChans -1;
-  status = cbAInScan(boardNum_, firstChan, lastChan, numChans*numPoints, &pointsPerSecond, BIP10VOLTS,
+  lastChan = firstChan + numChans - 1;
+  status = cbAInScan(boardNum_, firstChan, lastChan, numWaveDigChans_*numPoints, &pointsPerSecond, BIP10VOLTS,
                      inputMemHandle_, options);
                      
   // Get the trigger options
 
-  if (status == 0) {
-    asynPrint(pasynUserSelf, ASYN_TRACE_FLOW,
-      "%s:%s: called cbAInScan, firstChan=%d, lastChan=%d, numPoints=%d, pointsPerSecond=%d, options=0x%x\n",
-      driverName, functionName, firstChan, lastChan, numPoints, pointsPerSecond, options);
-    return status;
-  }
   if (status) {
     asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
       "%s:%s: ERROR calling cbAInScan, firstChan=%d, lastChan=%d, numPoints=%d, pointsPerSecond=%d, options=0x%x, status=%d\n",
       driverName, functionName, firstChan, lastChan, numPoints, pointsPerSecond, options, status);
     return status;
   }
+
+  waveDigRunning_ = 1;
+  asynPrint(pasynUserSelf, ASYN_TRACE_FLOW,
+    "%s:%s: called cbAInScan, firstChan=%d, lastChan=%d, numPoints=%d, pointsPerSecond=%d, options=0x%x\n",
+    driverName, functionName, firstChan, lastChan, numPoints, pointsPerSecond, options);
+
+  // Convert back from pointsPerSecond to dwell, since value might have changed
+  dwell = (1. / pointsPerSecond);
+  setDoubleParam(waveDigDwell_, dwell);
   return 0;
 }
 
-int USB1608G::readWaveformDigitizer()
+int USB1608G::stopWaveDig()
 {
-  int firstChan, numChans;
+  waveDigRunning_ = 0;
+  setIntegerParam(waveDigRun_, 0);
+  return cbStopBackground(boardNum_, AIFUNCTION);
+}
+
+int USB1608G::readWaveDig()
+{
+  int firstChan, lastChan;
   int currentPoint;
-  int i, ichan=0, ipoint=0;
-  unsigned short *pAnalogIn = (unsigned short *)inputMemHandle_;
-  static const char *functionName = "readWaveformDigitizer";
+  int i, j;
+  epicsFloat64 *pAnalogIn = (epicsFloat64 *)inputMemHandle_;
+  static const char *functionName = "readWaveDig";
   
   getIntegerParam(waveDigFirstChan_,    &firstChan);
-  getIntegerParam(waveDigNumChans_,     &numChans);
+  lastChan = firstChan + numWaveDigChans_ - 1;
   getIntegerParam(waveDigCurrentPoint_, &currentPoint);
   for (i=0; i<currentPoint; i++) {
-    // Assume +-10V range for now
-    waveDigBuffer_[firstChan + ichan][ipoint] = (epicsFloat32) ((*pAnalogIn++ - 32768)*20./65536.);
-    if (++ichan >= numChans) {
-      ichan=0;
-      ipoint++;
+    for (j=firstChan; j<=lastChan; j++) {
+      waveDigBuffer_[j][i] = *pAnalogIn++;
     }
- }
-  for (i=firstChan; i<numChans; i++) {
+  }
+  for (i=firstChan; i<=lastChan; i++) {
     asynPrint(pasynUserSelf, ASYN_TRACE_FLOW,
       "%s:%s:, doing callbacks on input %d, first value=%f\n", 
       driverName, functionName, i, waveDigBuffer_[i][0]);
-    doCallbacksFloat32Array(waveDigBuffer_[i], currentPoint, waveDigVoltWF_, i);
+    doCallbacksFloat64Array(waveDigBuffer_[i], currentPoint, waveDigVoltWF_, i);
   }
   return 0;
 }    
+
+int USB1608G::computeWaveDigTimes()
+{
+  int numPoints, i;
+  double dwell;
+  
+  getIntegerParam(waveDigNumPoints_, &numPoints);
+  getDoubleParam(waveDigDwell_, &dwell);
+  for (i=0; i<numPoints; i++) {
+    waveDigTimeBuffer_[i] = (epicsFloat32) (i * dwell);
+  }
+  doCallbacksFloat32Array(waveDigTimeBuffer_, numPoints, waveDigTimeWF_, 0);
+  return 0;
+}
 
 
 asynStatus USB1608G::getBounds(asynUser *pasynUser, epicsInt32 *low, epicsInt32 *high)
@@ -616,11 +694,7 @@ asynStatus USB1608G::writeInt32(asynUser *pasynUser, epicsInt32 value)
   int addr;
   int function = pasynUser->reason;
   int status=0;
-  int waveGenRunning, waveDigRunning;
   static const char *functionName = "writeInt32";
-
-  getIntegerParam(waveGenRun_, &waveGenRunning);
-  getIntegerParam(waveDigRun_, &waveDigRunning);
 
   this->getAddress(pasynUser, &addr);
   setIntegerParam(addr, function, value);
@@ -630,7 +704,7 @@ asynStatus USB1608G::writeInt32(asynUser *pasynUser, epicsInt32 value)
     if (value) {
       status = startPulseGenerator();
     } else {
-      status = cbPulseOutStop(boardNum_, 0);
+      status = stopPulseGenerator();
     }
   }
 
@@ -642,19 +716,23 @@ asynStatus USB1608G::writeInt32(asynUser *pasynUser, epicsInt32 value)
 
   // Waveform digitizer functions
   else if (function == waveDigRun_) {
-    if ((value) && !waveDigRunning)
-      status = startWaveformDigitizer();
-    else if (!value && waveDigRunning) 
-      status = cbStopBackground(boardNum_, AIFUNCTION);
+    if ((value) && !waveDigRunning_)
+      status = startWaveDig();
+    else if (!value && waveDigRunning_) 
+      status = stopWaveDig();
   }
   
   else if (function == waveDigReadWF_) {
-    readWaveformDigitizer();
+    readWaveDig();
+  }
+
+  else if (function == waveDigNumPoints_) {
+    computeWaveDigTimes();
   }
   
   // Analog output functions
   else if (function == analogOutValue_) {
-    if (waveGenRunning) {
+    if (waveGenRunning_) {
       asynPrint(pasynUser, ASYN_TRACE_ERROR,
         "%s:%s: ERROR cannot write analog outputs while waveform generator is running.\n",
         driverName, functionName);
@@ -665,10 +743,10 @@ asynStatus USB1608G::writeInt32(asynUser *pasynUser, epicsInt32 value)
 
   // Waveform generator functions
   else if (function == waveGenRun_) {
-    if ((value) && !waveGenRunning)
-      status = startWaveformGenerator();
-    else if (!value && waveGenRunning) 
-      status = cbStopBackground(boardNum_, AOFUNCTION);
+    if ((value) && !waveGenRunning_)
+      status = startWaveGen();
+    else if (!value && waveGenRunning_) 
+      status = stopWaveGen();
   }
 
   else if ((function == waveGenWaveType_)      ||
@@ -679,12 +757,17 @@ asynStatus USB1608G::writeInt32(asynUser *pasynUser, epicsInt32 value)
            (function == waveGenExtTrigger_)    ||
            (function == waveGenExtClock_)      ||
            (function == waveGenContinuous_)) {
-    if (waveGenRunning) {
-      status = cbStopBackground(boardNum_, AOFUNCTION);
-      status |= startWaveformGenerator();
+    if (waveGenRunning_) {
+      status = stopWaveGen();
+      status |= startWaveGen();
     }
    }
 
+  if ((function == waveGenUserNumPoints_) ||
+      (function == waveGenIntNumPoints_)) {
+    computeWaveGenTimes();
+  }
+  
   callParamCallbacks(addr);
   if (status == 0) {
     asynPrint(pasynUser, ASYN_TRACEIO_DRIVER, 
@@ -706,15 +789,13 @@ asynStatus USB1608G::readInt32(asynUser *pasynUser, epicsInt32 *value)
   int status=0;
   unsigned short shortVal;
   int range;
-  int waveDigRunning;
   static const char *functionName = "readInt32";
 
   this->getAddress(pasynUser, &addr);
 
   // Analog input function
   if (function == analogInValue_) {
-    getIntegerParam(waveDigRun_, &waveDigRunning);
-    if (waveDigRunning) return asynSuccess;
+    if (waveDigRunning_) return asynSuccess;
     getIntegerParam(addr, analogInRange_, &range);
     status = cbAIn(boardNum_, addr, range, &shortVal);
     *value = shortVal;
@@ -739,11 +820,8 @@ asynStatus USB1608G::writeFloat64(asynUser *pasynUser, epicsFloat64 value)
 {
   int addr;
   int function = pasynUser->reason;
-  int waveGenRunning;
   int status=0;
   static const char *functionName = "writeFloat64";
-
-  getIntegerParam(waveGenRun_, &waveGenRunning);
 
   this->getAddress(pasynUser, &addr);
   setDoubleParam(addr, function, value);
@@ -753,12 +831,20 @@ asynStatus USB1608G::writeFloat64(asynUser *pasynUser, epicsFloat64 value)
       (function == waveGenPulseWidth_) ||
       (function == waveGenAmplitude_)  ||
       (function == waveGenOffset_)) {
-    if (waveGenRunning) {
+    if (waveGenRunning_) {
       status = cbStopBackground(boardNum_, AOFUNCTION);
-      status |= startWaveformGenerator();
+      status |= startWaveGen();
     }
   }
-  
+  else if (function == waveDigDwell_) {
+    computeWaveDigTimes();
+  }
+
+  if ((function == waveGenUserDwell_)  ||
+      (function == waveGenIntFreq_)) {
+    computeWaveGenTimes();
+  }
+
   callParamCallbacks(addr);
   if (status == 0) {
     asynPrint(pasynUser, ASYN_TRACEIO_DRIVER, 
@@ -825,6 +911,48 @@ asynStatus USB1608G::readFloat32Array(asynUser *pasynUser, epicsFloat32 *value, 
   
   this->getAddress(pasynUser, &addr);
   
+  if (addr >= NUM_ANALOG_OUT) {
+    asynPrint(pasynUser, ASYN_TRACE_ERROR,
+      "%s:%s: ERROR: addr=%d max=%d\n",
+      driverName, functionName, addr, NUM_ANALOG_OUT-1);
+    return asynError;
+  }
+  // Assume WaveGen function, WaveDig numPoints handled below
+  getIntegerParam(waveGenNumPoints_, &numPoints);
+  if (function == waveGenUserWF_)
+    inPtr = waveGenUserBuffer_[addr];
+  else if (function == waveGenIntWF_)
+    inPtr = waveGenIntBuffer_[addr];
+  else if (function == waveGenUserTimeWF_)
+    inPtr = waveGenUserTimeBuffer_;
+  else if (function == waveGenIntTimeWF_)
+    inPtr = waveGenIntTimeBuffer_;
+  else if (function == waveDigTimeWF_) {
+    inPtr = waveDigTimeBuffer_;
+    getIntegerParam(waveDigNumPoints_, &numPoints);
+  }
+  else {
+    asynPrint(pasynUser, ASYN_TRACE_ERROR,
+      "%s:%s: ERROR: unknown function=%d\n",
+      driverName, functionName, function);
+    return asynError;
+  }
+  *nIn = nElements;
+  if (*nIn > (size_t) numPoints) *nIn = (size_t) numPoints;
+  memcpy(value, inPtr, *nIn*sizeof(epicsFloat32)); 
+
+  return asynSuccess;
+}
+
+asynStatus USB1608G::readFloat64Array(asynUser *pasynUser, epicsFloat64 *value, size_t nElements, size_t *nIn)
+{
+  int function = pasynUser->reason;
+  int addr;
+  int numPoints;
+  static const char *functionName = "readFloat64Array";
+  
+  this->getAddress(pasynUser, &addr);
+  
   if (function == waveDigVoltWF_) {
     if (addr >= NUM_ANALOG_IN) {
       asynPrint(pasynUser, ASYN_TRACE_ERROR,
@@ -833,37 +961,17 @@ asynStatus USB1608G::readFloat32Array(asynUser *pasynUser, epicsFloat32 *value, 
       return asynError;
     } 
     *nIn = nElements;
-    // This should really be the number of points actually available - CHANGE
-    if (*nIn > maxInputPoints_) *nIn = maxInputPoints_;
-    memcpy(value, waveDigBuffer_[addr], *nIn*sizeof(epicsFloat32));
+    getIntegerParam(waveDigNumPoints_, &numPoints);
+    if (*nIn > (size_t)numPoints) *nIn = numPoints;
+    memcpy(value, waveDigBuffer_[addr], *nIn*sizeof(epicsFloat64));
     return asynSuccess; 
   }
-
-  // All other functions read the waveGen arrays
-  if (addr >= NUM_ANALOG_OUT) {
-    asynPrint(pasynUser, ASYN_TRACE_ERROR,
-      "%s:%s: ERROR: addr=%d max=%d\n",
-      driverName, functionName, addr, NUM_ANALOG_OUT-1);
-    return asynError;
-  } 
-  if (function == waveGenUserWF_)
-    inPtr = waveGenUserBuffer_[addr];
-  else if (function == waveGenIntWF_)
-    inPtr = waveGenIntBuffer_[addr];
-  else if (function == waveGenTimeWF_)
-    inPtr = waveGenTimeBuffer_;
   else {
     asynPrint(pasynUser, ASYN_TRACE_ERROR,
       "%s:%s: ERROR: unknown function=%d\n",
       driverName, functionName, function);
     return asynError;
   }
-  getIntegerParam(waveGenNumPoints_, &numPoints);
-  *nIn = nElements;
-  if (*nIn > (size_t) numPoints) *nIn = (size_t) numPoints;
-  memcpy(value, inPtr, *nIn*sizeof(epicsFloat32)); 
-
-  return asynSuccess;
 }
 
 asynStatus USB1608G::writeFloat32Array(asynUser *pasynUser, epicsFloat32 *value, size_t nElements)
@@ -901,6 +1009,7 @@ void USB1608G::pollerThread()
   epicsUInt32 newValue, changedBits, prevInput=0;
   unsigned short biVal;;
   int i;
+  int currentPoint;
   unsigned long countVal;
   long aoCount, aoIndex, aiCount, aiIndex;
   short aoStatus, aiStatus;
@@ -935,13 +1044,17 @@ void USB1608G::pollerThread()
     
     // Poll the status of the waveform generator output
     status = cbGetStatus(boardNum_, &aoStatus, &aoCount, &aoIndex, AOFUNCTION);
-    setIntegerParam(waveGenRun_, aoStatus);
-    setIntegerParam(waveGenCurrentPoint_, aoIndex);
+    if (aoStatus == 0) 
+      stopWaveGen();
+    currentPoint = (aoIndex / numWaveGenChans_) + 1;
+    setIntegerParam(waveGenCurrentPoint_, currentPoint);
     
     // Poll the status of the waveform digitzer input
     status = cbGetStatus(boardNum_, &aiStatus, &aiCount, &aiIndex, AIFUNCTION);
-    setIntegerParam(waveDigRun_, aiStatus);
-    setIntegerParam(waveDigCurrentPoint_, aiIndex);
+    if (aiStatus == 0) 
+      stopWaveDig();
+    currentPoint = (aiIndex / numWaveDigChans_) + 1;
+    setIntegerParam(waveDigCurrentPoint_, currentPoint);
     
     for (i=0; i<MAX_SIGNALS; i++) {
       callParamCallbacks(i);
