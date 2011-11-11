@@ -5,9 +5,9 @@ file {
 }
 display {
 	object {
-		x=21
-		y=57
-		width=1800
+		x=416
+		y=282
+		width=1250
 		height=810
 	}
 	clr=14
@@ -1762,7 +1762,7 @@ rectangle {
 		x=6
 		y=217
 		width=515
-		height=420
+		height=400
 	}
 	"basic attribute" {
 		clr=14
@@ -2077,475 +2077,6 @@ composite {
 				width=1
 			}
 		}
-	}
-}
-text {
-	object {
-		x=26
-		y=470
-		width=220
-		height=20
-	}
-	"basic attribute" {
-		clr=14
-	}
-	textix="User-defined waveforms"
-	align="horiz. right"
-}
-rectangle {
-	object {
-		x=11
-		y=464
-		width=250
-		height=80
-	}
-	"basic attribute" {
-		clr=14
-		fill="outline"
-		width=1
-	}
-}
-text {
-	object {
-		x=31
-		y=554
-		width=210
-		height=20
-	}
-	"basic attribute" {
-		clr=14
-	}
-	textix="Pre-defined waveforms"
-	align="horiz. right"
-}
-text {
-	object {
-		x=34
-		y=579
-		width=100
-		height=20
-	}
-	"basic attribute" {
-		clr=14
-	}
-	textix="Frequency"
-	align="horiz. right"
-}
-"text entry" {
-	object {
-		x=139
-		y=579
-		width=100
-		height=20
-	}
-	control {
-		chan="$(P)$(Wg)IntFrequency"
-		clr=14
-		bclr=51
-	}
-	format="compact"
-	limits {
-	}
-}
-text {
-	object {
-		x=54
-		y=604
-		width=80
-		height=20
-	}
-	"basic attribute" {
-		clr=14
-	}
-	textix="# points"
-	align="horiz. right"
-}
-"text entry" {
-	object {
-		x=139
-		y=604
-		width=100
-		height=20
-	}
-	control {
-		chan="$(P)$(Wg)IntNumPoints"
-		clr=14
-		bclr=51
-	}
-	limits {
-	}
-}
-rectangle {
-	object {
-		x=11
-		y=549
-		width=250
-		height=80
-	}
-	"basic attribute" {
-		clr=14
-		fill="outline"
-		width=1
-	}
-}
-composite {
-	object {
-		x=19
-		y=260
-		width=235
-		height=192
-	}
-	"composite name"=""
-	children {
-		"related display" {
-			object {
-				x=80
-				y=432
-				width=113
-				height=20
-			}
-			display[0] {
-				label="Output 1 Internal"
-				name="measCompWaveGenPlot.adl"
-				args="P=$(P),TIME=$(P)$(Wg)TimeWF,WAVE=$(P)$(Wg)1InternalWF"
-			}
-			display[1] {
-				label="Output 1 User"
-				name="measCompWaveGenPlot.adl"
-				args="P=$(P),TIME=$(P)$(Wg)TimeWF,WAVE=$(P)$(Wg)1UserWF"
-			}
-			display[2] {
-				label="Output 2 Internal"
-				name="measCompWaveGenPlot.adl"
-				args="P=$(P),TIME=$(P)$(Wg)TimeWF,WAVE=$(P)$(Wg)2InternalWF"
-			}
-			display[3] {
-				label="Outout 2 User"
-				name="measCompWaveGenPlot.adl"
-				args="P=$(P),TIME=$(P)$(Wg)TimeWF,WAVE=$(P)$(Wg)2UserWF"
-			}
-			clr=14
-			bclr=51
-			label="Plots"
-		}
-		composite {
-			object {
-				x=36
-				y=407
-				width=200
-				height=20
-			}
-			"composite name"=""
-			children {
-				"message button" {
-					object {
-						x=36
-						y=407
-						width=60
-						height=20
-					}
-					control {
-						chan="$(P)$(Wg)Run"
-						clr=14
-						bclr=15
-					}
-					label="Start"
-					press_msg="1"
-				}
-				"message button" {
-					object {
-						x=101
-						y=407
-						width=60
-						height=20
-					}
-					control {
-						chan="$(P)$(Wg)Run"
-						clr=14
-						bclr=20
-					}
-					label="Stop"
-					press_msg="0"
-				}
-				composite {
-					object {
-						x=166
-						y=407
-						width=70
-						height=20
-					}
-					"composite name"=""
-					children {
-						text {
-							object {
-								x=166
-								y=407
-								width=70
-								height=20
-							}
-							"basic attribute" {
-								clr=30
-							}
-							"dynamic attribute" {
-								vis="if not zero"
-								chan="$(P)$(Wg)Run"
-							}
-							textix="Running"
-						}
-						text {
-							object {
-								x=166
-								y=407
-								width=40
-								height=20
-							}
-							"basic attribute" {
-								clr=15
-							}
-							"dynamic attribute" {
-								vis="if zero"
-								chan="$(P)$(Wg)Run"
-							}
-							textix="Done"
-						}
-					}
-				}
-			}
-		}
-		composite {
-			object {
-				x=49
-				y=332
-				width=175
-				height=70
-			}
-			"composite name"=""
-			children {
-				text {
-					object {
-						x=49
-						y=332
-						width=70
-						height=20
-					}
-					"basic attribute" {
-						clr=14
-					}
-					textix="Trigger"
-					align="horiz. right"
-				}
-				menu {
-					object {
-						x=124
-						y=332
-						width=100
-						height=20
-					}
-					control {
-						chan="$(P)$(Wg)ExtTrigger"
-						clr=14
-						bclr=51
-					}
-				}
-				text {
-					object {
-						x=69
-						y=357
-						width=50
-						height=20
-					}
-					"basic attribute" {
-						clr=14
-					}
-					textix="Clock"
-					align="horiz. right"
-				}
-				menu {
-					object {
-						x=124
-						y=357
-						width=100
-						height=20
-					}
-					control {
-						chan="$(P)$(Wg)ExtClock"
-						clr=14
-						bclr=51
-					}
-				}
-				text {
-					object {
-						x=59
-						y=382
-						width=60
-						height=20
-					}
-					"basic attribute" {
-						clr=14
-					}
-					textix="Repeat"
-					align="horiz. right"
-				}
-				menu {
-					object {
-						x=124
-						y=382
-						width=100
-						height=20
-					}
-					control {
-						chan="$(P)$(Wg)Continuous"
-						clr=14
-						bclr=51
-					}
-				}
-			}
-		}
-		composite {
-			object {
-				x=19
-				y=260
-				width=235
-				height=67
-			}
-			"composite name"=""
-			children {
-				composite {
-					object {
-						x=19
-						y=260
-						width=235
-						height=20
-					}
-					"composite name"=""
-					children {
-						text {
-							object {
-								x=19
-								y=260
-								width=130
-								height=20
-							}
-							"basic attribute" {
-								clr=14
-							}
-							textix="Current point"
-							align="horiz. right"
-						}
-						"text update" {
-							object {
-								x=154
-								y=260
-								width=100
-								height=20
-							}
-							monitor {
-								chan="$(P)$(Wg)CurrentPoint"
-								clr=54
-								bclr=4
-							}
-							align="horiz. right"
-							limits {
-							}
-						}
-					}
-				}
-				composite {
-					object {
-						x=69
-						y=284
-						width=185
-						height=20
-					}
-					"composite name"=""
-					children {
-						text {
-							object {
-								x=69
-								y=284
-								width=80
-								height=20
-							}
-							"basic attribute" {
-								clr=14
-							}
-							textix="# points"
-							align="horiz. right"
-						}
-						"text update" {
-							object {
-								x=154
-								y=284
-								width=100
-								height=20
-							}
-							monitor {
-								chan="$(P)$(Wg)NumPoints"
-								clr=54
-								bclr=4
-							}
-							align="horiz. right"
-							limits {
-							}
-						}
-					}
-				}
-				composite {
-					object {
-						x=49
-						y=307
-						width=205
-						height=20
-					}
-					"composite name"=""
-					children {
-						text {
-							object {
-								x=49
-								y=307
-								width=100
-								height=20
-							}
-							"basic attribute" {
-								clr=14
-							}
-							textix="Time/point"
-							align="horiz. right"
-						}
-						"text update" {
-							object {
-								x=154
-								y=307
-								width=100
-								height=20
-							}
-							monitor {
-								chan="$(P)$(Wg)Dwell"
-								clr=54
-								bclr=4
-							}
-							align="horiz. right"
-							format="engr. notation"
-							limits {
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
-rectangle {
-	object {
-		x=11
-		y=254
-		width=250
-		height=205
-	}
-	"basic attribute" {
-		clr=14
-		fill="outline"
-		width=1
 	}
 }
 composite {
@@ -3464,21 +2995,8 @@ rectangle {
 	object {
 		x=973
 		y=218
-		width=515
+		width=260
 		height=420
-	}
-	"basic attribute" {
-		clr=14
-		fill="outline"
-		width=1
-	}
-}
-rectangle {
-	object {
-		x=978
-		y=255
-		width=250
-		height=320
 	}
 	"basic attribute" {
 		clr=14
@@ -3520,74 +3038,6 @@ composite {
 				clr=14
 				bclr=51
 			}
-			limits {
-			}
-		}
-	}
-}
-composite {
-	object {
-		x=34
-		y=495
-		width=205
-		height=43
-	}
-	"composite name"=""
-	children {
-		text {
-			object {
-				x=54
-				y=518
-				width=80
-				height=20
-			}
-			"basic attribute" {
-				clr=14
-			}
-			textix="# points"
-			align="horiz. right"
-		}
-		"text entry" {
-			object {
-				x=139
-				y=518
-				width=100
-				height=20
-			}
-			control {
-				chan="$(P)$(Wg)UserNumPoints"
-				clr=14
-				bclr=51
-			}
-			limits {
-			}
-		}
-		text {
-			object {
-				x=34
-				y=495
-				width=100
-				height=20
-			}
-			"basic attribute" {
-				clr=14
-			}
-			textix="Time/point"
-			align="horiz. right"
-		}
-		"text entry" {
-			object {
-				x=139
-				y=495
-				width=100
-				height=20
-			}
-			control {
-				chan="$(P)$(Wg)UserDwell"
-				clr=14
-				bclr=51
-			}
-			format="engr. notation"
 			limits {
 			}
 		}
@@ -3651,19 +3101,6 @@ menu {
 	}
 	control {
 		chan="$(P)$(Wd)ExtClock"
-		clr=14
-		bclr=51
-	}
-}
-menu {
-	object {
-		x=1119
-		y=486
-		width=100
-		height=20
-	}
-	control {
-		chan="$(P)$(Wd)Continuous"
 		clr=14
 		bclr=51
 	}
@@ -3738,109 +3175,118 @@ menu {
 	limits {
 	}
 }
-composite {
+"related display" {
+	object {
+		x=1047
+		y=605
+		width=113
+		height=20
+	}
+	display[0] {
+		label="Input 1"
+		name="measCompWaveDigPlot.adl"
+		args="P=$(P),TIME=$(P)$(Wd)TimeWF,WAVE=$(P)$(Wd)1VoltWF"
+	}
+	display[1] {
+		label="Input 2"
+		name="measCompWaveDigPlot.adl"
+		args="P=$(P),TIME=$(P)$(Wd)TimeWF,WAVE=$(P)$(Wd)2VoltWF"
+	}
+	display[2] {
+		label="Input 3"
+		name="measCompWaveDigPlot.adl"
+		args="P=$(P),TIME=$(P)$(Wd)TimeWF,WAVE=$(P)$(Wd)3VoltWF"
+	}
+	display[3] {
+		label="Input 4"
+		name="measCompWaveDigPlot.adl"
+		args="P=$(P),TIME=$(P)$(Wd)TimeWF,WAVE=$(P)$(Wd)4VoltWF"
+	}
+	display[4] {
+		label="Input 5"
+		name="measCompWaveDigPlot.adl"
+		args="P=$(P),TIME=$(P)$(Wd)TimeWF,WAVE=$(P)$(Wd)5VoltWF"
+	}
+	display[5] {
+		label="Input 6"
+		name="measCompWaveDigPlot.adl"
+		args="P=$(P),TIME=$(P)$(Wd)TimeWF,WAVE=$(P)$(Wd)6VoltWF"
+	}
+	display[6] {
+		label="Input 7"
+		name="measCompWaveDigPlot.adl"
+		args="P=$(P),TIME=$(P)$(Wd)TimeWF,WAVE=$(P)$(Wd)7VoltWF"
+	}
+	display[7] {
+		label="Input 8"
+		name="measCompWaveDigPlot.adl"
+		args="P=$(P),TIME=$(P)$(Wd)TimeWF,WAVE=$(P)$(Wd)8VoltWF"
+	}
+	clr=14
+	bclr=51
+	label="Plots"
+}
+"message button" {
 	object {
 		x=1003
-		y=515
-		width=200
-		height=45
+		y=580
+		width=60
+		height=20
 	}
-	"composite name"=""
-	children {
-		"related display" {
-			object {
-				x=1047
-				y=540
-				width=113
-				height=20
-			}
-			display[0] {
-				label="Output 1 Internal"
-				name="measCompWaveDigPlot.adl"
-				args="P=$(P),TIME=$(P)$(Wg)TimeWF,WAVE=$(P)$(Wg)1InternalWF"
-			}
-			display[1] {
-				label="Output 1 User"
-				name="measCompWaveGenPlot.adl"
-				args="P=$(P),TIME=$(P)$(Wg)TimeWF,WAVE=$(P)$(Wg)1UserWF"
-			}
-			display[2] {
-				label="Output 2 Internal"
-				name="measCompWaveGenPlot.adl"
-				args="P=$(P),TIME=$(P)$(Wg)TimeWF,WAVE=$(P)$(Wg)2InternalWF"
-			}
-			display[3] {
-				label="Outout 2 User"
-				name="measCompWaveGenPlot.adl"
-				args="P=$(P),TIME=$(P)$(Wg)TimeWF,WAVE=$(P)$(Wg)2UserWF"
-			}
-			clr=14
-			bclr=51
-			label="Plots"
-		}
-		"message button" {
-			object {
-				x=1003
-				y=515
-				width=60
-				height=20
-			}
-			control {
-				chan="$(P)$(Wd)Run"
-				clr=14
-				bclr=15
-			}
-			label="Start"
-			press_msg="1"
-		}
-		"message button" {
-			object {
-				x=1068
-				y=515
-				width=60
-				height=20
-			}
-			control {
-				chan="$(P)$(Wd)Run"
-				clr=14
-				bclr=20
-			}
-			label="Stop"
-			press_msg="0"
-		}
-		text {
-			object {
-				x=1133
-				y=515
-				width=70
-				height=20
-			}
-			"basic attribute" {
-				clr=30
-			}
-			"dynamic attribute" {
-				vis="if not zero"
-				chan="$(P)$(Wd)Run"
-			}
-			textix="Running"
-		}
-		text {
-			object {
-				x=1133
-				y=515
-				width=40
-				height=20
-			}
-			"basic attribute" {
-				clr=15
-			}
-			"dynamic attribute" {
-				vis="if zero"
-				chan="$(P)$(Wd)Run"
-			}
-			textix="Done"
-		}
+	control {
+		chan="$(P)$(Wd)Run"
+		clr=14
+		bclr=15
 	}
+	label="Start"
+	press_msg="1"
+}
+"message button" {
+	object {
+		x=1068
+		y=580
+		width=60
+		height=20
+	}
+	control {
+		chan="$(P)$(Wd)Run"
+		clr=14
+		bclr=20
+	}
+	label="Stop"
+	press_msg="0"
+}
+text {
+	object {
+		x=1133
+		y=580
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=30
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(P)$(Wd)Run"
+	}
+	textix="Running"
+}
+text {
+	object {
+		x=1133
+		y=580
+		width=40
+		height=20
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="$(P)$(Wd)Run"
+	}
+	textix="Done"
 }
 text {
 	object {
@@ -3892,19 +3338,6 @@ text {
 		clr=14
 	}
 	textix="Clock"
-	align="horiz. right"
-}
-text {
-	object {
-		x=1033
-		y=486
-		width=81
-		height=20
-	}
-	"basic attribute" {
-		clr=14
-	}
-	textix="Repeat"
 	align="horiz. right"
 }
 text {
@@ -3971,4 +3404,621 @@ text {
 	}
 	textix="Time/point"
 	align="horiz. right"
+}
+composite {
+	object {
+		x=1033
+		y=486
+		width=186
+		height=20
+	}
+	"composite name"=""
+	children {
+		text {
+			object {
+				x=1033
+				y=486
+				width=81
+				height=20
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Repeat"
+			align="horiz. right"
+		}
+		menu {
+			object {
+				x=1119
+				y=486
+				width=100
+				height=20
+			}
+			control {
+				chan="$(P)$(Wd)Continuous"
+				clr=14
+				bclr=51
+			}
+		}
+	}
+}
+text {
+	object {
+		x=1033
+		y=511
+		width=81
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Read rate"
+	align="horiz. right"
+}
+menu {
+	object {
+		x=1119
+		y=511
+		width=100
+		height=20
+	}
+	control {
+		chan="$(P)$(Wd)ReadWF.SCAN"
+		clr=14
+		bclr=51
+	}
+}
+text {
+	object {
+		x=1033
+		y=538
+		width=81
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Read"
+	align="horiz. right"
+}
+"message button" {
+	object {
+		x=1119
+		y=538
+		width=100
+		height=20
+	}
+	control {
+		chan="$(P)$(Wd)ReadWF.PROC"
+		clr=14
+		bclr=51
+	}
+	label="Read"
+	press_msg="1"
+}
+"related display" {
+	object {
+		x=323
+		y=586
+		width=113
+		height=20
+	}
+	display[0] {
+		label="Output 1 Internal"
+		name="measCompWaveGenPlot.adl"
+		args="P=$(P),TIME=$(P)$(Wg)IntTimeWF,WAVE=$(P)$(Wg)1InternalWF"
+	}
+	display[1] {
+		label="Output 1 User"
+		name="measCompWaveGenPlot.adl"
+		args="P=$(P),TIME=$(P)$(Wg)IntTimeWF,WAVE=$(P)$(Wg)1UserWF"
+	}
+	display[2] {
+		label="Output 2 Internal"
+		name="measCompWaveGenPlot.adl"
+		args="P=$(P),TIME=$(P)$(Wg)IntTimeWF,WAVE=$(P)$(Wg)2InternalWF"
+	}
+	display[3] {
+		label="Outout 2 User"
+		name="measCompWaveGenPlot.adl"
+		args="P=$(P),TIME=$(P)$(Wg)IntTimeWF,WAVE=$(P)$(Wg)2UserWF"
+	}
+	clr=14
+	bclr=51
+	label="Plots"
+}
+composite {
+	object {
+		x=36
+		y=586
+		width=200
+		height=20
+	}
+	"composite name"=""
+	children {
+		"message button" {
+			object {
+				x=36
+				y=586
+				width=60
+				height=20
+			}
+			control {
+				chan="$(P)$(Wg)Run"
+				clr=14
+				bclr=15
+			}
+			label="Start"
+			press_msg="1"
+		}
+		"message button" {
+			object {
+				x=101
+				y=586
+				width=60
+				height=20
+			}
+			control {
+				chan="$(P)$(Wg)Run"
+				clr=14
+				bclr=20
+			}
+			label="Stop"
+			press_msg="0"
+		}
+		composite {
+			object {
+				x=166
+				y=586
+				width=70
+				height=20
+			}
+			"composite name"=""
+			children {
+				text {
+					object {
+						x=166
+						y=586
+						width=70
+						height=20
+					}
+					"basic attribute" {
+						clr=30
+					}
+					"dynamic attribute" {
+						vis="if not zero"
+						chan="$(P)$(Wg)Run"
+					}
+					textix="Running"
+				}
+				text {
+					object {
+						x=166
+						y=586
+						width=40
+						height=20
+					}
+					"basic attribute" {
+						clr=15
+					}
+					"dynamic attribute" {
+						vis="if zero"
+						chan="$(P)$(Wg)Run"
+					}
+					textix="Done"
+				}
+			}
+		}
+	}
+}
+composite {
+	object {
+		x=11
+		y=254
+		width=250
+		height=155
+	}
+	"composite name"=""
+	children {
+		composite {
+			object {
+				x=49
+				y=332
+				width=175
+				height=70
+			}
+			"composite name"=""
+			children {
+				text {
+					object {
+						x=49
+						y=332
+						width=70
+						height=20
+					}
+					"basic attribute" {
+						clr=14
+					}
+					textix="Trigger"
+					align="horiz. right"
+				}
+				menu {
+					object {
+						x=124
+						y=332
+						width=100
+						height=20
+					}
+					control {
+						chan="$(P)$(Wg)ExtTrigger"
+						clr=14
+						bclr=51
+					}
+				}
+				text {
+					object {
+						x=69
+						y=357
+						width=50
+						height=20
+					}
+					"basic attribute" {
+						clr=14
+					}
+					textix="Clock"
+					align="horiz. right"
+				}
+				menu {
+					object {
+						x=124
+						y=357
+						width=100
+						height=20
+					}
+					control {
+						chan="$(P)$(Wg)ExtClock"
+						clr=14
+						bclr=51
+					}
+				}
+				text {
+					object {
+						x=59
+						y=382
+						width=60
+						height=20
+					}
+					"basic attribute" {
+						clr=14
+					}
+					textix="Repeat"
+					align="horiz. right"
+				}
+				menu {
+					object {
+						x=124
+						y=382
+						width=100
+						height=20
+					}
+					control {
+						chan="$(P)$(Wg)Continuous"
+						clr=14
+						bclr=51
+					}
+				}
+			}
+		}
+		composite {
+			object {
+				x=19
+				y=260
+				width=235
+				height=20
+			}
+			"composite name"=""
+			children {
+				text {
+					object {
+						x=19
+						y=260
+						width=130
+						height=20
+					}
+					"basic attribute" {
+						clr=14
+					}
+					textix="Current point"
+					align="horiz. right"
+				}
+				"text update" {
+					object {
+						x=154
+						y=260
+						width=100
+						height=20
+					}
+					monitor {
+						chan="$(P)$(Wg)CurrentPoint"
+						clr=54
+						bclr=4
+					}
+					align="horiz. right"
+					limits {
+					}
+				}
+			}
+		}
+		composite {
+			object {
+				x=69
+				y=284
+				width=185
+				height=20
+			}
+			"composite name"=""
+			children {
+				text {
+					object {
+						x=69
+						y=284
+						width=80
+						height=20
+					}
+					"basic attribute" {
+						clr=14
+					}
+					textix="# points"
+					align="horiz. right"
+				}
+				"text update" {
+					object {
+						x=154
+						y=284
+						width=100
+						height=20
+					}
+					monitor {
+						chan="$(P)$(Wg)NumPoints"
+						clr=54
+						bclr=4
+					}
+					align="horiz. right"
+					limits {
+					}
+				}
+			}
+		}
+		text {
+			object {
+				x=49
+				y=307
+				width=100
+				height=20
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Time/point"
+			align="horiz. right"
+		}
+		"text update" {
+			object {
+				x=154
+				y=307
+				width=100
+				height=20
+			}
+			monitor {
+				chan="$(P)$(Wg)Dwell"
+				clr=54
+				bclr=4
+			}
+			align="horiz. right"
+			format="compact"
+			limits {
+			}
+		}
+		rectangle {
+			object {
+				x=11
+				y=254
+				width=250
+				height=155
+			}
+			"basic attribute" {
+				clr=14
+				fill="outline"
+				width=1
+			}
+		}
+	}
+}
+composite {
+	object {
+		x=11
+		y=414
+		width=250
+		height=80
+	}
+	"composite name"=""
+	children {
+		text {
+			object {
+				x=26
+				y=420
+				width=220
+				height=20
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="User-defined waveforms"
+			align="horiz. right"
+		}
+		rectangle {
+			object {
+				x=11
+				y=414
+				width=250
+				height=80
+			}
+			"basic attribute" {
+				clr=14
+				fill="outline"
+				width=1
+			}
+		}
+		text {
+			object {
+				x=54
+				y=468
+				width=80
+				height=20
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="# points"
+			align="horiz. right"
+		}
+		"text entry" {
+			object {
+				x=139
+				y=468
+				width=100
+				height=20
+			}
+			control {
+				chan="$(P)$(Wg)UserNumPoints"
+				clr=14
+				bclr=51
+			}
+			limits {
+			}
+		}
+		text {
+			object {
+				x=34
+				y=445
+				width=100
+				height=20
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Time/point"
+			align="horiz. right"
+		}
+		"text entry" {
+			object {
+				x=139
+				y=445
+				width=100
+				height=20
+			}
+			control {
+				chan="$(P)$(Wg)UserDwell"
+				clr=14
+				bclr=51
+			}
+			format="compact"
+			limits {
+			}
+		}
+	}
+}
+composite {
+	object {
+		x=11
+		y=499
+		width=250
+		height=80
+	}
+	"composite name"=""
+	children {
+		text {
+			object {
+				x=31
+				y=504
+				width=210
+				height=20
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Pre-defined waveforms"
+			align="horiz. right"
+		}
+		text {
+			object {
+				x=34
+				y=529
+				width=100
+				height=20
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Frequency"
+			align="horiz. right"
+		}
+		"text entry" {
+			object {
+				x=139
+				y=529
+				width=100
+				height=20
+			}
+			control {
+				chan="$(P)$(Wg)IntFrequency"
+				clr=14
+				bclr=51
+			}
+			format="compact"
+			limits {
+			}
+		}
+		text {
+			object {
+				x=54
+				y=554
+				width=80
+				height=20
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="# points"
+			align="horiz. right"
+		}
+		"text entry" {
+			object {
+				x=139
+				y=554
+				width=100
+				height=20
+			}
+			control {
+				chan="$(P)$(Wg)IntNumPoints"
+				clr=14
+				bclr=51
+			}
+			limits {
+			}
+		}
+		rectangle {
+			object {
+				x=11
+				y=499
+				width=250
+				height=80
+			}
+			"basic attribute" {
+				clr=14
+				fill="outline"
+				width=1
+			}
+		}
+	}
 }
