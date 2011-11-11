@@ -7,6 +7,7 @@
 ###################################################################
 record(bo, "$(P)$(R)Run")
 {
+    field(PINI, "YES")
     field(DTYP, "asynInt32")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PULSE_START")
     field(ZNAM, "Stop")
