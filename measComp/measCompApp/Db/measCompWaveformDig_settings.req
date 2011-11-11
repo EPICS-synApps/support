@@ -1,0 +1,7 @@
+$(P)$(R)NumPoints
+$(P)$(R)FirstChan
+$(P)$(R)NumChans
+$(P)$(R)Dwell
+$(P)$(R)ExtTrigger
+$(P)$(R)ExtClock
+$(P)$(R)Continuous
