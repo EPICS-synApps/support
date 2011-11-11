@@ -25,6 +25,7 @@ file "measCompAnalogIn_settings.req",     P=$(P), R=Ai15
 file "measCompAnalogIn_settings.req",     P=$(P), R=Ai16
 file "measCompAnalogOut_settings.req",    P=$(P), R=Ao1
 file "measCompAnalogOut_settings.req",    P=$(P), R=Ao2
+file "measCompWaveformDig_settings.req",  P=$(P), R=WaveDig
 file "measCompWaveformGen_settings.req",  P=$(P), R=WaveGen
 file "measCompWaveformGenN_settings.req", P=$(P), R=WaveGen1
 file "measCompWaveformGenN_settings.req", P=$(P), R=WaveGen2
