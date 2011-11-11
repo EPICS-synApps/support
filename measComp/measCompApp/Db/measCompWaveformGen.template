@@ -35,13 +35,25 @@ record(longout, "$(P)$(R)IntNumPoints")
 }
 
 ###################################################################
-#  Timebase waveform record                                       #
+#  Timebase waveform record for user waveforms                    #
 ###################################################################
-record(waveform, "$(P)$(R)TimeWF")
+record(waveform, "$(P)$(R)UserTimeWF")
 {
     field(FTVL, "FLOAT")
     field(DTYP, "asynFloat32ArrayIn")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_TIME_WF")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_USER_TIME_WF")
+    field(NELM, "$(MAX_POINTS)")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Timebase waveform record for predefined waveforms              #
+###################################################################
+record(waveform, "$(P)$(R)IntTimeWF")
+{
+    field(FTVL, "FLOAT")
+    field(DTYP, "asynFloat32ArrayIn")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_INT_TIME_WF")
     field(NELM, "$(MAX_POINTS)")
     field(SCAN, "I/O Intr")
 }
@@ -57,15 +69,15 @@ record(longin, "$(P)$(R)CurrentPoint")
 }
 
 ###################################################################
-#  Time per point                                                 # 
+#  Time per point readback, based on UserDwell or Int Frequency   # 
 ###################################################################
-record(ao, "$(P)$(R)Dwell")
+record(ai, "$(P)$(R)Dwell")
 {
-    field(PINI, "YES")
     field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_DWELL")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_DWELL")
     field(VAL,  "0.001")
     field(PREC, "$(PREC)")
+    field(SCAN, "I/O Intr")
 }
 
 ###################################################################
