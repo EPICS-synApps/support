@@ -144,4 +144,37 @@ record(busy, "$(P)$(R)Run")
     field(ONAM, "Run")
 }
 
+###################################################################
+#  Read waveforms                                                 # 
+###################################################################
+# This periodically reads, and is disabled of when the run is done
+record(bo, "$(P)$(R)ReadWF")
+{
+    field(OUT,  "$(P)$(R)DoReadWF.PROC")
+    field(VAL,  "1")
+    field(SCAN, "1 second")
+    field(SDIS, "$(P)$(R)Run")
+    field(DISV, "0")
+}
+
+# This forces one read when the run completes
+record(calcout, "$(P)$(R)ReadWFOnDone")
+{
+    field(INPA, "$(P)$(R)Run CP")
+    field(CALC, "A")
+    field(OOPT, "Transition To Zero")
+    field(OVAL, "1")
+    field(OUT,  "$(P)$(R)DoReadWF.PROC")
+}
+
+# This tells the driver to read, which then does callbacks to the
+# input waveform records which are I/O Intr scanned
+record(busy, "$(P)$(R)DoReadWF")
+{
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEDIG_READ_WF")
+    field(ZNAM, "Done")
+    field(ONAM, "Read")
+}
+
 
