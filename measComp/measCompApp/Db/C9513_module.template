@@ -12,7 +12,7 @@ record(mbbo, "$(P)$(R)SetFrequency1") {
    field(DOL,  "$(P)$(R)TimeCalc.VAL")
    field(OMSL, "closed_loop")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SCALER_FREQUENCY")
+   field(OUT,  "@asyn($(PORT),$(ADDR))SCALER_FREQUENCY")
    field(ZRST, "Freq 1 (5 MHz)")
    field(ZRVL, "0")
    field(ONST, "Freq 2 (500 kHz)")
