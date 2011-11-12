@@ -9,7 +9,7 @@ record(longout, "$(P)$(R)NumPoints")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEDIG_NUM_POINTS")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEDIG_NUM_POINTS")
 }
 
 ###################################################################
@@ -19,7 +19,7 @@ record(mbbo, "$(P)$(R)FirstChan")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEDIG_FIRST_CHAN")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEDIG_FIRST_CHAN")
     field(ZRVL, "0")
     field(ZRST, "1")
     field(ONVL, "1")
@@ -45,7 +45,7 @@ record(mbbo, "$(P)$(R)NumChans")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEDIG_NUM_CHANS")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEDIG_NUM_CHANS")
     field(ZRVL, "1")
     field(ZRST, "1")
     field(ONVL, "2")
@@ -70,7 +70,7 @@ record(waveform, "$(P)$(R)TimeWF")
 {
     field(FTVL, "FLOAT")
     field(DTYP, "asynFloat32ArrayIn")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEDIG_TIME_WF")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEDIG_TIME_WF")
     field(NELM, "$(MAX_POINTS)")
     field(SCAN, "I/O Intr")
 }
@@ -81,7 +81,7 @@ record(waveform, "$(P)$(R)TimeWF")
 record(longin, "$(P)$(R)CurrentPoint")
 {
     field(DTYP, "asynInt32")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEDIG_CURRENT_POINT")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEDIG_CURRENT_POINT")
     field(SCAN, "I/O Intr")
 }
 
@@ -92,7 +92,7 @@ record(ao, "$(P)$(R)Dwell")
 {
     field(PINI, "YES")
     field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEDIG_DWELL")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEDIG_DWELL")
     field(VAL,  "0.001")
     field(PREC, "$(PREC)")
 }
@@ -104,7 +104,7 @@ record(bo, "$(P)$(R)ExtTrigger")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEDIG_EXT_TRIGGER")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEDIG_EXT_TRIGGER")
     field(ZNAM, "Internal")
     field(ONAM, "External")
 }
@@ -116,7 +116,7 @@ record(bo, "$(P)$(R)ExtClock")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEDIG_EXT_CLOCK")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEDIG_EXT_CLOCK")
     field(ZNAM, "Internal")
     field(ONAM, "External")
 }
@@ -128,7 +128,7 @@ record(bo, "$(P)$(R)Continuous")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEDIG_CONTINUOUS")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEDIG_CONTINUOUS")
     field(ZNAM, "One-shot")
     field(ONAM, "Continuous")
 }
@@ -139,7 +139,7 @@ record(bo, "$(P)$(R)Continuous")
 record(busy, "$(P)$(R)Run")
 {
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEDIG_RUN")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEDIG_RUN")
     field(ZNAM, "Stop")
     field(ONAM, "Run")
 }
@@ -172,7 +172,7 @@ record(calcout, "$(P)$(R)ReadWFOnDone")
 record(busy, "$(P)$(R)DoReadWF")
 {
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEDIG_READ_WF")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEDIG_READ_WF")
     field(ZNAM, "Done")
     field(ONAM, "Read")
 }

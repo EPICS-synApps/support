@@ -5,7 +5,7 @@ record(waveform, "$(P)$(R)UserWF")
 {
     field(FTVL, "FLOAT")
     field(DTYP, "asynFloat32ArrayOut")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_USER_WF")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEGEN_USER_WF")
     field(NELM, "$(MAX_POINTS)")
 }
 
@@ -16,7 +16,7 @@ record(waveform, "$(P)$(R)InternalWF")
 {
     field(FTVL, "FLOAT")
     field(DTYP, "asynFloat32ArrayIn")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_INT_WF")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEGEN_INT_WF")
     field(NELM, "$(MAX_POINTS)")
     field(SCAN, "I/O Intr")
 }
@@ -28,7 +28,7 @@ record(bo, "$(P)$(R)Enable")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_ENABLE")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_ENABLE")
     field(ZNAM, "Disable")
     field(ONAM, "Enable")
 }
@@ -40,7 +40,7 @@ record(mbbo, "$(P)$(R)Type")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_WAVE_TYPE")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_WAVE_TYPE")
     field(ZRVL, "0")
     field(ZRST, "User-defined")
     field(ONVL, "1")
@@ -62,7 +62,7 @@ record(ao, "$(P)$(R)PulseWidth")
 {
     field(PINI, "YES")
     field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_PULSE_WIDTH")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_PULSE_WIDTH")
     field(VAL,  "0.001")
     field(PREC, "$(PREC)")
 }
@@ -74,7 +74,7 @@ record(ao, "$(P)$(R)Amplitude")
 {
     field(PINI, "YES")
     field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_AMPLITUDE")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_AMPLITUDE")
     field(VAL,  "1.0")
     field(PREC, "4")
 }
@@ -86,7 +86,7 @@ record(ao, "$(P)$(R)Offset")
 {
     field(PINI, "YES")
     field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_OFFSET")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_OFFSET")
     field(VAL,  "0.0")
     field(PREC, "4")
 }
