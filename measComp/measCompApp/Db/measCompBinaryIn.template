@@ -1,7 +1,7 @@
 record(bi, "$(P)$(R)")
 {
     field(DTYP, "asynUInt32Digital")
-    field(INP,  "@asynMask($(PORT),$(ADDR),$(MASK),$(TIMEOUT))DIGITAL_INPUT")
+    field(INP,  "@asynMask($(PORT),$(ADDR),$(MASK))DIGITAL_INPUT")
     field(ZNAM, "Low")
     field(ONAM, "High")
     field(SCAN, "I/O Intr")
