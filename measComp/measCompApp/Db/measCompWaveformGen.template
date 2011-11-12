@@ -8,7 +8,7 @@
 record(longin, "$(P)$(R)NumPoints")
 {
     field(DTYP, "asynInt32")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_NUM_POINTS")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEGEN_NUM_POINTS")
     field(SCAN, "I/O Intr")
 }
 
@@ -19,7 +19,7 @@ record(longout, "$(P)$(R)UserNumPoints")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_USER_NUM_POINTS")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_USER_NUM_POINTS")
     field(VAL,  "1000")
 }
 
@@ -30,7 +30,7 @@ record(longout, "$(P)$(R)IntNumPoints")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_INT_NUM_POINTS")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_INT_NUM_POINTS")
     field(VAL,  "1000")
 }
 
@@ -41,7 +41,7 @@ record(waveform, "$(P)$(R)UserTimeWF")
 {
     field(FTVL, "FLOAT")
     field(DTYP, "asynFloat32ArrayIn")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_USER_TIME_WF")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEGEN_USER_TIME_WF")
     field(NELM, "$(MAX_POINTS)")
     field(SCAN, "I/O Intr")
 }
@@ -53,7 +53,7 @@ record(waveform, "$(P)$(R)IntTimeWF")
 {
     field(FTVL, "FLOAT")
     field(DTYP, "asynFloat32ArrayIn")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_INT_TIME_WF")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEGEN_INT_TIME_WF")
     field(NELM, "$(MAX_POINTS)")
     field(SCAN, "I/O Intr")
 }
@@ -64,7 +64,7 @@ record(waveform, "$(P)$(R)IntTimeWF")
 record(longin, "$(P)$(R)CurrentPoint")
 {
     field(DTYP, "asynInt32")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_CURRENT_POINT")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEGEN_CURRENT_POINT")
     field(SCAN, "I/O Intr")
 }
 
@@ -74,7 +74,7 @@ record(longin, "$(P)$(R)CurrentPoint")
 record(ai, "$(P)$(R)Dwell")
 {
     field(DTYP, "asynFloat64")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_DWELL")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEGEN_DWELL")
     field(VAL,  "0.001")
     field(PREC, "$(PREC)")
     field(SCAN, "I/O Intr")
@@ -87,7 +87,7 @@ record(ao, "$(P)$(R)IntFrequency")
 {
     field(PINI, "YES")
     field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_INT_FREQ")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_INT_FREQ")
     field(VAL,  "1000.")
     field(PREC, "$(PREC)")
 }
@@ -99,7 +99,7 @@ record(ao, "$(P)$(R)UserDwell")
 {
     field(PINI, "YES")
     field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_USER_DWELL")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_USER_DWELL")
     field(VAL,  "0.001")
     field(PREC, "$(PREC)")
 }
@@ -111,7 +111,7 @@ record(bo, "$(P)$(R)ExtTrigger")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_EXT_TRIGGER")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_EXT_TRIGGER")
     field(ZNAM, "Internal")
     field(ONAM, "External")
 }
@@ -123,7 +123,7 @@ record(bo, "$(P)$(R)ExtClock")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_EXT_CLOCK")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_EXT_CLOCK")
     field(ZNAM, "Internal")
     field(ONAM, "External")
 }
@@ -135,7 +135,7 @@ record(bo, "$(P)$(R)Continuous")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_CONTINUOUS")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_CONTINUOUS")
     field(ZNAM, "One-shot")
     field(ONAM, "Continuous")
 }
@@ -146,7 +146,7 @@ record(bo, "$(P)$(R)Continuous")
 record(busy, "$(P)$(R)Run")
 {
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))WAVEGEN_RUN")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_RUN")
     field(ZNAM, "Stop")
     field(ONAM, "Run")
 }
