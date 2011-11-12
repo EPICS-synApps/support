@@ -9,7 +9,7 @@ record(bo, "$(P)$(R)Run")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PULSE_START")
+    field(OUT,  "@asyn($(PORT),$(ADDR))PULSE_START")
     field(ZNAM, "Stop")
     field(ZSV,  "NO_ALARM")
     field(ONAM, "Run")
@@ -23,9 +23,9 @@ record(ao, "$(P)$(R)Period")
 {
     field(PINI, "YES")
     field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PULSE_PERIOD")
+    field(OUT,  "@asyn($(PORT),$(ADDR))PULSE_PERIOD")
     field(VAL,  "0.001")
-    field(PREC, "5")
+    field(PREC, "$(PREC)")
 }
 
 ###################################################################
@@ -35,9 +35,9 @@ record(ao, "$(P)$(R)Width")
 {
     field(PINI, "YES")
     field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PULSE_WIDTH")
+    field(OUT,  "@asyn($(PORT),$(ADDR))PULSE_WIDTH")
     field(VAL,  "0.0001")
-    field(PREC, "7")
+    field(PREC, "$(PREC)")
 }
 
 ###################################################################
@@ -47,9 +47,9 @@ record(ao, "$(P)$(R)Delay")
 {
     field(PINI, "YES")
     field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PULSE_DELAY")
+    field(OUT,  "@asyn($(PORT),$(ADDR))PULSE_DELAY")
     field(VAL,  "0.")
-    field(PREC, "7")
+    field(PREC, "$(PREC)")
 }
 
 ###################################################################
@@ -59,7 +59,7 @@ record(longout, "$(P)$(R)Count")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PULSE_COUNT")
+    field(OUT,  "@asyn($(PORT),$(ADDR))PULSE_COUNT")
 }
 
 ###################################################################
@@ -69,7 +69,7 @@ record(bo, "$(P)$(R)IdleState")
 {
     field(PINI, "YES")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PULSE_IDLE_STATE")
+    field(OUT,  "@asyn($(PORT),$(ADDR))PULSE_IDLE_STATE")
     field(ZNAM, "Low")
     field(ONAM, "High")
     field(VAL,  "0")
