@@ -113,7 +113,7 @@ display {
 	display[0] {
 		label="USB-1608G module"
 		name="1608G_module.adl"
-		args="P=1608G:,Bi=Bi,Li=Li,Bo=Bo,Lo=Lo,Bd=Bd,Ai=Ai,Ao=Ao,Ct=Counter,Wd=WaveDig,Wg=WaveGen,Pg=PulseGen1"
+		args="P=1608G:,Bi=Bi,Li=Li,Bo=Bo,Lo=Lo,Bd=Bd,Ai=Ai,Ao=Ao,Ct=Counter,Wd=WaveDig,Wg=WaveGen,Pg=PulseGen1,Tg=Trig"
 	}
 	clr=14
 	bclr=51
