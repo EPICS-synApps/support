@@ -81,6 +81,17 @@ record(ai, "$(P)$(R)Dwell")
 }
 
 ###################################################################
+#  Total time                                                     # 
+###################################################################
+record(ai, "$(P)$(R)TotalTime")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEGEN_TOTAL_TIME")
+    field(PREC, "$(PREC)")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
 #  Internal waveform frequency                                    # 
 ###################################################################
 record(ao, "$(P)$(R)IntFrequency")
@@ -138,6 +149,29 @@ record(bo, "$(P)$(R)Continuous")
     field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_CONTINUOUS")
     field(ZNAM, "One-shot")
     field(ONAM, "Continuous")
+}
+
+###################################################################
+#  Retrigger                                                      # 
+###################################################################
+record(bo, "$(P)$(R)Retrigger")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_RETRIGGER")
+    field(ZNAM, "Disable")
+    field(ONAM, "Enable")
+}
+
+###################################################################
+#  Trigger count                                                  # 
+###################################################################
+record(longout, "$(P)$(R)TriggerCount")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_TRIGGER_COUNT")
+    field(VAL,  "1")
 }
 
 ###################################################################
