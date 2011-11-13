@@ -1,43 +1,43 @@
 file "$(MEASCOMP)/measCompApp/Db/measCompLongIn.template"
 {
 pattern
-{    P,       R,   MASK,   PORT,    ADDR,  TIMEOUT}
-{   1608G:,  Li,   0xFF,  1608G_1,     0,        1}
+{    P,       R,   MASK,   PORT,    ADDR}
+{   1608G:,  Li,   0xFF,  1608G_1,     0}
 }
 
 file "$(MEASCOMP)/measCompApp/Db/measCompBinaryIn.template"
 {
 pattern
-{    P,       R,   MASK,   PORT,    ADDR,  TIMEOUT}
-{   1608G:,  Bi1,  0x01   1608G_1,     0,        1}
-{   1608G:,  Bi2,  0x02   1608G_1,     0,        1}
-{   1608G:,  Bi3,  0x04   1608G_1,     0,        1}
-{   1608G:,  Bi4,  0x08   1608G_1,     0,        1}
-{   1608G:,  Bi5,  0x10   1608G_1,     0,        1}
-{   1608G:,  Bi6,  0x20   1608G_1,     0,        1}
-{   1608G:,  Bi7,  0x40   1608G_1,     0,        1}
-{   1608G:,  Bi8,  0x80   1608G_1,     0,        1}
+{    P,       R,   MASK,   PORT,    ADDR}
+{   1608G:,  Bi1,  0x01   1608G_1,     0}
+{   1608G:,  Bi2,  0x02   1608G_1,     0}
+{   1608G:,  Bi3,  0x04   1608G_1,     0}
+{   1608G:,  Bi4,  0x08   1608G_1,     0}
+{   1608G:,  Bi5,  0x10   1608G_1,     0}
+{   1608G:,  Bi6,  0x20   1608G_1,     0}
+{   1608G:,  Bi7,  0x40   1608G_1,     0}
+{   1608G:,  Bi8,  0x80   1608G_1,     0}
 }
 
 file "$(MEASCOMP)/measCompApp/Db/measCompLongOut.template"
 {
 pattern
-{    P,       R,   MASK,   PORT,    ADDR,  TIMEOUT}
-{   1608G:,  Lo,   0xFF,  1608G_1,     0,        1}
+{    P,       R,   MASK,   PORT,    ADDR}
+{   1608G:,  Lo,   0xFF,  1608G_1,     0}
 }
 
 file "$(MEASCOMP)/measCompApp/Db/measCompBinaryOut.template"
 {
 pattern
-{    P,       R,   MASK,   PORT,    ADDR,  TIMEOUT}
-{   1608G:,  Bo1,  0x01   1608G_1,     0,        1}
-{   1608G:,  Bo2,  0x02   1608G_1,     0,        1}
-{   1608G:,  Bo3,  0x04   1608G_1,     0,        1}
-{   1608G:,  Bo4,  0x08   1608G_1,     0,        1}
-{   1608G:,  Bo5,  0x10   1608G_1,     0,        1}
-{   1608G:,  Bo6,  0x20   1608G_1,     0,        1}
-{   1608G:,  Bo7,  0x40   1608G_1,     0,        1}
-{   1608G:,  Bo8,  0x80   1608G_1,     0,        1}
+{    P,       R,   MASK,   PORT,    ADDR}
+{   1608G:,  Bo1,  0x01   1608G_1,     0}
+{   1608G:,  Bo2,  0x02   1608G_1,     0}
+{   1608G:,  Bo3,  0x04   1608G_1,     0}
+{   1608G:,  Bo4,  0x08   1608G_1,     0}
+{   1608G:,  Bo5,  0x10   1608G_1,     0}
+{   1608G:,  Bo6,  0x20   1608G_1,     0}
+{   1608G:,  Bo7,  0x40   1608G_1,     0}
+{   1608G:,  Bo8,  0x80   1608G_1,     0}
 }
 
 # Direction bits on binary I/O
@@ -45,30 +45,30 @@ pattern
 file "$(MEASCOMP)/measCompApp/Db/measCompBinaryDir.template"
 {
 pattern
-{    P,       R,   MASK,  VAL,  PORT,    ADDR,  TIMEOUT}
-{   1608G:,  Bd1,  0x01    0,  1608G_1,     0,        1}
-{   1608G:,  Bd2,  0x02    0,  1608G_1,     0,        1}
-{   1608G:,  Bd3,  0x04    0,  1608G_1,     0,        1}
-{   1608G:,  Bd4,  0x08    0,  1608G_1,     0,        1}
-{   1608G:,  Bd5,  0x10    1,  1608G_1,     0,        1}
-{   1608G:,  Bd6,  0x20    1,  1608G_1,     0,        1}
-{   1608G:,  Bd7,  0x40    1,  1608G_1,     0,        1}
-{   1608G:,  Bd8,  0x80    1,  1608G_1,     0,        1}
+{    P,       R,   MASK,  VAL,  PORT,    ADDR}
+{   1608G:,  Bd1,  0x01    0,  1608G_1,     0}
+{   1608G:,  Bd2,  0x02    0,  1608G_1,     0}
+{   1608G:,  Bd3,  0x04    0,  1608G_1,     0}
+{   1608G:,  Bd4,  0x08    0,  1608G_1,     0}
+{   1608G:,  Bd5,  0x10    1,  1608G_1,     0}
+{   1608G:,  Bd6,  0x20    1,  1608G_1,     0}
+{   1608G:,  Bd7,  0x40    1,  1608G_1,     0}
+{   1608G:,  Bd8,  0x80    1,  1608G_1,     0}
 }
 
 file "$(MEASCOMP)/measCompApp/Db/measCompPulseGen.template"
 {
 pattern
-{     P,         R,        PORT,    ADDR,  TIMEOUT}
-{   1608G:,  PulseGen1,  1608G_1,     0,        1}
+{     P,         R,        PORT,    ADDR,  PREC}
+{   1608G:,  PulseGen1,  1608G_1,      0,     4}
 }
 
 file "$(MEASCOMP)/measCompApp/Db/1608GCounter.template"
 {
 pattern
-{     P,         R,       PORT,    ADDR,  TIMEOUT}
-{   1608G:,  Counter1,  1608G_1,     0,        1}
-{   1608G:,  Counter2,  1608G_1,     1,        1}
+{     P,         R,       PORT,    ADDR}
+{   1608G:,  Counter1,  1608G_1,      0}
+{   1608G:,  Counter2,  1608G_1,      1}
 }
 
 # Analog inputs
@@ -84,35 +84,28 @@ pattern
 {   1608G:,   Ai6, 1608G_1,    5,   -2.,  -2.,   2.,   2.,    1,  "1 second",   4}
 {   1608G:,   Ai7, 1608G_1,    6,   -1.,  -1.,   1.,   1.,    0,  "1 second",   4}
 {   1608G:,   Ai8, 1608G_1,    7,   -1.,  -1.,   1.,   1.,    0,  "1 second",   4}
-{   1608G:,   Ai9, 1608G_1,    8,  -10., -10.,  10.,  10.,    3,   "Passive",   4}
-{   1608G:,  Ai10, 1608G_1,    9,  -10., -10.,  10.,  10.,    3,   "Passive",   4}
-{   1608G:,  Ai11, 1608G_1,   10,  -10., -10.,  10.,  10.,    3,   "Passive",   4}
-{   1608G:,  Ai12, 1608G_1,   11,  -10., -10.,  10.,  10.,    3,   "Passive",   4}
-{   1608G:,  Ai13, 1608G_1,   12,  -10., -10.,  10.,  10.,    3,   "Passive",   4}
-{   1608G:,  Ai14, 1608G_1,   12,  -10., -10.,  10.,  10.,    3,   "Passive",   4}
-{   1608G:,  Ai15, 1608G_1,   14,  -10., -10.,  10.,  10.,    3,   "Passive",   4}
-{   1608G:,  Ai16, 1608G_1,   15,  -10., -10.,  10.,  10.,    3,   "Passive",   4}
 }
 
 # Waveform digitzer
 file "$(MEASCOMP)/measCompApp/Db/measCompWaveformDig.template"
 {
 pattern
-{     P,       R,          PORT,    ADDR,  MAX_POINTS,  PREC, TIMEOUT}
-{   1608G:,  WaveDig,    1608G_1,     0,     1000000,     4,        1}
+{     P,       R,          PORT,    ADDR,  MAX_POINTS,  PREC}
+{   1608G:,  WaveDig,    1608G_1,     0,      2048,        4}
 }
+
 file "$(MEASCOMP)/measCompApp/Db/measCompWaveformDigN.template"
 {
 pattern
-{     P,       R,          PORT,    ADDR,  MAX_POINTS,  PREC, TIMEOUT}
-{   1608G:,  WaveDig1,   1608G_1,     0,     1000000,     4,        1}
-{   1608G:,  WaveDig2,   1608G_1,     1,     1000000,     4,        1}
-{   1608G:,  WaveDig3,   1608G_1,     2,     1000000,     4,        1}
-{   1608G:,  WaveDig4,   1608G_1,     3,     1000000,     4,        1}
-{   1608G:,  WaveDig5,   1608G_1,     4,     1000000,     4,        1}
-{   1608G:,  WaveDig6,   1608G_1,     5,     1000000,     4,        1}
-{   1608G:,  WaveDig7,   1608G_1,     6,     1000000,     4,        1}
-{   1608G:,  WaveDig8,   1608G_1,     7,     1000000,     4,        1}
+{     P,       R,          PORT,    ADDR,  MAX_POINTS,  PREC}
+{   1608G:,  WaveDig1,   1608G_1,     0,     2048,         4}
+{   1608G:,  WaveDig2,   1608G_1,     1,     2048,         4}
+{   1608G:,  WaveDig3,   1608G_1,     2,     2048,         4}
+{   1608G:,  WaveDig4,   1608G_1,     3,     2048,         4}
+{   1608G:,  WaveDig5,   1608G_1,     4,     2048,         4}
+{   1608G:,  WaveDig6,   1608G_1,     5,     2048,         4}
+{   1608G:,  WaveDig7,   1608G_1,     6,     2048,         4}
+{   1608G:,  WaveDig8,   1608G_1,     7,     2048,         4}
 }
 
 
@@ -129,15 +122,22 @@ pattern
 file "$(MEASCOMP)/measCompApp/Db/measCompWaveformGen.template"
 {
 pattern
-{     P,       R,          PORT,    ADDR,  MAX_POINTS,  PREC, TIMEOUT}
-{   1608G:,  WaveGen,    1608G_1,     0,     1000000,     4,        1}
+{     P,       R,          PORT,    ADDR,  MAX_POINTS,  PREC}
+{   1608G:,  WaveGen,    1608G_1,     0,     2048,         4}
 }
 file "$(MEASCOMP)/measCompApp/Db/measCompWaveformGenN.template"
 {
 pattern
-{     P,       R,          PORT,    ADDR,  MAX_POINTS,  PREC, TIMEOUT}
-{   1608G:,  WaveGen1,   1608G_1,     0,     1000000,     4,        1}
-{   1608G:,  WaveGen2,   1608G_1,     1,     1000000,     4,        1}
+{     P,       R,          PORT,    ADDR,  MAX_POINTS,  PREC}
+{   1608G:,  WaveGen1,   1608G_1,     0,     2048,         4}
+{   1608G:,  WaveGen2,   1608G_1,     1,     2048,         4}
 }
 
+# Trigger
+file "$(MEASCOMP)/measCompApp/Db/measCompTrigger.template"
+{
+pattern
+{     P,       R,          PORT,    ADDR}
+{   1608G:,  Trig,       1608G_1,      0}
+}
 
