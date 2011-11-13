@@ -15,16 +15,95 @@ record(bo, "$(P)$(R)Run")
     field(OSV,  "MINOR")
 }
 
+# NOTE: The records for the period and the frequency are a bit
+# complex because we want to be able to change either ao record
+# and have the other one update
+
 ###################################################################
-#  Pulse frequency                                                # 
+#  Pulse period                                                   # 
 ###################################################################
 record(ao, "$(P)$(R)Period")
 {
     field(PINI, "YES")
-    field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),$(ADDR))PULSE_PERIOD")
+    field(OUT,  "$(P)$(R)SendPeriod PP MS")
     field(VAL,  "0.001")
     field(PREC, "$(PREC)")
+}
+
+###################################################################
+#  Send pulse period                                              # 
+###################################################################
+record(ao, "$(P)$(R)SendPeriod")
+{
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),$(ADDR))PULSE_PERIOD")
+    field(SDIS, "$(P)$(R)PeriodRBV.PROC")
+    field(DISV, "1")
+}
+
+###################################################################
+#  Pulse period readback                                          # 
+###################################################################
+record(ai, "$(P)$(R)PeriodRBV")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),$(ADDR))PULSE_PERIOD")
+    field(PREC, "$(PREC)")
+    field(SCAN, "I/O Intr")
+    field(FLNK, "$(P)$(R)PeriodSync")
+}
+
+###################################################################
+#  Pulse period sync                                             # 
+###################################################################
+record(ao, "$(P)$(R)PeriodSync")
+{
+    field(DOL,  "$(P)$(R)PeriodRBV NPP")
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R)Period PP")
+}
+
+###################################################################
+#  Pulse frequency                                                # 
+###################################################################
+record(ao, "$(P)$(R)Frequency")
+{
+    field(OUT,  "$(P)$(R)SendFrequency PP MS")
+    field(VAL,  "0.001")
+    field(PREC, "$(PREC)")
+}
+
+###################################################################
+#  Send pulse frequency                                           # 
+###################################################################
+record(ao, "$(P)$(R)SendFrequency")
+{
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),$(ADDR))PULSE_FREQUENCY")
+    field(SDIS, "$(P)$(R)FrequencyRBV.PROC")
+    field(DISV, "1")
+}
+
+###################################################################
+#  Pulse frequency readback                                       # 
+###################################################################
+record(ai, "$(P)$(R)FrequencyRBV")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),$(ADDR))PULSE_FREQUENCY")
+    field(PREC, "$(PREC)")
+    field(SCAN, "I/O Intr")
+    field(FLNK, "$(P)$(R)FrequencySync")
+}
+
+###################################################################
+#  Pulse frequency sync                                           # 
+###################################################################
+record(ao, "$(P)$(R)FrequencySync")
+{
+    field(DOL,  "$(P)$(R)FrequencyRBV NPP")
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R)Frequency PP")
 }
 
 ###################################################################
