@@ -69,13 +69,23 @@ record(longin, "$(P)$(R)CurrentPoint")
 }
 
 ###################################################################
-#  Time per point readback, based on UserDwell or Int Frequency   # 
+#  Waveform frequency, based on IntFreq or UserFreq               # 
+###################################################################
+record(ai, "$(P)$(R)Frequency")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEGEN_FREQ")
+    field(PREC, "$(PREC)")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
+#  Time per point readback, based on UserDwell or IntDwell        # 
 ###################################################################
 record(ai, "$(P)$(R)Dwell")
 {
     field(DTYP, "asynFloat64")
     field(INP,  "@asyn($(PORT),$(ADDR))WAVEGEN_DWELL")
-    field(VAL,  "0.001")
     field(PREC, "$(PREC)")
     field(SCAN, "I/O Intr")
 }
@@ -97,22 +107,174 @@ record(ai, "$(P)$(R)TotalTime")
 record(ao, "$(P)$(R)IntFrequency")
 {
     field(PINI, "YES")
-    field(DTYP, "asynFloat64")
-    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_INT_FREQ")
+    field(OUT,  "$(P)$(R)SendIntFrequency PP MS")
     field(VAL,  "1000.")
     field(PREC, "$(PREC)")
 }
 
 ###################################################################
-#  User waveform dwell time                                       # 
+#  Send internal waveform frequency                               # 
+###################################################################
+record(ao, "$(P)$(R)SendIntFrequency")
+{
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_INT_FREQ")
+    field(SDIS, "$(P)$(R)IntFrequencyRBV.PROC")
+    field(DISV, "1")
+}
+
+###################################################################
+#  Internal frequency readback                                    # 
+###################################################################
+record(ai, "$(P)$(R)IntFrequencyRBV")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEGEN_INT_FREQ")
+    field(PREC, "$(PREC)")
+    field(SCAN, "I/O Intr")
+    field(FLNK, "$(P)$(R)IntFrequencySync")
+}
+
+###################################################################
+#  Internal frequency sync                                        # 
+###################################################################
+record(ao, "$(P)$(R)IntFrequencySync")
+{
+    field(DOL,  "$(P)$(R)IntFrequencyRBV NPP")
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R)IntFrequency PP")
+}
+
+###################################################################
+#  Internal waveform dwell                                        # 
+###################################################################
+record(ao, "$(P)$(R)IntDwell")
+{
+    field(PINI, "YES")
+    field(OUT,  "$(P)$(R)SendIntDwell PP MS")
+    field(VAL,  "1000.")
+    field(PREC, "$(PREC)")
+}
+
+###################################################################
+#  Send internal waveform dwell                                   # 
+###################################################################
+record(ao, "$(P)$(R)SendIntDwell")
+{
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_INT_DWELL")
+    field(SDIS, "$(P)$(R)IntDwellRBV.PROC")
+    field(DISV, "1")
+}
+
+###################################################################
+#  Internal dwell readback                                        # 
+###################################################################
+record(ai, "$(P)$(R)IntDwellRBV")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEGEN_INT_DWELL")
+    field(PREC, "$(PREC)")
+    field(SCAN, "I/O Intr")
+    field(FLNK, "$(P)$(R)IntDwellSync")
+}
+
+###################################################################
+#  Internal dwell sync                                            # 
+###################################################################
+record(ao, "$(P)$(R)IntDwellSync")
+{
+    field(DOL,  "$(P)$(R)IntDwellRBV NPP")
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R)IntDwell PP")
+}
+
+###################################################################
+#  User waveform frequency                                        # 
+###################################################################
+record(ao, "$(P)$(R)UserFrequency")
+{
+    field(PINI, "YES")
+    field(OUT,  "$(P)$(R)SendUserFrequency PP MS")
+    field(VAL,  "1000.")
+    field(PREC, "$(PREC)")
+}
+
+###################################################################
+#  Send user waveform frequency                                   # 
+###################################################################
+record(ao, "$(P)$(R)SendUserFrequency")
+{
+    field(DTYP, "asynFloat64")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_USER_FREQ")
+    field(SDIS, "$(P)$(R)UserFrequencyRBV.PROC")
+    field(DISV, "1")
+}
+
+###################################################################
+#  User frequency readback                                        # 
+###################################################################
+record(ai, "$(P)$(R)UserFrequencyRBV")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEGEN_USER_FREQ")
+    field(PREC, "$(PREC)")
+    field(SCAN, "I/O Intr")
+    field(FLNK, "$(P)$(R)UserFrequencySync")
+}
+
+###################################################################
+#  User frequency sync                                            # 
+###################################################################
+record(ao, "$(P)$(R)UserFrequencySync")
+{
+    field(DOL,  "$(P)$(R)UserFrequencyRBV NPP")
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R)UserFrequency PP")
+}
+
+###################################################################
+#  User waveform dwell                                            # 
 ###################################################################
 record(ao, "$(P)$(R)UserDwell")
 {
     field(PINI, "YES")
+    field(OUT,  "$(P)$(R)SendUserDwell PP MS")
+    field(VAL,  "1000.")
+    field(PREC, "$(PREC)")
+}
+
+###################################################################
+#  Send user waveform dwell                                       # 
+###################################################################
+record(ao, "$(P)$(R)SendUserDwell")
+{
     field(DTYP, "asynFloat64")
     field(OUT,  "@asyn($(PORT),$(ADDR))WAVEGEN_USER_DWELL")
-    field(VAL,  "0.001")
+    field(SDIS, "$(P)$(R)UserDwellRBV.PROC")
+    field(DISV, "1")
+}
+
+###################################################################
+#  User dwell readback                                            # 
+###################################################################
+record(ai, "$(P)$(R)UserDwellRBV")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEGEN_USER_DWELL")
     field(PREC, "$(PREC)")
+    field(SCAN, "I/O Intr")
+    field(FLNK, "$(P)$(R)UserDwellSync")
+}
+
+###################################################################
+#  User dwell sync                                                # 
+###################################################################
+record(ao, "$(P)$(R)UserDwellSync")
+{
+    field(DOL,  "$(P)$(R)UserDwellRBV NPP")
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R)UserDwell PP")
 }
 
 ###################################################################
