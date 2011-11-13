@@ -19,3 +19,9 @@ dbLoadTemplate("1608G.substitutions")
 iocInit
 
 create_monitor_set("auto_settings.req",30)
+
+# Need to force the time arrays to process because the records are scan=I/O Int
+# but asynPortDriver does not do array callbacks before iocInit.
+
+dbpf 1608G:WaveDigDwell.PROC 1
+dbpf 1608G:WaveGenUserDwell.PROC 1
