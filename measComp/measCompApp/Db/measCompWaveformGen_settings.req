@@ -5,3 +5,5 @@ $(P)$(R)IntFrequency
 $(P)$(R)ExtTrigger
 $(P)$(R)ExtClock
 $(P)$(R)Continuous
+$(P)$(R)Retrigger
+$(P)$(R)TriggerCount
