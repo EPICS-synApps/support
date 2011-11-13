@@ -98,6 +98,17 @@ record(ao, "$(P)$(R)Dwell")
 }
 
 ###################################################################
+#  Total time                                                     # 
+###################################################################
+record(ai, "$(P)$(R)TotalTime")
+{
+    field(DTYP, "asynFloat64")
+    field(INP,  "@asyn($(PORT),$(ADDR))WAVEDIG_TOTAL_TIME")
+    field(PREC, "$(PREC)")
+    field(SCAN, "I/O Intr")
+}
+
+###################################################################
 #  External trigger                                               # 
 ###################################################################
 record(bo, "$(P)$(R)ExtTrigger")
@@ -134,6 +145,29 @@ record(bo, "$(P)$(R)Continuous")
 }
 
 ###################################################################
+#  Retrigger                                                      # 
+###################################################################
+record(bo, "$(P)$(R)Retrigger")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEDIG_RETRIGGER")
+    field(ZNAM, "Disable")
+    field(ONAM, "Enable")
+}
+
+###################################################################
+#  Trigger count                                                  # 
+###################################################################
+record(longout, "$(P)$(R)TriggerCount")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR))WAVEDIG_TRIGGER_COUNT")
+    field(VAL,  "1")
+}
+
+###################################################################
 #  Run                                                            # 
 ###################################################################
 record(busy, "$(P)$(R)Run")
@@ -147,34 +181,19 @@ record(busy, "$(P)$(R)Run")
 ###################################################################
 #  Read waveforms                                                 # 
 ###################################################################
-# This periodically reads, and is disabled of when the run is done
-record(bo, "$(P)$(R)ReadWF")
-{
-    field(OUT,  "$(P)$(R)DoReadWF.PROC")
-    field(VAL,  "1")
-    field(SCAN, "1 second")
-    field(SDIS, "$(P)$(R)Run")
-    field(DISV, "0")
-}
-
-# This forces one read when the run completes
-record(calcout, "$(P)$(R)ReadWFOnDone")
-{
-    field(INPA, "$(P)$(R)Run CP")
-    field(CALC, "A")
-    field(OOPT, "Transition To Zero")
-    field(OVAL, "1")
-    field(OUT,  "$(P)$(R)DoReadWF.PROC")
-}
-
 # This tells the driver to read, which then does callbacks to the
 # input waveform records which are I/O Intr scanned
-record(busy, "$(P)$(R)DoReadWF")
+# The driver always reads the waveforms when acquisition completes,
+# so this record can be passive for fast scans
+record(busy, "$(P)$(R)ReadWF")
 {
     field(DTYP, "asynInt32")
     field(OUT,  "@asyn($(PORT),$(ADDR))WAVEDIG_READ_WF")
     field(ZNAM, "Done")
     field(ONAM, "Read")
+    field(SCAN, "1 second")
+    field(SDIS, "$(P)$(R)Run")
+    field(DISV, "0")
 }
 
 
