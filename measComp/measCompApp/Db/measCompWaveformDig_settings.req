@@ -5,3 +5,6 @@ $(P)$(R)Dwell
 $(P)$(R)ExtTrigger
 $(P)$(R)ExtClock
 $(P)$(R)Continuous
+$(P)$(R)Retrigger
+$(P)$(R)TriggerCount
+$(P)$(R)ReadWF.SCAN
