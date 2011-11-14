@@ -5,6 +5,8 @@ $(P)$(R)Dwell
 $(P)$(R)ExtTrigger
 $(P)$(R)ExtClock
 $(P)$(R)Continuous
+$(P)$(R)AutoRestart
 $(P)$(R)Retrigger
 $(P)$(R)TriggerCount
+$(P)$(R)BurstMode
 $(P)$(R)ReadWF.SCAN
