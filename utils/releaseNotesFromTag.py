@@ -2,15 +2,18 @@
 usage = """
 usage:
     releaseNotesFromTag.py module [tag1 [tag2]]
-		If tag1 is supplied:
-	        do 'svn log -v' for 'module' from 'tag1' to 'tag2',
-	        or to trunk if 'tag2' is omitted
-		Otherwise:
-			do  'svn ls' for 'module'/tags
+        If tag1 and tag2 are supplied:
+            do 'svn log -v' for 'module' from 'tag1' to 'tag2',
+        If tag2 is omitted:
+            use 'trunk' for tag2
+        If tag1 is omitted:
+            Use most recent tag for tag1
+        Then convert log to html.
 """
 
 import sys
 import commands
+import logModuleFromTag
 SVN="https://subversion.xor.aps.anl.gov/synApps"
 
 def tags(module, verbose=False):
@@ -35,32 +38,32 @@ def tags(module, verbose=False):
 			tagList.append(tag.strip('/'))
 		return(tagList)
 
-def highestTag(module, dir):
-	maxTag = -1
-	tagList = commands.getoutput("svn ls -v %s/%s/%s" % (SVN,module,dir)).split('\n')
-	for tag in tagList:
-		maxTag = max(maxTag, int(tag.split()[0]))
-	return maxTag
+#def highestTag(module, dir):
+#	maxTag = -1
+#	tagList = commands.getoutput("svn ls -v %s/%s/%s" % (SVN,module,dir)).split('\n')
+#	for tag in tagList:
+#		maxTag = max(maxTag, int(tag.split()[0]))
+#	return maxTag
 
-def log(module, tag1, tag2=None):
-	# Find the difference between tag1 and tag2, or between tag1 and trunk
-	tagList = tags(module)
-	if not tag1 in tagList:
-		print("tag '%s' not found for module '%s'" % (tag1, module))
-		return
-	if tag2 == None:
-		tagRevNum = highestTag(module, 'tags/'+tag1)
-		trunkRevNum = highestTag(module, 'trunk')
-		l = commands.getoutput("svn log -v -r %d:%d %s/%s" % (tagRevNum, trunkRevNum, SVN, module))
-	else:
-		if not tag2 in tagList:
-			print("tag '%s' not found for module '%s'" % (tag2, module))
-			return
-		tag1RevNum = highestTag(module, 'tags/'+tag1)
-		tag2RevNum = highestTag(module, 'tags/'+tag2)
-		l = commands.getoutput("svn log -v -r %d:%d %s/%s" % (tag1RevNum, tag2RevNum, SVN, module))
-	l = l.split('\n')
-	return(l)
+#def log(module, tag1, tag2=None):
+#	# Find the difference between tag1 and tag2, or between tag1 and trunk
+#	tagList = tags(module)
+#	if not tag1 in tagList:
+#		print("tag '%s' not found for module '%s'" % (tag1, module))
+#		return
+#	if tag2 == None:
+#		tagRevNum = highestTag(module, 'tags/'+tag1)
+#		trunkRevNum = highestTag(module, 'trunk')
+#		l = commands.getoutput("svn log -v -r %d:%d %s/%s" % (tagRevNum, trunkRevNum, SVN, module))
+#	else:
+#		if not tag2 in tagList:
+#			print("tag '%s' not found for module '%s'" % (tag2, module))
+#			return
+#		tag1RevNum = highestTag(module, 'tags/'+tag1)
+#		tag2RevNum = highestTag(module, 'tags/'+tag2)
+#		l = commands.getoutput("svn log -v -r %d:%d %s/%s" % (tag1RevNum, tag2RevNum, SVN, module))
+#	l = l.split('\n')
+#	return(l)
 
 typeName = {'A': 'Added',
       'C': 'Conflicted',
@@ -135,7 +138,11 @@ def printRevisionsHTML(revs, file=None, endTag=None, module=None):
 		fp.write("<h2 align=\"center\">Release %s</h2>\n" % endTag)
 
 	fp.write('<dl>\n')
+	revList = []
 	for key in revs.keys():
+		revList.append(key)
+	revList.sort()
+	for key in revList:
 		if (len(revs[key]['message'])) > 0 and (
 			revs[key]['message'][0][:39] == "This commit was manufactured by cvs2svn"):
 			continue
@@ -153,11 +160,11 @@ def printRevisionsHTML(revs, file=None, endTag=None, module=None):
 def main():
 	#print "sys.arvg:", sys.argv
 	if len(sys.argv) == 4:
-		s = log(sys.argv[1], sys.argv[2], sys.argv[3])
+		s = logModuleFromTag.log(sys.argv[1], sys.argv[2], sys.argv[3])
 		revs = parseLog(s)
 		printRevisionsHTML(revs,None,sys.argv[3])
 	elif len(sys.argv) == 3:
-		s=log(sys.argv[1], sys.argv[2])
+		s=logModuleFromTag.log(sys.argv[1], sys.argv[2])
 		revs = parseLog(s)
 		printRevisionsHTML(revs)
 	elif len(sys.argv) == 2:

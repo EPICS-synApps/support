@@ -2,11 +2,12 @@
 usage = """
 usage:
     logModuleFromTag.py module [tag1 [tag2]]
-		If tag1 is supplied:
-	        do 'svn log -v' for 'module' from 'tag1' to 'tag2',
-	        or to trunk if 'tag2' is omitted
-		Otherwise:
-			do  'svn ls' for 'module'/tags
+        If tag1 and tag2 are supplied:
+            do 'svn log -v' for 'module' from 'tag1' to 'tag2',
+        If tag2 is omitted:
+            use 'trunk' for tag2
+        If tag1 is omitted:
+            Use most recent tag for tag1
 """
 
 import sys
@@ -35,24 +36,48 @@ def tags(module, verbose=False):
 			tagList.append(tag.strip('/'))
 		return(tagList)
 
-def highestTag(module, dir):
-	maxTag = -1
+def highestRevisionNum(module, dir):
+	maxRev = -1
+	maxTag = "None"
+	revDate = "None"
 	tagList = commands.getoutput("svn ls -v %s/%s/%s" % (SVN,module,dir)).split('\n')
-	print "tagList:", tagList
+	#print "tagList:", tagList
 	for tag in tagList:
-		maxTag = max(maxTag, int(tag.split()[0]))
-	return maxTag
+		words = tag.split()
+		thisRev = int(words[0])
+		thisTag = words[5]
+		if (thisRev > maxRev) and (thisTag != "./"):
+			maxTag = words[5][:-1] # strip trailing slash
+			maxRev = thisRev
+			revDate = " ".join(words[2:5])
+	return (maxRev, maxTag, revDate)
 		
 
-def log(module, tag1, tag2=None):
+def log(module, tag1=None, tag2=None):
 	# Find the difference between tag1 and tag2, or between tag1 and trunk
 	if tag2 == None:
-		tagRevNum = highestTag(module, 'tags/'+tag1)
-		trunkRevNum = highestTag(module, 'trunk')
-		l = commands.getoutput("svn log -v -r %d:%d %s/%s" % (tagRevNum, trunkRevNum, SVN, module))
+		if tag1 == None:
+			(tagRevNum, tag1, date1) = highestRevisionNum(module, 'tags')
+			print "Most recent tag (revision) is %s (%d) on %s" % (tag1, tagRevNum, date1)
+		else:
+			reply = commands.getoutput("svn ls -v %s/%s/%s" % (SVN,module,'tags/'+tag1))
+			tagList = reply.split('\n')
+			words = tagList[0].split()
+			try:
+				(tagRevNum, date1) = (int(words[0]), " ".join(words[2:5]))
+			except:
+				print "* * * Error: '%s', using most recent tag instead\n" % reply
+				(tagRevNum, tag1, date1) = highestRevisionNum(module, 'tags')
+		(trunkRevNum, xx, date2) = highestRevisionNum(module, 'trunk')
+		print "log from tag '%s' (%s on %s) to trunk (%s on %s)" % (tag1, tagRevNum, date1, trunkRevNum, date2)
+		if (tagRevNum > trunkRevNum):
+			l = "No changes"
+		else:
+			l = commands.getoutput("svn log -v -r %d:%d %s/%s" % (tagRevNum, trunkRevNum, SVN, module))
 	else:
-		tag1RevNum = highestTag(module, 'tags/'+tag1)
-		tag2RevNum = highestTag(module, 'tags/'+tag2)
+		(tag1RevNum, xx, date1) = highestRevisionNum(module, 'tags/'+tag1)
+		(tag2RevNum, xx, date2) = highestRevisionNum(module, 'tags/'+tag2)
+		print "log from tag '%s' (%s) to tag '%s' (%s)" % (tag1, date1, tag2, date2)
 		l = commands.getoutput("svn log -v -r %d:%d %s/%s" % (tag1RevNum, tag2RevNum, SVN, module))
 	l = l.split('\n')
 	return(l)
@@ -147,8 +172,11 @@ def main():
 		s=log(sys.argv[1], sys.argv[2])
 		for line in s: print(line)
 	elif len(sys.argv) == 2:
-		s=tags(sys.argv[1])
+		s=log(sys.argv[1])
 		for line in s: print(line)
+#	elif len(sys.argv) == 2:
+#		s=tags(sys.argv[1])
+#		for line in s: print(line)
 	else:
 		print (usage)
 		return
