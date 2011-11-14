@@ -30,7 +30,7 @@ DELAYGEN=$(SUPPORT)/delaygen-1-0-6
 #http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
 DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-6
 DXP=$(SUPPORT)/dxp-3-1
-IP=$(SUPPORT)/ip-2-12
+IP=$(SUPPORT)/ip-2-13
 IP330=$(SUPPORT)/ip330-2-7
 #https://svn.aps.anl.gov/epics/ipac/
 IPAC=$(SUPPORT)/ipac-2-11
@@ -45,7 +45,7 @@ QUADEM=$(SUPPORT)/quadEM-2-6
 SNCSEQ=$(SUPPORT)/seq-2-1-3
 SOFTGLUE=$(SUPPORT)/softGlue-2-2
 SSCAN=$(SUPPORT)/sscan-2-7
-STD=$(SUPPORT)/std-3-0
+STD=$(SUPPORT)/std-3-1
 #http://epics.web.psi.ch/software/streamdevice/
 STREAM=$(SUPPORT)/stream-2-5
 VAC=$(SUPPORT)/vac-1-4
