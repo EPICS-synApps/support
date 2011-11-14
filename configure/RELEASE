@@ -20,7 +20,7 @@ EPICS_BASE=/home/oxygen/MOONEY/epics/base-3.14.12.1
 ALLEN_BRADLEY=$(SUPPORT)/allenBradley-2-2
 AREA_DETECTOR=$(SUPPORT)/areaDetector-1-7-1
 #https://svn.aps.anl.gov/epics/asyn/
-ASYN=$(SUPPORT)/asyn-4-17
+ASYN=$(SUPPORT)/asyn-4-18
 AUTOSAVE=$(SUPPORT)/autosave-4-8
 BUSY=$(SUPPORT)/busy-1-4
 CALC=$(SUPPORT)/calc-2-9
@@ -34,15 +34,15 @@ IP=$(SUPPORT)/ip-2-12
 IP330=$(SUPPORT)/ip330-2-7
 #https://svn.aps.anl.gov/epics/ipac/
 IPAC=$(SUPPORT)/ipac-2-11
-IPUNIDIG=$(SUPPORT)/ipUnidig-2-8
+IPUNIDIG=$(SUPPORT)/ipUnidig-2-9
 LOVE=$(SUPPORT)/love-3-2-5
 MCA=$(SUPPORT)/mca-7-1
 MODBUS=$(SUPPORT)/modbus-2-3
 MOTOR=$(SUPPORT)/motor-6-6-2
 OPTICS=$(SUPPORT)/optics-2-8
-QUADEM=$(SUPPORT)/quadEM-2-5
+QUADEM=$(SUPPORT)/quadEM-2-6
 #http://www-csr.bessy.de/control/SoftDist/sequencer
-SNCSEQ=$(SUPPORT)/seq-2-1-2
+SNCSEQ=$(SUPPORT)/seq-2-1-3
 SOFTGLUE=$(SUPPORT)/softGlue-2-2
 SSCAN=$(SUPPORT)/sscan-2-7
 STD=$(SUPPORT)/std-3-0
