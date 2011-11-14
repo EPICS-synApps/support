@@ -25,7 +25,7 @@ svn export $SVN/quadEM/tags/R2-6 quadEM-2-6
 svn export $SVN/softGlue/tags/R2-2 softGlue-2-2
 svn export $SVN/sscan/tags/R2-7 sscan-2-7
 svn export $SVN/std/tags/R3-1 std-3-1
-svn export $SVN/stream/tags/R2-5 stream-2-5
+svn export $SVN/stream/tags/R2-5-1 stream-2-5-1
 svn export $SVN/vac/tags/R1-4 vac-1-4
 svn export $SVN/vme/tags/R2-8 vme-2-8
 svn export $SVN/vxStats/tags/R1-7-2h vxStats-1-7-2h
