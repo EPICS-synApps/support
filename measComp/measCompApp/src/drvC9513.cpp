@@ -37,7 +37,7 @@ static const char *driverName = "C9513";
 #define C9513LoadRegString         "LOAD_REG"
 #define C9513HoldRegString         "HOLD_REG"
 #define C9513PollCounterString     "POLL_COUNTER"
-#define C9513PulseStartString      "PULSE_START"
+#define C9513PulseRunString        "PULSE_RUN"
 #define C9513PulsePeriodString     "PULSE_PERIOD"
 #define C9513PulseWidthString      "PULSE_WIDTH"
 #define C9513PulseDelayString      "PULSE_DELAY"
@@ -93,7 +93,7 @@ protected:
   int C9513LoadReg_;
   int C9513HoldReg_;
   int C9513PollCounter_;
-  int C9513PulseStart_;
+  int C9513PulseRun_;
   int C9513PulsePeriod_;
   int C9513PulseWidth_;
   int C9513PulseDelay_;
@@ -181,7 +181,7 @@ C9513::C9513(const char *portName, int boardNum, int numChips)
   createParam(C9513LoadRegString,                   asynParamInt32, &C9513LoadReg_);
   createParam(C9513HoldRegString,                   asynParamInt32, &C9513HoldReg_);
   createParam(C9513PollCounterString,               asynParamInt32, &C9513PollCounter_);
-  createParam(C9513PulseStartString,                asynParamInt32, &C9513PulseStart_);
+  createParam(C9513PulseRunString,                  asynParamInt32, &C9513PulseRun_);
   createParam(C9513PulsePeriodString,             asynParamFloat64, &C9513PulsePeriod_);
   createParam(C9513PulseWidthString,              asynParamFloat64, &C9513PulseWidth_);
   createParam(C9513PulseDelayString,              asynParamFloat64, &C9513PulseDelay_);
@@ -463,7 +463,7 @@ int C9513::setupPulseGenerator(int counterNum)
   int periodCount, widthCount;
   int count;
   int idleState;
-  int pulseStart;
+  int pulseRun;
   int i;
   static const char *functionName = "setupPulseGenerator";
   
@@ -478,13 +478,13 @@ int C9513::setupPulseGenerator(int counterNum)
   getDoubleParam (counterNum, C9513PulseDelay_,     &delay);
   getIntegerParam(counterNum, C9513PulseCount_,     &count);
   getIntegerParam(counterNum, C9513PulseIdleState_, &idleState);
-  getIntegerParam(counterNum, C9513PulseStart_,     &pulseStart);
+  getIntegerParam(counterNum, C9513PulseRun_,       &pulseRun);
 
   setIntegerParam(counterNum, C9513GateControl_,    NOGATE);
   setIntegerParam(counterNum, C9513SpecialGate_,    DISABLED);
   setIntegerParam(counterNum, C9513ReloadSource_,   LOADANDHOLDREG);
   setIntegerParam(counterNum, C9513PollCounter_,    0);
-  if (pulseStart)
+  if (pulseRun)
     setIntegerParam(counterNum, C9513RecycleMode_,  RECYCLE);
   else
     setIntegerParam(counterNum, C9513RecycleMode_,  ONETIME);
@@ -518,7 +518,7 @@ int C9513::setupPulseGenerator(int counterNum)
   }
   status = setupChip(chip);
   status = setupCounter(counterNum);
-  if (pulseStart) status = loadCounterRegisters(counterNum);
+  if (pulseRun) status = loadCounterRegisters(counterNum);
   return status;
 }
 
@@ -566,7 +566,7 @@ asynStatus C9513::writeInt32(asynUser *pasynUser, epicsInt32 value)
     setIntegerParam(scalerDone_, 0);
   }
   // Pulse generator commands
-  else if ((function == C9513PulseStart_) ||
+  else if ((function == C9513PulseRun_) ||
            (function == C9513PulseCount_) ||
            (function == C9513PulseIdleState_)) {
      status = setupPulseGenerator(addr);
@@ -709,6 +709,7 @@ void C9513::pollerThread()
         setIntegerParam(i, C9513CounterValue_, count);
         callParamCallbacks(i);
       }
+      callParamCallbacks(i);
     }
     unlock();
     epicsThreadSleep(pollTime_);
