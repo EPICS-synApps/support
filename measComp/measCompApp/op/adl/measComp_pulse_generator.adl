@@ -1,13 +1,13 @@
 
 file {
-	name="/home/epics/devel/MeasComp/measCompApp/op/adl/measComp_pulse_generator.adl"
+	name="/home/epics/devel/measComp/measCompApp/op/adl/measComp_pulse_generator.adl"
 	version=030105
 }
 display {
 	object {
-		x=311
-		y=60
-		width=320
+		x=666
+		y=30
+		width=255
 		height=250
 	}
 	clr=14
@@ -89,20 +89,20 @@ display {
 }
 text {
 	object {
-		x=16
+		x=37
 		y=7
-		width=288
+		width=180
 		height=25
 	}
 	"basic attribute" {
 		clr=54
 	}
-	textix="MeasComp Pulse Generator"
+	textix="Pulse Generator"
 	align="horiz. centered"
 }
 text {
 	object {
-		x=112
+		x=79
 		y=37
 		width=96
 		height=25
@@ -116,168 +116,232 @@ text {
 text {
 	object {
 		x=50
-		y=86
-		width=150
+		y=69
+		width=90
 		height=20
 	}
 	"basic attribute" {
 		clr=14
 	}
-	textix="Pulse period"
+	textix="Frequency"
 	align="horiz. right"
 }
-text {
+"text entry" {
 	object {
-		x=90
-		y=111
-		width=110
+		x=145
+		y=69
+		width=99
 		height=20
 	}
-	"basic attribute" {
+	control {
+		chan="$(P)$(R)Frequency"
 		clr=14
+		bclr=51
 	}
-	textix="Pulse width"
-	align="horiz. right"
+	format="compact"
+	limits {
+	}
 }
 text {
 	object {
 		x=10
-		y=136
-		width=190
+		y=144
+		width=130
 		height=20
 	}
 	"basic attribute" {
 		clr=14
 	}
-	textix="Initial pulse delay"
+	textix="Initial delay"
 	align="horiz. right"
 }
 text {
 	object {
 		x=90
-		y=161
-		width=110
+		y=119
+		width=50
 		height=20
 	}
 	"basic attribute" {
 		clr=14
 	}
-	textix="Pulse count"
+	textix="Width"
+	align="horiz. right"
+}
+"text entry" {
+	object {
+		x=145
+		y=119
+		width=100
+		height=20
+	}
+	control {
+		chan="$(P)$(R)Width"
+		clr=14
+		bclr=51
+	}
+	format="compact"
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=145
+		y=144
+		width=100
+		height=20
+	}
+	control {
+		chan="$(P)$(R)Delay"
+		clr=14
+		bclr=51
+	}
+	format="compact"
+	limits {
+	}
+}
+text {
+	object {
+		x=60
+		y=169
+		width=80
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="# pulses"
 	align="horiz. right"
 }
 text {
 	object {
 		x=40
-		y=186
-		width=160
+		y=194
+		width=100
 		height=20
 	}
 	"basic attribute" {
 		clr=14
 	}
-	textix="Pulse idle state"
+	textix="Idle state"
 	align="horiz. right"
 }
 menu {
 	object {
-		x=205
-		y=187
+		x=145
+		y=194
 		width=100
 		height=20
 	}
 	control {
-		chan="$(P)$(R)PulseIdleState"
+		chan="$(P)$(R)IdleState"
 		clr=14
 		bclr=51
 	}
 }
+"text entry" {
+	object {
+		x=145
+		y=169
+		width=100
+		height=20
+	}
+	control {
+		chan="$(P)$(R)Count"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
 text {
 	object {
-		x=90
-		y=211
-		width=110
+		x=80
+		y=94
+		width=60
 		height=20
 	}
 	"basic attribute" {
 		clr=14
 	}
-	textix="Pulse output"
+	textix="Period"
 	align="horiz. right"
 }
-"choice button" {
-	object {
-		x=205
-		y=212
-		width=100
-		height=20
-	}
-	control {
-		chan="$(P)$(R)PulseStart"
-		clr=14
-		bclr=51
-	}
-	stacking="column"
-}
 "text entry" {
 	object {
-		x=205
-		y=87
+		x=145
+		y=94
 		width=100
 		height=20
 	}
 	control {
-		chan="$(P)$(R)PulsePeriod"
+		chan="$(P)$(R)Period"
 		clr=14
 		bclr=51
 	}
-	format="exponential"
+	format="compact"
 	limits {
 	}
 }
-"text entry" {
+"message button" {
 	object {
-		x=205
-		y=112
-		width=100
+		x=90
+		y=217
+		width=60
 		height=20
 	}
 	control {
-		chan="$(P)$(R)PulseWidth"
+		chan="$(P)$(R)Run"
 		clr=14
-		bclr=51
+		bclr=20
 	}
-	format="exponential"
-	limits {
-	}
+	label="Stop"
+	press_msg="0"
 }
-"text entry" {
+"message button" {
 	object {
-		x=205
-		y=137
-		width=100
+		x=25
+		y=217
+		width=60
 		height=20
 	}
 	control {
-		chan="$(P)$(R)PulseDelay"
+		chan="$(P)$(R)Run"
 		clr=14
-		bclr=51
+		bclr=15
 	}
-	format="exponential"
-	limits {
-	}
+	label="Start"
+	press_msg="1"
 }
-"text entry" {
+text {
 	object {
-		x=205
-		y=162
-		width=100
+		x=156
+		y=217
+		width=70
 		height=20
 	}
-	control {
-		chan="$(P)$(R)PulseCount"
-		clr=14
-		bclr=51
+	"basic attribute" {
+		clr=30
 	}
-	limits {
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(P)$(R)Run"
 	}
+	textix="Running"
+}
+text {
+	object {
+		x=156
+		y=217
+		width=40
+		height=20
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="$(P)$(R)Run"
+	}
+	textix="Done"
 }
