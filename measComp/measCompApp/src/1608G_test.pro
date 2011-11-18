@@ -1,8 +1,8 @@
 ; This program loads 2 user-defined waveforms for the 1608G
 
-npts = 1000000L
+npts = 2048L
 prefix = '1608G:WaveGen'
-dwell = 2e-6
+dwell = 2e-3
 time = dwell * findgen(npts)
 volts1 = 3.*sin(time*4*!pi) + 2*sin(time*200*!pi) * 1*cos(time*3.1*!pi)
 volts2 = 2.*sin(time*4*!pi)
