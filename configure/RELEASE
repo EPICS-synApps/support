@@ -47,7 +47,7 @@ SOFTGLUE=$(SUPPORT)/softGlue-2-2
 SSCAN=$(SUPPORT)/sscan-2-7
 STD=$(SUPPORT)/std-3-1
 #http://epics.web.psi.ch/software/streamdevice/
-STREAM=$(SUPPORT)/stream-2-5
+STREAM=$(SUPPORT)/stream-2-5-1
 VAC=$(SUPPORT)/vac-1-4
 VME=$(SUPPORT)/vme-2-8
 #VXSTATS=$(SUPPORT)/vxStats-1-7-2h
