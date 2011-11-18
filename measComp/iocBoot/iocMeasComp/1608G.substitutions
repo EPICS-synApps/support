@@ -91,21 +91,21 @@ file "$(MEASCOMP)/measCompApp/Db/measCompWaveformDig.template"
 {
 pattern
 {     P,       R,          PORT,    ADDR,  MAX_POINTS,  PREC}
-{   1608G:,  WaveDig,    1608G_1,     0,      2048,        4}
+{   1608G:,  WaveDig,    1608G_1,     0,    1048576,       4}
 }
 
 file "$(MEASCOMP)/measCompApp/Db/measCompWaveformDigN.template"
 {
 pattern
 {     P,       R,          PORT,    ADDR,  MAX_POINTS,  PREC}
-{   1608G:,  WaveDig1,   1608G_1,     0,     2048,         4}
-{   1608G:,  WaveDig2,   1608G_1,     1,     2048,         4}
-{   1608G:,  WaveDig3,   1608G_1,     2,     2048,         4}
-{   1608G:,  WaveDig4,   1608G_1,     3,     2048,         4}
-{   1608G:,  WaveDig5,   1608G_1,     4,     2048,         4}
-{   1608G:,  WaveDig6,   1608G_1,     5,     2048,         4}
-{   1608G:,  WaveDig7,   1608G_1,     6,     2048,         4}
-{   1608G:,  WaveDig8,   1608G_1,     7,     2048,         4}
+{   1608G:,  WaveDig1,   1608G_1,     0,       2048,       4}
+{   1608G:,  WaveDig2,   1608G_1,     1,       2048,       4}
+{   1608G:,  WaveDig3,   1608G_1,     2,    1048576,       4}
+{   1608G:,  WaveDig4,   1608G_1,     3,    1048576,       4}
+{   1608G:,  WaveDig5,   1608G_1,     4,    1048576,       4}
+{   1608G:,  WaveDig6,   1608G_1,     5,    1048576,       4}
+{   1608G:,  WaveDig7,   1608G_1,     6,    1048576,       4}
+{   1608G:,  WaveDig8,   1608G_1,     7,    1048576,       4}
 }
 
 
@@ -123,14 +123,14 @@ file "$(MEASCOMP)/measCompApp/Db/measCompWaveformGen.template"
 {
 pattern
 {     P,       R,          PORT,    ADDR,  MAX_POINTS,  PREC}
-{   1608G:,  WaveGen,    1608G_1,     0,     2048,         4}
+{   1608G:,  WaveGen,    1608G_1,     0,   1048576,        4}
 }
 file "$(MEASCOMP)/measCompApp/Db/measCompWaveformGenN.template"
 {
 pattern
 {     P,       R,          PORT,    ADDR,  MAX_POINTS,  PREC}
-{   1608G:,  WaveGen1,   1608G_1,     0,     2048,         4}
-{   1608G:,  WaveGen2,   1608G_1,     1,     2048,         4}
+{   1608G:,  WaveGen1,   1608G_1,     0,   1048576,        4}
+{   1608G:,  WaveGen2,   1608G_1,     1,   1048576,        4}
 }
 
 # Trigger
