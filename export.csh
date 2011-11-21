@@ -11,7 +11,7 @@ svn export $SVN/busy/tags/R1-4 busy-1-4
 svn export $SVN/calc/tags/R2-9 calc-2-9
 svn export $SVN/camac/tags/R2-7 camac-2-7
 svn export $SVN/dac128V/tags/R2-7 dac128V-2-7
-svn export $SVN/delaygen/tags/R1-0-6 delaygen-1-0-6
+svn export $SVN/delaygen/tags/R1-0-7 delaygen-1-0-7
 svn export $SVN/dxp/tags/R3-1 dxp-3-1
 svn export $SVN/ip/tags/R2-13 ip-2-13
 svn export $SVN/ip330/tags/R2-7 ip330-2-7
