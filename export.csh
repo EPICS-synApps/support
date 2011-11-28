@@ -20,7 +20,7 @@ svn export $SVN/love/tags/R3-2-5 love-3-2-5
 svn export $SVN/mca/tags/R7-1 mca-7-1
 svn export $SVN/modbus/tags/R2-3 modbus-2-3
 svn export $SVN/motor/tags/R6-6-2 motor-6-6-2
-svn export $SVN/optics/tags/R2-8 optics-2-8
+svn export $SVN/optics/tags/R2-8-1 optics-2-8-1
 svn export $SVN/quadEM/tags/R2-6 quadEM-2-6
 svn export $SVN/softGlue/tags/R2-2 softGlue-2-2
 svn export $SVN/sscan/tags/R2-7 sscan-2-7
