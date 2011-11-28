@@ -39,7 +39,7 @@ LOVE=$(SUPPORT)/love-3-2-5
 MCA=$(SUPPORT)/mca-7-1
 MODBUS=$(SUPPORT)/modbus-2-3
 MOTOR=$(SUPPORT)/motor-6-6-2
-OPTICS=$(SUPPORT)/optics-2-8
+OPTICS=$(SUPPORT)/optics-2-8-1
 QUADEM=$(SUPPORT)/quadEM-2-6
 #http://www-csr.bessy.de/control/SoftDist/sequencer
 SNCSEQ=$(SUPPORT)/seq-2-1-3
