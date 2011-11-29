@@ -38,7 +38,7 @@ IPUNIDIG=$(SUPPORT)/ipUnidig-2-9
 LOVE=$(SUPPORT)/love-3-2-5
 MCA=$(SUPPORT)/mca-7-1
 MODBUS=$(SUPPORT)/modbus-2-3
-MOTOR=$(SUPPORT)/motor-6-6-2
+MOTOR=$(SUPPORT)/motor-6-6-3
 OPTICS=$(SUPPORT)/optics-2-8-1
 QUADEM=$(SUPPORT)/quadEM-2-6
 #http://www-csr.bessy.de/control/SoftDist/sequencer
