@@ -28,7 +28,7 @@ CAMAC=$(SUPPORT)/camac-2-7
 DAC128V=$(SUPPORT)/dac128V-2-7
 DELAYGEN=$(SUPPORT)/delaygen-1-0-7
 #http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
-DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-6
+DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-7
 DXP=$(SUPPORT)/dxp-3-1
 IP=$(SUPPORT)/ip-2-13
 IP330=$(SUPPORT)/ip330-2-7
