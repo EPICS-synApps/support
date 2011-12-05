@@ -1,0 +1,1718 @@
+<html>
+
+<head>
+	<meta http-equiv="Content-Type"
+	content="text/html; charset=iso-8859-1">
+	<title>synApps</title>
+
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h1>synApps 5.6</h1>
+<hr><h2>Introduction</h2><hr>
+
+<P>synApps is a collection of <a href=http://www.aps.anl.gov/epics>EPICS</a> software
+intended to support most of the common requirements of an x-ray laboratory or
+synchrotron-radiation beamline.  Because it is EPICS software, synApps is
+extensible by developers and end users, to support new devices and experimental
+techniques.  This extensibility frees synApps to focus mostly on general-purpose
+capabilities and infrastructure, from which application-specific software can be
+built or assembled.
+
+<blockquote>
+
+<P>Thus, for example, synApps provides support for motors, scalers, and scans,
+but it does not tie those items together into an immediately executable scan (of
+specific motors, to acquire specific scaler channels, for a specific dwell time,
+etc.).  The user does this at run time (or a knowledgeable user can provide a
+fully specified scan, and give the novice user a button to start it).
+
+<P>Similarly, synApps provides support for ADC's and PID loops, but somebody has
+to tell the PID software what feedback value to read, what conditioning function
+to run it through, what PID parameters to use, and what actuator to drive.  By
+default, all of these choices can be made at top level, by the end user.  Or, a
+knowledgeable user can provide a fully specified PID loop, and make it available
+to a novice user through a simplified or otherwise customized interface.  The
+techniques and tools used to accomplish this are essentially the same as those
+a user would have applied at run time, so the packaged solution can be
+prototyped and tested at run time.
+
+</blockquote>
+
+<P>synApps is organized into modules, whose structure is based on the example
+directory tree produced by the EPICS application, <code>makeBaseApp.pl</code>,
+typically with two additional directories: a documentation directory, and a
+display-file directory. synApps modules typically contain source code, EPICS
+databases and database-definition files, autosave-request files, client scripts,
+display files, libraries and executables, and documentation.
+
+<P>Most synApps modules are intended primarily to export support to other modules. 
+Some synApps modules produce bootable software, in addition to support
+software, but in most cases, this bootable software is primarily for testing,
+and for demonstrating how the support software can be used.  The support
+exported by a module is of the following types, with example names and locations
+from the <b>calc</b> module:
+
+<blockquote>
+<dl>
+<dt>database-definition file, in calc/dbd
+<dd><code>calcSupport.dbd</code><br>...
+
+<P><dt>link library, in calc/lib/&lt;arch&gt;
+<dd><code>libcalc</code>
+
+<P><dt>header files, in calc/include
+<dd><code>transformRecord.h</code><br>...
+
+<P><dt>database files, and associated autosave-request files,
+in calc/calcApp/Db
+<dd><code>userTransforms10.db</code>
+<dd><code>userTransforms10_settings.req</code><br>...
+
+<P><dt>display files, in calc/calcApp/op/adl, and calc/calcApp/op/opi
+<dd><code>userTransforms10.adl</code><br>
+    <code>userTransforms10.opi</code><br>...
+
+</dl>
+</blockquote>
+
+One synApps module, the <b>xxx</b> module, is different: it doesn't export
+anything. It imports support from other modules, and produces bootable software
+to support an EPICS <i>IOC</i>.  The <b>xxx</b> module is documentation in
+runnable form, and also a template from which a synApps application can be
+constructed.  <b>xxx</b> is not comprehensive: it doesn't apply all of synApps; 
+it's usually a little behind the rest of synApps; it focusses more on VME crates
+than on other kinds of IOCs; and it's a compromise between what is most widely
+used and what is most likely to build and run out of the box.
+
+<blockquote><i>
+
+If you haven't run into the term 'IOC' yet, two things:
+
+<ol>
+
+<li>IOC stands for Input/Output Controller.  Initially, this was a VME crate
+with a processor running EPICS under the VxWorks operating system, but beginning
+with EPICS 3.14, an EPICS IOC can also be a set of tasks on a workstation
+running Linux, Windows, Cygwin, Solaris, RTEMS, Mac OS, and, no doubt, other
+operating systems.
+
+<li>The </i>EPICS Application Developer's Guide<i> is an essential reference for
+anyone planning to develop or deploy EPICS software.  While you won't need to
+read the guide to build or run synApps, you will need it to understand what
+you've done, to diagnose problems, and to extend synApps in any significant way.
+
+
+</ol>
+</i></blockquote>
+
+
+
+<hr><h2>Contents</h2><hr>
+
+<P>Here's a list of the <b>modules</b> and directories in synApps:
+
+<P><table border>
+<tr><td><b>Module</b>/<i>directory</i><th><b>description</b>
+
+<tr><td><b>areaDetector</b><td>Support for area (i.e., 2-D, or image) detectors,
+	including CCDs, pixel array detectors, and online imaging plates.  This
+	module replaces the <b>ccd</b> and <b>pilatus</b> modules.
+
+<tr><td><b>autosave</b><td>Support for saving software parameters at run time,
+	and restoring them during the next reboot.  Autosave is also a way to
+	initialize array PV's at boot time.
+
+<tr><td><b>busy</b><td>The busy record, which allows developers more ways to
+	indicate when an operation is complete.  Previously, this record was
+	provided by the <b>sscan</b> module, because the sscan record is one of its
+	beneficiaries.
+
+<tr><td><b>calc</b><td>Run-time expression evaluation, derived from the calcout
+	record in EPICS base, and extended to operate on strings, arrays, and to
+	implement coupled expressions.
+
+<tr><td><b>camac</b><td>Support for CAMAC hardware.
+
+<tr><td><i>configure</i><td>Build files
+
+<tr><td><b>dac128V</b><td>Support for an IndustryPack DAC module.
+
+<tr><td><b>delaygen</b><td>Support for delay generators, including the SRS
+	DG645, Colby Instruments PDL100A, and Gigabaudics PADL3.
+
+<tr><td><i>documentation</i><td>Um... documentation
+
+<tr><td><b>dxp</b><td>Support for X-Ray Instrumentation Associates's DXP digital
+signal processor
+
+<tr><td><b>ebrick</b><td>Support and sample application for low-cost PC-104 and
+uCDIMM based IOC.
+
+<tr><td><b>ip</b><td>Support for various serial, and other message-based,
+devices.
+
+<tr></b><td><b>ip330</b><td>Support for an IndustryPack ADC module
+
+<tr><td><b>ipUnidig</b><td>Support for an IndustryPack digital I/O module
+
+<tr><td><b>love</b><td>Support for Love controllers
+
+<tr><td><b>mca</b><td>Support for multichannel analyzers and multichannel
+	scalers.
+
+<tr><td><b>modbus</b><td>Support for ModBus-protocol devices over TCP, serial
+	RTU, and serial ASCII links
+
+<tr><td><b>motor</b><td>Support for motors
+
+<tr><td><b>optics</b><td>Support for optical tables, monochromators, slits, etc.
+
+<tr><td><b>quadEM</b><td>Support for an APS-developed 4-channel electrometer
+
+<tr><td><b>softGlue</b><td>Support for user-programmed "wiring" of custom FPGA
+	content loaded into an Acromag IP-EP201 module.
+
+<tr><td><b>sscan</b><td>Support for scans (programmed control and data
+	acquisition).
+
+<tr><td><b>std</b><td>Miscellaneous EPICS support, including the epid (extended
+	PID), scaler, sseq (string sequence), and timestamp records; and pvHistory
+	support.
+
+<tr><td><b>stream</b><td>Dirk Zimoch's streamDevice, in a module-flavored
+	wrapper.
+
+<tr><td><i>utils</i><td>Miscellaneous tools, including support for converting an
+	application from one version of synApps to another; support for the MDA file
+	format, written by the <b>sscan</b> module; and support for 
+	EPICS-application prototyping.
+
+<tr><td><b>vac</b><td>Support for vacuum controllers
+
+<tr><td><b>vme</b><td>Support for VME hardware
+
+<tr><td><b>xxx</b><td>Sample user-application directory
+
+</table>
+
+<P>See support/configure/RELEASE for a complete set of compatible module
+versions.  This release of synApps is compatible with EPICS release 3.14.12.1,
+Tornado 2.2, and the following EPICS modules/versions, which are produced and
+maintained by other members of the EPICS collaboration.  These modules are not
+part of synApps, but their maintainers have permitted us to distribute copies
+along with synApps:
+
+<P><table border>
+<tr><th>Module<th>version<th>description
+<tr><td><b>allenBradley</b><td>2-2<td>for communicating with Allen Bradley PLC's (ANL)
+<tr><td><b>ipac</b><td>v2-11<td>required for IndustryPack support (ANL)
+<tr><td><b>asyn</b><td>v4-18<td>required by many modules (ANL)
+<tr><td><b>seq</b><td>v2-1-3<td>for SNL programs in synApps (BESSY)<br>
+source: http://www-csr.bessy.de/control/SoftDist/sequencer
+<tr><td><b>stream</b><td>2-5-1<td>configurable device support for message-based devices (PSI)<br>
+source: http://epics.web.psi.ch/software/streamdevice.
+<tr><td><b>vxStats</b><td>v1-7-2h<td>vxWorks statistics, modified by us (SNS)<br>
+<b>This module has been replaced by devIocStats, and will be removed from the
+next version of synApps.</b>
+<tr><td><b>devIocStats</b><td>v3-1-7<td>IOC statistics, replaces vxStats (SLAC)<br>
+source: http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
+</table>
+
+<blockquote>
+
+<P>Previous versions of synApps included and relied on the <b>genSub</b>,
+<b>ccd</b>, and <b>pilatus</b> modules.  Beginning with EPICS 3.14.10, a replacement for the
+genSub record, called the asub record, is included in base, and synApps has been
+modified to use it instead of the genSub record.  The <b>ccd</b> and
+<b>pilatus</b> modules have been replaced by the <b>areaDetector</b> module.
+
+</blockquote>
+
+<P>For convenience, this distribution includes the module versions listed above,
+in place and ready to build, with minor modifications to build files.  A few of
+the modules have suffered more substantial modifications to fix problems, add
+display files, etc.
+
+<P>synApps includes software developed by the Beamline Controls & Data Acquisition, Software
+Services, and Accelerator Controls groups of the Advanced Photon Source (APS); by developers in
+APS Collaborative Access Teams &ndash; notably, Mark Rivers (CARS-CAT); and by developers in
+the EPICS collaboration outside of the APS &ndash; notably, those at the Diamond Light Source,
+the Berliner Elektronenspeicherring-Gesellschaft für Synchrotronstrahlung (BESSY), the Stanford
+Linear Accelerator Center (SLAC), the Swiss Light Source (SLS)/Paul Scherrer Institut (PSI),
+the National Synchrotron Light Source (NSLS), the Deutsches Elektronen Synchrotron (DESY), the
+Spallation Neutron Source (SNS), the Australian Light Source, and the Canadian Light Source.
+
+
+<P>Aside from EPICS databases, SNL (State Notation Language) programs, and the
+like, synApps contains the following code:
+
+<ul>
+<li><h3>Record support in or distributed with synApps</h3>
+<table border>
+<tr><th>Record<th>Description
+<tr><td><b>acalcout</b><td>calcout record extended to handle array expressions
+<tr><td><b>asyn</b><td>provide access to nearly all of the features of the
+    asyn facility
+<tr><td><b>busy</b><td>utility record: calls recGblFwdLink only when its
+	VAL field is zero, allowing CA clients, and asyn drivers to
+	participate in EPICS putNotify (ca_put_callback()) operations
+<tr><td><b>epid</b><td>Extended version of the PID record, previously in EPICS base.
+	Intended for implementing feedback loops
+<tr><td><b>mca</b><td>support for multichannel analyzers, and some other
+	array-valued detectors
+<tr><td><b>motor</b><td>stepper and servo motors, "soft" motor
+<tr><td><b>scalcout</b><td>calcout record extended to handle string expressions,
+	links, and values
+<tr><td><b>scaler</b><td>scaler bank
+<tr><td><b>sscan</b><td>Replaces the scan record (Ned Arnold/APS) previously in EPICS
+	base. This version uses a modified version of recDynLlib that supports
+	dbNotify command completion.  It uses ca_put_callback to do puts, instead of
+	ca_put.
+<tr><td><b>scanparm</b><td>scan parameters for use with the scan record
+<tr><td><b>sseq</b><td>string-sequence record.  This is a modified version of
+	the seq record in base.  This version can link to/from
+	either string or numeric PVs, and it can use
+	dbCaPutLinkCallback to wait for completion of the
+	execution started by one link before going on to the
+	next.
+<tr><td><b>swait</b><td>replaces the wait record previously in EPICS base.
+	This version uses a modified version of recDynLlib
+	that supports dbNotify command completion.  It uses
+	ca_put_callback to do puts, instead of ca_put.
+<tr><td><b>table</b><td>6-degree-of-freedom optical table
+<tr><td><b>transform</b><td>like an array of calc records, with output links
+<tr><td><b>vme</b><td>generic vme record (Mark Rivers/APS/CARS-CAT)
+<tr><td><b>timestamp</b><td>(written by Stephanie Allison/SLAC) Needed by the vxStats
+	module, but apparently not available in a published module.
+</table>
+
+<P><li><h3>Device/driver support in or distributed with synApps</h3>
+<P>List appended to this document.
+
+<P><li><h3>Other C code</h3>
+<dl>
+<dt>aCalcPostfix, aCalcPerform
+	sCalcPostfix, sCalcPerform
+	<dd>Support for run-time expression evaluation
+<dt>recDynLink
+	<dd>Backward compatible extension of the dynamic-link software
+		previously in EPICS base.  (New code should probably use
+		dbCaPutlinkCallback(), instead of recDynLink.)
+<dt>save_restore, dbrestore
+	<dd>Automatic parameter save and boot-time restore.
+<dt>saveData
+	<dd>Saves scan data to files on an NFS-mounted disk (vxWorks), or to
+	a local disk (other operating systems).
+</dl>
+
+<P><li><h3>Documentation</h3>
+
+	<P>In addition to this top-level documentation, synApps modules have their own
+	documentation directories, and the <b>xxx</b> module contains examples of how much of the
+	software is imported, built, loaded, and run. Some modules have their own example iocBoot
+	directories.
+
+
+<P><li><h3>Miscellaneous</h3>
+
+	<P>The synApps support/utils directory contains a variety of scripts,
+	programs, etc., that some have found useful.
+</ul>
+
+<hr><h2>How to deploy synApps</h2><hr>
+
+<P>Although synApps is distributed as a single 'support' directory, it's
+normally deployed as a two-part system: a 'support' directory, and one or more
+'user' directories.  The support directory can be installed on a read-only file
+system, along with EPICS base and other modules, and used from there by user
+directories, each of which typically begins as a copy (or a collection of
+copies) of the <b>xxx</b> module, and is customized/extended to suit a
+particular application and set of hardware.
+
+<P>I'm not being very precise about what is meant by a user directory, because
+there are a number of reasonable variations.  At the simplest, a single copy of
+the <b>xxx</b> module, which supports a single IOC, is a user directory.  If
+several IOC's cooperate to serve a single application (such as a synchrotron
+beamline), one might make several independent copies of <b>xxx</b>, or one might
+extend a single <b>xxx</b> copy to contain multiple xxxApp directories, and
+multiple iocBoot/iocxxx directories.  At APS, the BCDA group maintains around
+100 top-level user directories (for each version of synApps) each of which
+contains a number of copies of <b>xxx</b>, and most of which, in turn, contain
+multiple xxxApp and iocBoot/iocxxx directories.
+
+<P>Here's what a complete installation might look like (much detail omitted)
+with all the files you will have to edit before you can build or boot an IOC:
+
+<P><h4> The support directory</h4>
+<pre>
+synApps/support/
+    Makefile                            <&mdash; EDIT to build
+    all_adl/
+    allenBradley/
+    areaDetector/
+    asyn/
+    busy/
+    calc/
+    camac/
+    configure/
+        CONFIG
+        CONFIG_SITE                     <&mdash; EDIT to build
+        RELEASE                         <&mdash; EDIT to build
+        EPICS_BASE.&lt;arch&gt;               <&mdash; EDIT to build for &lt;arch&gt;
+        Makefile
+        RELEASE
+        SUPPORT.&lt;arch&gt;                  <&mdash; EDIT to build for &lt;arch&gt;
+        setup_epics_cygwin32
+        ...
+    dac128V/
+    delaygen/
+    devIocStats/
+    documentation/
+    dxp/
+    ebrick/
+    ip/
+    ip330/
+    ipUnidig/
+    ipac/
+        drvIpac/drvIpac.dbd             <&mdash; EDIT to build
+    love/
+    mca/
+    modbus/
+    motor/
+        motorApp/
+            Makefile                    <&mdash; EDIT to build
+    optics/
+    quadEM/
+    seq/
+    softGlue/
+    sscan/
+    std/
+    stream/
+    utils/
+    vac/
+    vme/
+    vxStats/
+    xxx/
+
+</pre>
+<P><h4> The user-directory tree</h4>
+<pre>
+synApps/ioc/
+    1bm/
+        Makefile
+        bin/
+        configure/
+            CONFIG_SITE                 <&mdash; EDIT to build
+            RELEASE                     <&mdash; EDIT to build
+        dbd/
+        iocBoot/
+            Makefile
+            nfsCommands                 <&mdash; EDIT to run
+            ioc1bma/
+                Makefile                <&mdash; EDIT to build
+                areaDetector.cmd
+                asynRecord.req
+                asynRecord.substitutions
+                autoShutter.substitutions
+                auto_13mca_settings.req
+                auto_3mca_settings.req
+                auto_positions.req
+                auto_settings.req
+                autosave/
+                basic_motor.substitutions
+                bootParms
+                camac.cmd
+                canberra_1.cmd
+                canberra_13.cmd
+                canberra_13.substitutions
+                canberra_3.cmd
+                canberra_3.substitutions
+                cdCommands or envPaths
+                dac128V.cmd
+                dac128V.substitutions
+                femto_DxPCA_x00.substitutions
+                gpib.cmd
+                industryPack.cmd
+                ip330.cmd
+                ip330PIDFast.substitutions
+                ip330Scan.substitutions
+                ipUnidig.cmd
+                ipUnidig.substitutions
+                motor.substitutions
+                orient_xtals.substitutions
+                pf4bank.req
+                pf4common.req
+                picMot.substitutions
+                pid_slow.substitutions
+                pseudoMotor.substitutions
+                quadEM.cmd
+                quadEM_pid.substitutions
+                saveData.req
+                save_restore.cmd
+                scanParms.substitutions
+                serial.cmd
+                softGlue.cmd
+                softMotor.substitutions
+                st.cmd
+                vme.cmd
+                vxStats.substitutions
+            ioc1bmb/
+            ioc1bmc/
+            ioc1bmd/
+                &lt;much like ioc1bma&gt;
+        release.pl
+        setup_epics_common
+        start_epics_1bma
+        start_epics_1bmb
+        start_epics_1bmc
+        start_epics_1bmd
+        1bmaApp/
+        1bmbApp/
+        1bmcApp/
+        1bmdApp/
+
+    1id/
+    2bm/
+    2id/
+    ...
+        &lt;much like 1bm&gt;
+</pre>
+
+<P>As shown above, the following files can or must be edited to modify the way
+the synApps support directory is built.  After modifying files in  the support,
+or support/configure directories, you should run <code>make release</code>,
+and <code>make rebuild</code>, in the support directory.
+
+<blockquote>
+<dl>
+<dt><code>support/Makefile</code>
+    <dd>Comment out any modules you don't want to build.
+
+<P><dt><code>support/configure/EPICS_BASE.&lt;arch&gt;</code>
+    <dd>Edit to specify the full path to EPICS base for target architecture &lt;arch&gt;.
+
+<P><dt><code>support/configure/SUPPORT.&lt;arch&gt;</code>
+
+	<dd>Edit to specify the full path to the synApps <code>support</code> directory for
+    target architecture &lt;arch&gt;.
+
+<P><dt><code>support/configure/RELEASE</code>
+
+	<dd>Edit the definitions of <code>EPICS_BASE</code> and <code>SUPPORT</code>
+	with the correct paths to these directories on your system.<br>
+	Comment out any modules you don't want to build.
+	
+<P><dt><code>support/configure/CONFIG_SITE</code>
+	<dd>Edit to set the following variables, which control what will be built:
+	The supported values for these variables are <code>YES</code> and
+	<code>NO</code>.
+	<dl>
+	<dt><code>LINUX_USB_INSTALLED</code>
+
+		<dd>This controls the build of the <b>dxp</b> module.  If usb is not
+		installed for developers, then parts of dxp/dxpApp/handelSrc will not be
+		built, and the example application executable, dxpApp, will not be
+		built, so dxp/iocBoot cannot be used.
+
+	<dt><code>LINUX_NET_INSTALLED</code>
+
+		<dd>This controls the build of the <b>mca</b> module, specifically,
+		support for the Canberra AIM hardware.
+
+
+	<dt><code>IOCS_APPL_TOP</code>
+	
+		<dd>Path to application top as seen by IOC.  Set this when your IOC and host use
+		different paths to access the application directory. This will be needed to boot from a
+		Microsoft FTP server or with some NFS mounts. You must rebuild in the iocBoot directory
+		for this to take effect.
+
+	</dl>
+
+<P><dt><code>ipac/&lt;version&gt;/drvIpac/drvIpac.dbd</code>
+
+	<dd>uncomment <code>registrar()</code> commands for IndustryPack carriers
+    you plan to use.
+
+<P><dt><code>motor/&lt;version&gt;/motorApp/Makefile</code>
+	<dd>comment or uncomment to select the motor support you want to build.
+</dl>
+</blockquote>
+
+
+<P>The following files must be edited before building a user directory:
+
+<blockquote>
+<dl>
+<dt><code>ioc/&lt;appname&gt;/configure/RELEASE</code><br>
+	<dd>edit the definition of <code>SUPPORT</code> with the correct path to
+	the support directory
+<dt><code>ioc/&lt;appname&gt;/iocBoot/&lt;iocname&gt;/Makefile</code><br>
+	<dd>edit to specify the architecture that is to be built
+</dl>
+</blockquote>
+
+<P>The association between a user directory, and the support directory on which
+it depends, is made entirely by the file, configure/RELEASE, in the
+user directory.  Typically, this file simply includes the
+configure/RELEASE file from the support directory, but it may
+differ: it may specify EPICS modules not included in synApps, for example.  Or,
+if the support directory contains more than one built version of a module (the
+original and a bug fix, for example) the user directory can choose which
+version it will use.
+
+<blockquote><i> Note, however, that the modules in synApps are interdependent. 
+Many of the modules depend on the <b>asyn</b> module, for example, and there are
+many other dependencies, both direct and implied. (If module <b>a</b> depends on
+module <b>b</b>, and module <b>b</b> depends on module <b>c</b>, then <b>a</b>
+also depends on <b>c</b>, and it must specify the same version of <b>c</b> that
+<b>b</b> specifies.)  The complete set of modules selected by a user directory
+must be self consistent, and the EPICS build will ensure this, unless you tell
+it not to.
+
+<P>For completeness, the format of a RELEASE-file path definition is
+"<code>&lt;name&gt;=&lt;path&gt;</code>", where &lt;name&gt; is an arbitrary
+string, and &lt;path&gt; is an absolute directory name (starts with '/' on a
+unix host, or with a drive name such as 'C:' on Windows).  Although &lt;name&gt;
+is arbitrary, you should be consistent.  Generally, the EPICS build doesn't care
+what paths are named, because it's just going to collect them all into a list,
+and use the list to search for libraries, .dbd files, etc.  But, in the module
+consistency check mentioned above, the name does matter, because EPICS can't
+check that all modules in a build are using the same version of, say, the asyn
+module, unless they all use the same &lt;name&gt; for it.  Also, in the xxx
+module, &lt;name&gt; is used extensively to find display files (that is, to set
+the EPICS_DISPLAY_PATH environment variable), and to specify databases, autosave
+request files, etc., when an ioc is booting.
+
+</i></blockquote>
+
+<hr><h2> How to build synApps</h2><hr>
+<ol>
+<h3><li>System configuration</h3>
+
+<P>Before building synApps, you should ensure that your system has the
+tools, libraries, header files, etc. required to build the modules you want
+to build.  Here's a list of dependencies we've
+documented so far.
+
+<blockquote><i>
+
+Please help: new users are particularly well placed to help us complete this
+list.  Long-time developers typically have lots of things correctly configured
+that they don't even remember configuring.
+
+</i></blockquote>
+
+<ul>
+<li>The EPICS extension, <a href="http://www.aps.anl.gov/epics/extensions/msi/index.php">msi</a>,
+    version 1-5 or higher.  This tool is needed to build some softGlue databases.
+
+<P><li>Linux:
+<dl>
+<dt>libtiff.a,libjpeg.a, libz.a, libsz.a, libNexus.a, libhdf5.a, libnetCDF.a,
+and associated header files<dd>needed for the
+<b>areaDetector</b> module.  Note that versions of these files are included in
+<b>areaDetector</b> for some architectures. 
+<dt>libusb.a, and associated header files<dd>needed for the <b>dxp</b> module
+</dl>
+
+<P><li>Cygwin:
+<P>Cygwin is configured from a menu of choices organized by function.  You will
+need the following components from the following menu headings:
+	<ul>
+		<li>base
+		<ul>
+			<li>All default components
+		</ul>
+		<li>devel
+		<ul> 
+			<li>gcc-core
+			<li>gcc-g++
+			<li>libncurses-devel
+			<li>make
+			<li>readline
+		</ul>
+		<li>interpreters
+		<ul>
+			<li>perl
+		</ul>
+		<li>libs
+		<ul>
+			<li>ncurses
+
+		<li>sunrpc (needed for the <b>asyn</b> and <b>sscan</b> modules).  In
+			cygwin 1.7, rpc was replaced by libtirpc: instead of linking with
+			librpc, you link with libtirpc.  EPICS base 3.14.12.1 defines
+			CYGWIN_RPC_LIB (configure/os/CONFIG.Common.cygwin-x86) to handle this.
+
+		</ul>
+		<li>misc
+		<ul>
+			<li>DLPORTIO (needed for the <b>dxp</b> module)
+			<li>the sequencer (version 2.1) uses re2c, which is not a standard part of
+				cygwin.  You must install re2c version 0.13.3 or higher.  This is
+				available from http://re2c.org/.
+		</ul>
+	</ul>
+
+<P><li>Windows:
+<dl>
+<dt>DLPORTIO<dd>needed for the <b>dxp</b> module
+</dl>
+
+</ul>
+
+<P><h3><li>Building and configuring the support directory</h3>
+
+
+<P>If you have a built copy of EPICS base 3.14.12.1 or later, then building the
+synApps support directory should be very simple:
+
+<ol>
+<li>Edit support/Makefile, support/configure/RELEASE,
+   and support/configure/CONFIG_SITE, as noted above.
+
+<li>Edit support/configure/EPICS_BASE.&lt;arch&gt;,
+support/configure/SUPPORT.&lt;arch&gt, as noted above, for the architectures you
+want to build.
+
+<li>Edit ipac/&lt;version&gt;/drvIpac/drvIpac.dbd, and
+   motor/&lt;version&gt;/motorApp/Makefile, as noted above.
+
+<li>Set the environment variable <code>EPICS_HOST_ARCH</code> to the
+   architecture (and compiler, if there is a choice) on which you are building.
+   synApps is tested with the architectures <code>solaris-sparc-gnu</code>,
+   <code>linux-x86_64</code>, <code>cygwin-x86</code>, and <code>win32-x86</code>.
+
+<li>In support, run '<code>make release</code>'.   (See note below.)
+
+<li>In support, run '<code>make</code>'.  (You should be able to use
+    '<code>make -j</code>' to build synApps more quickly.)
+</ol>
+
+<P>You should use the same GNU Make executable that was used to build EPICS
+base.  You may need <code>$(EPICS_BASE)/bin/&lt;arch&gt;</code> in your path,
+and you may need <code>$(EPICS_BASE)/lib/&lt;arch&gt;</code> in
+<code>LD_LIBRARY_PATH</code>.
+
+<P>When executed in the support directory, '<code>make release</code>' will go to all of the
+modules support/Makefile is configured to build, and edit the configure/RELEASE files in those
+modules so that they all build from the same versions of EPICS base and other known modules. 
+
+<blockquote><b>Note:</b> 'make release' is not an operating-system independent operation in synApps 5.6:
+areaDetector and dxp are not built on solaris, so a 'make release' performed on solaris will
+not edit make files in these modules. 
+</blockquote>
+
+<P>Typically, the build will not succeed the first time, because you will not
+have all of the required system support.  If you find that you cannot build some
+synApps module, you should comment it out of both support/Makefile, and
+support/configure/RELEASE*.
+
+<P><h3><li>Building and configuring a user directory</h3>
+
+<P>Once synApps' support directory has built without errors, the <b>xxx</b>
+module will have been configured (xxx/configure/RELEASE will have
+correct, absolute paths to base and support) and built, so you can use it as
+an example &ndash; or, better, a template &ndash; for constructing user directories to
+support your IOCs.  To make a template of xxx, clean and uninstall it, and tar a
+copy of the directory.  To use the template, untar it, cd to its top-level
+directory and run utils/changePrefix to change the PV-name prefix
+from xxx to whatever you want.  (Note you must have support/utils in your
+command path, or you could copy utils/changePrefix and
+utils/doSed to a directory that is in your command path.  Note that
+changePrefix is synApps-version specific.)
+
+<P>Here's what I do:
+<pre>
+	# Do once when synApps is built:
+	cd $(SYNAPPS)/support/xxx
+	setenv EPICS_HOST_ARCH &lt;host architecture&gt;
+	gnumake clean uninstall
+	(repeat as needed for any other architectures)
+	tar cvf ../xxx.tar *
+
+	# Do whenever a new user directory ('1bm', in this example) is needed:
+	cd $(SYNAPPS)/ioc
+	mkdir 1bm
+	cd 1bm
+	tar xf $(SYNAPPS)/support/xxx.tar
+	changePrefix xxx 1bma
+	mv iocBoot/iocvxWorks iocBoot/ioc1bma
+	edit iocBoot/ioc1bma/Makefile to specify the IOC processor type
+	gnumake
+</pre>
+
+<P>To put a second application, 1bmb, into 1bm, I run the following commands:
+<pre>
+	cd $(SYNAPPS)/ioc
+	mkdir temp
+	cd temp
+	tar xf $(SYNAPPS)/support/xxx.tar
+	changePrefix xxx 1bmb
+	mv iocBoot/iocvxWorks iocBoot/ioc1bmb
+	edit iocBoot/ioc1bmb/Makefile to specify the ioc processor type
+	cd $(SYNAPPS)/ioc
+	mv temp/1bmbApp/start_epics_1bmb 1bm
+	mv temp/1bmbApp 1bm
+	mv temp/iocBoot/ioc1bmb 1bm/iocBoot
+	rm -rf temp
+	cd 1bm
+	gnumake
+</pre>
+
+<P>Edit the files above to agree with your hardware, to load the databases you
+want, etc., set up the IOC processor's parameters to load from the software
+just configured, and boot the crate.  If you don't know how to do this, read
+on.
+</ol>
+
+<hr><h2>How to make synApps work</h2><hr>
+<ol>
+<h3><li>Setting up the IOC (vxWorks)</h3>
+
+<P>Ensure that <code>$(EPICS_BASE)/bin/&lt;arch&gt;/caRepeater</code> gets run
+when your
+workstation boots.  If you have no way of doing this, you can run it manually
+or put the command in your .login file.
+
+<P>Setup your host system to work with the EPICS processor.  See the <i>VxWorks
+Programmer's Guide</i> if you have a copy.  Here's what we do (on a Sun
+workstation):
+<ul>
+<li>Add a user named <vx_username> with the password <vx_password>.
+    The user has nothing in its home directory, and very few priviledges.
+
+<li>Connect an ethernet cable to the processor.
+
+<li>Setup the workstation to use a serial port at 9600 baud.
+    Connect a serial cable from the workstation to the VME
+    processor's "Console" port.
+
+<li>Start up an "xterm" on the workstation and type
+    <pre>cu -lttya</pre>
+    <P>(On some workstations we must type "<code>cu -lcua/a</code>".)
+    This gets the xterm communicating with the crate processor.
+
+<li>Turn the crate on.  The crate processor says "Press any key to
+    stop auto-boot..." and a number counting down from 7.  Pressing
+    a key gets the prompt "[VxWorks Boot]:"
+
+<li>Type "p" to see the current boot parameters,  type "c" to
+    change them.  Here are sample boot parameters 
+<pre>
+    boot device          : dc 
+    processor number     : 0 
+    host name            : &lt;server&gt; 
+    file name            : /usr/local/vxWorks/T222/mv2700-asd1
+    inet on ethernet (e) : xxx.xxx.xxx.xxx:fffffe00 
+    inet on backplane (b): 
+    host inet (h)        : xxx.xxx.xxx.xxx
+    gateway inet (g)     : 
+    user (u)             : &lt;vx_username&gt; 
+    ftp password (pw) (blank = use rsh): &lt;vx_password&gt;  
+    flags (f)            : 0x0
+    target name (tn)     : iocxxx
+    startup script (s)   : /home/server/USER/epics/xxx/iocBoot/iocxxx/st.cmd
+    other (o)            : 
+</pre>
+</ul>
+
+<P>See <code>support/xxx/iocBoot/ioc*/bootParms</code> for other processor
+types.  If your VME processor has mount access to an 'APSshare' NFS file
+server, you can specify the 'file name', above, as
+"/APSshare/vw/T222/mv2700-asd1".
+
+
+<P><h3><li>Display files</h3>
+
+<P>synApps includes hundreds of display files intended for use with the EPICS
+display manager, MEDM, and translations of those files that work with CSS-BOY. 
+Other EPICS display managers exist, and I once did a mass automated translation
+of MEDM display files to the EDM display manager's file format, using software
+developed by others.  This translation was only partially satisfactory, but we
+don't have the resources to do the job better or more generically.  In this
+documentation, I'll limit attention to MEDM display files.
+
+
+
+<P><h3><li>Fitting synApps to a particular set of hardware</h3>
+
+
+<P>This happens in the user directory.  Generally, you must tell "EPICS" what
+hardware is in your crate, and what addresses, interrupt vectors, etc. you have
+set your hardware to use.  (See support/xxx/documentation/vme_address.html for a
+list of suggested values.)  You also must specify which motors any slit,
+table, monochromator, etc., control software is to use.  If you use serial or
+GPIB, you must match port names to hardware devices, set serial-port parameters,
+and specify GPIB addresses.  For any IndustryPack modules, you must specify the
+IP carrier and slot into which you've loaded those modules.
+
+<P><h4>Overview</h4>
+
+<P>In a complete job of fitting synApps to an IOC's hardware, all of the
+following files will be touched:
+<blockquote>
+<dl>
+<dt><code>xxx/iocBoot/ioc*/st.cmd</code>
+<dd>This is the ioc's startup script, and it loads the other .cmd files 
+
+<P><dt><code>xxx/iocBoot/ioc*/*.cmd</code><br>
+    <code>xxx/iocBoot/ioc*/*.substitutions</code>
+<dd>Other command files that may or may not be invoked by st.cmd
+	
+<P><dt><code>xxx/iocBoot/ioc*/auto_positions.req</code><br>
+    <code>xxx/iocBoot/ioc*/auto_settings.req</code>
+<dd>specifies PV's to be saved/restored automatically
+
+<P><dt><code>xxx/iocBoot/ioc*/saveData.req</code>
+<dd>identifies PV's used by the saveData software,  sscan records to be
+	monitored for data, and PV's whose values are to be included in all
+	scan-data files.
+
+<P><dt><code>xxx/iocBoot/ioc*/bootParms</code>
+<dd>a copy of the boot parameters (in case the IOC processor
+        crashes in a way that erases nonvolatile memory)
+</dl>
+</blockquote>
+
+<P><h4>In more detail</h4>
+
+<P><ul>
+<li><code>xxx/iocBoot/ioc*/st.cmd</code>
+
+<P>This is the file run by the IOC at boot time.  It loads an executable built in
+the IOC directory (e.g., <code>xxx</code>, or <code>xxx.munch</code>), sets parameters to configure that
+software, makes calls to that software to configure it for a particular set of
+hardware, and loads databases from synApps modules.  Mostly, it sources other
+.cmd files that do these same things.
+
+<P>This file, and the files it sources, are probably worth studying.  They are
+reasonably well commented, and contain <code>dbLoadRecords()</code> commands for most of
+the EPICS databases in synApps. 
+
+<P><li>Motors
+
+<P>To load more motors, add lines to the file
+<code>xxx/iocBoot/ioc*/motor.substitutions</code>. For motors controlled by a
+VME board, edit <code>vme.cmd</code> to specify the hardware address, etc.  For
+motors controlled through a serial connection, edit <code>serial.cmd</code>.
+
+<P>If you want the new motors to work with the 'AllStop' button
+(<code>xxx:allstop.VAL</code>
+&ndash; see the top-level MEDM display <code>xxx.adl</code>), load the database
+<code>$(MOTOR)/db/motorUtil.db</code>, and run the command
+<code>motorUtilInit("xxx:")</code>.
+
+<P>If you want the IOC automatically to save positions and settings of the new
+motors, and restore them when the crate reboots, add lines to the files
+<code>xxx/iocBoot/ioc*/auto_settings.req</code> and
+<code>xxx/iocBoot/ioc*/auto_positions.req</code>.
+
+<P><li>Slits
+
+<P>To use a pair of motors to control a slit, search for <code>2slit.db</code>
+in <code>xxx/iocBoot/ioc*/st.cmd</code>, and edit the
+<code>dbLoadRecords()</code> command you'll find there.  The example in
+<code>st.cmd</code> loads two copies of <code>2slit.db</code> intended for use
+as the horizontal and vertical members of a four-jaw slit.  The MEDM displays
+<code>2slit*.adl</code> and <code>4slit*.adl</code> are involved in these
+applications.
+
+<P>The slit database can make either of two sets of assumptions about the two
+motors attached to the individual slit leaves, depending on the value of the
+macro "RELTOCENTER" that may be supplied when loading the 2slit.db database.
+
+<P>If "RELTOCENTER=0" is supplied, or if RELTOCENTER is omitted altogether: 
+<ul>
+<li>Both motors have the same engineering units.
+<li>Both motors are in the same coordinate system.  When the center position is
+increased, both motors' .VAL fields increase.
+<li>The APS standard beamline coordinate system is used.  Positive Z is the beam
+direction; positive Y is upward; positive X is outward from the storage ring.
+</ul>
+
+<P>If "RELTOCENTER=1" is supplied:
+<ul>
+<li>Both motors have the same engineering units.
+<li>Their .VAL fields increase as the slit opens.
+<li>The APS standard beamline coordinate system is used.  Positive Z is the beam
+direction; positive Y is upward; positive X is outward from the storage ring.
+</ul>
+
+<P>The <code>2slit.db</code> database allows users to move either the slit
+virtual motors or the actual motors, and it keeps all the readback values
+current regardless of how the actual motors got moved or recalibrated. But it
+does not automatically reset the slit <b>drive</b> values when the actual motors are
+used.  This must be done manually, using the "SYNC" button on the
+<code>2slit.adl</code> display.  Pressing this button causes the database to
+read the actual motor drive values and set the slit-drive values accordingly.
+
+<P>To recalibrate slit positions, press the "Set" button, type in the current slit
+position as you want it to be called, and press the "Use" button.  This
+procedure uses the "Set" buttons of both motors the slit software talks to, and
+the user/dial offsets of those motors actually implement the recalibration. 
+
+<P>There is a new, experimental slit database in synApps which uses soft motor
+records as the user/client interface.  This allows clients that know how to
+control a motor also to control a slit, with some limitations.  We hope to use
+soft motor records in front of other positioners (e.g. monochromators, optical
+tables, insertion devices, and DAC channels) in the future.
+
+<P><li>Optical tables
+
+<P>Optical tables are controlled by a custom EPICS record (the "table" record),
+used in the database <code>table.db</code> and controlled via MEDM displays
+<code>table*.adl</code>.
+
+<P>Table virtual motors behave in much the same way as do slit virtual motors. 
+However, the table software does not use user/dial offsets in the underlying
+motor to implement recalibration (it can't, since it works through a nonlinear
+transform).  Instead, the table maintains its own offsets for all of the six
+coordinated motions it implements. Pressing the "Set" button causes new table
+positions to modify the offsets instead of moving the table (which is exactly
+the way motor and slit calibration works).  In addition to a "Sync" button,
+which reads motor positions and calculates the table positions from them, the
+table display has an "Init" button, which zeros all offsets before doing a
+"sync" operation.  It also has a "Zero" button, which manipulates all the table
+offsets to make the current table positions zero without moving or
+recalibrating any motors.
+
+<P><li>Monochromators
+
+<P>Several varieties of crystal monochromators are supported in synApps: two
+constant-offset "channel-cut" monochromators, a high-resolution double-crystal
+monochromator, and a spherical-grating monochromator. Most are supported by
+databases paired with State Notation Language (SNL) programs, and several MEDM
+displays.  The EPICS databases <code>kohzuSeq.db</code>, SNL program
+<code>kohzuCtl.st</code>, and MEDM displays <code>kohzu*.adl</code> (also
+<code>kohzu*.gif</code>) are involved in control of two varieties of
+high-heat-load monochromators.  The EPICS database <code>hrSeq.db</code>, SNL
+program <code>hrCtl.st</code>, and MEDM displays <code>hSeq*.adl</code> are
+involved in control of the high-resolution double-crystal monochromator.  The
+spherical grating monochromator is supported by the database <code>SGM.db</code>
+and the displays <code>SGM*.adl</code>.
+
+<P><li>Filters
+<P>The APS standard user filters combine several motors and solenoids to control
+the placement of filter material in the beam path.  The databases
+<code>filterMotor.db</code> and <code>filterLock.db</code>, and the MEDM displays
+<code>*filter*.adl</code> are involved in this application.
+
+<P><li>Basic run-time programming
+
+<P>Impromptu coordinated motions and other bits of run-time programming are
+handled by what we call a "userCalc" (actually just a swait record with a nice
+MEDM interface) or a "userTransform" (actually just a transform record with a
+nice MEDM interface).  We normally load sets of these and other records into
+each EPICS processor, specifically for end-user programming.  Users type in
+expressions to be evaluated, and link inputs and outputs, as needed, to glue
+existing objects together to do what they want done at the moment.  Here are
+some examples of the tasks that have been accomplished with userCalcs and
+userTransforms:
+
+<ul>
+<li>Turn off hardware feedback control of a monochromator crystal when beam drops
+below a user-specified level.  The userCalc monitored the EPICS PV that
+contains the value of the positron beam-current, and drove a DAC channel (used
+as a digital i/o bit) that enabled hardware feedback.
+
+<li>Support the ubiquitous theta/two-theta coordination by slaving the two-theta
+motor's .VAL field to the theta motor's .VAL field.
+
+<li>Talk to a motor through a nonlinear transformation, e.g.,
+energy-to-Bragg-angle.
+
+<li>Close slow feedback loops &ndash; e.g., to adjust a monochromator crystal to
+suppress third-order diffraction through the high-heat-load monochromator.
+
+<li>Move multichannel-analyzer regions of interest automatically as the incident
+beam energy changes.
+
+<li>Save and automatically subtract shutter-closed offsets from scaler data.
+
+<li>Implement the first cut at support for a spherical grating monochromator.
+
+</ul>
+
+<P><li>String-expression support
+
+<P>Run-time programming involving strings and/or numbers can be done with
+userStringCalcs, which resemble userCalcs closely, but differ in significant
+details.  A package containing two stringCalcs and an 'asyn' record (called a
+"deviceCmdReply") is also available for run-time programming of simple support
+for serial and other message-based devices.
+
+<P><li>Array-expression support
+
+<P>Run-time programming involving arrays and/or numbers can be done with
+userArrayCalcs, which resemble userCalcs closely, but differ in significant
+details.
+
+<P><li>Scan support
+
+<P>Scans of up to five dimensions are supported by the
+<code>standardScans.db</code> database.  Scan data is written to disk by the
+saveData program, whose user interface is contained in
+<code>saveData.db</code>.  The number of data points per scan dimension is
+specified when <code>standardScans.db</code> is loaded, and is limited to 2000,
+unless the environment variable <code>EPICS_CA_MAX_ARRAY_BYTES</code> is
+specified.
+
+<P>Note that loading <code>saveData.db</code> does not automatically cause scan data to be
+written to disk.  You must also call the function <code>saveData_Init()</code>, specifying a
+scan-configuration file (<code>saveData.req</code>) which tells saveData which sscan records
+to monitor.
+
+<P>Also note that initializing saveData is an all-or-nothing choice.  If you
+initialize saveData, then <i>all</i> scans performed by sscan records named in
+the configuration file will be written to disk.  If saveData cannot write a
+file, it will prevent the next scan from completing. (Scans performed by sscan
+records that are <i>not</i> named in <code>saveData.req</code> are completely outside of this
+restriction.  The data they accumulate is not written to disk by saveData, so
+saveData is not involved in their operation.)
+
+<P><li>Sequence support
+
+<P>Run-time programming of sequences is possible using the sseq record and related
+MEDM displays <code>yySseq.adl</code>
+
+<P><li>Multiple-step measurement
+
+<P>Up to four measurement steps involving positioners, detectors, and end
+calculations (e.g., to support dichroism experiments) can be done with the
+<code>4step.db</code> database and the related MEDM display, <code>4step.adl</code>. The entire
+measurement sequence can be involved in a scan by treating the 4step database
+as you would treat the scaler or mca software.
+</ul>
+
+<P><h3><li>Running synApps</h3>
+
+<ol>
+<P><li>Boot parameters
+
+<P>See <code>xxx/iocBoot/ioc*/bootParms</code> for sample boot parameters.
+
+<P><li>MEDM
+
+<P>See the MEDM Operator's Manual for detailed information on the special needs of
+this X11/Motif program.  I'll assume those needs have been met.
+
+<P>Edit the file <code>xxx/start_epics_xxx</code> to so it sets the environment
+ variable
+<code>EPICS_APP</code> to the directory that contains <code>xxxApp</code>.  If you plan to run MEDM on a
+workstation that isn't on the same subnet as the IOC's, you'll need to
+uncomment and edit the definition of the environment variable
+<code>EPICS_CA_ADDR_LIST</code>.  In principle, you should be able to name only the
+broadcast address for the subnet that contains the IOC's, but if this doesn't
+work, you can put in the IP addresses of all the IOC's you want to connect
+with, separated by spaces, as follows:
+
+	<pre>setenv EPICS_CA_ADDR_LIST "164.54.53.126 164.54.53.127"</pre>
+
+<P>If you want to use arrays larger than 16000 bytes (e.g., MCA spectra of more
+than 4000 channels, or scans of more than 2000 data points), you must set the
+environment variable <code>EPICS_CA_MAX_ARRAY_BYTES</code>, in <b>both</b> the IOC and
+workstation, to the size of the largest array you plan to send over the
+network, plus the size of the extra data channel access might be asked to
+include with the array.  On a Unix system, for example, you might say
+
+	<pre>setenv EPICS_CA_MAX_ARRAY_BYTES 64008</pre>
+
+in the IOC's st.cmd file, you'd say
+
+	<pre>putenv "EPICS_CA_MAX_ARRAY_BYTES=64008"</pre>
+
+This will permit scans of up to 8000 points (8000 doubles * 8 bytes per double +
+8 bytes for channel-access overhead), and mca spectra of up to 16000 channels.
+
+<P>To bring up the top-level MEDM display for synApps software, cd to xxx and type
+"start_epics_xxx" (e.g., start_epics_1bma).  This script locates the
+directories that might have MEDM-display files and includes them in the
+environment variable EPICS_DISPLAY_PATH, cd's to xxxApp/op/adl, and runs MEDM
+with the default top-level display file.
+
+<P><li>CSS-BOY
+
+<P>CSS-BOY display files (*.opi) in synApps were translated from MEDM-display
+files (*.adl) with the ADL-to-BOY translator in APS_CSS_v3.0.2 (available from
+http://css.aps.anl.gov/), followed by some stream editing to specify colors,
+fonts, and paths to files specified in linking containers.
+
+<P>CSS-BOY currently does not have the notion of a search path for display
+files, as MEDM does.  Instead, all display files must be present either
+literally or via soft links in the CSS workspace, and any file that references
+another file must specify the path to that file.  This is a little awkward for
+synApps, whose display files are located in separate modules.  The best
+compromise found so far is to create soft links in the CSS workspace, like this:
+
+<pre>
+ln -s ${SUPPORT}/calc-2-9/calcApp/op/opi ${CSS-WORKSPACE}/Default/synApps/calc
+</pre>
+
+<P>File paths in synApps .opi displays assume this structure, and a file that
+references a file in some other module does so like this:
+
+<pre>
+../calc/yysCalcoutRecord.opi
+</pre>
+
+<P><li>autosave/restore
+
+<P>You must give the crate write permission to xxx/iocBoot/ioc*/autosave so it can
+write the files auto_positions.sav and auto_settings.sav there.  It's also
+helpful to set the autosave directory's 'group' bit so that files the crate
+writes will be owned by the owner of the directory instead of by
+<vxworks_user>.  Normally, I do this:
+
+    <pre>chmod a+w,g+s autosave</pre>
+
+<P>To modify the list of PV's that are saved and restored, edit the files
+
+   xxx/iocBoot/ioc*/auto_settings.req and
+   xxx/iocBoot/ioc*/auto_positions.req
+
+<P>The autosave software is started by the lines
+"<code>create_monitor_set(...</code>" in xxx/iocBoot/ioc*/st.cmd.  The restore
+happens during iocInit as a result of function calls inserted into initHooks.o,
+which is included in the library provided by the <b>autosave</b> module, and
+linked into the executable loaded by xxx/iocBoot/ioc*/st.cmd.
+
+
+<P><li>saveData
+
+<P>saveData is a CA client that monitors sscan records and saves scan data to
+disk.  On vxWorks, this is an NFS-mounted disk; on other operating systems, it's
+whatever file system the system provides for the standard C library.  The
+saveData software is configured with the file xxx/iocBoot/ioc*/saveData.req,
+which needs no special attention unless you want to modify the list of EPICS
+PV's whose values are to be saved with every data file.  To do this, look for
+the string "[extraPV]" in the file, and edit the list of PV's immediately
+following that string.  If an entry in this list contains only the PV name,
+saveData will describe the PV, in the data file, using the .DESC field of the
+record that contains that PV.  If a string follows the PV name, saveData will
+use the string instead.
+
+</ol>
+</ol>
+
+<hr><h2>How to extend synApps</h2><hr>
+
+<P>Like all EPICS software, synApps can be extended in many ways, and at many
+levels, by EPICS developers and users.  (That's how the package came to exist in
+the first place.  It started as a single App directory, and folks just added
+stuff.)  But synApps pushes the idea a little bit further toward end users who
+are not developers.  One of the driving notions behind the development of
+synApps was to put as much of EPICS' flexibility and power as seems both wise
+and practical into the hands of end users &ndash; typically, scientists running
+experiments &ndash; whose backgrounds in software development and implementation
+vary over a wide range.
+
+<P>Here is a list of techniques by which synApps has already been extended by
+users and developers, arranged <i>very</i> roughly according to the amounts of
+effort, skill, and EPICS knowledge required.
+
+<ul>
+
+<li>scaler end-calculation customization
+
+<P>This is certainly too simple to be considered an extension &ndash; all you do
+is type something like "<code>(A-B)/I</code>" into a text box &ndash; but it's still pretty
+useful, and it demonstrates a technique that will be used for much more
+sophisticated purposes.
+
+<li>scan configuration
+
+<P>The first extension that many users attempt is the programming of a scan. 
+This might also seem more like mere <i>use</i> than extension, but it can become a
+very highly evolved skill, and it is software development in a reasonably
+literal sense.  If you buy into the notion that an EPICS database is essentially
+a program (in a very high-level programming language), then scan configuration
+can be viewed as the simpler end of a continuum.
+
+<li>"userCalc" programming
+
+<P>synApps facilitates run-time programming of a number of EPICS record types,
+by providing the following kinds of support:
+<ul>
+<li>databases dedicated to this purpose
+<li>autosave-request files, intended to
+preserve run-time programming through IOC reboots
+<li>display files exposing those
+fields most appropriate for run-time programming
+<li>display files that contain
+documentation intended for run-time reference by end users.
+</ul>
+
+<P>The word "userCalc" has become generic for the records and database fragments
+with which run-time programming is done, and most of the records so used are, in
+fact, calculation records whose expressions can be modified by users.  But
+synApps also contains records and databases intended for run-time programming of
+other kinds:
+
+<ul>
+
+<li>sequences of operations (in <b>std</b>)
+<br><code>userStringSeqs10.db, userStringSeqs10_settings.req, userStringSeq*.adl</code>
+
+<P><li>feedback loops  (in <b>std</b>)
+<br><code>*pid_control.db, *pid_control_settings.req, pid*.adl</code>
+
+<P><li>ramping/tweaking of control parameters (in <b>std</b>)
+<br><code>ramp_tweak.db, ramp_tweak_settings.req, ramp_tweak*.adl</code>
+
+<P><li>impromptu device support for serial and other message based devices  (in <b>ip</b>)
+<br><code>deviceCmdReply.db, deviceCmdReply_settings.req, deviceCmdReply*.adl</code>
+
+<P><li>a 1-4 step sequence of <i>set-conditions/acquire-data/calculate</i> operations (in <b>std</b>)
+<br><code>4step.db, 4step_settings.req, 4step.adl</code>
+
+<P><li>lookup-table definition and use (in <b>calc</b>)
+<br><code>interpNew.db, interpNew_settings.req, interpNew.adl</code>
+
+</ul>
+
+<P>In addition to "userCalcs", many synApps records and databases contain
+sections intended primarily for run-time programming by end users.  Examples
+include end-of-acquisition calculations for scalers and digital multimeters;
+region-of-interest summing, and background-subtraction for mca records.
+
+<li>MEDM-display editing
+
+<P>End users know better than anybody what they want in a graphical user
+interface.  One thing they've demonstrated that they want, is the ability to
+have some control over the user interface without having to specify every little
+detail to a programmer. MEDM provides end users with the ability easily to
+create custom displays, and  synApps provides over 600 stock user-interface
+fragments that can be called up from, or included as part of, a user crafted
+display.
+
+<li>IOC command-file editing
+
+<P>An EPICS IOC is populated and configured by ASCII command files, which
+knowledgeable end users can edit to add motors, change default baud rates,
+load additional copies of databases, etc.
+
+<li>Development of client-side scripts
+
+<P>Many synApps end users have written scripts, in languages such as the unix
+shell, Python, SPEC macro, IDL, tcl, perl, and Labview, to simplify and/or
+standardize beamline operations.  Any language can be used for this purpose, if
+it can be fitted with a Channel-Access interface.
+
+<li>EPICS-database development
+
+<P>One very easy step from run-time programming to EPICS-database development can
+be taken by using the wxPython program, snapDb.py, (in the <i>utils</i>
+directory) to "freeze" a collection of programmed userCalcs into an independently
+loadable database.  snapDb can also generate a first cut at a user interface for
+the database.
+
+<P>But most EPICS database development is done with a database-configuration
+tool, such as VDCT, or a text editor.  In any case, EPICS-database development
+typically involves the selection of device support, the specification of links
+and link attributes, and the setting of parameters. More sophisticated
+development also involves the programming of an initialization strategy into the
+database, and maybe the writing of an autosave-request file, for it.
+
+<li>Development of subroutines for the <i>sub</i> and <i>aSub</i> record types
+
+<P>This is probably the simplest way to add custom C code to an EPICS
+application.  SynApps contains several examples of this type of code, among them
+are arrayTest.c, interp.c, and subAve.c, all in the directory
+support/calc/calcApp/src.
+
+<li>Development of State-Notation-Language programs
+
+<P>This is probably the next easiest, and the next most capable, way of adding
+compiled code to an application.  SNL also introduces (to this list) the notion
+of client-side program development, for an SNL program is a Channel Access
+client, even though it runs on an IOC. Again, synApps has a bunch of examples,
+which you can find by searching for ".st" files. 
+
+<P>Documentation for SNL can be found in the <b>seq</b> module, a copy of which
+is bundled with synApps (though <b>seq</b> is not part of synApps).
+
+<li>Device-support development
+
+<P>If synApps doesn't contain device support for the device you want to use,
+you can probably find (in synApps or elsewhere) a device-support example that
+has, at least, the structure of the sort of support you will need.
+
+<P>Nobody writes device support from scratch; it's just not an effective way to
+develop.  Everybody tries to find the closest approximation to what they need,
+and modifies it until it serves their purpose.  One important use of the EPICS
+tech-talk email list is to gather suggestions, from folks further up the
+learning curve, on what might be a good piece of code to modify for a particular
+purpose.
+
+<li>Development of client-side GUI programs
+
+<P>This requires a lot of skill, effort, and information.  Developers at this
+level need the <i>EPICS Application Developer's Guide</i>, the <i>Channel Access
+Reference Manual</i>, and very capable cross-platform GUI infrastructure.
+
+<li>Module development
+
+<P>This also requires a lot of skill, effort, and information.  Developers at
+this level need the <i>EPICS Application Developer's Guide</i>, and the <i>EPICS
+Record Reference Manual</i>.  One of the very best features of EPICS is the fact
+that experts in module development can collaborate with experts in client-side
+development, even if the developers are unaware of each other.
+
+</ul>
+
+<P>All of the extension strategies described above produce (or, at least
+<i>can</i> produce) results which are <i>fully</i> integrated into the control
+system.  This means that they can be used in further extensions by the same
+techniques.  Thus, motors ganged together by a transform record can be scanned,
+driven by a PID loop, or controlled by another userCalc.
+
+<P>
+
+
+
+
+
+
+<hr><h2>The synApps utils directory</h2><hr>
+
+<P>The synApps support/utils directory contains a variety of executables that
+may be useful in administering and/or using synApps.  Some of these tools are
+probably peculiar to the way synApps is used at APS.
+
+<blockquote>
+<P><dl>
+<dt>changePrefix, doSed
+
+<dd>These are for the application developer's convenience in changing EPICS
+prefixes in a user directory.  You must be in the top level of the user
+directory to run changePrefix, and you should do a "gnumake clean uninstall"
+before running it.
+
+<P>Example of use:
+<pre>
+    cd $(SYNAPPS)/ioc/1bm
+    changePrefix xxx 1bma
+</pre>
+
+<dt>copyAdl
+<dd>
+Look through synApps for .adl files, and copy them all to a specified directory
+
+<P>Example of use:
+<pre>
+    copyAdl $SYNAPPS/support adl_files
+</pre>
+
+<dt>convertIocFiles.py
+
+<dd>This file, and its associates, are intended to help convert an IOC directory
+from one version of EPICS to another, by collecting data from an existing IOC
+directory, and attempting to correctly edit files in a new IOC directory. See
+support/utils/HowToUse_convertIocFiles.txt for more information on this program.
+
+<P><dt>mdautils-src.tar.gz <dd> This tar file contains utility programs for
+using data files written by the <b>sscan</b> module's "saveData" program.  These
+programs were written by Dohn Arms, and contributed to synApps.
+
+<P><dt>mdaExplorer
+<dd>This wxPython program displays the content of MDA files, and directories of
+MDA files.  (An MDA file is the scan-data file produced by the synApps <b>sscan</b>
+module's saveData software during a scan.)
+
+
+<P><dt>mdaPythonUtils
+<dd>A collection of python programs that read, write, modify, and translate
+MDA files.
+
+<P><dt>snapDb
+<dd>A wxPython rapid development tool for EPICS databases and MEDM display
+files.  This program supports the use of EPICS' run-time programmability
+to prototype EPICS databases, using records loaded into an IOC.  It's
+particularly useful with synApps "userCalcs", a collection of various
+record types intended for end users to program at run time. 
+</dl>
+
+</blockquote>
+
+
+<hr>
+<P><h3>Appendix: Device/driver support in or distributed with synApps</h3>
+<table border>
+<tr><th>record<th>bus-type<th>codename<th>username
+<tr><td>acalcout   <td>CONSTANT  <td>devaCalcoutSoft              <td>Soft Channel
+<tr><td>ai         <td>AB_IO     <td>devAiAb1771Ife               <td>AB-1771IFE
+<tr><td>ai         <td>AB_IO     <td>devAiAb1771Ife0to5V          <td>AB-1771IFE-0to5Volt
+<tr><td>ai         <td>AB_IO     <td>devAiAb1771IfeMa             <td>AB-1771IFE-4to20MA
+<tr><td>ai         <td>AB_IO     <td>devAiAb1771IfeSe             <td>AB-1771IFE-SE
+<tr><td>ai         <td>AB_IO     <td>devAiAb1771Il                <td>AB-1771IL-Analog In
+<tr><td>ai         <td>AB_IO     <td>devAiAb1771IrCopper          <td>AB-1771RTD-Copper
+<tr><td>ai         <td>AB_IO     <td>devAiAb1771IrPlatinum        <td>AB-1771RTD-Platinum
+<tr><td>ai         <td>AB_IO     <td>devAiAb1771Ixe               <td>AB-1771IXE-Millivolt In
+<tr><td>ai         <td>AB_IO     <td>devAiAbSlcDcm                <td>AB-SLC500DCM
+<tr><td>ai         <td>AB_IO     <td>devAiAbSlcDcmSigned          <td>AB-SLC500DCM-Signed
+<tr><td>ai         <td>BBGPIB_IO <td>devAiAX301                   <td>PZT Bug
+<tr><td>ai         <td>CONSTANT  <td>devAiTodSeconds              <td>Sec Past Epoch
+<tr><td>ai         <td>GPIB_IO   <td>devAiGP307Gpib               <td>Vg307 GPIB Instrument
+<tr><td>ai         <td>GPIB_IO   <td>devAiHeidAWE1024             <td>Heidenhein Encoder
+<tr><td>ai         <td>GPIB_IO   <td>devAiKeithleyDMM199          <td>KeithleyDMM199
+<tr><td>ai         <td>GPIB_IO   <td>devGpib                      <td>GPIB init/report
+<tr><td>ai         <td>INST_IO   <td>asynAiFloat64                <td>asynFloat64
+<tr><td>ai         <td>INST_IO   <td>asynAiFloat64Average         <td>asynFloat64Average
+<tr><td>ai         <td>INST_IO   <td>asynAiInt32                  <td>asynInt32
+<tr><td>ai         <td>INST_IO   <td>asynAiInt32Average           <td>asynInt32Average
+<tr><td>ai         <td>INST_IO   <td>devAiAb1791                  <td>Allen Bradley 1791
+<tr><td>ai         <td>INST_IO   <td>devAiAbDcm                   <td>Ab Dcm
+<tr><td>ai         <td>INST_IO   <td>devAiClusts                  <td>VX stats clusts
+<tr><td>ai         <td>INST_IO   <td>devAiHeidND261               <td>asyn ai HeidND261
+<tr><td>ai         <td>INST_IO   <td>devAiMKS                     <td>HPS SensaVac 937
+<tr><td>ai         <td>INST_IO   <td>devAiMPC                     <td>asyn MPC
+<tr><td>ai         <td>INST_IO   <td>devAiStats                   <td>VX stats
+<tr><td>ai         <td>INST_IO   <td>devAiStrParm                 <td>asyn ai stringParm
+<tr><td>ai         <td>INST_IO   <td>devAiTPG261                  <td>asyn TPG261
+<tr><td>ai         <td>INST_IO   <td>devAiTelevac                 <td>asyn Televac
+<tr><td>ai         <td>INST_IO   <td>devInterfaceAI1              <td>InterfaceAI1
+<tr><td>ai         <td>INST_IO   <td>devaiStream                  <td>stream
+<tr><td>ai         <td>VME_IO    <td>devAiA32Vme                  <td>Generic A32 VME
+<tr><td>ai         <td>VME_IO    <td>devAiAvmeMRD                 <td>devAvmeMRD
+<tr><td>ai         <td>VME_IO    <td>devAiBunchClkGen             <td>APS Bunch Clock
+<tr><td>ai         <td>VME_IO    <td>devAiVaroc                   <td>ESRF Varoc SSI Encoder Iface
+<tr><td>ai         <td>VME_IO    <td>devIK320Ai                   <td>Heidenhain IK320
+<tr><td>ai         <td>VME_IO    <td>devIK320GroupAi              <td>Heidenhain IK320 Group
+<tr><td>ao         <td>AB_IO     <td>devAoAb1771Ofe               <td>AB-1771OFE
+<tr><td>ao         <td>AB_IO     <td>devAoAbSlcDcm                <td>AB-SLC500DCM
+<tr><td>ao         <td>BBGPIB_IO <td>devAoAX301                   <td>PZT Bug
+<tr><td>ao         <td>GPIB_IO   <td>devAoHeidAWE1024             <td>Heidenhein Encoder
+<tr><td>ao         <td>GPIB_IO   <td>devAoKeithleyDMM199          <td>KeithleyDMM199
+<tr><td>ao         <td>INST_IO   <td>asynAoFloat64                <td>asynFloat64
+<tr><td>ao         <td>INST_IO   <td>asynAoInt32                  <td>asynInt32
+<tr><td>ao         <td>INST_IO   <td>devAoAb1791                  <td>Allen Bradley 1791
+<tr><td>ao         <td>INST_IO   <td>devAoAbDcm                   <td>Ab Dcm
+<tr><td>ao         <td>INST_IO   <td>devAoEurotherm               <td>asyn ao Eurotherm
+<tr><td>ao         <td>INST_IO   <td>devAoMPC                     <td>asyn MPC
+<tr><td>ao         <td>INST_IO   <td>devAoStats                   <td>VX stats
+<tr><td>ao         <td>INST_IO   <td>devAoStrParm                 <td>asyn ao stringParm
+<tr><td>ao         <td>INST_IO   <td>devAoTPG261                  <td>asyn TPG261
+<tr><td>ao         <td>INST_IO   <td>devInterfaceAO1              <td>InterfaceAO1
+<tr><td>ao         <td>INST_IO   <td>devaoStream                  <td>stream
+<tr><td>ao         <td>VME_IO    <td>devAoA32Vme                  <td>Generic A32 VME
+<tr><td>ao         <td>VME_IO    <td>devAoAvme9210                <td>AVME-9210
+<tr><td>ao         <td>VME_IO    <td>devAoBunchClkGen             <td>APS Bunch Clock
+<tr><td>ao         <td>VME_IO    <td>devAoVMI4116                 <td>VMIVME-4116
+<tr><td>asyn       <td>INST_IO   <td>asynRecordDevice             <td>asynRecordDevice
+<tr><td>bi         <td>AB_IO     <td>devBiAb                      <td>AB-Binary Input
+<tr><td>bi         <td>AB_IO     <td>devBiAb16                    <td>AB-16 bit BI
+<tr><td>bi         <td>AB_IO     <td>devBiAb32                    <td>AB-32 bit BI
+<tr><td>bi         <td>GPIB_IO   <td>devBiGP307Gpib               <td>Vg307 GPIB Instrument
+<tr><td>bi         <td>GPIB_IO   <td>devBiHeidAWE1024             <td>Heidenhein Encoder
+<tr><td>bi         <td>GPIB_IO   <td>devBiKeithleyDMM199          <td>KeithleyDMM199
+<tr><td>bi         <td>INST_IO   <td>asynBiInt32                  <td>asynInt32
+<tr><td>bi         <td>INST_IO   <td>asynBiUInt32Digital          <td>asynUInt32Digital
+<tr><td>bi         <td>INST_IO   <td>devBiAbDcm                   <td>Ab Dcm
+<tr><td>bi         <td>INST_IO   <td>devBiMPC                     <td>asyn MPC
+<tr><td>bi         <td>INST_IO   <td>devBiStrParm                 <td>asyn bi stringParm
+<tr><td>bi         <td>INST_IO   <td>devBiTPG261                  <td>asyn TPG261
+<tr><td>bi         <td>INST_IO   <td>devBiTelevac                 <td>asyn Televac
+<tr><td>bi         <td>INST_IO   <td>devbiStream                  <td>stream
+<tr><td>bi         <td>VME_IO    <td>devBiA32Vme                  <td>Generic A32 VME
+<tr><td>bi         <td>VME_IO    <td>devBiAvme9440                <td>AVME9440 I
+<tr><td>bi         <td>VME_IO    <td>devBiAvmeMRD                 <td>devAvmeMRD
+<tr><td>bi         <td>VME_IO    <td>devBiBunchClkGen             <td>APS Bunch Clock
+<tr><td>bi         <td>VME_IO    <td>devBiHP10895LaserAxis        <td>HP interferometer
+<tr><td>bo         <td>AB_IO     <td>devBoAb                      <td>AB-Binary Output
+<tr><td>bo         <td>AB_IO     <td>devBoAb16                    <td>AB-16 bit BO
+<tr><td>bo         <td>AB_IO     <td>devBoAb32                    <td>AB-32 bit BO
+<tr><td>bo         <td>BBGPIB_IO <td>devBoAX301                   <td>PZT Bug
+<tr><td>bo         <td>GPIB_IO   <td>devBoGP307Gpib               <td>Vg307 GPIB Instrument
+<tr><td>bo         <td>GPIB_IO   <td>devBoHeidAWE1024             <td>Heidenhein Encoder
+<tr><td>bo         <td>GPIB_IO   <td>devBoKeithleyDMM199          <td>KeithleyDMM199
+<tr><td>bo         <td>INST_IO   <td>asynBoInt32                  <td>asynInt32
+<tr><td>bo         <td>INST_IO   <td>asynBoUInt32Digital          <td>asynUInt32Digital
+<tr><td>bo         <td>INST_IO   <td>devBoAbDcm                   <td>Ab Dcm
+<tr><td>bo         <td>INST_IO   <td>devBoMPC                     <td>asyn MPC
+<tr><td>bo         <td>INST_IO   <td>devBoStrParm                 <td>asyn bo stringParm
+<tr><td>bo         <td>INST_IO   <td>devBoTPG261                  <td>asyn TPG261
+<tr><td>bo         <td>INST_IO   <td>devboStream                  <td>stream
+<tr><td>bo         <td>VME_IO    <td>devBoA32Vme                  <td>Generic A32 VME
+<tr><td>bo         <td>VME_IO    <td>devBoAvme9440                <td>AVME9440 O
+<tr><td>bo         <td>VME_IO    <td>devBoAvmeMRD                 <td>devAvmeMRD
+<tr><td>bo         <td>VME_IO    <td>devBoBunchClkGen             <td>APS Bunch Clock
+<tr><td>bo         <td>VME_IO    <td>devBoHP10895LaserAxis        <td>HP interferometer
+<tr><td>busy       <td>CONSTANT  <td>devBusySoft                  <td>Soft Channel
+<tr><td>busy       <td>CONSTANT  <td>devBusySoftRaw               <td>Raw Soft Channel
+<tr><td>busy       <td>INST_IO   <td>asynBusyInt32                <td>asynInt32
+<tr><td>calcout    <td>INST_IO   <td>devcalcoutStream             <td>stream
+<tr><td>epid       <td>CONSTANT  <td>devEpidSoft                  <td>Soft Channel
+<tr><td>epid       <td>CONSTANT  <td>devEpidSoftCB                <td>Async Soft Channel
+<tr><td>epid       <td>INST_IO   <td>devEpidFast                  <td>Fast Epid
+<tr><td>longin     <td>AB_IO     <td>devLiAbSlcDcm                <td>AB-SLC500DCM
+<tr><td>longin     <td>GPIB_IO   <td>devLiHeidAWE1024             <td>Heidenhein Encoder
+<tr><td>longin     <td>GPIB_IO   <td>devLiKeithleyDMM199          <td>KeithleyDMM199
+<tr><td>longin     <td>INST_IO   <td>asynLiInt32                  <td>asynInt32
+<tr><td>longin     <td>INST_IO   <td>asynLiUInt32Digital          <td>asynUInt32Digital
+<tr><td>longin     <td>INST_IO   <td>devLiAbDcm                   <td>Ab Dcm
+<tr><td>longin     <td>INST_IO   <td>devLiStrParm                 <td>asyn li stringParm
+<tr><td>longin     <td>INST_IO   <td>devlonginStream              <td>stream
+<tr><td>longin     <td>VME_IO    <td>devLiA32Vme                  <td>Generic A32 VME
+<tr><td>longin     <td>VME_IO    <td>devLiAvmeMRD                 <td>devAvmeMRD
+<tr><td>longin     <td>VME_IO    <td>devLiHP10895LaserAxis        <td>HP interferometer
+<tr><td>longout    <td>AB_IO     <td>devLoAbSlcDcm                <td>AB-SLC500DCM
+<tr><td>longout    <td>BBGPIB_IO <td>devLoAX301                   <td>PZT Bug
+<tr><td>longout    <td>GPIB_IO   <td>devLoHeidAWE1024             <td>Heidenhein Encoder
+<tr><td>longout    <td>GPIB_IO   <td>devLoKeithleyDMM199          <td>KeithleyDMM199
+<tr><td>longout    <td>INST_IO   <td>asynLoInt32                  <td>asynInt32
+<tr><td>longout    <td>INST_IO   <td>asynLoUInt32Digital          <td>asynUInt32Digital
+<tr><td>longout    <td>INST_IO   <td>devLoAbDcm                   <td>Ab Dcm
+<tr><td>longout    <td>INST_IO   <td>devLoStrParm                 <td>asyn lo stringParm
+<tr><td>longout    <td>INST_IO   <td>devlongoutStream             <td>stream
+<tr><td>longout    <td>VME_IO    <td>devLoA32Vme                  <td>Generic A32 VME
+<tr><td>longout    <td>VME_IO    <td>devLoHP10895LaserAxis        <td>HP interferometer
+<tr><td>mbbi       <td>AB_IO     <td>devMbbiAb                    <td>AB-Binary Input
+<tr><td>mbbi       <td>AB_IO     <td>devMbbiAb16                  <td>AB-16 bit BI
+<tr><td>mbbi       <td>AB_IO     <td>devMbbiAb32                  <td>AB-32 bit BI
+<tr><td>mbbi       <td>AB_IO     <td>devMbbiAbAdapterStat         <td>AB-Adapter Status
+<tr><td>mbbi       <td>AB_IO     <td>devMbbiAbCardStat            <td>AB-Card Status
+<tr><td>mbbi       <td>GPIB_IO   <td>devMbbiHeidAWE1024           <td>Heidenhein Encoder
+<tr><td>mbbi       <td>GPIB_IO   <td>devMbbiKeithleyDMM199        <td>KeithleyDMM199
+<tr><td>mbbi       <td>INST_IO   <td>asynMbbiInt32                <td>asynInt32
+<tr><td>mbbi       <td>INST_IO   <td>asynMbbiUInt32Digital        <td>asynUInt32Digital
+<tr><td>mbbi       <td>INST_IO   <td>devMbbiAbDcm                 <td>Ab Dcm
+<tr><td>mbbi       <td>INST_IO   <td>devMbbiTPG261                <td>asyn TPG261
+<tr><td>mbbi       <td>INST_IO   <td>devmbbiStream                <td>stream
+<tr><td>mbbi       <td>VME_IO    <td>devMbbiA32Vme                <td>Generic A32 VME
+<tr><td>mbbi       <td>VME_IO    <td>devMbbiAvme9440              <td>AVME9440 I
+<tr><td>mbbi       <td>VME_IO    <td>devMbbiAvmeMRD               <td>devAvmeMRD
+<tr><td>mbbi       <td>VME_IO    <td>devMbbiHP10895LaserAxis      <td>HP interferometer
+<tr><td>mbbiDirect <td>AB_IO     <td>devMbbiDirectAb              <td>AB-Binary Input
+<tr><td>mbbiDirect <td>AB_IO     <td>devMbbiDirectAb16            <td>AB-16 bit BI
+<tr><td>mbbiDirect <td>AB_IO     <td>devMbbiDirectAb32            <td>AB-32 bit BI
+<tr><td>mbbiDirect <td>INST_IO   <td>asynMbbiDirectUInt32Digital  <td>asynUInt32Digital
+<tr><td>mbbiDirect <td>INST_IO   <td>devmbbiDirectStream          <td>stream
+<tr><td>mbbo       <td>AB_IO     <td>devMbboAb                    <td>AB-Binary Output
+<tr><td>mbbo       <td>AB_IO     <td>devMbboAb16                  <td>AB-16 bit BO
+<tr><td>mbbo       <td>AB_IO     <td>devMbboAb32                  <td>AB-32 bit BO
+<tr><td>mbbo       <td>GPIB_IO   <td>devMbboHeidAWE1024           <td>Heidenhein Encoder
+<tr><td>mbbo       <td>GPIB_IO   <td>devMbboKeithleyDMM199        <td>KeithleyDMM199
+<tr><td>mbbo       <td>INST_IO   <td>asynMbboInt32                <td>asynInt32
+<tr><td>mbbo       <td>INST_IO   <td>asynMbboUInt32Digital        <td>asynUInt32Digital
+<tr><td>mbbo       <td>INST_IO   <td>devMbboAbDcm                 <td>Ab Dcm
+<tr><td>mbbo       <td>INST_IO   <td>devMbboMPC                   <td>asyn MPC
+<tr><td>mbbo       <td>INST_IO   <td>devMbboTPG261                <td>asyn TPG261
+<tr><td>mbbo       <td>INST_IO   <td>devmbboStream                <td>stream
+<tr><td>mbbo       <td>VME_IO    <td>devIK320Dir                  <td>Heidenhain IK320 Sign
+<tr><td>mbbo       <td>VME_IO    <td>devIK320Funct                <td>Heidenhain IK320 Command
+<tr><td>mbbo       <td>VME_IO    <td>devIK320ModeX3               <td>Heidenhain IK320 X3 Mode
+<tr><td>mbbo       <td>VME_IO    <td>devMbboA32Vme                <td>Generic A32 VME
+<tr><td>mbbo       <td>VME_IO    <td>devMbboAvme9440              <td>AVME9440 O
+<tr><td>mbbo       <td>VME_IO    <td>devMbboHP10895LaserAxis      <td>HP interferometer
+<tr><td>mbboDirect <td>AB_IO     <td>devMbboDirectAb              <td>AB-Binary Output
+<tr><td>mbboDirect <td>AB_IO     <td>devMbboDirectAb16            <td>AB-16 bit BO
+<tr><td>mbboDirect <td>AB_IO     <td>devMbboDirectAb32            <td>AB-32 bit BO
+<tr><td>mbboDirect <td>INST_IO   <td>asynMbboDirectUInt32Digital  <td>asynUInt32Digital
+<tr><td>mbboDirect <td>INST_IO   <td>devmbboDirectStream          <td>stream
+<tr><td>mca        <td>CONSTANT  <td>devMCA_soft                  <td>Soft Channel
+<tr><td>mca        <td>INST_IO   <td>devMcaAsyn                   <td>asynMCA
+<tr><td>mca        <td>VME_IO    <td>devSTR7201                   <td>Struck STR7201 MCS
+<tr><td>motor      <td>CONSTANT  <td>devMotorSoft                 <td>Soft Channel
+<tr><td>motor      <td>INST_IO   <td>devMotorAsyn                 <td>asynMotor
+<tr><td>motor      <td>VME_IO    <td>devE500                      <td>E500
+<tr><td>motor      <td>VME_IO    <td>devEMC18011                  <td>EMC18011
+<tr><td>motor      <td>VME_IO    <td>devESP300                    <td>ESP300
+<tr><td>motor      <td>VME_IO    <td>devEnsemble                  <td>Ensemble
+<tr><td>motor      <td>VME_IO    <td>devIM483PL                   <td>IM483PL
+<tr><td>motor      <td>VME_IO    <td>devIM483SM                   <td>IM483SM
+<tr><td>motor      <td>VME_IO    <td>devMAXv                      <td>OMS MAXv
+<tr><td>motor      <td>VME_IO    <td>devMCB4B                     <td>ACS MCB-4B
+<tr><td>motor      <td>VME_IO    <td>devMCDC2805                  <td>MCDC2805
+<tr><td>motor      <td>VME_IO    <td>devMDT695                    <td>MDT695
+<tr><td>motor      <td>VME_IO    <td>devMDrive                    <td>MDrive
+<tr><td>motor      <td>VME_IO    <td>devMM3000                    <td>MM3000
+<tr><td>motor      <td>VME_IO    <td>devMM4000                    <td>MM4000
+<tr><td>motor      <td>VME_IO    <td>devMVP2001                   <td>MVP2001
+<tr><td>motor      <td>VME_IO    <td>devMicos                     <td>Micos MoCo
+<tr><td>motor      <td>VME_IO    <td>devMotorSim                  <td>Motor Simulation
+<tr><td>motor      <td>VME_IO    <td>devOMS                       <td>OMS VME8/44
+<tr><td>motor      <td>VME_IO    <td>devOms58                     <td>OMS VME58
+<tr><td>motor      <td>VME_IO    <td>devOmsPC68                   <td>OMS PC68/78
+<tr><td>motor      <td>VME_IO    <td>devPC6K                      <td>PC6K
+<tr><td>motor      <td>VME_IO    <td>devPIC630                    <td>PI C630
+<tr><td>motor      <td>VME_IO    <td>devPIC662                    <td>PIC662
+<tr><td>motor      <td>VME_IO    <td>devPIC844                    <td>PIC844
+<tr><td>motor      <td>VME_IO    <td>devPIC848                    <td>PIC848
+<tr><td>motor      <td>VME_IO    <td>devPIC862                    <td>PIC862
+<tr><td>motor      <td>VME_IO    <td>devPIE516                    <td>PIE516
+<tr><td>motor      <td>VME_IO    <td>devPIE710                    <td>PIE710
+<tr><td>motor      <td>VME_IO    <td>devPIE816                    <td>PIE816
+<tr><td>motor      <td>VME_IO    <td>devPIJEDS                    <td>PIJEDS
+<tr><td>motor      <td>VME_IO    <td>devPM304                     <td>Mclennan PM304
+<tr><td>motor      <td>VME_IO    <td>devPM500                     <td>PM500
+<tr><td>motor      <td>VME_IO    <td>devPMNC87xx                  <td>PMNC87xx
+<tr><td>motor      <td>VME_IO    <td>devPmac                      <td>PMAC
+<tr><td>motor      <td>VME_IO    <td>devSC800                     <td>SC-800
+<tr><td>motor      <td>VME_IO    <td>devSPiiPlus                  <td>SPiiPlus
+<tr><td>motor      <td>VME_IO    <td>devSmartMotor                <td>SmartMotor
+<tr><td>motor      <td>VME_IO    <td>devSoloist                   <td>Soloist
+<tr><td>scalcout   <td>CONSTANT  <td>devsCalcoutSoft              <td>Soft Channel
+<tr><td>scalcout   <td>INST_IO   <td>devscalcoutStream            <td>stream
+<tr><td>scaler     <td>INST_IO   <td>devScalerAsyn                <td>Asyn Scaler
+<tr><td>scaler     <td>VME_IO    <td>devScaler                    <td>Joerger VSC8/16
+<tr><td>scaler     <td>VME_IO    <td>devScalerCamac               <td>CAMAC scaler
+<tr><td>scaler     <td>VME_IO    <td>devScalerSTR7201             <td>Struck STR7201 Scaler
+<tr><td>scaler     <td>VME_IO    <td>devScaler_VS                 <td>Joerger VS
+<tr><td>stringin   <td>CONSTANT  <td>devSiTodString               <td>Time of Day
+<tr><td>stringin   <td>GPIB_IO   <td>devSiGP307Gpib               <td>Vg307 GPIB Instrument
+<tr><td>stringin   <td>GPIB_IO   <td>devSiHeidAWE1024             <td>Heidenhein Encoder
+<tr><td>stringin   <td>GPIB_IO   <td>devSiKeithleyDMM199          <td>KeithleyDMM199
+<tr><td>stringin   <td>INST_IO   <td>asynSiOctetCmdResponse       <td>asynOctetCmdResponse
+<tr><td>stringin   <td>INST_IO   <td>asynSiOctetRead              <td>asynOctetRead
+<tr><td>stringin   <td>INST_IO   <td>asynSiOctetWriteRead         <td>asynOctetWriteRead
+<tr><td>stringin   <td>INST_IO   <td>devSiMPC                     <td>asyn MPC
+<tr><td>stringin   <td>INST_IO   <td>devSiSeq                     <td>Sequencer Internals
+<tr><td>stringin   <td>INST_IO   <td>devSiStrParm                 <td>asyn si stringParm
+<tr><td>stringin   <td>INST_IO   <td>devSiTPG261                  <td>asyn TPG261
+<tr><td>stringin   <td>INST_IO   <td>devStringinStats             <td>VX stats
+<tr><td>stringin   <td>INST_IO   <td>devstringinStream            <td>stream
+<tr><td>stringout  <td>GPIB_IO   <td>devSoHeidAWE1024             <td>Heidenhein Encoder
+<tr><td>stringout  <td>GPIB_IO   <td>devSoKeithleyDMM199          <td>KeithleyDMM199
+<tr><td>stringout  <td>INST_IO   <td>asynSoOctetWrite             <td>asynOctetWrite
+<tr><td>stringout  <td>INST_IO   <td>asynSoftGlue                 <td>softGlue
+<tr><td>stringout  <td>INST_IO   <td>devSoEurotherm               <td>asyn so Eurotherm
+<tr><td>stringout  <td>INST_IO   <td>devSoMPC                     <td>asyn MPC
+<tr><td>stringout  <td>INST_IO   <td>devSoStrParm                 <td>asyn so stringParm
+<tr><td>stringout  <td>INST_IO   <td>devstringoutStream           <td>stream
+<tr><td>stringout  <td>VME_IO    <td>devIK320Parm                 <td>Heidenhain IK320 Parameter
+<tr><td>swait      <td>CONSTANT  <td>devSWaitIoEvent              <td>Soft Channel
+<tr><td>waveform   <td>INST_IO   <td>asynFloat32ArrayWfIn         <td>asynFloat32ArrayIn
+<tr><td>waveform   <td>INST_IO   <td>asynFloat32ArrayWfOut        <td>asynFloat32ArrayOut
+<tr><td>waveform   <td>INST_IO   <td>asynFloat64ArrayWfIn         <td>asynFloat64ArrayIn
+<tr><td>waveform   <td>INST_IO   <td>asynFloat64ArrayWfOut        <td>asynFloat64ArrayOut
+<tr><td>waveform   <td>INST_IO   <td>asynInt16ArrayWfIn           <td>asynInt16ArrayIn
+<tr><td>waveform   <td>INST_IO   <td>asynInt16ArrayWfOut          <td>asynInt16ArrayOut
+<tr><td>waveform   <td>INST_IO   <td>asynInt32ArrayWfIn           <td>asynInt32ArrayIn
+<tr><td>waveform   <td>INST_IO   <td>asynInt32ArrayWfOut          <td>asynInt32ArrayOut
+<tr><td>waveform   <td>INST_IO   <td>asynInt8ArrayWfIn            <td>asynInt8ArrayIn
+<tr><td>waveform   <td>INST_IO   <td>asynInt8ArrayWfOut           <td>asynInt8ArrayOut
+<tr><td>waveform   <td>INST_IO   <td>asynWfOctetCmdResponse       <td>asynOctetCmdResponse
+<tr><td>waveform   <td>INST_IO   <td>asynWfOctetRead              <td>asynOctetRead
+<tr><td>waveform   <td>INST_IO   <td>asynWfOctetWrite             <td>asynOctetWrite
+<tr><td>waveform   <td>INST_IO   <td>asynWfOctetWriteRead         <td>asynOctetWriteRead
+<tr><td>waveform   <td>INST_IO   <td>devwaveformStream            <td>stream
+<tr><td>waveform   <td>VME_IO    <td>devWfBunchClkGen             <td>APS Bunch Clock
+</table>
+
+
+
+<hr>
+<address> 
+    Suggestions and Comments to: <br> 
+    <a href="mailto:mooney@aps.anl.gov">Tim Mooney </a>:
+    (mooney@aps.anl.gov) <br> 
+	Software Services Group<br>
+	Advanced Photon Source, Argonne National Laboratory<br>
+    Last modified: Sept 1, 2010
+</address> 
+</body>
+</html>

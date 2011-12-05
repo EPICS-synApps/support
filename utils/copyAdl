@@ -1,0 +1,30 @@
+#!/bin/tcsh
+
+if ($1 == "" || $2 == "") then
+echo "usage: copyAdl support_directory adl_directory"
+echo "example: copyAdl /home/epics/synApps_4_6/support ."
+exit
+endif
+
+if (!(-e $2)) mkdir $2
+if (!(-d $2)) then
+    echo "'$2' exists and is not a directory.  Nothing done."
+    exit
+endif
+
+cd $1
+
+foreach d ( * )
+	if (( -d $d ) && (!(-l $d))) then
+		foreach i (`find $d -name adl -print`)
+			echo "copying from" $i
+			cp -f $i/*.adl $2
+			cp -f $i/*.gif $2
+		end
+		foreach i (`find $d -name medm -print`)
+			echo "copying from" $i
+			cp -f $i/*.adl $2
+			cp -f $i/*.gif $2
+		end
+	endif
+end

@@ -1,0 +1,58 @@
+mdaExplorer is a GUI program, based on wxPython and matplotlib, for exploring
+MDA files.  The MDA file format is described in the synApps sscan module, and
+is written by that module's saveData program.
+
+mdaExplorer.py - This is the main program.
+
+mdaTree.py     - Routines to read an MDA file and collect information into a
+                 tree (an instance of wx.TreeCtrl)
+
+mda_f.py       - A faster version of mda.py, which uses f_xdrlib.py to read
+                 arrays in big chunks, rather than element by element.
+
+f_xdrlib.py    - A modified copy of xdrlib.py, software from Python 2.5 which
+                 uses the Python struct module to convert data from an XDR
+				 file to native Python variables
+
+InstallSteps*.txt - The procedure I went through to install Python 2.5 and all
+                    the python-related stuff needed to run mdaExplorer.
+
+----------------------------------------------------------------------------
+Menus
+File
+	Survey MDA files
+	Open MDA file
+	Save as ASCII file
+	Show file as tree
+
+Options
+	Read 3D Data
+		If this item is not checked, only 1D and 2D data will be read from the
+		data file.
+
+	AutoUpdatePlots
+		Update plots whenever a relevant plot setting changes.  If the "MDA
+		Survey" window (See File/Survey MDA files) is open and displays the
+		directory containing the currently plotted data file, plots will be
+		updated when the file is updated.
+
+	1D plots
+		lines
+		points
+		with axes
+		with labels
+		log Y axis
+		with shared axes
+			All plots will use the same X and Y axes.  When zooming into one
+			plot, all plots will zoom to the same X/Y range.
+	2D plots
+		with axes
+		with labels
+		with colorbar
+		with shared axes
+			All plots will use the same X and Y axes.  When zooming into one
+			plot, all plots will zoom to the same X/Y range.
+		auto aspect
+			Make images square.
+	Show crosshair
+	Plot Everything
