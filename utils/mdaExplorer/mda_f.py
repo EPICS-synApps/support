@@ -676,12 +676,12 @@ def readMDA(fname=None, maxdim=4, verbose=0, showHelp=0, outFile=None, useNumpy=
 				if n: value = u.unpack_string()
 			elif EPICS_type == 32: # DBR_CTRL_CHAR
 				#value = u.unpack_fstring(count)
-				v = u.unpack_farray(count, u.unpack_int)
+				vect = u.unpack_farray(count, u.unpack_int)
 				value = ""
-				for i in range(len(v)):
+				for i in range(len(vect)):
 					# treat the byte array as a null-terminated string
-					if v[i] == 0: break
-					value = value + chr(v[i])
+					if vect[i] == 0: break
+					value = value + chr(vect[i])
 			elif EPICS_type == 29: # DBR_CTRL_SHORT
 				value = u.unpack_farray(count, u.unpack_int)
 			elif EPICS_type == 33: # DBR_CTRL_LONG
@@ -1066,7 +1066,7 @@ def writeMDA(dim, fname=None):
 
 	# Now we have to repack all the scan offsets
 	if (rank > 1): # 2D scan
-		print "m.scan.pLowerScans", m.scan.pLowerScans
+		#print "m.scan.pLowerScans", m.scan.pLowerScans
 		p.reset()
 		p.pack_farray(m.scan.npts, m.scan.pLowerScans, p.pack_int)
 		m.scan.pLowerScansBuf = p.get_buffer()
