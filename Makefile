@@ -54,13 +54,12 @@ $(CALC)_DEPEND_DIRS = $(SSCAN)
 
 ################### 3rd Tier Support Modules #####################
 
-MODULE_LIST  = BUSY MOTOR STD DAC128V IP330 IPUNIDIG LOVE
-MODULE_LIST += IP OPTICS STREAM MODBUS VAC SOFTGLUE QUADEM
+MODULE_LIST  = BUSY STD DAC128V IP330 IPUNIDIG LOVE
+MODULE_LIST += IP OPTICS STREAM MODBUS VAC SOFTGLUE
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(BUSY)_DEPEND_DIRS     = $(ASYN)
-$(MOTOR)_DEPEND_DIRS    = $(ASYN) $(SNCSEQ) $(IPAC)
-$(STD)_DEPEND_DIRS      = $(ASYN)
+$(STD)_DEPEND_DIRS      = $(ASYN) $(SNCSEQ)
 $(DAC128V)_DEPEND_DIRS  = $(ASYN) $(IPAC)
 $(IP330)_DEPEND_DIRS    = $(ASYN) $(IPAC)
 $(IPUNIDIG)_DEPEND_DIRS = $(ASYN) $(IPAC)
@@ -71,29 +70,32 @@ $(STREAM)_DEPEND_DIRS   = $(ASYN) $(CALC) $(SSCAN)
 $(MODBUS)_DEPEND_DIRS   = $(ASYN)
 $(VAC)_DEPEND_DIRS      = $(ASYN) $(IPAC)
 $(SOFTGLUE)_DEPEND_DIRS = $(ASYN) $(IPAC)
-$(QUADEM)_DEPEND_DIRS   = $(ASYN)
 
 ################### 4th Tier Support Modules #####################
 
-#MODULE_LIST  = DELAYGEN CAMAC MCA VME EBRICK
-MODULE_LIST  = DELAYGEN CAMAC MCA VME
+MODULE_LIST  = DELAYGEN MCA VME MOTOR EBRICK 
+#MODULE_LIST  = DELAYGEN MCA VME MOTOR
+ifneq (solaris,$(findstring solaris, $(EPICS_HOST_ARCH)))
+MODULE_LIST += AREA_DETECTOR
+endif
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
-$(DELAYGEN)_DEPEND_DIRS = $(STD) $(STREAM)
-$(CAMAC)_DEPEND_DIRS    = $(MOTOR) $(STD)
-$(MCA)_DEPEND_DIRS      = $(BUSY) $(CALC) $(STD)
-$(VME)_DEPEND_DIRS      = $(STD)
-#$(EBRICK)_DEPEND_DIRS   = $(STD) $(CALC)
+$(DELAYGEN)_DEPEND_DIRS = $(ASYN) $(AUTOSAVE) $(CALC) $(IP) $(IPAC) $(STREAM) 
+$(MCA)_DEPEND_DIRS      = $(ASYN) $(AUTOSAVE) $(BUSY) $(CALC) $(SNCSEQ) $(SSCAN) $(STD)
+$(VME)_DEPEND_DIRS      = $(SNCSEQ) $(STD)
+$(MOTOR)_DEPEND_DIRS    = $(ASYN) $(BUSY) $(IPAC) $(SNCSEQ) 
+$(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(AUTOSAVE) $(BUSY) $(CALC) $(SSCAN)
+$(EBRICK)_DEPEND_DIRS   = $(ASYN) $(AUTOSAVE) $(CALC) $(SNCSEQ) $(SSCAN) $(STD)
 
 ################### 5th Tier Support Modules #####################
 # The conditional below should be a target arch, but those are not
 # defined at this level.
-ifneq (solaris,$(findstring solaris, $(EPICS_HOST_ARCH)))
-MODULE_LIST = AREA_DETECTOR
+MODULE_LIST = CAMAC QUADEM
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
-$(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(SSCAN) $(MCA)
-endif
+$(CAMAC)_DEPEND_DIRS    = $(CALC) $(SSCAN) $(MOTOR) $(STD)
+$(QUADEM)_DEPEND_DIRS   = $(ASYN) $(AUTOSAVE) $(BUSY) $(IPAC) $(IPUNIDIG) $(MCA) $(SNCSEQ)
+
 ################### 6th Tier Support Modules #####################
 # The conditional below should be a target arch, but those are not
 # defined at this level.
@@ -101,7 +103,7 @@ ifneq (solaris,$(findstring solaris, $(EPICS_HOST_ARCH)))
 MODULE_LIST = DXP
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
-$(DXP)_DEPEND_DIRS = $(AREA_DETECTOR) $(ASYN) $(CAMAC) $(MCA) $(BUSY)
+$(DXP)_DEPEND_DIRS = $(AREA_DETECTOR) $(ASYN) $(AUTOSAVE) $(BUSY) $(CALC) $(CAMAC) $(MCA) $(SNCSEQ) $(SSCAN)
 endif
 ################### End of Support-Modules #####################
 
