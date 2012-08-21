@@ -48,8 +48,7 @@ System Requirements:
 -------------------
 snapDb.py requires the following:
 	wxPython	GUI
-	CaChannel	EPICS CA interface for Python
-	ca_util.py	thin layer on top of CaChannel (included with snapDb.py)
+	pyepics		EPICS CA interface for Python
 	dbd.py		reads EPICS .dbd files (included with snapDb.py)
 
 Supplementary files:
@@ -62,7 +61,8 @@ snapDb.
 
 displayInfo.txt
 --------------------------------------------------------------------
-#rtype		adl file				prefix_macro	recordname_macro
+rtype		adl file				prefix_macro	recordname_macro
+--------------------------------------------------------------------
 aSub		anyRecord.adl			P				R
 acalcout	yyArrayCalc.adl			P				C
 ai			anyRecord.adl			P				R
