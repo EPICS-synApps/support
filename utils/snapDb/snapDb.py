@@ -180,7 +180,7 @@ def defineNewDatabase(pvList, dbd_object, fixUserCalcs=True):
 
 	"""
 	if not HAVE_CA :
-		print("Can't import ca_util")
+		print("Can't import pyepics")
 		return None
 
 	# From pvList, compile a list of unique record instances
@@ -1048,4 +1048,5 @@ def main():
 	app.MainLoop()
 
 if __name__ == "__main__":
+	#print sys.path
 	main()
