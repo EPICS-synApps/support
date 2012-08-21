@@ -14,8 +14,7 @@ import wx.lib.mixins.listctrl as listmix
 
 HAVE_CA = True
 try:
-	from ca_util import *
-	import ca
+	import epics
 except:
 	HAVE_CA = False
 
@@ -191,7 +190,7 @@ def defineNewDatabase(pvList, dbd_object, fixUserCalcs=True):
 		recordName = pv.split('.')[0]
 		if recordName not in recordNameList:
 			try:
-				recordType = caget(recordName+".RTYP")
+				recordType = epics.caget(recordName+".RTYP")
 			except:
 				continue
 			recordNameList.append(recordName)
@@ -213,11 +212,11 @@ def defineNewDatabase(pvList, dbd_object, fixUserCalcs=True):
 				pv = r.recordName+'.'+fieldName
 				#print("trying %s..." % pv)
 				try:
-					value = caget(pv)
+					value = epics.caget(pv)
 				except:
 					value = 0
 				try:
-					string_value = caget(pv,req_type=ca.DBR_STRING)
+					string_value = epics.caget(pv,as_string=True)
 				except:
 					string_value = "Caget failed"
 				#print("%s='%s'" % (recordName+'.'+fieldName, value))
@@ -875,7 +874,7 @@ class TopFrame(wx.Frame):
 		if HAVE_CA:
 			pvName = rName+".RTYP"
 			try:
-				rType = caget(pvName)
+				rType = epics.caget(pvName)
 			except:
 				rType = "unknown"
 		else:
