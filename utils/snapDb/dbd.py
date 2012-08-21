@@ -10,7 +10,7 @@ import sys
 
 HAVE_CA = True
 try:
-	from ca_util import *
+	import epics
 except:
 	HAVE_CA = False
 
@@ -308,7 +308,7 @@ def writeNewDatabase(fileName, pvList, dbdFileName, replaceDict=None, fixUserCal
 
 	"""
 	if not HAVE_CA :
-		print("Can't import ca_util")
+		print("Can't import pyepics")
 		return
 
 	if (fileName):
@@ -324,7 +324,7 @@ def writeNewDatabase(fileName, pvList, dbdFileName, replaceDict=None, fixUserCal
 
 	dbd = readDBD(dbdFileName)
 	for recordName in recordList:
-		recordType = caget(recordName+".RTYP")
+		recordType = epics.caget(recordName+".RTYP")
 		file.write('record(%s,"%s") {\n' % (recordType, doReplace(recordName, replaceDict)))
 		for fieldName in dbd.recordtypeDict[recordType].fieldList:
 			if dbd.recordtypeDict[recordType].fieldType[fieldName] == 'DBF_NOACCESS':
@@ -336,7 +336,7 @@ def writeNewDatabase(fileName, pvList, dbdFileName, replaceDict=None, fixUserCal
 			if 'prompt' in dbd.recordtypeDict[recordType].fieldDict[fieldName].keys():
 				pv = recordName+'.'+fieldName
 				#print("trying %s..." % pv)
-				value = caget(pv)
+				value = epics.caget(pv)
 				#print("%s='%s'" % (recordName+'.'+fieldName, value))
 				if isDefaultValue(value, recordType, fieldName, dbd):
 					continue
