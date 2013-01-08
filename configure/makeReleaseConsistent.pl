@@ -1,7 +1,7 @@
 # FILENAME...	makeReleaseConsistent.pl
 #
 # SYNOPSIS...	makeReleaseConsistent(supporttop_dir, epics_base_dir,
-#				master_release, supporttop_dir)
+#				master_release, release_dirs)
 #
 # USAGE...      Take the version info. from the "master_release" file and
 #	rewrite the <supporttop>/configure/RELEASE file macros, giving them
@@ -16,140 +16,80 @@
 #  05/12/06 - Change permissions on updated RELEASE files to include group write
 #             write access.
 #  08/19/08 - master_config_dir argument changed to one "master_release" file.
+#  12/18/12 - script rewrote to remove writing to temp file.
 #
-# LOGIC...
-=for block comments
 
-Initialize $supporttop, $epics_base and $master_file from command line arguments.
-Add $epics_base to the master macro list.
-Add $GATEWAY to the master macro list.
-
-Read the rest of the release files from the command line arguments.
-
-Process $master_file for the master macro list.
-
-FOR each release file.
-    Open the release file.
-    Set "rewrite release file" indicator to NO.
-    Create temp file.
-    WHILE master file lines left to process.
-    	IF whitespace.
-    	    Copy $line to temp file.
-	ELSE
-	    Parse input line for macro assignment.
-	    IF macro found in master macro list.
-    		Set "rewrite release file" indicator to YES.
-		Copy macro to temp file using macro value from master list.
-	    ELSE
-		Copy $line to temp file.    
-	    ENDIF
-	ENDIF
-    ENDWHILE
-
-    Close temp and release files.
-    IF "rewrite release file" indicator is YES.
-	Copy temp file to release file.
-    ENDIF
-    Delete temp file.
-ENDFOR
-=cut
 #
+# Version:	$Revision: 2.0 $
+# Modified By:	$Author: gebhardt $
+# Last Modified:$Date: 2012-12-18 17:24:18 $
+# This is a modified version of:
 # Version:	$Revision: 1.1 $
 # Modified By:	$Author: sluiter $
 # Last Modified:$Date: 2008-08-26 18:09:18 $
 
-# NOTE with Perl 5.6, replace the following with File::Temp.
-use POSIX;
-use File::Copy;
-use Env;
+use strict;
+use warnings;
 
-$ritera = 0;
-$supporttop = shift;
-$epics_base = shift;
-$master_file = shift;
-$master_macro{"EPICS_BASE"} = $epics_base;
+my $supporttop    = shift;
+my $epics_base    = shift;
+my $master_file   = shift;
+my @masterFile;
+my @releaseFile;
+my @prefix;
+my %macro;
+my %post;
+my $release_file; 
+my $line;
+my $iter          = 0;
+my $tmp1;
+my $tmp2;
 
-if ($ENV{GATEWAY} ne "")
-{
-    # Add GATEWAY to macro list.
-    $master_macro{GATEWAY} = $ENV{GATEWAY};
+# Parse MASTER_RELEASE_FILE
+open(FILE, "<$master_file") || die "Cannot open $master_file\n";
+@masterFile = <FILE>;
+close FILE;
+foreach $line (@masterFile) {
+    if (($line !~ /^(#|\s*\n)/)&&($line =~ /.*\s*=\s*\$\(.*\).*/)) {
+        chomp($line);
+        $_ = $line;
+        ($prefix[$iter], $tmp1, $tmp2) = /(.*)\s*=\s*\$\((.*)\)(.*)/;
+        $macro{$prefix[$iter]} = $tmp1;
+        $post{$prefix[$iter]}  = $tmp2;
+        $iter++;
+    }
+}
+$prefix[$iter] = "EPICS_BASE";
+$macro{$prefix[$iter]} = "";
+$post{$prefix[$iter]}  = $epics_base;
+$iter++;
+$prefix[$iter] = "SUPPORT";
+$macro{$prefix[$iter]} = "";
+$post{$prefix[$iter]}  = $supporttop;
+$iter++;
+if (defined($ENV{GATEWAY})) {
+    $prefix[$iter] = "GATEWAY";
+    $macro{$prefix[$iter]} = "";
+    $post{$prefix[$iter]}  = $ENV{GATEWAY};
+    $iter++;
 }
 
-while (@ARGV)
-{
-    $_ = $ARGV[0];
-    shift @ARGV;
-    $release_files[$ritera] = $_;
-    $ritera++;
-}
-
-open(IN, "$master_file") or die "Cannot open $master_file\n";
-while ($line = <IN>)
-{
-    next if ($line =~ /^(#|\s*\n)/);
-    chomp($line);
-    $_ = $line;
-    $macro = /(.*)\s*=\s*\$\((.*)\)/;
-    if ($macro eq "")
-    {
-	($prefix,$post) = /(.*)\s*=\s*(.*)/;
+# Rewrite RELEASE_FILES
+foreach $release_file (@ARGV) {
+    open(FILE, "<$release_file") || die "Cannot open $master_file\n";
+    @releaseFile = <FILE>;
+    close FILE;
+    foreach $line (@releaseFile) {
+        for(my $i=0; $i<scalar @prefix; $i++) {
+            if ($line =~ /^$prefix[$i]/) {
+                if ($macro{$prefix[$i]} ne "")
+                   {$line = $prefix[$i]."=\$(".$macro{$prefix[$i]}.")".$post{$prefix[$i]}."\n";}
+                else {$line = $prefix[$i]."=".$post{$prefix[$i]}."\n";}
+            }
+        }
     }
-    else
-    {
-	($prefix,$macro,$post) = /(.*)\s*=\s*\$\((.*)\)(.*)/;
-    }
-    if ($macro ne "" && $macro eq "SUPPORT")
-    {
-	$post = "\$(SUPPORT)" . $post;
-    }
-    if ($macro ne "" && $macro eq "GATEWAY")
-    {
-	$post = $master_macro{GATEWAY} . $post;
-    }
-    $master_macro{$prefix} = $post;
-}
-close(IN);
-
-for ($itera = 0; $itera < $ritera; $itera++)
-{
-    open(IN, "$release_files[$itera]") or die "Cannot open $release_files[$itera]\n";
-    $rewrite = 'NO';
-    do
-    {
-	$tempfile = tmpnam();
-    } until sysopen(TEMP, $tempfile, O_RDWR | O_CREAT | O_EXCL, 0600);
-
-    while ($line = <IN>)
-    {
-	if ($line =~ /^(#|\s*\n)/)
-	{
-	    print TEMP $line;
-	}
-	else
-	{
-	    chomp($line);
-	    $_ = $line;
-	    ($prefix,$fullmacro,$macro,$post) = /(.*)\s*=\s*(\$\((.*)\))?(.*)?/;
-	    $prefix =~ s/^\s+|\s+$//g; # strip leading and trailing whitespace.
-	    if ($master_macro{$prefix} ne '' && $master_macro{$prefix} ne $post)
-	    {
-		$rewrite = 'YES';
-		print TEMP "$prefix=$master_macro{$prefix}\n";
-	    }
-	    else
-	    {
-		print TEMP "$line\n";
-	    }
-	}
-    }
-    
-    close(TEMP);
-    close(IN);
-    if ($rewrite eq 'YES')
-    {
-	chmod 0664, $release_files[$itera];
-	copy($tempfile, $release_files[$itera]) or
-	    die "copy failed for $release_files[$itera]: $!";
-    }
-    unlink $tempfile;
+    open(FILE, ">$release_file") || die "Cannot open $release_file\n";
+    foreach $line (@releaseFile) {print FILE $line;}
+    close FILE;
+    chmod 0664, $release_file;
 }
