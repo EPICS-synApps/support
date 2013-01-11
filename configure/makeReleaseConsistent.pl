@@ -20,13 +20,10 @@
 #
 
 #
-# Version:	$Revision: 2.0.1 $
-# Modified By:	$Author: gebhardt $
-# Last Modified:$Date: 2013-01-11 11:34:18 $
-# This is a modified version of:
-# Version:	$Revision: 1.1 $
-# Modified By:	$Author: sluiter $
-# Last Modified:$Date: 2008-08-26 18:09:18 $
+# Version:	 $Revision$
+# Modified By:	 $Author$
+# Last Modified: $Date$
+# HeadURL:       $URL$
 
 use strict;
 use warnings;
