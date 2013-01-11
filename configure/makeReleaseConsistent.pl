@@ -20,9 +20,9 @@
 #
 
 #
-# Version:	$Revision: 2.0 $
+# Version:	$Revision: 2.0.1 $
 # Modified By:	$Author: gebhardt $
-# Last Modified:$Date: 2012-12-18 17:24:18 $
+# Last Modified:$Date: 2013-01-11 11:34:18 $
 # This is a modified version of:
 # Version:	$Revision: 1.1 $
 # Modified By:	$Author: sluiter $
@@ -81,7 +81,7 @@ foreach $release_file (@ARGV) {
     close FILE;
     foreach $line (@releaseFile) {
         for(my $i=0; $i<scalar @prefix; $i++) {
-            if ($line =~ /^$prefix[$i]/) {
+            if ($line =~ /^$prefix[$i]\s*=/) {
                 if ($macro{$prefix[$i]} ne "")
                    {$line = $prefix[$i]."=\$(".$macro{$prefix[$i]}.")".$post{$prefix[$i]}."\n";}
                 else {$line = $prefix[$i]."=".$post{$prefix[$i]}."\n";}
