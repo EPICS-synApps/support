@@ -78,7 +78,7 @@ foreach $release_file (@ARGV) {
     close FILE;
     foreach $line (@releaseFile) {
         for(my $i=0; $i<scalar @prefix; $i++) {
-            if ($line =~ /^$prefix[$i]\s*=/) {
+            if ($line =~ /^\s*$prefix[$i]\s*=/) {
                 if ($macro{$prefix[$i]} ne "")
                    {$line = $prefix[$i]."=\$(".$macro{$prefix[$i]}.")".$post{$prefix[$i]}."\n";}
                 else {$line = $prefix[$i]."=".$post{$prefix[$i]}."\n";}
