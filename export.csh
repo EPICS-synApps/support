@@ -1,5 +1,5 @@
 #!/bin/csh
-setenv SVN https://subversion.xor.aps.anl.gov/synApps
+setenv SVN https://subversion.xray.aps.anl.gov/synApps
 mkdir synApps_5_6
 cd synApps_5_6
 svn export $SVN/support/tags/synApps_5_6 support

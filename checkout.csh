@@ -6,7 +6,7 @@ cd synAppsSVN
 #setenv SVN file:///home/joule/SVNSYNAP/svn
 
 # For https access
-setenv SVN https://subversion.xor.aps.anl.gov/synApps
+setenv SVN https://subversion.xray.aps.anl.gov/synApps
 
 svn co $SVN/support/trunk support
 cd support
