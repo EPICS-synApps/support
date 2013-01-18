@@ -26,10 +26,4 @@ setup(
     description = 'MDA support library',
     license = 'EPICS',
     py_modules = ['f_xdrlib', 'mda_f'],
-    #entry_points = {
-    #    'nose.plugins.0.10': [
-    #        'example = plug:ExamplePlugin'
-    #        ]
-    #s    }
-
     )
