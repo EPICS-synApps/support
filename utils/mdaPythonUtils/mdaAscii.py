@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+
 from mda import *
 
 def getFormat(d, rank):
@@ -47,7 +48,7 @@ def main():
 			print "example: mdaAscii.py -i xxx_0001.mda"
 			print "   flags:"
 			print "      i -- show information"
-			print "      d -- show data (only 1D data is shown)"
+			print "      d -- show data (only 1D and 2D data are shown)"
 			print "      e -- show scan-environment PV's"
 			print "      a -- show all (information, data, and scan-environment PV's)"
 			print "      v -- tell file reader to be verbose"
@@ -68,14 +69,24 @@ def main():
 			fname = sys.argv[1]
 
 	d = readMDA(fname, 4, verbose, 0)
+	if not d:
+		return
+
 	rank = d[0]['rank']
 
 	(phead_fmt, dhead_fmt, pdata_fmt, ddata_fmt, columns) = getFormat(d, 1)
 	# header
 	if (showInfo):
 		print "### ", d[0]['filename'], " is a ", d[0]['rank'], "dimensional file."
+
+		if (rank > len(d)-1):
+			print "file doesn't contain the data that it claims to contain"
+			print "rank=%d, dimensions found=%d" % (rank, len(d)-1)
+			return
+		
 		print "### Number of data points      = [",
-		for i in range(d[0]['rank'],1,-1): print "%-d," % d[i].curr_pt,
+		for i in range(d[0]['rank'],1,-1):
+			print "%-d," % d[i].curr_pt,
 		print d[1].curr_pt, "]"
 
 		print "### Number of detector signals = [",
@@ -129,26 +140,26 @@ def main():
 		# 1D data
 		for i in range(d[1].curr_pt):
 			print "",
-			for j in range(d[1].np):
+			for j in range(len(d[1].p)):
 				print pdata_fmt[j] % (d[1].p[j].data[i]),
-			for j in range(d[1].nd):
+			for j in range(len(d[1].d)):
 				print ddata_fmt[j] % (d[1].d[j].data[i]),
 			print
 
 		# 2D data
 		if rank >= 2:
 			print "# 2D data"
-			for i in range(d[2].np):
+			for i in range(len(d[2].p)):
 				print "\n# Positioner %d (.%s) PV:'%s' desc:'%s'" % (i, d[2].p[i].fieldName, d[2].p[i].name, d[2].p[i].desc)
-				for j in range(d[1].curr_pt):
-					for k in range(d[2].curr_pt):
+				for j in range(len(d[2].p[i].data)):
+					for k in range(len(d[2].p[i].data[j])):
 						print "%f" % d[2].p[i].data[j][k],
 					print
 
-			for i in range(d[2].nd):
+			for i in range(len(d[2].d)):
 				print "\n# Detector %d (.%s) PV:'%s' desc:'%s'" % (i, d[2].d[i].fieldName, d[2].d[i].name, d[2].d[i].desc)
-				for j in range(d[1].curr_pt):
-					for k in range(d[2].curr_pt):
+				for j in range(len(d[2].d[i].data)):
+					for k in range(len(d[2].d[i].data[j])):
 						try:
 							print "%f" % d[2].d[i].data[j][k],
 						except IndexError:
