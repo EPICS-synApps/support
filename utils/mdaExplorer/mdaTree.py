@@ -2,8 +2,14 @@
 
 """ Fill a wxPython treeCtrl with the content of an MDA file"""
 import os
-import mda_f as mda
-from f_xdrlib import *
+import mda
+
+have_fast_xdr = False
+try:
+	import f_xdrlib as xdr
+	have_fast_xdr = True
+except:
+	import xdrlib as xdr
 
 def hexValuesAsString(numList, maxVals=None):
 	s = '['
@@ -27,7 +33,7 @@ def readScanFillTree(scanFile, tree, branch, unpacker=None):
 	scan = mda.scanDim()	# data structure to hold scan info and data
 	buf = scanFile.read(10000) # enough to read scan header
 	if unpacker == None:
-		u = Unpacker(buf)
+		u = xdr.Unpacker(buf)
 	else:
 		u = unpacker
 		u.reset(buf)
@@ -48,7 +54,10 @@ def readScanFillTree(scanFile, tree, branch, unpacker=None):
 		# if curr_pt < npts, plower_scans will have garbage for pointers to
 		# scans that were planned for but not written
 		loc = scanFile.tell() - (len(buf) - u.get_position())
-		scan.plower_scans = u.unpack_farray(scan.npts, u.unpack_int)
+		if have_fast_xdr:
+			scan.plower_scans = u.unpack_farray_int(scan.npts)
+		else:
+			scan.plower_scans = u.unpack_farray(scan.npts, u.unpack_int)
 		tree.AppendItem(branch, "%08X %-12s %s" % (loc, 'p_scans', hexValuesAsString(scan.plower_scans, 6)))
 
 	loc = scanFile.tell() - (len(buf) - u.get_position())
@@ -195,7 +204,7 @@ def readMDA_FillTree(fname=None, maxdim=4, tree=None):
 
 	scanFile = open(fname, 'rb')
 	buf = scanFile.read(100)	# to read header for scan of up to 5 dimensions
-	u = Unpacker(buf)
+	u = xdr.Unpacker(buf)
 
 	tree.AppendItem(root, "hex_loc item_name     item_value")
 
