@@ -5,14 +5,15 @@ is written by that module's saveData program.
 mdaExplorer.py - This is the main program.
 
 mdaTree.py     - Routines to read an MDA file and collect information into a
-                 tree (an instance of wx.TreeCtrl)
+                 tree (an instance of wx.TreeCtrl).  Will user f_xdrlib if
+				 available, otherwise falls back to Python's xdrlib.
 
-mda.py         - Python support for the MDA file format.  mda.py tries to import
-                 f_xdrlib.  If that fails, it uses python's xdrlib instead.
+mda.py         - Python support for the MDA file format.  Will user f_xdrlib if
+				 available, otherwise falls back to Python's xdrlib.
 
-f_xdrlib.py    - A modified copy of xdrlib.py, software from Python 2.5 which
-                 uses the Python struct module to convert data from an XDR
-				 file to native Python variables.
+f_xdrlib.py    - (in mdaPythonUtils) A modified copy of xdrlib.py, software from
+				 Python 2.5 which uses the Python struct module to convert data
+				 from an XDR file to native Python variables.
 
 InstallSteps*.txt - The procedure I went through to install Python 2.5 and all
                     the python-related stuff needed to run mdaExplorer.
