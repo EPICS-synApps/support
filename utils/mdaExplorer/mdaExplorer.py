@@ -22,21 +22,25 @@ if hasattr(sys, 'frozen') and sys.frozen:
 import matplotlib
 #matplotlib.use('WXAgg')
 import wx
-import wxmpl
+HAVE_WXMPL = True
+try:
+	import wxmpl
+except:
+	HAVE_WXMPL = False
 import wx.lib.scrolledpanel as scrolled
 import wx.lib.mixins.listctrl as listmix
 from pylab import *
 import numpy
 
-# try this to help pyinstaller find stuff
-import matplotlib.numerix.fft
-import matplotlib.numerix.linear_algebra
-import matplotlib.numerix.ma
-import matplotlib.numerix.mlab
-import matplotlib.numerix.npyma
-import matplotlib.numerix.random_array
+## try this to help pyinstaller find stuff
+#import matplotlib.numerix.fft
+#import matplotlib.numerix.linear_algebra
+#import matplotlib.numerix.ma
+#import matplotlib.numerix.mlab
+#import matplotlib.numerix.npyma
+#import matplotlib.numerix.random_array
 
-import mda_f as mda
+import mda
 
 import string
 import mdaTree
@@ -44,7 +48,11 @@ import mdaTree
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.backends.backend_wx import NavigationToolbar2Wx
 from matplotlib.figure import Figure
-import matplotlib.axes3d as axes3d
+HAVE_AXES3D = True
+try:
+	import matplotlib.axes3d as axes3d
+except:
+	HAVE_AXES3D = False
 from matplotlib.ticker import NullLocator
 import matplotlib.cbook as cbook
 
@@ -408,7 +416,8 @@ class CanvasFrame(wx.Frame):
 		pData.SetPaperId(wx.PAPER_LETTER)
 		if callable(getattr(pData, 'SetPrinterCommand', None)):
 			pData.SetPrinterCommand(LINUX_PRINTING_COMMAND)
-		self.printer = wxmpl.FigurePrinter(self, pData)
+		if (HAVE_WXMPL):
+			self.printer = wxmpl.FigurePrinter(self, pData)
 
 		menuBar = wx.MenuBar()
 		menu = wx.Menu()
@@ -773,6 +782,9 @@ class CanvasFrame(wx.Frame):
 
 
 	def plotDetsSurface(self):
+		if HAVE_AXES3D==False:
+			return
+
 		self.SetTitle(self.frame.fileName)
 		fig = self.get_figure()
 		fig.clf()
@@ -1234,15 +1246,18 @@ class PlotDimPanel(wx.Panel):
 			# 2D plot buttons
 			p2D = wx.Panel(p)
 			plotButton = wx.Button(p2D, -1, "Plot")
-			plotSurfaceButton = wx.Button(p2D, -1, "PlotSurface")
+			if HAVE_AXES3D:
+				plotSurfaceButton = wx.Button(p2D, -1, "PlotSurface")
 
 			p2DSizer = wx.BoxSizer(wx.VERTICAL)
 			p2DSizer.Add(plotButton)
-			p2DSizer.Add(plotSurfaceButton)
+			if HAVE_AXES3D:
+				p2DSizer.Add(plotSurfaceButton)
 			p2D.SetSizer(p2DSizer)
 
 			self.Bind(wx.EVT_BUTTON, self.plot2D, plotButton)
-			self.Bind(wx.EVT_BUTTON, self.plotSurface, plotSurfaceButton)
+			if HAVE_AXES3D:
+				self.Bind(wx.EVT_BUTTON, self.plotSurface, plotSurfaceButton)
 
 			# 1D plot buttons (show slice of 2D data)
 			p1D = wx.Panel(p)
