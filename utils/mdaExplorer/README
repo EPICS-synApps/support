@@ -7,12 +7,12 @@ mdaExplorer.py - This is the main program.
 mdaTree.py     - Routines to read an MDA file and collect information into a
                  tree (an instance of wx.TreeCtrl)
 
-mda_f.py       - A faster version of mda.py, which uses f_xdrlib.py to read
-                 arrays in big chunks, rather than element by element.
+mda.py         - Python support for the MDA file format.  mda.py tries to import
+                 f_xdrlib.  If that fails, it uses python's xdrlib instead.
 
 f_xdrlib.py    - A modified copy of xdrlib.py, software from Python 2.5 which
                  uses the Python struct module to convert data from an XDR
-				 file to native Python variables
+				 file to native Python variables.
 
 InstallSteps*.txt - The procedure I went through to install Python 2.5 and all
                     the python-related stuff needed to run mdaExplorer.
