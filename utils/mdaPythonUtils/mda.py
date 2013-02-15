@@ -1,17 +1,49 @@
 #!/usr/bin/env python
 
-# version 1 Tim Mooney 5/30/2006
-# derived from readMDA.py
-# - supports reading, writing, and arithmetic operations for up to 4D MDA files
+# version 2.1 Tim Mooney 2/15/2012
+# merge of mda.py and mda_f.py
+# - supports reading, writing, and arithmetic operations for
+#   up to 4-dimensional MDA files.
 
-from xdrlib import *
-import tkFileDialog
 import sys
 import os
 import string
-import Tkinter
+
+have_fast_xdr = False
+try:
+	import f_xdrlib as xdr
+	have_fast_xdr = True
+except:
+	import xdrlib as xdr
+
+try:
+	import Tkinter
+	have_Tkinter = True
+except:
+	have_Tkinter = False
+	try:
+		import wx
+		have_wx = True
+	except:
+		have_wx = False
+
+if have_Tkinter:
+	import tkFileDialog
+
+try:
+	import numpy
+	have_numpy = True
+except:
+	have_numpy = False
+use_numpy = have_numpy
+
+# If we can import numpy, and if caller asks us to use it, we'll
+# return data in numpy arrays.  Otherwise, we'll return data in lists.
+
 import copy
 
+################################################################################
+# classes
 # scanDim holds all of the data associated with a single execution of a single sscan record.
 class scanDim:
 	def __init__(self):
@@ -31,8 +63,8 @@ class scanDim:
 
 	def __str__(self):
 		if self.name <> '':
-			s = "%dD data from \"%s\": %d/%d pts; %d positioners, %d detectors" % (
-				self.dim, self.name, self.curr_pt, self.npts, self.np, self.nd)
+			s = "%dD data from \"%s\" acquired on %s:\n%d/%d pts; %d positioners, %d detectors" % (
+				self.dim, self.name, self.time, self.curr_pt, self.npts, self.np, self.nd)
 		else:
 			s = "%dD data (not read in)" % (self.dim)
 
@@ -55,11 +87,24 @@ class scanPositioner:
 		self.data = []				# list of values written to 'name' PV.  If rank==2, lists of lists, etc.
 
 	def __str__(self):
-		s = "positioner %d (%s), desc:%s, unit:%s\n" % (self.number, self.name,
-			self.desc, self.unit)
-		s = s + "   step mode: %s, readback:\"%s\"\n" % (self.step_mode,
-			self.readback_name)
-		s = s + "data:%s" % (str(self.data))
+		global use_numpy
+		data = self.data
+		if use_numpy:
+			n = data.ndim
+			if n==1:
+				dimString = '(' + str(data.shape[0]) + ')'
+			else:
+				dimString = str(data.shape)
+		else:
+			n = 1
+			dimString = str(len(data))
+			while (len(data)>0) and ((type(data[0]) == type([])) or (type(data[0]) == type(()))):
+				data = data[0]
+				n = n+1
+				dimString = dimString+"x"+str(len(data))
+			dimString = '('+dimString+')'
+		s = "positioner <scanRecord>.%s\nPV name  '%s'\nPV desc. '%s'\nPV units    '%s'\nstep mode: %s\nRB name  '%s'\nRB desc. '%s'\nRB units    '%s'\ndata: %dD array %s\n" % (self.fieldName,
+		self.name, self.desc, self.unit, self.step_mode, self.name, self.desc, self.unit, n, dimString)
 		return s
 
 # scanDetector holds all the information associated with a single detector, and
@@ -74,8 +119,24 @@ class scanDetector:
 		self.data = []			# list of values read from 'name' PV.  If rank==2, lists of lists, etc.
 
 	def __str__(self):
-		s = "detector %d (%s), desc:%s, unit:%s, data:%s\n" % (self.number,
-			self.name, self.desc, self.unit, str(self.data))
+		global use_numpy
+		data = self.data
+		if use_numpy:
+			n = data.ndim
+			if n==1:
+				dimString = '(' + str(data.shape[0]) + ')'
+			else:
+				dimString = str(data.shape)
+		else:
+			n = 1
+			dimString = str(len(data))
+			while (len(data)>0) and ((type(data[0]) == type([])) or (type(data[0]) == type(()))):
+				data = data[0]
+				n = n+1
+				dimString = dimString+"x"+str(len(data))
+			dimString = '('+dimString+')'
+		s = "detector <scanRecord>.%s\nPV name  '%s'\nPV desc. '%s'\nPV units    '%s'\ndata: %dD array %s\n" % (self.fieldName,
+		self.name, self.desc, self.unit, n, dimString)
 		return s
 
 # scanTrigger holds all the information associated with a single detector trigger.
@@ -111,6 +172,9 @@ class mdaBuf:
 		self.scan = None
 		self.extraPV = None	# extraPV section
 
+################################################################################
+# read MDA file
+
 # Given a detector number, return the name of the associated sscanRecord PV, 'D01'-'D99'.
 # (Currently, only 70 detectors are ever used.)
 def detName(i):
@@ -136,222 +200,468 @@ def posName(i):
 	else:
 		return "?"
 
-# Read data resulting from start-to-finish execution of a single sscan record.
-# For a 1D scan file, this routine is called once.  For a 2D scan file, this
-# routine is called once for the outer scan, and then <outerscan>.curr_pt times
-# for the inner scans.
-def readScan(file, v):
-	scan = scanDim()
-	buf = file.read(10000) # enough to read scan header
-	u = Unpacker(buf)
+def verboseData(data, out=sys.stdout):
+	if ((len(data)>0) and (type(data[0]) == type([]))):
+		for i in len(data):
+			verboseData(data[i], out)
+	else:
+		out.write("[")
+		for datum in data:
+			if (type(datum) == type(0)):
+				out.write(" %d" % datum)
+			else:
+				out.write(" %.5f" % datum)
+		out.write(" ]\n")
+
+def readScan(scanFile, verbose=0, out=sys.stdout, unpacker=None):
+	"""usage: (scan,num) = readScan(scanFile, verbose=0, out=sys.stdout)"""
+
+	scan = scanDim()	# data structure to hold scan info and data
+	buf = scanFile.read(10000) # enough to read scan header
+	if unpacker == None:
+		u = xdr.Unpacker(buf)
+	else:
+		u = unpacker
+		u.reset(buf)
+
 	scan.rank = u.unpack_int()
-	if v: print "scan.rank = ", `scan.rank`
 	scan.npts = u.unpack_int()
-	if v: print "scan.npts = ", `scan.npts`
 	scan.curr_pt = u.unpack_int()
-	if v: print "scan.curr_pt = ", `scan.curr_pt`
+	if verbose:
+		print "scan.rank = ", `scan.rank`
+		print "scan.npts = ", `scan.npts`
+		print "scan.curr_pt = ", `scan.curr_pt`
+
 	if (scan.rank > 1):
 		# if curr_pt < npts, plower_scans will have garbage for pointers to
 		# scans that were planned for but not written
-		scan.plower_scans = u.unpack_farray(scan.npts, u.unpack_int)
-		if v: print "scan.plower_scans = ", `scan.plower_scans`
+		if have_fast_xdr:
+			scan.plower_scans = u.unpack_farray_int(scan.npts)
+		else:
+			scan.plower_scans = u.unpack_farray(scan.npts, u.unpack_int)
+		if verbose: print "scan.plower_scans = ", `scan.plower_scans`
 	namelength = u.unpack_int()
 	scan.name = u.unpack_string()
-	if v: print "scan.name = ", `scan.name`
+	if verbose: print "scan.name = ", `scan.name`
 	timelength = u.unpack_int()
 	scan.time = u.unpack_string()
-	if v: print "scan.time = ", `scan.time`
+	if verbose: print "scan.time = ", `scan.time`
 	scan.np = u.unpack_int()
-	if v: print "scan.np = ", `scan.np`
+	if verbose: print "scan.np = ", `scan.np`
 	scan.nd = u.unpack_int()
-	if v: print "scan.nd = ", `scan.nd`
+	if verbose: print "scan.nd = ", `scan.nd`
 	scan.nt = u.unpack_int()
-	if v: print "scan.nt = ", `scan.nt`
+	if verbose: print "scan.nt = ", `scan.nt`
 	for j in range(scan.np):
 		scan.p.append(scanPositioner())
 		scan.p[j].number = u.unpack_int()
 		scan.p[j].fieldName = posName(scan.p[j].number)
-		if v: print "positioner ", j
+		if verbose: print "positioner ", j
 		length = u.unpack_int() # length of name string
 		if length: scan.p[j].name = u.unpack_string()
-		if v: print "scan.p[%d].name = %s" % (j, `scan.p[j].name`)
+		if verbose: print "scan.p[%d].name = %s" % (j, `scan.p[j].name`)
 		length = u.unpack_int() # length of desc string
 		if length: scan.p[j].desc = u.unpack_string()
-		if v: print "scan.p[%d].desc = %s" % (j, `scan.p[j].desc`)
+		if verbose: print "scan.p[%d].desc = %s" % (j, `scan.p[j].desc`)
 		length = u.unpack_int() # length of step_mode string
 		if length: scan.p[j].step_mode = u.unpack_string()
-		if v: print "scan.p[%d].step_mode = %s" % (j, `scan.p[j].step_mode`)
+		if verbose: print "scan.p[%d].step_mode = %s" % (j, `scan.p[j].step_mode`)
 		length = u.unpack_int() # length of unit string
 		if length: scan.p[j].unit = u.unpack_string()
-		if v: print "scan.p[%d].unit = %s" % (j, `scan.p[j].unit`)
+		if verbose: print "scan.p[%d].unit = %s" % (j, `scan.p[j].unit`)
 		length = u.unpack_int() # length of readback_name string
 		if length: scan.p[j].readback_name = u.unpack_string()
-		if v: print "scan.p[%d].readback_name = %s" % (j, `scan.p[j].readback_name`)
+		if verbose: print "scan.p[%d].readback_name = %s" % (j, `scan.p[j].readback_name`)
 		length = u.unpack_int() # length of readback_desc string
 		if length: scan.p[j].readback_desc = u.unpack_string()
-		if v: print "scan.p[%d].readback_desc = %s" % (j, `scan.p[j].readback_desc`)
+		if verbose: print "scan.p[%d].readback_desc = %s" % (j, `scan.p[j].readback_desc`)
 		length = u.unpack_int() # length of readback_unit string
 		if length: scan.p[j].readback_unit = u.unpack_string()
-		if v: print "scan.p[%d].readback_unit = %s" % (j, `scan.p[j].readback_unit`)
+		if verbose: print "scan.p[%d].readback_unit = %s" % (j, `scan.p[j].readback_unit`)
+
+	file_loc_det = scanFile.tell() - (len(buf) - u.get_position())
 
 	for j in range(scan.nd):
 		scan.d.append(scanDetector())
 		scan.d[j].number = u.unpack_int()
 		scan.d[j].fieldName = detName(scan.d[j].number)
-		if v: print "detector ", j
+		if verbose: print "detector ", j
 		length = u.unpack_int() # length of name string
 		if length: scan.d[j].name = u.unpack_string()
-		if v: print "scan.d[%d].name = %s" % (j, `scan.d[j].name`)
+		if verbose: print "scan.d[%d].name = %s" % (j, `scan.d[j].name`)
 		length = u.unpack_int() # length of desc string
 		if length: scan.d[j].desc = u.unpack_string()
-		if v: print "scan.d[%d].desc = %s" % (j, `scan.d[j].desc`)
+		if verbose: print "scan.d[%d].desc = %s" % (j, `scan.d[j].desc`)
 		length = u.unpack_int() # length of unit string
 		if length: scan.d[j].unit = u.unpack_string()
-		if v: print "scan.d[%d].unit = %s" % (j, `scan.d[j].unit`)
+		if verbose: print "scan.d[%d].unit = %s" % (j, `scan.d[j].unit`)
 
 	for j in range(scan.nt):
 		scan.t.append(scanTrigger())
 		scan.t[j].number = u.unpack_int()
-		if v: print "trigger ", j
+		if verbose: print "trigger ", j
 		length = u.unpack_int() # length of name string
 		if length: scan.t[j].name = u.unpack_string()
-		if v: print "scan.t[%d].name = %s" % (j, `scan.t[j].name`)
+		if verbose: print "scan.t[%d].name = %s" % (j, `scan.t[j].name`)
 		scan.t[j].command = u.unpack_float()
-		if v: print "scan.t[%d].command = %s" % (j, `scan.t[j].command`)
+		if verbose: print "scan.t[%d].command = %s" % (j, `scan.t[j].command`)
 
 	### read data
 	# positioners
-	file_loc = file.tell() - (len(buf) - u.get_position())
-	file.seek(file_loc)
-	buf = file.read(scan.np * scan.npts * 8)
-	u = Unpacker(buf)
+	file_loc_data = scanFile.tell() - (len(buf) - u.get_position())
+	scanFile.seek(file_loc_data)
+	buf = scanFile.read(scan.npts * (scan.np * 8 + scan.nd *4))
+	u.reset(buf)
+
+	if have_fast_xdr:
+		data = u.unpack_farray_double(scan.npts*scan.np)
+	else:
+		data = u.unpack_farray(scan.npts*scan.np, u.unpack_double)
+	start = 0
+	end = scan.npts
 	for j in range(scan.np):
-		if v: print "read %d pts for pos. %d at file loc %x" % (scan.npts,
-			j, file_loc)
-		scan.p[j].data = u.unpack_farray(scan.npts, u.unpack_double)    
-		if v: print "scan.p[%d].data = %s" % (j, `scan.p[j].data`)
+		start = j*scan.npts
+		scan.p[j].data = data[start:end]
+		start = end
+		end += scan.npts
         
 	# detectors
-	file.seek(file.tell() - (len(buf) - u.get_position()))
-	buf = file.read(scan.nd * scan.npts * 4)
-	u = Unpacker(buf)
+	if have_fast_xdr:
+		data = u.unpack_farray_float(scan.npts*scan.nd)
+	else:
+		data = u.unpack_farray(scan.npts*scan.nd, u.unpack_float)
+	start = 0
+	end = scan.npts
 	for j in range(scan.nd):
-		scan.d[j].data = u.unpack_farray(scan.npts, u.unpack_float)
-		if v: print "scan.d[%d].data = %s" % (j, `scan.d[j].data`)
+		scan.d[j].data = data[start:end]
+		start = end
+		end += scan.npts
+
+	return (scan, (file_loc_data-file_loc_det))
+
+useDetToDatOffset = 1
+def readScanQuick(scanFile, unpacker=None, detToDat_offset=None):
+	"""usage: readScanQuick(scanFile, unpacker=None)"""
+
+	scan = scanDim()	# data structure to hold scan info and data
+	buf = scanFile.read(10000) # enough to read scan header
+	if unpacker == None:
+		u = xdr.Unpacker(buf)
+	else:
+		u = unpacker
+		u.reset(buf)
+
+	scan.rank = u.unpack_int()
+	scan.npts = u.unpack_int()
+	scan.curr_pt = u.unpack_int()
+
+	if (scan.rank > 1):
+		if have_fast_xdr:
+			scan.plower_scans = u.unpack_farray_int(scan.npts)
+		else:
+			scan.plower_scans = u.unpack_farray(scan.npts, u.unpack_int)
+
+	namelength = u.unpack_int()
+	scan.name = u.unpack_string()
+	timelength = u.unpack_int()
+	scan.time = u.unpack_string()
+
+	scan.np = u.unpack_int()
+	scan.nd = u.unpack_int()
+	scan.nt = u.unpack_int()
+
+	for j in range(scan.np):
+		scan.p.append(scanPositioner())
+		scan.p[j].number = u.unpack_int()
+		n = u.unpack_int() # length of name string
+		if n: u.set_position(u.get_position()+4+(n+3)//4*4)
+		n = u.unpack_int() # length of desc string
+		if n: u.set_position(u.get_position()+4+(n+3)//4*4)
+		n = u.unpack_int() # length of step_mode string
+		if n: u.set_position(u.get_position()+4+(n+3)//4*4)
+		n = u.unpack_int() # length of unit string
+		if n: u.set_position(u.get_position()+4+(n+3)//4*4)
+		n = u.unpack_int() # length of readback_name string
+		if n: u.set_position(u.get_position()+4+(n+3)//4*4)
+		n = u.unpack_int() # length of readback_desc string
+		if n: u.set_position(u.get_position()+4+(n+3)//4*4)
+		n = u.unpack_int() # length of readback_unit string
+		if n: u.set_position(u.get_position()+4+(n+3)//4*4)
+
+	file_loc_det = scanFile.tell() - (len(buf) - u.get_position())
+
+	if (detToDat_offset == None) or (not useDetToDatOffset):
+		for j in range(scan.nd):
+			scan.d.append(scanDetector())
+			scan.d[j].number = u.unpack_int()
+			scan.d[j].fieldName = detName(scan.d[j].number)
+			n = u.unpack_int() # length of name string
+			if n: u.set_position(u.get_position()+4+(n+3)//4*4)
+			n = u.unpack_int() # length of desc string
+			if n: u.set_position(u.get_position()+4+(n+3)//4*4)
+			n = u.unpack_int() # length of unit string
+			if n: u.set_position(u.get_position()+4+(n+3)//4*4)
+
+		for j in range(scan.nt):
+			scan.t.append(scanTrigger())
+			scan.t[j].number = u.unpack_int()
+			n = u.unpack_int() # length of name string
+			if n: u.set_position(u.get_position()+4+(n+3)//4*4)
+			scan.t[j].command = u.unpack_float()
+
+		### read data
+		# positioners
+
+		file_loc = scanFile.tell() - (len(buf) - u.get_position())
+		diff = file_loc - (file_loc_det + detToDat_offset)
+		if diff != 0:
+			print "oldSeek, newSeek, o-n=", file_loc, file_loc_det + detToDat_offset, diff
+		scanFile.seek(file_loc)
+	else:
+		for j in range(scan.nd):
+			scan.d.append(scanDetector())
+		scanFile.seek(file_loc_det + detToDat_offset)
+
+	buf = scanFile.read(scan.npts * (scan.np * 8 + scan.nd *4))
+	u.reset(buf)
+
+	if have_fast_xdr:
+		data = u.unpack_farray_double(scan.npts*scan.np)
+	else:
+		data = u.unpack_farray(scan.npts*scan.np, u.unpack_double)
+	for j in range(scan.np):
+		start = j*scan.npts
+		scan.p[j].data = data[j*scan.npts : (j+1)*scan.npts]
+
+	# detectors
+	if have_fast_xdr:
+		data = u.unpack_farray_float(scan.npts*scan.nd)
+	else:
+		data = u.unpack_farray(scan.npts*scan.nd, u.unpack_float)
+	for j in range(scan.nd):
+		scan.d[j].data = data[j*scan.npts : (j+1)*scan.npts]
 
 	return scan
 
-# readMDA reads an entire scan file into a data structure, which is built as the file
-# is read and returned to caller.
-def readMDA(fname=None, maxdim=4, verbose=0, help=0):
+EPICS_types_dict = {
+0: "DBR_STRING",
+1: "DBR_SHORT",
+2: "DBR_FLOAT",
+3: "DBR_ENUM",
+4: "DBR_CHAR",
+5: "DBR_LONG",
+6: "DBR_DOUBLE",
+7: "DBR_STS_STRING",
+8: "DBR_STS_SHORT",
+9: "DBR_STS_FLOAT",
+10: "DBR_STS_ENUM",
+11: "DBR_STS_CHAR",
+12: "DBR_STS_LONG",
+13: "DBR_STS_DOUBLE",
+14: "DBR_TIME_STRING",
+15: "DBR_TIME_SHORT",
+16: "DBR_TIME_FLOAT",
+17: "DBR_TIME_ENUM",
+18: "DBR_TIME_CHAR",
+19: "DBR_TIME_LONG",
+20: "DBR_TIME_DOUBLE",
+21: "DBR_GR_STRING",
+22: "DBR_GR_SHORT",
+23: "DBR_GR_FLOAT",
+24: "DBR_GR_ENUM",
+25: "DBR_GR_CHAR",
+26: "DBR_GR_LONG",
+27: "DBR_GR_DOUBLE",
+28: "DBR_CTRL_STRING",
+29: "DBR_CTRL_SHORT",
+30: "DBR_CTRL_FLOAT",
+31: "DBR_CTRL_ENUM",
+32: "DBR_CTRL_CHAR",
+33: "DBR_CTRL_LONG",
+34: "DBR_CTRL_DOUBLE"
+}
+
+def EPICS_types(n):
+	if EPICS_types_dict.has_key(n):
+		return EPICS_types_dict[n]
+	else:
+		return ("Unexpected type %d" % n)
+
+def readMDA(fname=None, maxdim=4, verbose=0, showHelp=0, outFile=None, useNumpy=None, readQuick=False):
+	"""usage readMDA(fname=None, maxdim=4, verbose=0, showHelp=0, outFile=None, useNumpy=None, readQuick=False)"""
+	global use_numpy
+
+	if useNumpy and not have_numpy:
+		print "readMDA: Caller requires that we use the python 'numpy' package, but we can't import it."
+		return None
+	use_numpy = useNumpy
+
 	dim = []
-
 	if (fname == None):
-		fname = tkFileDialog.Open().show()
-	if (not os.path.isfile(fname)): fname = fname + '.mda'
+		if have_Tkinter:
+			fname = tkFileDialog.Open().show()
+		elif have_wx:
+			app=wx.App()
+			wildcard = "MDA (*.mda)|*.mda|All files (*.*)|*.*"
+			dlg = wx.FileDialog(None, message="Choose a file",
+				defaultDir=os.getcwd(), defaultFile="", wildcard=wildcard,
+				style=wx.OPEN | wx.CHANGE_DIR)
+			if dlg.ShowModal() == wx.ID_OK:
+				fname = dlg.GetPath()
+			dlg.Destroy()
+			app.Destroy()
+		else:
+			print "No file specified, and no file dialog could be opened"
+			return None
 	if (not os.path.isfile(fname)):
-		print fname," is not a file"
-		return dim
+		if (not fname.endswith('.mda')):
+			fname = fname + '.mda'
+		if (not os.path.isfile(fname)):
+			print fname, "not found"
+			return None
 
-	file = open(fname, 'rb')
-	#print "file = ", str(file)
-	#file.seek(0,2)
-	#filesize = file.tell()
-	#file.seek(0)
-	buf = file.read(100)		# to read header for scan of up to 5 dimensions
-	u = Unpacker(buf)
+	if (outFile == None):
+		out = sys.stdout
+	else:
+		out = open(outFile, 'w')
+
+	scanFile = open(fname, 'rb')
+	if verbose: out.write("verbose=%d output for MDA file '%s'\n" % (verbose, fname))
+	buf = scanFile.read(100)		# to read header for scan of up to 5 dimensions
+	u = xdr.Unpacker(buf)
 
 	# read file header
 	version = u.unpack_float()
+	if verbose: out.write("MDA version = %.3f\n" % version)
+	if abs(version - 1.3) > .01:
+		print "I can't read MDA version %f.  Is this really an MDA file?" % version
+		return None
+
 	scan_number = u.unpack_int()
+	if verbose: out.write("scan_number = %d\n" % scan_number)
 	rank = u.unpack_int()
+	if verbose: out.write("rank = %d\n" % rank)
 	dimensions = u.unpack_farray(rank, u.unpack_int)
+	if verbose:
+		out.write("dimensions = ")
+		verboseData(dimensions, out)
 	isRegular = u.unpack_int()
+	if verbose: out.write("isRegular = %d\n" % isRegular)
 	pExtra = u.unpack_int()
-	pmain_scan = file.tell() - (len(buf) - u.get_position())
+	if verbose: out.write("pExtra = %d (0x%x)\n" % (pExtra, pExtra))
+	pmain_scan = scanFile.tell() - (len(buf) - u.get_position())
 
 	# collect 1D data
-	file.seek(pmain_scan)
-	dim.append(readScan(file, max(0,verbose-1)))
+	scanFile.seek(pmain_scan)
+	(s,n) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
+	dim.append(s)
 	dim[0].dim = 1
+
+	if use_numpy:
+		for p in dim[0].p:
+			p.data = numpy.array(p.data)
+		for d in dim[0].d:
+			d.data = numpy.array(d.data)
 
 	if ((rank > 1) and (maxdim > 1)):
 		# collect 2D data
 		for i in range(dim[0].curr_pt):
-			file.seek(dim[0].plower_scans[i])
+			scanFile.seek(dim[0].plower_scans[i])
 			if (i==0):
-				dim.append(readScan(file, max(0,verbose-1)))
+				(s,detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
+				dim.append(s)
 				dim[1].dim = 2
 				# replace data arrays [1,2,3] with [[1,2,3]]
 				for j in range(dim[1].np):
-					data = dim[1].p[j].data
-					dim[1].p[j].data = []
-					dim[1].p[j].data.append(data)
+					dim[1].p[j].data = [dim[1].p[j].data]
 				for j in range(dim[1].nd):
-					data = dim[1].d[j].data
-					dim[1].d[j].data = []
-					dim[1].d[j].data.append(data)
+					dim[1].d[j].data = [dim[1].d[j].data]
 			else:
-				s = readScan(file, max(0,verbose-1))
+				if readQuick:
+					s = readScanQuick(scanFile, unpacker=u, detToDat_offset=detToDat)
+				else:
+					(s,junk) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
 				# append data arrays
 				# [ [1,2,3], [2,3,4] ] -> [ [1,2,3], [2,3,4], [3,4,5] ]
-				for j in range(s.np): dim[1].p[j].data.append(s.p[j].data)
-				for j in range(s.nd): dim[1].d[j].data.append(s.d[j].data)
+				numP = min(s.np, len(dim[1].p))
+				if (s.np > numP):
+					print "First scan had %d positioners; This one only has %d." % (s.np, numP)
+				for j in range(numP): dim[1].p[j].data.append(s.p[j].data)
+				numD = min(s.nd, len(dim[1].d))
+				if (s.nd > numD):
+					print "First scan had %d detectors; This one only has %d." % (s.nd, numD)
+				for j in range(numD): dim[1].d[j].data.append(s.d[j].data)
+		if use_numpy:
+			for p in dim[1].p:
+				p.data = numpy.array(p.data)
+			for d in dim[1].d:
+				d.data = numpy.array(d.data)
 
 	if ((rank > 2) and (maxdim > 2)):
 		# collect 3D data
+		#print "dim[0].curr_pt=",dim[0].curr_pt
 		for i in range(dim[0].curr_pt):
-			file.seek(dim[0].plower_scans[i])
-			s1 = readScan(file, max(0,verbose-1))
+			#print "i=%d of %d points" % (i, dim[0].curr_pt)
+			scanFile.seek(dim[0].plower_scans[i])
+			(s1,detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
+			#print "s1.curr_pt=", s1.curr_pt
 			for j in range(s1.curr_pt):
-				file.seek(s1.plower_scans[j])
+				#print "j=%d of %d points" % (j, s1.curr_pt)
+				scanFile.seek(s1.plower_scans[j])
+				if (j==0) or not readQuick:
+					(s, detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
+				else:
+					s = readScanQuick(scanFile, unpacker=u, detToDat_offset=detToDat)
 				if ((i == 0) and (j == 0)):
-					dim.append(readScan(file, max(0,verbose-1)))
+					dim.append(s)
 					dim[2].dim = 3
 					# replace data arrays [1,2,3] with [[[1,2,3]]]
 					for k in range(dim[2].np):
-						data = dim[2].p[k].data
-						dim[2].p[k].data = [[]]
-						dim[2].p[k].data[0].append(data)
+						dim[2].p[k].data = [[dim[2].p[k].data]]
 					for k in range(dim[2].nd):
-						data = dim[2].d[k].data
-						dim[2].d[k].data = [[]]
-						dim[2].d[k].data[0].append(data)
+						dim[2].d[k].data = [[dim[2].d[k].data]]
 				else:
-					s = readScan(file, max(0,verbose-1))
 					# append data arrays
-					# if j==0: [[[1,2,3], [2,3,4]]] -> [[[1,2,3], [2,3,4]], [[3,4,5]]]
-					# else: [[[1,2,3], [2,3,4]]] -> [[[1,2,3], [2,3,4]], [[3,4,5]]]
-					for k in range(s.np):
+					numP = min(s.np, len(dim[2].p))
+					if (s.np > numP):
+						print "First scan had %d positioners; This one only has %d." % (s.np, numP)
+					for k in range(numP):
 						if j==0: dim[2].p[k].data.append([])
 						dim[2].p[k].data[i].append(s.p[k].data)
-					for k in range(s.nd):
+					numD = min(s.nd, len(dim[2].d))
+					if (s.nd > numD):
+						print "First scan had %d detectors; This one only has %d." % (s.nd, numD)
+					for k in range(numD):
 						if j==0: dim[2].d[k].data.append([])
 						dim[2].d[k].data[i].append(s.d[k].data)
+		if use_numpy:
+			for p in dim[2].p:
+				p.data = numpy.array(p.data)
+			for d in dim[2].d:
+				d.data = numpy.array(d.data)
 
 	if ((rank > 3) and (maxdim > 3)):
 		# collect 4D data
 		for i in range(dim[0].curr_pt):
-			file.seek(dim[0].plower_scans[i])
-			s1 = readScan(file, max(0,verbose-1))
+			scanFile.seek(dim[0].plower_scans[i])
+			(s1, detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
 			for j in range(s1.curr_pt):
-				file.seek(s1.plower_scans[j])
-				s2 = readScan(file, max(0,verbose-1))
+				scanFile.seek(s1.plower_scans[j])
+				(s2, detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
 				for k in range(s2.curr_pt):
-					file.seek(s2.plower_scans[k])
+					scanFile.seek(s2.plower_scans[k])
+					if (k==0) or not readQuick:
+						(s, detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
+					else:
+						s = readScanQuick(scanFile, unpacker=u, detToDat_offset=detToDat)
 					if ((i == 0) and (j == 0) and (k == 0)):
-						dim.append(readScan(file, max(0,verbose-1)))
+						dim.append(s)
 						dim[3].dim = 4
 						for m in range(dim[3].np):
-							data = dim[3].p[m].data
-							dim[3].p[m].data = [[[]]]
-							dim[3].p[m].data[0][0].append(data)
+							dim[3].p[m].data = [[[dim[3].p[m].data]]]
 						for m in range(dim[3].nd):
-							data = dim[3].d[m].data
-							dim[3].d[m].data = [[[]]]
-							dim[3].d[m].data[0][0].append(data)
+							dim[3].d[m].data = [[[dim[3].d[m].data]]]
 					else:
-						s = readScan(file, max(0,verbose-1))
 						# append data arrays
 						if j==0 and k==0:
 							for m in range(dim[3].np):
@@ -367,6 +677,11 @@ def readMDA(fname=None, maxdim=4, verbose=0, help=0):
 							for m in range(dim[3].nd):
 								if k==0: dim[3].d[m].data[i].append([])
 								dim[3].d[m].data[i][j].append(s.d[m].data)
+		if use_numpy:
+			for p in dim[3].p:
+				p.data = numpy.array(p.data)
+			for d in dim[3].d:
+				d.data = numpy.array(d.data)
 
 
 
@@ -378,42 +693,52 @@ def readMDA(fname=None, maxdim=4, verbose=0, help=0):
 	dict['scan_number'] = scan_number
 	dict['rank'] = rank
 	dict['dimensions'] = dimensions
+	acq_dimensions = []
+	for d in dim:
+		acq_dimensions.append(d.curr_pt)
+	dict['acquired_dimensions'] = acq_dimensions
 	dict['isRegular'] = isRegular
-	dict['ourKeys'] = ['sampleEntry', 'filename', 'version', 'scan_number', 'rank', 'dimensions', 'isRegular', 'ourKeys']
+	dict['ourKeys'] = ['sampleEntry', 'filename', 'version', 'scan_number', 'rank', 'dimensions', 'acquired_dimensions', 'isRegular', 'ourKeys']
 	if pExtra:
-		file.seek(pExtra)
-		buf = file.read()       # Read all scan-environment data
-		u = Unpacker(buf)
+		scanFile.seek(pExtra)
+		buf = scanFile.read()       # Read all scan-environment data
+		u.reset(buf)
 		numExtra = u.unpack_int()
+		if verbose: out.write("\nnumber of 'Extra' PV's = %d\n" % numExtra)
 		for i in range(numExtra):
+			if verbose: out.write("env PV #%d -------\n" % (i))
 			name = ''
 			n = u.unpack_int()      # length of name string
 			if n: name = u.unpack_string()
+			if verbose: out.write("\tname = '%s'\n" % name)
 			desc = ''
 			n = u.unpack_int()      # length of desc string
 			if n: desc = u.unpack_string()
+			if verbose: out.write("\tdesc = '%s'\n" % desc)
 			EPICS_type = u.unpack_int()
+			if verbose: out.write("\tEPICS_type = %d (%s)\n" % (EPICS_type, EPICS_types(EPICS_type)))
 
 			unit = ''
 			value = ''
 			count = 0
-			if EPICS_type != 0:   # not DBR_STRING
+			if EPICS_type != 0:   # not DBR_STRING; array is permitted
 				count = u.unpack_int()  # 
+				if verbose: out.write("\tcount = %d\n" % count)
 				n = u.unpack_int()      # length of unit string
 				if n: unit = u.unpack_string()
+				if verbose: out.write("\tunit = '%s'\n" % unit)
 
 			if EPICS_type == 0: # DBR_STRING
 				n = u.unpack_int()      # length of value string
 				if n: value = u.unpack_string()
 			elif EPICS_type == 32: # DBR_CTRL_CHAR
 				#value = u.unpack_fstring(count)
-				v = u.unpack_farray(count, u.unpack_int)
+				vect = u.unpack_farray(count, u.unpack_int)
 				value = ""
-				for i in range(len(v)):
+				for i in range(len(vect)):
 					# treat the byte array as a null-terminated string
-					if v[i] == 0: break
-					value = value + chr(v[i])
-
+					if vect[i] == 0: break
+					value = value + chr(vect[i])
 			elif EPICS_type == 29: # DBR_CTRL_SHORT
 				value = u.unpack_farray(count, u.unpack_int)
 			elif EPICS_type == 33: # DBR_CTRL_LONG
@@ -422,15 +747,21 @@ def readMDA(fname=None, maxdim=4, verbose=0, help=0):
 				value = u.unpack_farray(count, u.unpack_float)
 			elif EPICS_type == 34: # DBR_CTRL_DOUBLE
 				value = u.unpack_farray(count, u.unpack_double)
+			if verbose:
+				if (EPICS_type == 0):
+					out.write("\tvalue = '%s'\n" % (value))
+				else:
+					out.write("\tvalue = ")
+					verboseData(value, out)
 
 			dict[name] = (desc, unit, value, EPICS_type, count)
-	file.close()
+	scanFile.close()
 
 	dim.reverse()
 	dim.append(dict)
 	dim.reverse()
-	if verbose:
-		print "%s is a %d-D file; %d dimensions read in." % (fname, dim[0]['rank'], len(dim)-1)
+	if verbose or showHelp:
+		print "\n%s is a %d-D file; %d dimensions read in." % (fname, dim[0]['rank'], len(dim)-1)
 		print "dim[0] = dictionary of %d scan-environment PVs" % (len(dim[0]))
 		print "   usage: dim[0]['sampleEntry'] ->", dim[0]['sampleEntry']
 		for i in range(1,len(dim)):
@@ -438,9 +769,9 @@ def readMDA(fname=None, maxdim=4, verbose=0, help=0):
 		print "   usage: dim[1].p[2].data -> 1D array of positioner 2 data"
 		print "   usage: dim[2].d[7].data -> 2D array of detector 7 data"
 
-	if help:
+	if showHelp:
 		print " "
-		print "   each dimension (e.g., dim[1]) has the following fields: "
+		print "   each scan dimension (i.e., dim[1], dim[2], ...) has the following fields: "
 		print "      time      - date & time at which scan was started: %s" % (dim[1].time)
 		print "      name - name of scan record that acquired this dimension: '%s'" % (dim[1].name)
 		print "      curr_pt   - number of data points actually acquired: %d" % (dim[1].curr_pt)
@@ -452,7 +783,7 @@ def readMDA(fname=None, maxdim=4, verbose=0, help=0):
 		print "      nt        - number of detector triggers for this scan dimension: %d" % (dim[1].nt)
 		print "      t[]       - list of trigger-info structures"
 
-	if help:
+	if showHelp:
 		print " "
 		print "   each detector-data structure (e.g., dim[1].d[0]) has the following fields: "
 		print "      desc      - description of this detector"
@@ -461,7 +792,7 @@ def readMDA(fname=None, maxdim=4, verbose=0, help=0):
 		print "      fieldName - scan-record field (e.g., 'D01')"
 
 
-	if help:
+	if showHelp:
 		print " "
 		print "   each positioner-data structure (e.g., dim[1].p[0]) has the following fields: "
 		print "      desc          - description of this positioner"
@@ -474,14 +805,122 @@ def readMDA(fname=None, maxdim=4, verbose=0, help=0):
 		print "      readback_unit - engineering units associated with this positioner"
 		print "      readback_name - name of EPICS PV (e.g., 'xxx:m1.VAL')"
 
+	if (outFile):
+		out.close()
 	return dim
 
+################################################################################
+# skim MDA file to get dimensions (planned and actually acquired), and other info
+def skimScan(dataFile):
+	"""usage: skimScan(dataFile)"""
+	scan = scanDim()	# data structure to hold scan info and data
+	buf = dataFile.read(10000) # enough to read scan header
+	u = xdr.Unpacker(buf)
+	scan.rank = u.unpack_int()
+	scan.npts = u.unpack_int()
+	scan.curr_pt = u.unpack_int()
+	if (scan.curr_pt == 0):
+		#print "mda:skimScan: curr_pt = 0"
+		return None
+	if (scan.rank > 1):
+		if have_fast_xdr:
+			scan.plower_scans = u.unpack_farray_int(scan.npts)
+		else:
+			scan.plower_scans = u.unpack_farray(scan.npts, u.unpack_int)
+	namelength = u.unpack_int()
+	scan.name = u.unpack_string()
+	timelength = u.unpack_int()
+	scan.time = u.unpack_string()
+	scan.np = u.unpack_int()
+	scan.nd = u.unpack_int()
+	scan.nt = u.unpack_int()
+	return scan
+
+def skimMDA(fname=None, verbose=False):
+	"""usage skimMDA(fname=None)"""
+	#print "skimMDA: filename=", fname
+	dim = []
+	if (fname == None):
+		print "No file specified"
+		return None
+	if (not os.path.isfile(fname)):
+		if (not fname.endswith('.mda')):
+			fname = fname + '.mda'
+		if (not os.path.isfile(fname)):
+			print fname, "not found"
+			return None
+
+	try:
+		dataFile = open(fname, 'rb')
+	except:
+		print "mda_f:skimMDA: failed to open file '%s'" % fname
+		return None
+
+	buf = dataFile.read(100)		# to read header for scan of up to 5 dimensions
+	u = xdr.Unpacker(buf)
+
+	# read file header
+	version = u.unpack_float()
+#	if version < 1.299 or version > 1.301:
+#		print fname, " has file version", version
+#		return None
+	scan_number = u.unpack_int()
+	rank = u.unpack_int()
+	dimensions = u.unpack_farray(rank, u.unpack_int)
+	isRegular = u.unpack_int()
+	pExtra = u.unpack_int()
+	pmain_scan = dataFile.tell() - (len(buf) - u.get_position())
+
+	# collect 1D data
+	dataFile.seek(pmain_scan)
+	scan = skimScan(dataFile)
+	if (scan == None):
+		if verbose: print fname, "contains no data"
+		return None
+
+	dim.append(scan)
+	dim[0].dim = 1
+
+	if (rank > 1):
+		dataFile.seek(dim[0].plower_scans[0])
+		dim.append(skimScan(dataFile))
+		dim[1].dim = 2
+
+	if (rank > 2):
+		dataFile.seek(dim[1].plower_scans[0])
+		dim.append(skimScan(dataFile))
+		dim[2].dim = 3
+
+	if (rank > 3):
+		dataFile.seek(dim[2].plower_scans[0])
+		dim.append(skimScan(dataFile))
+		dim[3].dim = 4
+
+	dataFile.close()
+	dict = {}
+	dict['filename'] = fname
+	dict['version'] = version
+	dict['scan_number'] = scan_number
+	dict['rank'] = rank
+	dict['dimensions'] = dimensions
+	dimensions = []
+	for d in dim:
+		dimensions.append(d.curr_pt)
+	dict['acquired_dimensions'] = dimensions
+	dict['isRegular'] = isRegular
+	dim.reverse()
+	dim.append(dict)
+	dim.reverse()
+	return dim
+
+################################################################################
+# Write MDA file
 def packScanHead(scan):
 	s = scanBuf()
 	s.npts = scan.npts
 
 	# preamble
-	p = Packer()
+	p = xdr.Packer()
 	p.pack_int(scan.rank)
 	p.pack_int(scan.npts)
 	p.pack_int(scan.curr_pt)
@@ -550,7 +989,7 @@ def packScanHead(scan):
 	return s
 
 def packScanData(scan, cpt):
-	p = Packer()
+	p = xdr.Packer()
 	if (len(cpt) == 0): # 1D array
 		for i in range(scan.np):
 			p.pack_farray(scan.npts, scan.p[i].data, p.pack_double)    
@@ -576,7 +1015,7 @@ def packScanData(scan, cpt):
 
 def writeMDA(dim, fname=None):
 	m = mdaBuf()
-	p = Packer()
+	p = xdr.Packer()
 
 	p.reset()
 	if (type(dim) != type([])): print "writeMDA: first arg must be a scan"
@@ -732,6 +1171,212 @@ def writeMDA(dim, fname=None):
 	f.close()
 	return
 
+################################################################################
+# write Ascii file
+def getFormat(d, rank):
+	# number of positioners, detectors
+	np = d[rank].np
+	nd = d[rank].nd
+
+	min_column_width = 15
+	# make sure there's room for the names, etc.
+	phead_fmt = []
+	dhead_fmt = []
+	pdata_fmt = []
+	ddata_fmt = []
+	columns = 1
+	for i in range(np):
+		cw = max(min_column_width, len(d[rank].p[i].name)+1)
+		cw = max(cw, len(d[rank].p[i].desc)+1)
+		cw = max(cw, len(d[rank].p[i].fieldName)+1)
+		phead_fmt.append("%%-%2ds" % cw)
+		pdata_fmt.append("%%- %2d.8f" % cw)
+		columns = columns + cw
+	for i in range(nd):
+		cw = max(min_column_width, len(d[rank].d[i].name)+1)
+		cw = max(cw, len(d[rank].d[i].desc)+1)
+		cw = max(cw, len(d[rank].d[i].fieldName)+1)
+		dhead_fmt.append("%%-%2ds" % cw)
+		ddata_fmt.append("%%- %2d.8f" % cw)
+		columns = columns + cw
+	return (phead_fmt, dhead_fmt, pdata_fmt, ddata_fmt, columns)
+
+def writeAscii(d, fname=None):
+	if (type(d) != type([])):
+		print "writeMDA: first arg must be a scan"
+		return
+
+	if (fname == None):
+		f = sys.stdout
+	else:
+		f = open(fname, 'wb')
+
+	(phead_fmt, dhead_fmt, pdata_fmt, ddata_fmt, columns) = getFormat(d, 1)
+	# header
+	f.write("### %s is a %d-dimensional file\n" % (d[0]['filename'], d[0]['rank']))
+	f.write("### Number of data points      = [")
+	for i in range(d[0]['rank'],1,-1): f.write("%-d," % d[i].curr_pt)
+	f.write("%-d]\n" % d[1].curr_pt)
+
+	f.write("### Number of detector signals = [")
+	for i in range(d[0]['rank'],1,-1): f.write("%-d," % d[i].nd)
+	f.write("%-d]\n" % d[1].nd)
+
+	# scan-environment PV values
+	f.write("#\n# Scan-environment PV values:\n")
+	ourKeys = d[0]['ourKeys']
+	maxKeyLen = 0
+	for i in d[0].keys():
+		if (i not in ourKeys):
+			if len(i) > maxKeyLen: maxKeyLen = len(i)
+	for i in d[0].keys():
+		if (i not in ourKeys):
+			f.write("#%s%s%s\n" % (i, (maxKeyLen-len(i))*' ', d[0][i]))
+
+	f.write("\n#%s\n" % str(d[1]))
+	f.write("#  scan date, time: %s\n" % d[1].time)
+	sep = "#"*columns + "\n"
+	f.write(sep)
+
+	# 1D data table head
+	f.write("#")
+	for j in range(d[1].np):
+		f.write(phead_fmt[j] % (d[1].p[j].fieldName))
+	for j in range(d[1].nd):
+		f.write(dhead_fmt[j] % (d[1].d[j].fieldName))
+	f.write("\n")
+
+	f.write("#")
+	for j in range(d[1].np):
+		f.write(phead_fmt[j] % (d[1].p[j].name))
+	for j in range(d[1].nd):
+		f.write(dhead_fmt[j] % (d[1].d[j].name))
+	f.write("\n")
+
+	f.write("#")
+	for j in range(d[1].np):
+		f.write(phead_fmt[j] % (d[1].p[j].desc))
+	for j in range(d[1].nd):
+		f.write(dhead_fmt[j] % (d[1].d[j].desc))
+	f.write("\n")
+
+	f.write(sep)
+
+	# 1D data
+	for i in range(d[1].curr_pt):
+		f.write("")
+		for j in range(d[1].np):
+			f.write(pdata_fmt[j] % (d[1].p[j].data[i]))
+		for j in range(d[1].nd):
+			f.write(ddata_fmt[j] % (d[1].d[j].data[i]))
+		f.write("\n")
+
+	# 2D data
+	if (len(d) > 2):
+		f.write("\n# 2D data\n")
+		for i in range(d[2].np):
+			f.write("\n# Positioner %d (.%s) PV:'%s' desc:'%s'\n" % (i, d[2].p[i].fieldName, d[2].p[i].name, d[2].p[i].desc))
+			for j in range(d[1].curr_pt):
+				for k in range(d[2].curr_pt):
+					f.write("%f " % d[2].p[i].data[j][k])
+				f.write("\n")
+
+		for i in range(d[2].nd):
+			f.write("\n# Detector %d (.%s) PV:'%s' desc:'%s'\n" % (i, d[2].d[i].fieldName, d[2].d[i].name, d[2].d[i].desc))
+			for j in range(d[1].curr_pt):
+				for k in range(d[2].curr_pt):
+					f.write("%f " % d[2].d[i].data[j][k])
+				f.write("\n")
+
+	if (len(d) > 3):
+		f.write("\n# Can't write 3D (or higher) data\n")
+
+	if (fname != None):
+		f.close()
+
+
+################################################################################
+# misc
+def showEnv(dict, all=0):
+	if type(dict) == type([]) and type(dict[0]) == type({}):
+		dict = dict[0]
+	fieldLen = 0
+	for k in dict.keys():
+		if len(k) > fieldLen:
+			fieldLen = len(k)
+	format = "%%-%-ds %%s" % fieldLen
+	for k in dict.keys():
+		if not (k in dict['ourKeys']):
+			if type(dict[k]) == type((1,2,3)):
+				value = dict[k][2]
+			else:
+				value = dict[k]
+			if type(value) == type([]) and len(value) == 1:
+				value = value[0]
+			if all:
+				print format % (k,dict[k])
+			else:
+				print format % (k,value)
+	return
+
+def fixMDA(d):
+	"""usage: d=fixMDA(d), where d is a list returned by readMDA()"""
+	dimensions = []
+	for i in range(1,len(d)):
+		npts = d[i].curr_pt
+		d[i].npts = npts
+		dimensions.append(npts)
+		for j in range(d[i].np):
+			if (len(d[i].p[j].data) > npts):
+				d[i].p[j].data = d[i].p[j].data[0:npts]
+		for j in range(d[i].nd):
+			if (len(d[i].d[j].data) > npts):
+				d[i].d[j].data = d[i].d[j].data[0:npts]
+	dimensions.reverse()
+	d[0]['dimensions'] = dimensions
+	return(d)
+
+# translate mca-ROI PV's to mca-ROI description PV's, scaler signal PV'ss to scaler signal description PV's
+descDict = {'R1':'R1NM', 'R2':'R2NM', 'R3':'R3NM', 'R4':'R4NM', 'R5':'R5NM',
+ 'R6':'R6NM', 'R7':'R7NM', 'R8':'R8NM', 'R9':'R9NM', 'R10':'R10NM',
+ 'R11':'R11NM', 'R12':'R12NM', 'R13':'R13NM', 'R14':'R14NM', 'R15':'R15NM',
+ 'R16':'R16NM', 'R17':'R17NM', 'R18':'R18NM', 'R19':'R19NM', 'R20':'R20NM',
+ 'R21':'R21NM', 'R22':'R22NM', 'R23':'R23NM', 'R24':'R24NM', 'R25':'R25NM',
+ 'R26':'R26NM', 'R27':'R27NM', 'R28':'R28NM', 'R29':'R29NM', 'R30':'R30NM',
+ 'R31':'R31NM', 'R32':'R32NM',
+ 'S1':'NM1', 'S2':'NM2', 'S3':'NM3', 'S4':'NM4', 'S5':'NM5', 'S6':'NM6', 'S7':'NM7', 'S8':'NM8', 'S9':'NM9', 'S10':'NM10',
+ 'S11':'NM11', 'S12':'NM12', 'S13':'NM13', 'S14':'NM14', 'S15':'NM15', 'S16':'NM16', 'S17':'NM17', 'S18':'NM18', 'S19':'NM19', 'S20':'NM20',
+ 'S21':'NM21', 'S22':'NM22', 'S23':'NM23', 'S24':'NM24', 'S25':'NM25', 'S26':'NM26', 'S27':'NM27', 'S28':'NM28', 'S29':'NM29', 'S30':'NM30',
+ 'S31':'NM31', 'S32':'NM32', 'S33':'NM33', 'S34':'NM34', 'S35':'NM35', 'S36':'NM36', 'S37':'NM37', 'S38':'NM38', 'S39':'NM39', 'S40':'NM40',
+ 'S41':'NM41', 'S42':'NM42', 'S43':'NM43', 'S44':'NM44', 'S45':'NM45', 'S46':'NM46', 'S47':'NM47', 'S48':'NM48', 'S49':'NM49', 'S50':'NM50',
+ 'S51':'NM51', 'S52':'NM52', 'S53':'NM53', 'S54':'NM54', 'S55':'NM55', 'S56':'NM56', 'S57':'NM57', 'S58':'NM58', 'S59':'NM59', 'S60':'NM60',
+ 'S61':'NM61', 'S62':'NM62', 'S63':'NM63', 'S64':'NM64'}
+
+def findDescInEnv(name, env):
+	try:
+		(record, field) = name.split('.')
+	except:
+		return ""
+	try:
+		descField = descDict[field]
+	except:
+		return ""
+	try:
+		desc = env[record+'.'+descField]
+	except:
+		return ""
+	if desc[2] == "" or desc[2].isspace():
+		return ""
+	return "{%s}" % desc[2]
+
+def getDescFromEnv(data):
+	for d in data[1:]:
+		for p in d.p:
+			if not p.desc:
+				p.desc = findDescInEnv(p.name, data[0])
+		for d in d.d:
+			if not d.desc:
+				d.desc = findDescInEnv(d.name, data[0])
 
 ########################
 # opMDA and related code
@@ -819,7 +1464,8 @@ def opMDA_scalar(op, d1, scalar):
 	return s
 
 def opMDA(op, d1, d2):
-	"""opMDA() is a function for performing arithmetic operations on MDA files, or on an MDA file and a scalar value.
+	"""opMDA() is a function for performing arithmetic operations on MDA files,
+	or on an MDA file and a scalar value.
 
 	For examples, type 'opMDA_usage()'.
 	"""
@@ -899,21 +1545,25 @@ def opMDA(op, d1, d2):
 	return s
 
 #######################################
-# If called directory from command line
+# If called directly from command line
 #######################################
 def main():
-	root = Tkinter.Tk()
-	if len(sys.argv) < 2:
-		fname = tkFileDialog.Open().show()
-	elif sys.argv[1] == '?' or sys.argv[1] == "help" or sys.argv[1][:2] == "-h":
+#	root = Tkinter.Tk()
+#	if len(sys.argv) < 2:
+#		fname = tkFileDialog.Open().show()
+#	elif sys.argv[1] == '?' or sys.argv[1] == "help" or sys.argv[1][:2] == "-h":
+#		print "usage: %s [filename [maxdim [verbose]]]" % sys.argv[0]
+#		print "   maxdim defaults to 2; verbose defaults to 1"
+#		return()
+	if len(sys.argv) < 2 or sys.argv[1] == '?' or sys.argv[1] == "help" or sys.argv[1][:2] == "-h":
 		print "usage: %s [filename [maxdim [verbose]]]" % sys.argv[0]
-		print "   maxdim defaults to 2; verbose defaults to 1"
+		print "   maxdim defaults to 4; verbose defaults to 0"
 		return()
 	else:
 		fname = sys.argv[1]
 
 	maxdim = 4
-	verbose = 1
+	verbose = 0
 	if len(sys.argv) > 1:
 		maxdim = int(sys.argv[2])
 	if len(sys.argv) > 2:
