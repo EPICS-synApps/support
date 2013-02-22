@@ -1,5 +1,5 @@
 /*************************************************************************\
-* Copyright (c) 2010 UChicago Argonne, LLC,
+* Copyright (c) 2013 UChicago Argonne, LLC,
 *               as Operator of Argonne National Laboratory.
 * This file is distributed subject to a Software License Agreement
 * found in file LICENSE that is included with this distribution. 
@@ -23,6 +23,15 @@
            Added showing numbering of detectors, positioners, 
            and triggers as done by saveData.
   1.1   -- November 2010
+  1.1.1 -- March 2011
+  1.2   -- March 2011
+           Fixed integer issues by tying short to int16_t, long to int32_t,
+           and char to int8_t.  Changed %li to %i in printf's.
+  1.2.1 -- January 2012
+           Cleaned up the overuse of pointer dereferencing, hopefully
+           making it faster as well as easier to understand
+  1.2.2 -- June 2012
+  1.3.0 -- February 2013
 
  */
 
@@ -40,8 +49,8 @@
 
 //#include <mcheck.h>
 
-#define VERSION "1.1.0 (November 2010)"
-
+#define VERSION "1.3.0 (February 2013)"
+#define YEAR "2013"
 
 
 
@@ -58,20 +67,25 @@ int test_print(char *format, char *string)
 
 int information( struct mda_fileinfo *fileinfo)
 {
+  struct mda_scaninfo   *scinf;
+  struct mda_positioner *pos;  
+  struct mda_detector   *det;  
+  struct mda_trigger    *trig;  
+
   int i, j;
 
 
   printf("MDA file version = %g\n", fileinfo->version);
-  printf("     Scan number = %li\n", fileinfo->scan_number);
+  printf("     Scan number = %i\n", fileinfo->scan_number);
   printf("  Dimensionality = %i\n", fileinfo->data_rank);
   printf("       Scan size = ");
   if( fileinfo->last_topdim_point != fileinfo->dimensions[0] )
-    printf("(%li)", fileinfo->last_topdim_point );
+    printf("(%i)", fileinfo->last_topdim_point );
   for( i = 0; i < fileinfo->data_rank; i++)
     {
       if( i)
 	printf("x");
-      printf( "%li", fileinfo->dimensions[i]);
+      printf( "%i", fileinfo->dimensions[i]);
     }
   printf("\n");
   printf(" Scan start time = %s\n", fileinfo->time);
@@ -82,68 +96,62 @@ int information( struct mda_fileinfo *fileinfo)
       printf("Actual scan size = ");
       if( fileinfo->last_topdim_point != 
           fileinfo->scaninfos[0]->requested_points )
-        printf( "(%li)", fileinfo->last_topdim_point);
+        printf( "(%i)", fileinfo->last_topdim_point);
       for( i = 0; i < fileinfo->data_rank; i++)
         {
           if( i)
             printf("x");
-          printf( "%li", fileinfo->scaninfos[i]->requested_points);
+          printf( "%i", fileinfo->scaninfos[i]->requested_points);
         }
       printf("\n");
     }
 
   for( i = 0; i < fileinfo->data_rank; i++)
     {
-      printf("\n%i-D scanner name = %s\n", fileinfo->scaninfos[i]->scan_rank,
-             fileinfo->scaninfos[i]->name);
-      printf("%i-D triggers:%s\n", fileinfo->scaninfos[i]->scan_rank,
-             !fileinfo->scaninfos[i]->number_triggers ? "  None" : "" );
-      for( j = 0; j < fileinfo->scaninfos[i]->number_triggers; j++)
+      scinf = fileinfo->scaninfos[i];
+
+      printf("\n%i-D scanner name = %s\n", scinf->scan_rank, scinf->name);
+      printf("%i-D triggers:%s\n", scinf->scan_rank,
+             !scinf->number_triggers ? "  None" : "" );
+      for( j = 0; j < scinf->number_triggers; j++)
 	{
-	  printf( "    %i (T%d) = %s\n", j + 1,
-                  (fileinfo->scaninfos[i]->triggers[j])->number + 1,
-                  (fileinfo->scaninfos[i]->triggers[j])->name);
+          trig = scinf->triggers[j];
+	  printf( "    %i (T%d) = %s\n", j + 1, trig->number + 1, trig->name);
         }
-      printf("%i-D positioners:%s\n", fileinfo->scaninfos[i]->scan_rank,
-             !fileinfo->scaninfos[i]->number_positioners ? "  None" : "");
-      for( j = 0; j < fileinfo->scaninfos[i]->number_positioners; j++)
+      printf("%i-D positioners:%s\n", scinf->scan_rank,
+             !scinf->number_positioners ? "  None" : "");
+      for( j = 0; j < scinf->number_positioners; j++)
 	{
-	  printf("    %i (P%i) = %s", j + 1, 
-                 (fileinfo->scaninfos[i]->positioners[j])->number + 1,
-                 (fileinfo->scaninfos[i]->positioners[j])->name);
-          test_print(" (%s)", 
-                     (fileinfo->scaninfos[i]->positioners[j])->description);
-          test_print(" [%s]", (fileinfo->scaninfos[i]->positioners[j])->unit);
+          pos = scinf->positioners[j];
+
+	  printf("    %i (P%i) = %s", j + 1, pos->number + 1, pos->name);
+          test_print(" (%s)", pos->description);
+          test_print(" [%s]", pos->unit);
           printf("\n");
-          if( (fileinfo->scaninfos[i]->positioners[j])->readback_name[0] 
-              != '\0')
+          if( pos->readback_name[0] != '\0')
             {
-              printf("             %s",
-                     (fileinfo->scaninfos[i]->positioners[j])->readback_name );
-              test_print(" (%s)", 
-                         (fileinfo->scaninfos[i]->positioners[j])->readback_description);
-              test_print(" [%s]", 
-                         (fileinfo->scaninfos[i]->positioners[j])->readback_unit);
+              printf("             %s", pos->readback_name );
+              test_print(" (%s)", pos->readback_description);
+              test_print(" [%s]", pos->readback_unit);
               printf("\n");
             }
 	}
       
-      printf("%i-D detectors:%s\n", fileinfo->scaninfos[i]->scan_rank,
-             !fileinfo->scaninfos[i]->number_detectors ? "  None" : "");
+      printf("%i-D detectors:%s\n", scinf->scan_rank,
+             !scinf->number_detectors ? "  None" : "");
       for( j = 0; j < fileinfo->scaninfos[i]->number_detectors; j++)
 	{
-	  printf("  %02i (D%02i) = %s", j + 1,
-                 (fileinfo->scaninfos[i]->detectors[j])->number + 1,
-		 (fileinfo->scaninfos[i]->detectors[j])->name);
-          test_print(" (%s)", (fileinfo->scaninfos[i]->detectors[j])->description);
-          test_print(" [%s]", (fileinfo->scaninfos[i]->detectors[j])->unit);
+          det = scinf->detectors[j];
+
+	  printf("  %02i (D%02i) = %s", j + 1, det->number + 1, det->name);
+          test_print(" (%s)", det->description);
+          test_print(" [%s]", det->unit);
           printf("\n");
 	}
     }
   
   return 0;
 }
-
 
 
 void help(void)
@@ -165,11 +173,11 @@ void version(void)
 {
   printf("mda-info %s\n"
          "\n"
-         "Copyright (c) 2010 UChicago Argonne, LLC,\n"
+         "Copyright (c) %s UChicago Argonne, LLC,\n"
          "as Operator of Argonne National Laboratory.\n"
          "\n"
          "Written by Dohn Arms, dohnarms@anl.gov.\n",
-         VERSION);
+         VERSION, YEAR);
 }
 
 int main( int argc, char *argv[])

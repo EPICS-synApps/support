@@ -1,5 +1,5 @@
 /*************************************************************************\
-* Copyright (c) 2010 UChicago Argonne, LLC,
+* Copyright (c) 2013 UChicago Argonne, LLC,
 *               as Operator of Argonne National Laboratory.
 * This file is distributed subject to a Software License Agreement
 * found in file LICENSE that is included with this distribution. 
@@ -16,7 +16,7 @@
            Added support for files that have more than 32k points.
   0.2.0 -- October 2007
            Added several new functions for accessing scans or the extra PV's
-                 without loading the entire file (never publically released).
+           without loading the entire file (never publically released).
   0.2.1 -- March 2009
            Removed several memory leaks. Made trace structure consistent.
   1.0.0 -- October 2009
@@ -29,6 +29,20 @@
            Use offsets to load scans, as bad files sometimes have them out 
            of order.
   1.1   -- November 2010
+  1.1.1 -- February 2011
+           Realloc memory in screwy xdr counted strings.
+           Added <stdio.h> to remove MacOS warning. (From J. Lewis Muir)
+  1.2   -- March 2011
+           Fixed integer issues by tying short to int16_t, long to int32_t,
+           and char to int8_t.
+           Renamed DBR_* type variables to EXTRA_PV_* type variables, to
+           make explicit the type of integer used (which broke compatibility
+           with the EPICS DBR type names).
+  1.2.1 -- January 2012
+  1.2.2 -- June 2012
+           Fixed major bug with INT8 Extra PVs.
+  1.3.0 -- February 2013
+           Don't load files that have nonsensical scan dimensions.
 
  */
 
@@ -37,6 +51,8 @@
 /****************  mda_loader.c  **********************/
 
 
+#include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -49,7 +65,9 @@
 static bool_t xdr_counted_string( XDR *xdrs, char **p)
 {
   int mode;
-  long int length;
+  int32_t length;
+
+  bool_t ret_bool;
  
   mode = (xdrs->x_op == XDR_DECODE);
 
@@ -58,7 +76,9 @@ static bool_t xdr_counted_string( XDR *xdrs, char **p)
     length = strlen(*p);
  
   /* Transfer the string length */
-  if( !xdr_long(xdrs, &length)) 
+  // had to change this to int32_t, as values would sometimes turn negative
+  // resizing is done below
+  if( !xdr_int32_t(xdrs, &length)) 
     return 0;
 
   /* If reading, obtain room for the string */
@@ -69,7 +89,24 @@ static bool_t xdr_counted_string( XDR *xdrs, char **p)
     }
 
   /* If the string length is nonzero, transfer it */
-  return(length ? xdr_string(xdrs, p, length) : 1);
+  if( length)
+    ret_bool = xdr_string(xdrs, p, length);
+  else
+    ret_bool = 1;
+
+  // this fix is for when the size is not set correctly,
+  // reducing the memory allocated; it only checks if size is large;
+  // sometimes 4MB is allocated for an 8 character string....
+  if( mode && (length > 4095))
+    { 
+      int32_t l;
+
+      l = strlen(*p);
+      if( l != length)
+        *p = realloc( *p, l+1);
+    }
+
+  return ret_bool;
 }
 
 
@@ -83,28 +120,30 @@ static struct mda_header *header_read( XDR *xdrs)
   if( !xdr_float(xdrs, &(header->version) ))
     return NULL;
 
-  if( !xdr_long(xdrs, &(header->scan_number) ))
+  if( !xdr_int32_t(xdrs, &(header->scan_number) ))
     return NULL;
 
-  if( !xdr_short(xdrs, &(header->data_rank) ))
+  if( !xdr_int16_t(xdrs, &(header->data_rank) ))
     return NULL;
 
-  header->dimensions = (long *) malloc( header->data_rank * sizeof(long));
+  header->dimensions = (int32_t *) 
+    malloc( header->data_rank * sizeof(int32_t));
   if( !xdr_vector( xdrs, (char *) header->dimensions, header->data_rank, 
-		   sizeof( long), (xdrproc_t) xdr_long))
+		   sizeof( int32_t), (xdrproc_t) xdr_int32_t))
     return NULL;
 
-  if( !xdr_short(xdrs, &(header->regular) ))
+  if( !xdr_int16_t(xdrs, &(header->regular) ))
     return NULL;
 
-  if( !xdr_long(xdrs, &(header->extra_pvs_offset) )) 
+  if( !xdr_int32_t(xdrs, &(header->extra_pvs_offset) )) 
     return NULL;
 
   {  // need to do error checking on dimensions!
     int i;
 
     for( i = 0; i < header->data_rank; i++)
-      if(  header->dimensions[i] == 0xFFFFFFFF) // -1 is it was short, not long
+      // -1 is it was int16_t, not int32_t
+      if(  header->dimensions[i] == 0xFFFFFFFF) 
         {
           free( header);
           free( header->dimensions);
@@ -124,7 +163,7 @@ static struct mda_positioner *positioner_read(XDR *xdrs)
   positioner = (struct mda_positioner *) 
     malloc( sizeof(struct mda_positioner));
 
-  if( !xdr_short(xdrs, &(positioner->number) ))
+  if( !xdr_int16_t(xdrs, &(positioner->number) ))
     return NULL;
 
   if( !xdr_counted_string( xdrs, &(positioner->name) ) )
@@ -155,7 +194,7 @@ static struct mda_detector *detector_read(XDR *xdrs)
   detector = (struct mda_detector *) 
     malloc( sizeof(struct mda_detector));
 
-  if( !xdr_short(xdrs, &(detector->number) ))
+  if( !xdr_int16_t(xdrs, &(detector->number) ))
     return NULL;
 
   if( !xdr_counted_string( xdrs, &(detector->name) ) )
@@ -179,7 +218,7 @@ static struct mda_trigger *trigger_read(XDR *xdrs)
   trigger = (struct mda_trigger *) 
     malloc( sizeof(struct mda_trigger));
 
-  if( !xdr_short(xdrs, &(trigger->number) ))
+  if( !xdr_int16_t(xdrs, &(trigger->number) ))
     return NULL;
   if( !xdr_counted_string( xdrs, &(trigger->name ) ))
     return NULL;
@@ -202,18 +241,23 @@ static struct mda_scan *scan_read(XDR *xdrs, int recursive)
   scan = (struct mda_scan *) malloc( sizeof(struct mda_scan));
 
 
-  if( !xdr_short(xdrs, &(scan->scan_rank) ))
+  if( !xdr_int16_t(xdrs, &(scan->scan_rank) ))
     return NULL;
-  if( !xdr_long(xdrs, &(scan->requested_points) ))
+  if( !xdr_int32_t(xdrs, &(scan->requested_points) ))
     return NULL;
-    if( !xdr_long(xdrs, &(scan->last_point) ))
+  if( !xdr_int32_t(xdrs, &(scan->last_point) ))
+    return NULL;
+
+  // this happens in corrupt files sometimes.
+  if( scan->scan_rank < 1)
     return NULL;
 
   if( scan->scan_rank > 1)
     {
-      scan->offsets = (long *) malloc( scan->requested_points * sizeof(long));
+      scan->offsets = (int32_t *) 
+        malloc( scan->requested_points * sizeof(int32_t));
       if( !xdr_vector( xdrs, (char *) scan->offsets, scan->requested_points, 
-		       sizeof( long), (xdrproc_t) xdr_long))
+		       sizeof( int32_t), (xdrproc_t) xdr_int32_t))
 	return NULL;
     }
   else
@@ -224,11 +268,11 @@ static struct mda_scan *scan_read(XDR *xdrs, int recursive)
   if( !xdr_counted_string( xdrs, &(scan->time) ))
     return NULL;
 
-  if( !xdr_short(xdrs, &(scan->number_positioners) ))
+  if( !xdr_int16_t(xdrs, &(scan->number_positioners) ))
     return NULL;
-  if( !xdr_short(xdrs, &(scan->number_detectors) ))
+  if( !xdr_int16_t(xdrs, &(scan->number_detectors) ))
     return NULL;
-  if( !xdr_short(xdrs, &(scan->number_triggers) ))
+  if( !xdr_int16_t(xdrs, &(scan->number_triggers) ))
     return NULL;
 
 
@@ -313,7 +357,7 @@ static struct mda_pv *pv_read(XDR *xdrs)
 {
   struct mda_pv *pv;
 
-  unsigned int   byte_count;
+/*   unsigned int   byte_count; */
 
   pv = (struct mda_pv *) malloc( sizeof(struct mda_pv));
 
@@ -322,12 +366,12 @@ static struct mda_pv *pv_read(XDR *xdrs)
     return NULL;
   if( !xdr_counted_string( xdrs, &(pv->description) ))
     return NULL;
-  if( !xdr_short(xdrs, &(pv->type) ))
+  if( !xdr_int16_t(xdrs, &(pv->type) ))
     return NULL;
 
-  if( pv->type != DBR_STRING)
+  if( pv->type != EXTRA_PV_STRING)
     {
-      if( !xdr_short(xdrs, &(pv->count) ))
+      if( !xdr_int16_t(xdrs, &(pv->count) ))
 	return NULL;
       if( !xdr_counted_string( xdrs, &(pv->unit) ))
 	return NULL;
@@ -340,34 +384,42 @@ static struct mda_pv *pv_read(XDR *xdrs)
 
   switch( pv->type)
     {
-    case DBR_STRING:
+    case EXTRA_PV_STRING:
       if( !xdr_counted_string( xdrs, &(pv->values) ))
 	return NULL;
       break;
-    case DBR_CTRL_CHAR:
-      if( !xdr_bytes( xdrs, &(pv->values), &byte_count, pv->count ) )
-	return NULL;
-      pv->count = byte_count;
-      break;
-    case DBR_CTRL_SHORT:
-      pv->values = (char *) malloc( pv->count * sizeof(short));
+    case EXTRA_PV_INT8:
+      pv->values = (char *) malloc( pv->count * sizeof(int8_t));
+#ifndef DARWIN
       if( !xdr_vector( xdrs, pv->values, pv->count, 
-		       sizeof( short), (xdrproc_t) xdr_short))
+		       sizeof( int8_t), (xdrproc_t) xdr_int8_t))
 	return NULL;
-      break;
-    case DBR_CTRL_LONG:
-      pv->values = (char *) malloc( pv->count * sizeof(long));
+#else
+        // MacOS Darwin is missing xdr_int8_t, have to fake it with xdr_char
       if( !xdr_vector( xdrs, pv->values, pv->count, 
-		       sizeof( long), (xdrproc_t) xdr_long))
+		       sizeof( int8_t), (xdrproc_t) xdr_char))
+	return NULL;
+#endif
+      break;
+    case EXTRA_PV_INT16:
+      pv->values = (char *) malloc( pv->count * sizeof(int16_t));
+      if( !xdr_vector( xdrs, pv->values, pv->count, 
+		       sizeof( int16_t), (xdrproc_t) xdr_int16_t))
 	return NULL;
       break;
-    case DBR_CTRL_FLOAT:
+    case EXTRA_PV_INT32:
+      pv->values = (char *) malloc( pv->count * sizeof(int32_t));
+      if( !xdr_vector( xdrs, pv->values, pv->count, 
+		       sizeof( int32_t), (xdrproc_t) xdr_int32_t))
+	return NULL;
+      break;
+    case EXTRA_PV_FLOAT:
       pv->values = (char *) malloc( pv->count * sizeof(float));
       if( !xdr_vector( xdrs, pv->values, pv->count, 
 		       sizeof( float), (xdrproc_t) xdr_float))
 	return NULL;
       break;
-    case DBR_CTRL_DOUBLE:
+    case EXTRA_PV_DOUBLE:
       pv->values = (char *) malloc( pv->count * sizeof(double));
       if( !xdr_vector( xdrs, pv->values, pv->count, 
 		       sizeof( double), (xdrproc_t) xdr_double))
@@ -390,7 +442,7 @@ static struct mda_extra *extra_read(XDR *xdrs)
   extra = (struct mda_extra *) malloc( sizeof(struct mda_extra));
 
 
-  if( !xdr_short(xdrs, &(extra->number_pvs) ))
+  if( !xdr_int16_t(xdrs, &(extra->number_pvs) ))
     return NULL;
 
   extra->pvs = (struct mda_pv **) 
@@ -492,10 +544,10 @@ struct mda_scan *mda_subscan_load( FILE *fptr, int depth, int *indices,
     {
       int i;
 
-      short scan_rank;
-      long  requested_points;
-      long  last_point;
-      long *offsets;
+      int16_t scan_rank;
+      int32_t  requested_points;
+      int32_t  last_point;
+      int32_t *offsets;
 
       for( i = 0; i < depth; i++)
 	{
@@ -505,23 +557,25 @@ struct mda_scan *mda_subscan_load( FILE *fptr, int depth, int *indices,
 
       for( i = 0; i < depth; i++)
 	{
-	  if( !xdr_short(&xdrstream, &scan_rank ))
+	  if( !xdr_int16_t(&xdrstream, &scan_rank ))
+	    return NULL;
+	  if( scan_rank < 1)  // file error
 	    return NULL;
 	  if( scan_rank == 1)  // this case should not happen
 	    return NULL;
 
-	  if( !xdr_long(&xdrstream, &requested_points ))
+	  if( !xdr_int32_t(&xdrstream, &requested_points ))
 	    return NULL;
 
-	  if( !xdr_long(&xdrstream, &last_point ))
+	  if( !xdr_int32_t(&xdrstream, &last_point ))
 	    return NULL;
 	  if( indices[i] >= last_point)
 	    return NULL;
 
 
-	  offsets = (long *) malloc( requested_points * sizeof(long));
+	  offsets = (int32_t *) malloc( requested_points * sizeof(int32_t));
 	  if( !xdr_vector( &xdrstream, (char *) offsets, requested_points, 
-			   sizeof( long), (xdrproc_t) xdr_long))
+			   sizeof( int32_t), (xdrproc_t) xdr_int32_t))
 	    return NULL;
 
 	  if( offsets[indices[i]])
@@ -598,7 +652,7 @@ void mda_scan_unload( struct mda_scan *scan)
 
   if( (scan->scan_rank > 1) && (scan->sub_scans != NULL))
     {
-      for( i = 0; (i < scan->requested_points) && (scan->sub_scans[i] != NULL); 
+      for( i = 0; (i < scan->requested_points) && (scan->sub_scans[i] != NULL);
            i++)
 	mda_scan_unload( scan->sub_scans[i]);
     }
@@ -692,13 +746,13 @@ struct mda_fileinfo *mda_info_load( FILE *fptr)
 
   XDR xdrstream;
 
-  long  last_point;
-  long *offsets;
+  int32_t  last_point;
+  int32_t *offsets;
   char *time;
 
   int i, j;
 
-  long t;
+  int32_t t;
   
  
   rewind( fptr);
@@ -712,30 +766,33 @@ struct mda_fileinfo *mda_info_load( FILE *fptr)
   if( !xdr_float(&xdrstream, &(fileinfo->version) ))
     return NULL;
 
-  if( !xdr_long(&xdrstream, &(fileinfo->scan_number) ))
+  if( !xdr_int32_t(&xdrstream, &(fileinfo->scan_number) ))
     return NULL;
 
-  if( !xdr_short(&xdrstream, &(fileinfo->data_rank) ))
+  if( !xdr_int16_t(&xdrstream, &(fileinfo->data_rank) ))
     return NULL;
 
-  fileinfo->dimensions = (long *) malloc( fileinfo->data_rank * sizeof(long));
+  fileinfo->dimensions = 
+    (int32_t *) malloc( fileinfo->data_rank * sizeof(int32_t));
   if( !xdr_vector( &xdrstream, (char *) fileinfo->dimensions, 
-                   fileinfo->data_rank, sizeof( long), (xdrproc_t) xdr_long))
+                   fileinfo->data_rank, 
+                   sizeof( int32_t), (xdrproc_t) xdr_int32_t))
     return NULL;
 
   for( i = 0; i < fileinfo->data_rank; i++)
-    if(  fileinfo->dimensions[i] == 0xFFFFFFFF) // -1 is it was short, not long
+    // -1 is it was int16_t, not int32_t
+    if(  fileinfo->dimensions[i] == 0xFFFFFFFF) 
       {
         free(fileinfo->dimensions);
         free(fileinfo);
         return NULL;
       }
 
-  if( !xdr_short(&xdrstream, &(fileinfo->regular) ))
+  if( !xdr_int16_t(&xdrstream, &(fileinfo->regular) ))
     return NULL;
 
   // don't need this
-  if( !xdr_long(&xdrstream, &t )) 
+  if( !xdr_int32_t(&xdrstream, &t )) 
     return NULL;
 
 
@@ -750,21 +807,27 @@ struct mda_fileinfo *mda_info_load( FILE *fptr)
       fileinfo->scaninfos[i] = (struct mda_scaninfo *) 
         malloc( sizeof(struct mda_scaninfo ));
 
-      if( !xdr_short(&xdrstream, &(fileinfo->scaninfos[i]->scan_rank) ))
+      if( !xdr_int16_t(&xdrstream, &(fileinfo->scaninfos[i]->scan_rank) ))
         return NULL;
 
-      if( !xdr_long(&xdrstream, &(fileinfo->scaninfos[i]->requested_points) ))
+      // file error
+      if( fileinfo->scaninfos[i]->scan_rank < 1)
+        return NULL;
+
+      if( !xdr_int32_t(&xdrstream, 
+                       &(fileinfo->scaninfos[i]->requested_points)))
 	return NULL;
-      if( !xdr_long(&xdrstream, &last_point ))
+      if( !xdr_int32_t(&xdrstream, &last_point ))
 	return NULL;
 
       if( fileinfo->scaninfos[i]->scan_rank > 1)
 	{
-	  offsets = (long *) malloc( fileinfo->scaninfos[i]->requested_points 
-				     * sizeof(long));
+	  offsets = 
+            (int32_t *) malloc( fileinfo->scaninfos[i]->requested_points 
+				     * sizeof(int32_t));
 	  if( !xdr_vector( &xdrstream, (char *) offsets, 
 			   fileinfo->scaninfos[i]->requested_points, 
-			   sizeof( long), (xdrproc_t) xdr_long))
+			   sizeof( int32_t), (xdrproc_t) xdr_int32_t))
 	    return NULL;
 	}
       else
@@ -785,11 +848,13 @@ struct mda_fileinfo *mda_info_load( FILE *fptr)
       else
 	free(time);
 
-      if( !xdr_short(&xdrstream, &(fileinfo->scaninfos[i]->number_positioners)))
+      if( !xdr_int16_t(&xdrstream, 
+                       &(fileinfo->scaninfos[i]->number_positioners)))
 	return NULL;
-      if( !xdr_short(&xdrstream, &(fileinfo->scaninfos[i]->number_detectors)))
+      if( !xdr_int16_t(&xdrstream, 
+                       &(fileinfo->scaninfos[i]->number_detectors)))
 	return NULL;
-      if( !xdr_short(&xdrstream, &(fileinfo->scaninfos[i]->number_triggers)))
+      if( !xdr_int16_t(&xdrstream, &(fileinfo->scaninfos[i]->number_triggers)))
 	return NULL;
 
      

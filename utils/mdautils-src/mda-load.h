@@ -1,5 +1,5 @@
 /*************************************************************************\
-* Copyright (c) 2010 UChicago Argonne, LLC,
+* Copyright (c) 2013 UChicago Argonne, LLC,
 *               as Operator of Argonne National Laboratory.
 * This file is distributed subject to a Software License Agreement
 * found in file LICENSE that is included with this distribution. 
@@ -22,95 +22,108 @@
   1.0   -- October 2009
            Renamed structures.
   1.1   -- November 2010
-
+  1.1.1 -- December 2010
+  1.2   -- March 2011
+           Fixed integer issues by tying short to int16_t, long to int32_t,
+           and char to int8_t
+  1.2.1 -- January 2012
+  1.2.2 -- June 2012
+           Added preprocessor commands for c++ compatibility
+  1.3.0 -- February 2013
  */
 
 
 /******************  mda_load.h  **************/
 
+#ifndef MDA_LOAD_H
+#define MDA_LOAD_H 1
+
+#ifdef __cplusplus
+extern "C" {
+#endif 
 
 #include <stdio.h>
-
+#include <stdint.h>
 
 struct mda_header
 {
-  float  version;
-  long   scan_number;
-  short  data_rank;
-  long  *dimensions;
-  short  regular;
-  long   extra_pvs_offset;
+  float    version;
+  int32_t  scan_number;
+  int16_t  data_rank;
+  int32_t *dimensions;
+  int16_t  regular;
+  int32_t  extra_pvs_offset;
 };
 
 
 struct mda_positioner
 {
-  short number;
-  char *name;
-  char *description;
-  char *step_mode;
-  char *unit;
-  char *readback_name;
-  char *readback_description;
-  char *readback_unit;
+  int16_t number;
+  char   *name;
+  char   *description;
+  char   *step_mode;
+  char   *unit;
+  char   *readback_name;
+  char   *readback_description;
+  char   *readback_unit;
 };
 
 
 struct mda_detector
 {
-  short number;
-  char *name;
-  char *description;
-  char *unit;
+  int16_t number;
+  char   *name;
+  char   *description;
+  char   *unit;
 };
 
 
 struct mda_trigger
 {
-  short number;
-  char *name;
-  float command;
+  int16_t number;
+  char   *name;
+  float   command;
 };
 
 
 struct mda_scan
 {
-  short scan_rank;
-  long  requested_points;
-  long  last_point;
-  long *offsets;
-  char *name;
-  char *time;
-  short number_positioners;
-  short number_detectors;
-  short number_triggers;
+  int16_t  scan_rank;
+  int32_t  requested_points;
+  int32_t  last_point;
+  int32_t *offsets;
+  char    *name;
+  char    *time;
+  int16_t  number_positioners;
+  int16_t  number_detectors;
+  int16_t  number_triggers;
 
   struct mda_positioner **positioners;  
-  struct mda_detector **detectors;
-  struct mda_trigger **triggers;
+  struct mda_detector   **detectors;
+  struct mda_trigger    **triggers;
   double **positioners_data;
   float  **detectors_data;
 
   struct mda_scan **sub_scans;
 };
 
-enum PV_TYPES { DBR_STRING=0,     DBR_CTRL_CHAR=32,  DBR_CTRL_SHORT=29, 
-		DBR_CTRL_LONG=33, DBR_CTRL_FLOAT=30, DBR_CTRL_DOUBLE=34 };
+enum PV_TYPES { EXTRA_PV_STRING=0, EXTRA_PV_INT8=32,  EXTRA_PV_INT16=29, 
+		EXTRA_PV_INT32=33, EXTRA_PV_FLOAT=30, EXTRA_PV_DOUBLE=34 };
 
 struct mda_pv
 {
-  char *name;
-  char *description;
-  short type;
-  short count;
-  char *unit;
-  char *values; // used to be void *, but gave a lot of headaches
+  char   *name;
+  char   *description;
+  int16_t type;
+  int16_t count;
+  char   *unit;
+  char   *values; /* used to be void *, but gave a lot of headaches */
 };
 
 
 struct mda_extra
 {
-  short number_pvs;
+  int16_t number_pvs;
   struct mda_pv **pvs;
 };
 
@@ -118,41 +131,40 @@ struct mda_extra
 struct mda_file
 {
   struct mda_header *header;
-  struct mda_scan *scan;
-  struct mda_extra *extra;
+  struct mda_scan   *scan;
+  struct mda_extra  *extra;
 };
 
 
-////////////////////////
+/*****************************************************/
 
 struct mda_scaninfo
 {
-  short scan_rank;          // redundant
-  long  requested_points;   // redundant
-  char *name;
-  short number_positioners;
-  short number_detectors;
-  short number_triggers;
+  int16_t scan_rank;          /* redundant */
+  int32_t requested_points;   /* redundant */
+  char   *name;
+  int16_t number_positioners;
+  int16_t number_detectors;
+  int16_t number_triggers;
 
   struct mda_positioner **positioners;  
-  struct mda_detector **detectors;
-  struct mda_trigger **triggers;
+  struct mda_detector   **detectors;
+  struct mda_trigger    **triggers;
 };
 
 struct mda_fileinfo
 {
-  float  version;
-  long   scan_number;
-  short  data_rank;
-  long  *dimensions;
-  short  regular;
-  long   last_topdim_point;
+  float    version;
+  int32_t  scan_number;
+  int16_t  data_rank;
+  int32_t *dimensions;
+  int16_t  regular;
+  int32_t  last_topdim_point;
   char  *time;
   struct mda_scaninfo **scaninfos;
 };
 
-////////////////////////
-
+/******************************************************/
 
 struct mda_file *mda_load( FILE *fptr);
 struct mda_header *mda_header_load( FILE *fptr);
@@ -170,3 +182,10 @@ void mda_extra_unload( struct mda_extra *extra);
 
 struct mda_fileinfo *mda_info_load( FILE *fptr);
 void mda_info_unload( struct mda_fileinfo *fileinfo);
+
+
+#ifdef __cplusplus
+}
+#endif 
+
+#endif /* MDA_LOAD_H */

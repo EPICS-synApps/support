@@ -1,5 +1,5 @@
 /*************************************************************************\
-* Copyright (c) 2010 UChicago Argonne, LLC,
+* Copyright (c) 2013 UChicago Argonne, LLC,
 *               as Operator of Argonne National Laboratory.
 * This file is distributed subject to a Software License Agreement
 * found in file LICENSE that is included with this distribution. 
@@ -20,6 +20,17 @@
   1.0.1 -- August 2010
            Show actual offset of the scan and PV Extras as encountered
   1.1   -- November 2010
+  1.1.1 -- March 2011
+           Have counted strings immediately freed after printing them.
+  1.2   -- March 2011
+           Fixed integer issues by tying short to int16_t, long to int32_t,
+           and char to int8_t.  Changed %li to %i in printf's.  For MacOS
+           Darwin, add fix to use xdr_char instead of xdr_int8_t.
+  1.2.1 -- January 2012
+           Minor build tweak
+  1.2.2 -- June 2012
+  1.3.0 -- February 2013
+           Use printf correctly
 
  */
 
@@ -28,6 +39,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <stdarg.h>
 
@@ -36,17 +48,16 @@
 
 #include <unistd.h>
 
-#define VERSION       "1.1.0 (November 2010)"
-#define VERSIONNUMBER "1.1.0"
-
-
+#define VERSION       "1.3.0 (February 2013)"
+#define YEAR          "2013"
+#define VERSIONNUMBER "1.3.0"
 
 
 
 static bool_t xdr_counted_string( XDR *xdrs, char **p)
 {
   int mode;
-  long int length;
+  int32_t length;
 
   mode = (xdrs->x_op == XDR_DECODE);
 
@@ -55,7 +66,7 @@ static bool_t xdr_counted_string( XDR *xdrs, char **p)
     length = strlen(*p);
 
   /* Transfer the string length */
-  if( !xdr_long(xdrs, &length))
+  if( !xdr_int32_t(xdrs, &length))
     return 0;
 
   //  printf("length = %ld\n", length);
@@ -72,7 +83,10 @@ static bool_t xdr_counted_string( XDR *xdrs, char **p)
 }
 
 
-
+/* 
+   This function was set up to fflush after every printf in case of a crash 
+   but that was too slow, but I left it in case someone wants to reenable .
+*/
 void print( char *fmt, ...)
 {
   va_list args;
@@ -81,15 +95,15 @@ void print( char *fmt, ...)
   vprintf( fmt, args);
   va_end(args);
 
-  //  fflush( stdout);
+  /*  fflush( stdout);  */
 }
 
 
-long int li_print( XDR *xdrs, char *fmt )
+int32_t li_print( XDR *xdrs, char *fmt )
 {
-  long int ll;
+  int32_t ll;
 
-  if( !xdr_long(xdrs, &ll) )
+  if( !xdr_int32_t(xdrs, &ll) )
     {
       fflush( stdout);
       exit(1);
@@ -101,11 +115,11 @@ long int li_print( XDR *xdrs, char *fmt )
 }
 
 
-short int si_print( XDR *xdrs, char *fmt )
+int16_t si_print( XDR *xdrs, char *fmt )
 {
-  short int ss;
+  int16_t ss;
 
-  if( !xdr_short(xdrs, &ss) )
+  if( !xdr_int16_t(xdrs, &ss) )
     {
       fflush( stdout);
       exit(1);
@@ -147,9 +161,11 @@ double d_print( XDR *xdrs, char *fmt )
   return dd;
 }
 
-char *cs_print( XDR *xdrs, char *fmt )
+// does NOT return string, but simply frees it as nothing cares 
+// about the actual value, and this eats memory stupidly
+void cs_print( XDR *xdrs, char *fmt )
 {
-  char *cs;
+  char *cs = NULL;
 
   if( !xdr_counted_string( xdrs, &cs ) )
     {
@@ -158,21 +174,20 @@ char *cs_print( XDR *xdrs, char *fmt )
     }
 
   printf( fmt, cs);
-
-  return cs;
+  free( cs);
 }
 
 
 int mda_dump_header( XDR *xdrs)
 {
-  short int rank;
+  int16_t rank;
   
-  long int extrapvs;
+  int32_t extrapvs;
 
   int i;
 
   f_print( xdrs, "Version = %g\n" );
-  li_print( xdrs, "Scan number = %li\n");
+  li_print( xdrs, "Scan number = %i\n");
   rank = si_print( xdrs, "Data rank = %i\n");
 
   if( rank <= 0)
@@ -186,13 +201,13 @@ int mda_dump_header( XDR *xdrs)
     {
       if( i)
 	print(" x ");
-      li_print( xdrs, "%li");
+      li_print( xdrs, "%i");
     }
   print("\n");
 
-  li_print( xdrs, "Regularity = %li\n");
+  li_print( xdrs, "Regularity = %i\n");
 
-  extrapvs = li_print( xdrs, "File offset to extra PV's = %li bytes\n");
+  extrapvs = li_print( xdrs, "File offset to extra PV's = %i bytes\n");
 
   if( extrapvs < 0)
     {
@@ -213,17 +228,17 @@ void mda_dump_scan( XDR *xdrs)
 {
   int i, j;
   
-  short int rank, num_pos, num_det, num_trg;
+  int16_t rank, num_pos, num_det, num_trg;
   
-  long int req_pts, cmp_pts;
-  long int *offsets;
+  int32_t req_pts, cmp_pts;
+  int32_t *offsets;
   
   offsets = NULL;
   
   
   rank = si_print( xdrs, "This scan's rank = %i\n");
-  req_pts = li_print( xdrs, "Number of requested points = %li\n");
-  cmp_pts = li_print( xdrs, "Last completed point = %li\n");
+  req_pts = li_print( xdrs, "Number of requested points = %i\n");
+  cmp_pts = li_print( xdrs, "Last completed point = %i\n");
   
   if( (rank <= 0) || (req_pts <= 0) || (cmp_pts < 0) )
     {
@@ -233,14 +248,14 @@ void mda_dump_scan( XDR *xdrs)
   
   if( rank > 1)
     {
-      offsets = (long int *) malloc( sizeof( long int) * req_pts);
+      offsets = (int32_t *) malloc( sizeof( int32_t) * req_pts);
       
       print("Offsets to lower scans = ");
       for( i = 0; i < req_pts; i++)
 	{
 	  if( i)
 	    print(", ");
-	  offsets[i] = li_print( xdrs, "%li");
+	  offsets[i] = li_print( xdrs, "%i");
 	}
       print("\n");
     }
@@ -307,7 +322,7 @@ void mda_dump_scan( XDR *xdrs)
     {
       print( "\nPositioner #%i data:\n", i+1);
       for( j = 0; j < req_pts; j++)
-	d_print( xdrs, "%.9lg ");
+	d_print( xdrs, "%.9g ");
       print( "\n");
     }
 
@@ -325,7 +340,7 @@ void mda_dump_scan( XDR *xdrs)
       if( offsets[i] == 0)
           break;
         print( "\n\n%i-D Subscan #%i\n", rank - 1, i+1);
-        print( "Offset = %li\n\n", xdr_getpos( xdrs) );
+        print( "Offset = %i\n\n", xdr_getpos( xdrs) );
         mda_dump_scan( xdrs);
       }
 
@@ -334,16 +349,16 @@ void mda_dump_scan( XDR *xdrs)
 
 void mda_dump_extra( XDR *xdrs)
 {
-  enum PV_TYPES { DBR_STRING=0,     DBR_CTRL_CHAR=32,  DBR_CTRL_SHORT=29,
-		  DBR_CTRL_LONG=33, DBR_CTRL_FLOAT=30, DBR_CTRL_DOUBLE=34 };
+  enum PV_TYPES { EXTRA_PV_STRING=0, EXTRA_PV_INT8=32,  EXTRA_PV_INT16=29,
+		  EXTRA_PV_INT32=33, EXTRA_PV_FLOAT=30, EXTRA_PV_DOUBLE=34 };
 
   int i, j;
   
-  short int pvs, type, count;
+  int16_t pvs, type, count;
 
   count = 0;
 
-  print( "\n\nExtra PV Offset = %li", xdr_getpos( xdrs) );
+  print( "\n\nExtra PV Offset = %i", xdr_getpos( xdrs) );
 
   pvs = si_print( xdrs, "\n\nNumber of Extra PV's = %i.\n");
   if( pvs < 0)
@@ -360,19 +375,19 @@ void mda_dump_extra( XDR *xdrs)
       cs_print( xdrs, "    Name = %s\n");
       cs_print( xdrs, "    Description = %s\n");
 
-      if( !xdr_short(xdrs, &type) )
+      if( !xdr_int16_t(xdrs, &type) )
 	return;
 
-      if( (type != DBR_STRING) && (type != DBR_CTRL_CHAR) && 
-	  (type != DBR_CTRL_SHORT) &&  (type != DBR_CTRL_LONG) && 
-	  (type != DBR_CTRL_FLOAT) && (type != DBR_CTRL_DOUBLE))
+      if( (type != EXTRA_PV_STRING) && (type != EXTRA_PV_INT8) && 
+	  (type != EXTRA_PV_INT16) &&  (type != EXTRA_PV_INT32) && 
+	  (type != EXTRA_PV_FLOAT) && (type != EXTRA_PV_DOUBLE))
 	{
 	  print( "    Type = %i (UNKNOWN)\n", type);
 	  print( "\nExiting......\n");
 	  exit(2);
 	}
 
-      if( type != DBR_STRING)
+      if( type != EXTRA_PV_STRING)
 	{
 	  count = si_print( xdrs, "    Count = %i\n");
 	  cs_print( xdrs, "    Unit = %s\n");
@@ -380,23 +395,28 @@ void mda_dump_extra( XDR *xdrs)
 
       switch(type)
 	{
-	case DBR_STRING:
-	  print( "    Type = %i (DBR_STRING)\n", type);
+	case EXTRA_PV_STRING:
+	  print( "    Type = %i (STRING)\n", type);
 	  cs_print( xdrs, "    Value = \"%s\"\n");
 	  break;
-	case DBR_CTRL_CHAR:
+	case EXTRA_PV_INT8:
 	  {
-	    unsigned int size, maxsize;
-	    char *bytes;
+	    int8_t *bytes;
 
-	    print( "    Type = %i (DBR_CTRL_CHAR)\n", type);
+	    print( "    Type = %i (INT8)\n", type);
 	    print( "    Value%s = ", (count == 1) ? "" : "s");
 
-	    maxsize = count;
-
-	    if( !xdr_bytes( xdrs, &(bytes), &size, maxsize ) )
+	    bytes = (int8_t *) malloc( count * sizeof(int8_t));
+#ifndef DARWIN
+	    if( !xdr_vector( xdrs, (char *) bytes, count, 
+			     sizeof( int8_t), (xdrproc_t) xdr_int8_t))
+#else
+              // MacOS Darwin is missing xdr_int8_t, 
+              //have to fake it with xdr_char
+	    if( !xdr_vector( xdrs, (char *) bytes, count, 
+			     sizeof( int8_t), (xdrproc_t) xdr_char))
+#endif
 	      return;
-	    count = size;
 
 	    for( j = 0; j < count; j++)
 	      {
@@ -407,16 +427,16 @@ void mda_dump_extra( XDR *xdrs)
 	    print( "\n");
 	  }
 	  break;
-	case DBR_CTRL_SHORT:
+	case EXTRA_PV_INT16:
 	  {
-	    short int *shorts;
+	    int16_t *shorts;
 
-	    print( "    Type = %i (DBR_CTRL_SHORT\n", type);
+	    print( "    Type = %i (INT16)\n", type);
 	    print( "    Value%s = ", (count == 1) ? "" : "s");
 
-	    shorts = (short int *) malloc( count * sizeof(short));
+	    shorts = (int16_t *) malloc( count * sizeof(int16_t));
 	    if( !xdr_vector( xdrs, (char *) shorts, count, 
-			     sizeof( short), (xdrproc_t) xdr_short))
+			     sizeof( int16_t), (xdrproc_t) xdr_int16_t))
 	      return;
 
 	    for( j = 0; j < count; j++)
@@ -430,34 +450,34 @@ void mda_dump_extra( XDR *xdrs)
 	    free (shorts);
 	  }
 	  break;
-	case DBR_CTRL_LONG:
+	case EXTRA_PV_INT32:
 	  {
-	    long int *longs;
+	    int32_t *longs;
 	    
-	    print( "    Type = %i (DBR_CTRL_LONG)\n", type);
+	    print( "    Type = %i (INT32)\n", type);
 	    print( "    Value%s = ", (count == 1) ? "" : "s");
 
-	    longs = (long int *) malloc( count * sizeof(long));
+	    longs = (int32_t *) malloc( count * sizeof(int32_t));
 	    if( !xdr_vector( xdrs, (char *) longs, count, 
-			     sizeof( long), (xdrproc_t) xdr_long))
+			     sizeof( int32_t), (xdrproc_t) xdr_int32_t))
 	      return ;
 
 	    for( j = 0; j < count; j++)
 	      {
 		if( j)
 		  print( ", ");
-		print( "%li", longs[j]);
+		print( "%i", longs[j]);
 	      }
 	    print( "\n");
 
 	    free( longs);
 	  }
 	  break;
-	case DBR_CTRL_FLOAT:
+	case EXTRA_PV_FLOAT:
 	  {
 	    float *floats;
 
-	    print( "    Type = %i (DBR_CTRL_FLOAT)\n", type);
+	    print( "    Type = %i (FLOAT)\n", type);
 	    print( "    Value%s = ", (count == 1) ? "" : "s");
 
 	    floats = (float *) malloc( count * sizeof(float));
@@ -476,11 +496,11 @@ void mda_dump_extra( XDR *xdrs)
 	    free( floats);
 	  }
 	  break;
-	case DBR_CTRL_DOUBLE:
+	case EXTRA_PV_DOUBLE:
 	  {
 	    double *doubles;
 
-	    print( "    Type = %i (DBR_CTRL_DOUBLE)\n", type);
+	    print( "    Type = %i (DOUBLE)\n", type);
 	    print( "    Value%s = ", (count == 1) ? "" : "s");
 
 	    doubles = (double *) malloc( count * sizeof(double));
@@ -492,7 +512,7 @@ void mda_dump_extra( XDR *xdrs)
 	      {
 		if( j)
 		  print( ", ");
-		print( "%.9lg", doubles[j]);
+		print( "%.9g", doubles[j]);
 	      }
 	    print( "\n");
 
@@ -557,11 +577,11 @@ void version(void)
 {
   printf("mda-dump %s\n"
          "\n"
-         "Copyright (c) 2010 UChicago Argonne, LLC,\n"
+         "Copyright (c) %s UChicago Argonne, LLC,\n"
          "as Operator of Argonne National Laboratory.\n"
          "\n"
          "Written by Dohn Arms, dohnarms@anl.gov.\n",
-         VERSION);
+         VERSION, YEAR);
 }
 
 
@@ -594,7 +614,6 @@ int main( int argc, char *argv[])
       printf("For help, type: mda-dump -h\n");
       return 0;
     }
-
 
   printf("********** mda-dump %s generated output **********\n\n\n", 
          VERSIONNUMBER);
