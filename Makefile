@@ -94,7 +94,7 @@ MODULE_LIST = CAMAC QUADEM
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(CAMAC)_DEPEND_DIRS    = $(CALC) $(SSCAN) $(MOTOR) $(STD)
-$(QUADEM)_DEPEND_DIRS   = $(ASYN) $(AUTOSAVE) $(BUSY) $(IPAC) $(IPUNIDIG) $(MCA) $(SNCSEQ)
+$(QUADEM)_DEPEND_DIRS   = $(AREA_DETECTOR) $(ASYN) $(AUTOSAVE) $(BUSY) $(IPAC) $(IPUNIDIG) $(MCA) $(SNCSEQ)
 
 ################### 6th Tier Support Modules #####################
 # The conditional below should be a target arch, but those are not
