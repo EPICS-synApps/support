@@ -142,6 +142,7 @@ for file in *.adl
 do
 	printf "\r%-50s" "$file"
 	doSed "s/${old}:/${new}:/g" $file
+	doSed "s/=${old}/=${new}/g" $file
 	doSed "s/${old}App/${new}App/g" $file
 	doSed "s/${old}\.adl/${new}.adl/g" $file
 done
@@ -151,6 +152,17 @@ if [ -d opi ]; then
 	printf "\r%-50s" "${new}App/op/opi"
 	cd opi
 	for file in *.opi
+	do
+		printf "\r%-50s" "$file"
+		doSed "s/${old}/${new}/g" $file
+	done
+fi
+
+cd ${TOP}/${new}App/op
+if [ -d ui ]; then
+	printf "\r%-50s" "${new}App/op/ui"
+	cd ui
+	for file in *.ui
 	do
 		printf "\r%-50s" "$file"
 		doSed "s/${old}/${new}/g" $file
