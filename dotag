@@ -1,5 +1,5 @@
 #!/bin/csh
 set module=$1
 set tag=$2
-set SVN=https://subversion.xor.aps.anl.gov/synApps
+set SVN=https://subversion.xray.aps.anl.gov/synApps
 svn cp -m "${tag} tag" ${SVN}/${module}/trunk ${SVN}/${module}/tags/${tag}
