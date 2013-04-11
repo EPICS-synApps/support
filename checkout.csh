@@ -10,6 +10,6 @@ setenv SVN https://subversion.xray.aps.anl.gov/synApps
 
 svn co $SVN/support/trunk support
 cd support
-foreach i ( areaDetector autosave busy calc camac configure dac128V delaygen documentation dxp ebrick ip ip330 ipUnidig love mca modbus motor optics quadEM sscan softGlue std stream utils vac vme vxStats xxx )
+foreach i ( areaDetector autosave busy calc camac configure dac128V delaygen documentation dxp ebrick ip ip330 ipUnidig love mca measComp modbus motor optics quadEM sscan softGlue std stream utils vac vme vxStats xxx )
 	svn co $SVN/$i/trunk $i
 end
