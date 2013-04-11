@@ -41,8 +41,15 @@ endef
 
 #MODULE_LIST  = VXSTATS SNCSEQ ALLEN_BRADLEY
 MODULE_LIST  = DEVIOCSTATS SNCSEQ ALLEN_BRADLEY
-MODULE_LIST += IPAC SSCAN AUTOSAVE
+MODULE_LIST += IPAC AUTOSAVE
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
+
+###### 1.5 Tier Support Modules - Only Depend on 1st Tier ######
+# sscan now depends on seq, via scanProgress.st, but sscan can also build
+# without seq.
+MODULE_LIST += SSCAN 
+$(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
+$(SSCAN)_DEPEND_DIRS     = $(SNCSEQ)
 
 ###### 2nd Tier Support Modules - Only Depend on 1st Tier ########
 
@@ -73,11 +80,8 @@ $(SOFTGLUE)_DEPEND_DIRS = $(ASYN) $(IPAC)
 
 ################### 4th Tier Support Modules #####################
 
-MODULE_LIST  = DELAYGEN MCA VME MOTOR EBRICK 
-#MODULE_LIST  = DELAYGEN MCA VME MOTOR
-ifneq (solaris,$(findstring solaris, $(EPICS_HOST_ARCH)))
-MODULE_LIST += AREA_DETECTOR
-endif
+#MODULE_LIST  = DELAYGEN MCA VME MOTOR EBRICK 
+MODULE_LIST  = DELAYGEN MCA VME MOTOR MEASCOMP AREA_DETECTOR
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(DELAYGEN)_DEPEND_DIRS = $(ASYN) $(AUTOSAVE) $(CALC) $(IP) $(IPAC) $(STREAM) 
@@ -86,6 +90,7 @@ $(VME)_DEPEND_DIRS      = $(SNCSEQ) $(STD)
 $(MOTOR)_DEPEND_DIRS    = $(ASYN) $(BUSY) $(IPAC) $(SNCSEQ) 
 $(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(AUTOSAVE) $(BUSY) $(CALC) $(SSCAN)
 $(EBRICK)_DEPEND_DIRS   = $(ASYN) $(AUTOSAVE) $(CALC) $(SNCSEQ) $(SSCAN) $(STD)
+$(MEASCOMP)_DEPEND_DIRS   = $(ASYN) $(CALC) $(STD) $(BUSY) $(SSCAN) $(AUTOSAVE) $(SNCSEQ)  
 
 ################### 5th Tier Support Modules #####################
 # The conditional below should be a target arch, but those are not
