@@ -12,7 +12,8 @@ usage:
 
 import sys
 import commands
-SVN="https://subversion.xor.aps.anl.gov/synApps"
+SVN="https://subversion.xray.aps.anl.gov/synApps"
+IPAC_SVN="https://svn.aps.anl.gov/epics"
 
 def tags(module, verbose=False):
 	"""
@@ -22,25 +23,37 @@ def tags(module, verbose=False):
 	{'.': {'date': ('Mar', '30', '13:32'), 'rev': '10457', 'author': 'mooney'},
 	 'R1-3': {'date': ('Mar', '30', '13:20'), 'rev': '10456', 'author': 'mooney'}}
 	"""
+	
+	if (module == "ipac"):
+		SVN_ROOT=IPAC_SVN
+	else:
+		SVN_ROOT=SVN
+
 	if verbose:
-		tagListRaw = commands.getoutput("svn ls -v %s/%s/tags" % (SVN,module)).split('\n')
+		tagListRaw = commands.getoutput("svn ls -v %s/%s/tags" % (SVN_ROOT,module)).split('\n')
 		tagDict = {}
 		for tag in tagListRaw:
 			(rev, author, month, day, year_time, tagName) = tag.split()
 			tagDict[tagName.strip('/')] = {'rev':rev, 'author':author, 'date':(month, day, year_time)}
 		return(tagDict)
 	else:
-		tagListRaw = commands.getoutput("svn ls %s/%s/tags" % (SVN,module)).split()
+		tagListRaw = commands.getoutput("svn ls %s/%s/tags" % (SVN_ROOT,module)).split()
 		tagList = []
 		for tag in tagListRaw:
 			tagList.append(tag.strip('/'))
 		return(tagList)
 
 def highestRevisionNum(module, dir):
+
+	if (module == "ipac"):
+		SVN_ROOT=IPAC_SVN
+	else:
+		SVN_ROOT=SVN
+
 	maxRev = -1
 	maxTag = "None"
 	revDate = "None"
-	tagList = commands.getoutput("svn ls -v %s/%s/%s" % (SVN,module,dir)).split('\n')
+	tagList = commands.getoutput("svn ls -v %s/%s/%s" % (SVN_ROOT,module,dir)).split('\n')
 	#print "tagList:", tagList
 	for tag in tagList:
 		words = tag.split()
@@ -55,12 +68,18 @@ def highestRevisionNum(module, dir):
 
 def log(module, tag1=None, tag2=None):
 	# Find the difference between tag1 and tag2, or between tag1 and trunk
+
+	if (module == "ipac"):
+		SVN_ROOT=IPAC_SVN
+	else:
+		SVN_ROOT=SVN
+
 	if tag2 == None:
 		if tag1 == None:
 			(tagRevNum, tag1, date1) = highestRevisionNum(module, 'tags')
 			print "Most recent tag (revision) is %s (%d) on %s" % (tag1, tagRevNum, date1)
 		else:
-			reply = commands.getoutput("svn ls -v %s/%s/%s" % (SVN,module,'tags/'+tag1))
+			reply = commands.getoutput("svn ls -v %s/%s/%s" % (SVN_ROOT,module,'tags/'+tag1))
 			tagList = reply.split('\n')
 			words = tagList[0].split()
 			try:
@@ -73,12 +92,12 @@ def log(module, tag1=None, tag2=None):
 		if (tagRevNum > trunkRevNum):
 			l = "No changes"
 		else:
-			l = commands.getoutput("svn log -v -r %d:%d %s/%s" % (tagRevNum, trunkRevNum, SVN, module))
+			l = commands.getoutput("svn log -v -r %d:%d %s/%s" % (tagRevNum, trunkRevNum, SVN_ROOT, module))
 	else:
 		(tag1RevNum, xx, date1) = highestRevisionNum(module, 'tags/'+tag1)
 		(tag2RevNum, xx, date2) = highestRevisionNum(module, 'tags/'+tag2)
 		print "log from tag '%s' (%s) to tag '%s' (%s)" % (tag1, date1, tag2, date2)
-		l = commands.getoutput("svn log -v -r %d:%d %s/%s" % (tag1RevNum, tag2RevNum, SVN, module))
+		l = commands.getoutput("svn log -v -r %d:%d %s/%s" % (tag1RevNum, tag2RevNum, SVN_ROOT, module))
 	l = l.split('\n')
 	return(l)
 
