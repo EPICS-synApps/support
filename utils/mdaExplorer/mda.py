@@ -225,6 +225,10 @@ def readScan(scanFile, verbose=0, out=sys.stdout, unpacker=None):
 		u.reset(buf)
 
 	scan.rank = u.unpack_int()
+	if (scan.rank > 20) or (scan.rank < 0):
+		print "* * * readScan('%s'): rank > 20.  probably a corrupt file" % scanFile.name
+		return None
+
 	scan.npts = u.unpack_int()
 	scan.curr_pt = u.unpack_int()
 	if verbose:
@@ -352,6 +356,10 @@ def readScanQuick(scanFile, unpacker=None, detToDat_offset=None):
 		u.reset(buf)
 
 	scan.rank = u.unpack_int()
+	if (scan.rank > 20) or (scan.rank < 0):
+		print "* * * readScanQuick('%s'): rank > 20.  probably a corrupt file" % scanFile.name
+		return None
+
 	scan.npts = u.unpack_int()
 	scan.curr_pt = u.unpack_int()
 
@@ -817,6 +825,9 @@ def skimScan(dataFile):
 	buf = dataFile.read(10000) # enough to read scan header
 	u = xdr.Unpacker(buf)
 	scan.rank = u.unpack_int()
+	if (scan.rank > 20) or (scan.rank < 0):
+		print "* * * skimScan('%s'): rank > 20.  probably a corrupt file" % dataFile.name
+		return None
 	scan.npts = u.unpack_int()
 	scan.curr_pt = u.unpack_int()
 	if (scan.curr_pt == 0):
