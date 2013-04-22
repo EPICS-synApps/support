@@ -39,7 +39,6 @@ endef
 
 ###### 1st Tier Support Modules - Only Depend on EPICS BASE ######
 
-#MODULE_LIST  = VXSTATS SNCSEQ ALLEN_BRADLEY
 MODULE_LIST  = DEVIOCSTATS SNCSEQ ALLEN_BRADLEY
 MODULE_LIST += IPAC AUTOSAVE
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
@@ -80,7 +79,6 @@ $(SOFTGLUE)_DEPEND_DIRS = $(ASYN) $(IPAC)
 
 ################### 4th Tier Support Modules #####################
 
-#MODULE_LIST  = DELAYGEN MCA VME MOTOR EBRICK 
 MODULE_LIST  = DELAYGEN MCA VME MOTOR MEASCOMP AREA_DETECTOR
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
@@ -104,12 +102,11 @@ $(QUADEM)_DEPEND_DIRS   = $(AREA_DETECTOR) $(ASYN) $(AUTOSAVE) $(BUSY) $(IPAC) $
 ################### 6th Tier Support Modules #####################
 # The conditional below should be a target arch, but those are not
 # defined at this level.
-ifneq (solaris,$(findstring solaris, $(EPICS_HOST_ARCH)))
 MODULE_LIST = DXP
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(DXP)_DEPEND_DIRS = $(AREA_DETECTOR) $(ASYN) $(AUTOSAVE) $(BUSY) $(CALC) $(CAMAC) $(MCA) $(SNCSEQ) $(SSCAN)
-endif
+
 ################### End of Support-Modules #####################
 
 DIRS = $(SUPPORT_DIRS)
