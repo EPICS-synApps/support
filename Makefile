@@ -46,7 +46,7 @@ $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 ###### 1.5 Tier Support Modules - Only Depend on 1st Tier ######
 # sscan now depends on seq, via scanProgress.st, but sscan can also build
 # without seq.
-MODULE_LIST += SSCAN 
+MODULE_LIST = SSCAN 
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 $(SSCAN)_DEPEND_DIRS     = $(SNCSEQ)
 
@@ -87,7 +87,7 @@ $(MCA)_DEPEND_DIRS      = $(ASYN) $(AUTOSAVE) $(BUSY) $(CALC) $(SNCSEQ) $(SSCAN)
 $(VME)_DEPEND_DIRS      = $(SNCSEQ) $(STD)
 $(MOTOR)_DEPEND_DIRS    = $(ASYN) $(BUSY) $(IPAC) $(SNCSEQ) 
 $(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(AUTOSAVE) $(BUSY) $(CALC) $(SSCAN)
-$(EBRICK)_DEPEND_DIRS   = $(ASYN) $(AUTOSAVE) $(CALC) $(SNCSEQ) $(SSCAN) $(STD)
+#$(EBRICK)_DEPEND_DIRS   = $(ASYN) $(AUTOSAVE) $(CALC) $(SNCSEQ) $(SSCAN) $(STD)
 $(MEASCOMP)_DEPEND_DIRS   = $(ASYN) $(CALC) $(STD) $(BUSY) $(SSCAN) $(AUTOSAVE) $(SNCSEQ)  
 
 ################### 5th Tier Support Modules #####################
