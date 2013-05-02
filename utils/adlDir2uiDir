@@ -1,0 +1,13 @@
+#!/bin/csh
+
+# Run in *App/op directory to convert adl/*.adl to ui/*.ui
+if (! -d ui) then
+	mkdir ui
+endif
+cp adl/* ui
+cd ui
+rm *_BAK.adl
+foreach i (*.adl)
+	adl2ui $i
+end
+rm *.adl
