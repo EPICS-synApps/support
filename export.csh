@@ -1,8 +1,8 @@
 #!/bin/csh
 setenv SVN https://subversion.xray.aps.anl.gov/synApps
-mkdir synApps_5_6
-cd synApps_5_6
-svn export $SVN/support/tags/synApps_5_6 support
+mkdir synApps_5_7
+cd synApps_5_7
+svn export $SVN/support/tags/synApps_5_7 support
 cd support
 # modules
 svn export $SVN/areaDetector/tags/R1-9-1 areaDetector-1-9-1
