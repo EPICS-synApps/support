@@ -21,11 +21,11 @@ AREA_DETECTOR=$(SUPPORT)/areaDetector-1-9-1
 #https://svn.aps.anl.gov/epics/asyn/
 ASYN=$(SUPPORT)/asyn-4-21
 AUTOSAVE=$(SUPPORT)/autosave-5-1
-BUSY=$(SUPPORT)/busy-1-5
+BUSY=$(SUPPORT)/busy-1-6
 CALC=$(SUPPORT)/calc-3-2
 CAMAC=$(SUPPORT)/camac-2-7
 DAC128V=$(SUPPORT)/dac128V-2-7
-DELAYGEN=$(SUPPORT)/delaygen-1-0-8
+DELAYGEN=$(SUPPORT)/delaygen-1-1-0
 #http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
 DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-7
 DXP=$(SUPPORT)/dxp-3-2
@@ -40,7 +40,7 @@ LOVE=$(SUPPORT)/love-3-2-5
 MCA=$(SUPPORT)/mca-7-3-1
 MEASCOMP=$(SUPPORT)/measComp-1-0
 MODBUS=$(SUPPORT)/modbus-2-4
-MOTOR=$(SUPPORT)/motor
+MOTOR=$(SUPPORT)/motor-6-8
 OPTICS=$(SUPPORT)/optics-2-9
 QUADEM=$(SUPPORT)/quadEM-4-0
 #http://www-csr.bessy.de/control/SoftDist/sequencer
