@@ -43,7 +43,7 @@ my $tmp1;
 my $tmp2;
 
 # Parse MASTER_RELEASE_FILE
-open(FILE, "<$master_file") || die "Cannot open $master_file\n";
+open(FILE, "<$master_file") || die "Cannot open master_file $master_file for reading\n";
 @masterFile = <FILE>;
 close FILE;
 foreach $line (@masterFile) {
@@ -73,7 +73,7 @@ if (defined($ENV{GATEWAY})) {
 
 # Rewrite RELEASE_FILES
 foreach $release_file (@ARGV) {
-    open(FILE, "<$release_file") || die "Cannot open $master_file\n";
+    open(FILE, "<$release_file") || die "Cannot open release_file $release_file for reading\n";
     @releaseFile = <FILE>;
     close FILE;
     foreach $line (@releaseFile) {
@@ -85,7 +85,7 @@ foreach $release_file (@ARGV) {
             }
         }
     }
-    open(FILE, ">$release_file") || die "Cannot open $release_file\n";
+    open(FILE, ">$release_file") || die "Cannot open release_file $release_file for writing\n";
     foreach $line (@releaseFile) {print FILE $line;}
     close FILE;
     chmod 0664, $release_file;
