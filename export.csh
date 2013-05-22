@@ -7,7 +7,7 @@ cd support
 # modules
 svn export $SVN/areaDetector/tags/R1-9-1 areaDetector-1-9-1
 svn export $SVN/autosave/tags/R5-1 autosave-5-1
-svn export $SVN/busy/tags/R1-5 busy-1-5
+svn export $SVN/busy/tags/R1-6 busy-1-6
 svn export $SVN/calc/tags/R3-2 calc-3-2
 svn export $SVN/camac/tags/R2-7 camac-2-7
 svn export $SVN/dac128V/tags/R2-7 dac128V-2-7
