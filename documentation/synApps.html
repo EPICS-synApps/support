@@ -9,7 +9,7 @@
 
 <body bgcolor="#FFFFFF">
 
-<h1>synApps 5.6</h1>
+<h1>synApps 5.7</h1>
 <hr><h2>Introduction</h2><hr>
 
 <P>synApps is a collection of <a href=http://www.aps.anl.gov/epics>EPICS</a> software
@@ -111,7 +111,7 @@ you've done, to diagnose problems, and to extend synApps in any significant way.
 
 <hr><h2>Contents</h2><hr>
 
-<P>Here's a list of the <b>modules</b> and directories in synApps:
+<P>Here's a list of the <b>modules</b> and <i>directories</i> in synApps:
 
 <P><table border>
 <tr><td><b>Module</b>/<i>directory</i><th><b>description</b>
@@ -162,6 +162,9 @@ devices.
 <tr><td><b>mca</b><td>Support for multichannel analyzers and multichannel
 	scalers.
 
+<tr><td><b>measComp</b><td>Support for USB I/O modules from <a href="http://www.mccdaq.com">Measurement
+      Computing</a>
+
 <tr><td><b>modbus</b><td>Support for ModBus-protocol devices over TCP, serial
 	RTU, and serial ASCII links
 
@@ -198,39 +201,40 @@ devices.
 </table>
 
 <P>See support/configure/RELEASE for a complete set of compatible module
-versions.  This release of synApps is compatible with EPICS release 3.14.12.1,
-Tornado 2.2, and the following EPICS modules/versions, which are produced and
+versions.  This release of synApps is compatible with EPICS release 3.14.12,
+Tornado 2.2, and the following EPICS modules, which are produced and
 maintained by other members of the EPICS collaboration.  These modules are not
 part of synApps, but their maintainers have permitted us to distribute copies
 along with synApps:
 
 <P><table border>
-<tr><th>Module<th>version<th>description
-<tr><td><b>allenBradley</b><td>2-2<td>for communicating with Allen Bradley PLC's (ANL)
-<tr><td><b>ipac</b><td>v2-11<td>required for IndustryPack support (ANL)
-<tr><td><b>asyn</b><td>v4-18<td>required by many modules (ANL)
-<tr><td><b>seq</b><td>v2-1-3<td>for SNL programs in synApps (BESSY)<br>
+<tr><th>Module<th>description
+<tr><td><b>allenBradley</b><td>for communicating with Allen Bradley PLC's (ANL)
+<tr><td><b>ipac</b><td>required for IndustryPack support (ANL)
+<tr><td><b>asyn</b><td>required by many modules (ANL)
+<tr><td><b>seq</b><td>for SNL programs in synApps (BESSY)<br>
 source: http://www-csr.bessy.de/control/SoftDist/sequencer
-<tr><td><b>stream</b><td>2-5-1<td>configurable device support for message-based devices (PSI)<br>
+<tr><td><b>stream</b><td>configurable device support for message-based devices (PSI)<br>
 source: http://epics.web.psi.ch/software/streamdevice.
-<tr><td><b>vxStats</b><td>v1-7-2h<td>vxWorks statistics, modified by us (SNS)<br>
+<tr><td><b>vxStats</b><td>vxWorks statistics, modified by us (SNS)<br>
 <b>This module has been replaced by devIocStats, and will be removed from the
 next version of synApps.</b>
-<tr><td><b>devIocStats</b><td>v3-1-7<td>IOC statistics, replaces vxStats (SLAC)<br>
+<tr><td><b>devIocStats</b><td>IOC statistics, replaces vxStats (SLAC)<br>
 source: http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
 </table>
 
 <blockquote>
 
 <P>Previous versions of synApps included and relied on the <b>genSub</b>,
-<b>ccd</b>, and <b>pilatus</b> modules.  Beginning with EPICS 3.14.10, a replacement for the
-genSub record, called the asub record, is included in base, and synApps has been
-modified to use it instead of the genSub record.  The <b>ccd</b> and
-<b>pilatus</b> modules have been replaced by the <b>areaDetector</b> module.
+<b>ccd</b>, and <b>pilatus</b> modules.  Beginning with EPICS 3.14.10, a
+replacement for the genSub record, called the aSub record, is included in base,
+and synApps has been modified to use it instead of the genSub record.  The
+<b>ccd</b> and <b>pilatus</b> modules have been replaced by the
+<b>areaDetector</b> module.
 
 </blockquote>
 
-<P>For convenience, this distribution includes the module versions listed above,
+<P>For convenience, this distribution includes the modules listed above,
 in place and ready to build, with minor modifications to build files.  A few of
 the modules have suffered more substantial modifications to fix problems, add
 display files, etc.
@@ -252,12 +256,17 @@ like, synApps contains the following code:
 <li><h3>Record support in or distributed with synApps</h3>
 <table border>
 <tr><th>Record<th>Description
+
+<tr><td><b>ab*</b><td>AllenBradley-module custom records
+
 <tr><td><b>acalcout</b><td>calcout record extended to handle array expressions
 <tr><td><b>asyn</b><td>provide access to nearly all of the features of the
     asyn facility
 <tr><td><b>busy</b><td>utility record: calls recGblFwdLink only when its
 	VAL field is zero, allowing CA clients, and asyn drivers to
 	participate in EPICS putNotify (ca_put_callback()) operations
+<tr><td><b>camac</b><td>camac-module custom record
+<tr><td><b>digitel</b><td>vac-module custom record
 <tr><td><b>epid</b><td>Extended version of the PID record, previously in EPICS base.
 	Intended for implementing feedback loops
 <tr><td><b>mca</b><td>support for multichannel analyzers, and some other
@@ -286,9 +295,10 @@ like, synApps contains the following code:
 <tr><td><b>vme</b><td>generic vme record (Mark Rivers/APS/CARS-CAT)
 <tr><td><b>timestamp</b><td>(written by Stephanie Allison/SLAC) Needed by the vxStats
 	module, but apparently not available in a published module.
+<tr><td><b>vs</b><td>vac-module custom record
 </table>
 
-<P><li><h3>Device/driver support in or distributed with synApps</h3>
+<P><li><h3>Device support in or distributed with synApps</h3>
 <P>List appended to this document.
 
 <P><li><h3>Other C code</h3>
@@ -347,9 +357,8 @@ with all the files you will have to edit before you can build or boot an IOC:
 
 <P><h4> The support directory</h4>
 <pre>
-synApps/support/
-    Makefile                            <&mdash; EDIT to build
-    all_adl/
+synApps_X_X/support/
+    Makefile
     allenBradley/
     areaDetector/
     asyn/
@@ -364,14 +373,12 @@ synApps/support/
         Makefile
         RELEASE
         SUPPORT.&lt;arch&gt;                  <&mdash; EDIT to build for &lt;arch&gt;
-        setup_epics_cygwin32
         ...
     dac128V/
     delaygen/
     devIocStats/
     documentation/
     dxp/
-    ebrick/
     ip/
     ip330/
     ipUnidig/
@@ -379,6 +386,7 @@ synApps/support/
         drvIpac/drvIpac.dbd             <&mdash; EDIT to build
     love/
     mca/
+    measComp/
     modbus/
     motor/
         motorApp/
@@ -393,13 +401,12 @@ synApps/support/
     utils/
     vac/
     vme/
-    vxStats/
     xxx/
 
 </pre>
 <P><h4> The user-directory tree</h4>
 <pre>
-synApps/ioc/
+synApps_X_X/ioc/
     1bm/
         Makefile
         bin/
@@ -412,62 +419,21 @@ synApps/ioc/
             nfsCommands                 <&mdash; EDIT to run
             ioc1bma/
                 Makefile                <&mdash; EDIT to build
-                areaDetector.cmd
-                asynRecord.req
-                asynRecord.substitutions
-                autoShutter.substitutions
-                auto_13mca_settings.req
-                auto_3mca_settings.req
-                auto_positions.req
-                auto_settings.req
+                *.cmd
+                *.req
+                *.substitutions
                 autosave/
-                basic_motor.substitutions
-                bootParms
-                camac.cmd
-                canberra_1.cmd
-                canberra_13.cmd
-                canberra_13.substitutions
-                canberra_3.cmd
-                canberra_3.substitutions
                 cdCommands or envPaths
-                dac128V.cmd
-                dac128V.substitutions
-                femto_DxPCA_x00.substitutions
-                gpib.cmd
-                industryPack.cmd
-                ip330.cmd
-                ip330PIDFast.substitutions
-                ip330Scan.substitutions
-                ipUnidig.cmd
-                ipUnidig.substitutions
-                motor.substitutions
-                orient_xtals.substitutions
-                pf4bank.req
-                pf4common.req
-                picMot.substitutions
-                pid_slow.substitutions
-                pseudoMotor.substitutions
-                quadEM.cmd
-                quadEM_pid.substitutions
-                saveData.req
-                save_restore.cmd
-                scanParms.substitutions
-                serial.cmd
-                softGlue.cmd
-                softMotor.substitutions
-                st.cmd
-                vme.cmd
-                vxStats.substitutions
             ioc1bmb/
             ioc1bmc/
             ioc1bmd/
                 &lt;much like ioc1bma&gt;
         release.pl
-        setup_epics_common
-        start_epics_1bma
-        start_epics_1bmb
-        start_epics_1bmc
-        start_epics_1bmd
+        setup_epics_common              <&mdash; EDIT to run user interface
+        start_epics_1bma                <&mdash; EDIT to run user interface
+        start_epics_1bmb                <&mdash; EDIT to run user interface
+        start_epics_1bmc                <&mdash; EDIT to run user interface
+        start_epics_1bmd                <&mdash; EDIT to run user interface
         1bmaApp/
         1bmbApp/
         1bmcApp/
@@ -487,23 +453,29 @@ and <code>make rebuild</code>, in the support directory.
 
 <blockquote>
 <dl>
-<dt><code>support/Makefile</code>
-    <dd>Comment out any modules you don't want to build.
-
-<P><dt><code>support/configure/EPICS_BASE.&lt;arch&gt;</code>
-    <dd>Edit to specify the full path to EPICS base for target architecture &lt;arch&gt;.
-
-<P><dt><code>support/configure/SUPPORT.&lt;arch&gt;</code>
-
-	<dd>Edit to specify the full path to the synApps <code>support</code> directory for
-    target architecture &lt;arch&gt;.
-
-<P><dt><code>support/configure/RELEASE</code>
+<dt><code>support/configure/RELEASE</code>
 
 	<dd>Edit the definitions of <code>EPICS_BASE</code> and <code>SUPPORT</code>
 	with the correct paths to these directories on your system.<br>
 	Comment out any modules you don't want to build.
 	
+
+<P><dt><code>support/configure/EPICS_BASE.&lt;arch&gt;</code>
+
+	<dd>If you plan to build on more than one host architecture from a
+	single synApps directory, and the hosts use different paths to refer to
+	the same file (for example, Windows and Linux using a shared file
+	system) then you can override the definition of <code>EPICS_BASE</code>
+	in the <code>RELEASE</code> file by specifying host-specific paths to
+	base in separate <code>EPICS_BASE.&lt;arch&gt;</code> files.  If you
+	don't have such plans, then you can delete these files, but if they
+	exist, they must be correct.
+
+<P><dt><code>support/configure/SUPPORT.&lt;arch&gt;</code>
+
+	<dd>Similar to <code>EPICS_BASE.&lt;arch&gt;</code>, but for the synApps
+	<code>support</code> directory
+
 <P><dt><code>support/configure/CONFIG_SITE</code>
 	<dd>Edit to set the following variables, which control what will be built:
 	The supported values for these variables are <code>YES</code> and
@@ -531,12 +503,12 @@ and <code>make rebuild</code>, in the support directory.
 
 	</dl>
 
-<P><dt><code>ipac/&lt;version&gt;/drvIpac/drvIpac.dbd</code>
+<P><dt><code>support/ipac/&lt;version&gt;/drvIpac/drvIpac.dbd</code>
 
 	<dd>uncomment <code>registrar()</code> commands for IndustryPack carriers
     you plan to use.
 
-<P><dt><code>motor/&lt;version&gt;/motorApp/Makefile</code>
+<P><dt><code>support/motor/&lt;version&gt;/motorApp/Makefile</code>
 	<dd>comment or uncomment to select the motor support you want to build.
 </dl>
 </blockquote>
@@ -554,6 +526,20 @@ and <code>make rebuild</code>, in the support directory.
 </dl>
 </blockquote>
 
+
+<P>The following files must be edited before running the user interface:
+
+<blockquote>
+<dl>
+<dt><code>ioc/setup_epics_common</code><br>
+	<dd>set the value of Channel Access variables, such as
+		EPICS_CA_MAX_ARRAY_BYTES. 
+<dt><code>ioc/start_epics_xxx</code><br>
+	<dd>edit to specify the path to the application and display-file directories,
+		and the name of the top-level display file.
+</dl>
+</blockquote>
+ 
 <P>The association between a user directory, and the support directory on which
 it depends, is made entirely by the file, configure/RELEASE, in the
 user directory.  Typically, this file simply includes the
@@ -570,7 +556,12 @@ module <b>b</b>, and module <b>b</b> depends on module <b>c</b>, then <b>a</b>
 also depends on <b>c</b>, and it must specify the same version of <b>c</b> that
 <b>b</b> specifies.)  The complete set of modules selected by a user directory
 must be self consistent, and the EPICS build will ensure this, unless you tell
-it not to.
+it not to, by defining
+<pre>CHECK_RELEASE=NO</pre>
+or
+<pre>CHECK_RELEASE=WARN</pre>
+in <code>ioc/configure/CONFIG_SITE</code>.
+</i></blockquote>
 
 <P>For completeness, the format of a RELEASE-file path definition is
 "<code>&lt;name&gt;=&lt;path&gt;</code>", where &lt;name&gt; is an arbitrary
@@ -586,7 +577,11 @@ module, &lt;name&gt; is used extensively to find display files (that is, to set
 the EPICS_DISPLAY_PATH environment variable), and to specify databases, autosave
 request files, etc., when an ioc is booting.
 
-</i></blockquote>
+<P>The synApps build imposes an additional constraing on module names.  Because
+synApps uses EPICS build rules to descend from <code>support</code> into the
+modules, module names may not include the character '.'.  (The EPICS build rules
+expect '.' to be followed by a host or target architecture.)
+
 
 <hr><h2> How to build synApps</h2><hr>
 <ol>
@@ -671,8 +666,13 @@ need the following components from the following menu headings:
 synApps support directory should be very simple:
 
 <ol>
-<li>Edit support/Makefile, support/configure/RELEASE,
-   and support/configure/CONFIG_SITE, as noted above.
+
+<li>Edit support/configure/RELEASE, and support/configure/CONFIG_SITE, as noted
+above. 
+
+   <blockquote>If you are using Perl 5.6 or earlier, see comments in
+   support/configure/makeReleaseConsistent.pl for needed script
+   modifications.</blockquote>
 
 <li>Edit support/configure/EPICS_BASE.&lt;arch&gt;,
 support/configure/SUPPORT.&lt;arch&gt, as noted above, for the architectures you
@@ -683,8 +683,8 @@ want to build.
 
 <li>Set the environment variable <code>EPICS_HOST_ARCH</code> to the
    architecture (and compiler, if there is a choice) on which you are building.
-   synApps is tested with the architectures <code>solaris-sparc-gnu</code>,
-   <code>linux-x86_64</code>, <code>cygwin-x86</code>, and <code>win32-x86</code>.
+   synApps is tested with the architectures <code>linux-x86_64</code>,
+   <code>cygwin-x86</code>, and <code>win32-x86</code>.
 
 <li>In support, run '<code>make release</code>'.   (See note below.)
 
@@ -697,33 +697,30 @@ base.  You may need <code>$(EPICS_BASE)/bin/&lt;arch&gt;</code> in your path,
 and you may need <code>$(EPICS_BASE)/lib/&lt;arch&gt;</code> in
 <code>LD_LIBRARY_PATH</code>.
 
-<P>When executed in the support directory, '<code>make release</code>' will go to all of the
-modules support/Makefile is configured to build, and edit the configure/RELEASE files in those
-modules so that they all build from the same versions of EPICS base and other known modules. 
-
-<blockquote><b>Note:</b> 'make release' is not an operating-system independent operation in synApps 5.6:
-areaDetector and dxp are not built on solaris, so a 'make release' performed on solaris will
-not edit make files in these modules. 
-</blockquote>
+<P>When executed in the support directory, '<code>make release</code>' will go
+to all of the modules <code>support/Makefile</code> is configured to build, and
+edit the <code>configure/RELEASE</code> files in those modules so that they all build from
+the same versions of EPICS base and other known modules. 
 
 <P>Typically, the build will not succeed the first time, because you will not
 have all of the required system support.  If you find that you cannot build some
-synApps module, you should comment it out of both support/Makefile, and
-support/configure/RELEASE*.
+synApps module, you can disable its build by commentng it out of
+<code>support/configure/RELEASE</code>.
 
 <P><h3><li>Building and configuring a user directory</h3>
 
 <P>Once synApps' support directory has built without errors, the <b>xxx</b>
-module will have been configured (xxx/configure/RELEASE will have
-correct, absolute paths to base and support) and built, so you can use it as
-an example &ndash; or, better, a template &ndash; for constructing user directories to
-support your IOCs.  To make a template of xxx, clean and uninstall it, and tar a
-copy of the directory.  To use the template, untar it, cd to its top-level
-directory and run utils/changePrefix to change the PV-name prefix
-from xxx to whatever you want.  (Note you must have support/utils in your
-command path, or you could copy utils/changePrefix and
-utils/doSed to a directory that is in your command path.  Note that
-changePrefix is synApps-version specific.)
+module will have been configured (<code>xxx/configure/RELEASE</code> will have
+correct, absolute paths to base and support) and built, so you can use it as an
+example &ndash; or, better, a template &ndash; for constructing user directories
+to support your IOCs.  To make a template of xxx, clean and uninstall it, and
+tar a copy of the directory.  To use the template, untar it, cd to its top-level
+directory and run <code>support/utils/changePrefix</code> to change the PV-name
+prefix from xxx to whatever you want.  (Note you must have
+<code>support/utils</code> in your command path, or you could copy
+<code>support/utils/changePrefix</code> and <code>support/utils/doSed</code> to
+a directory that is in your command path.  Note that <code>changePrefix</code> is
+synApps-version specific.)
 
 <P>Here's what I do:
 <pre>
@@ -782,8 +779,10 @@ or put the command in your .login file.
 Programmer's Guide</i> if you have a copy.  Here's what we do (on a Sun
 workstation):
 <ul>
-<li>Add a user named <vx_username> with the password <vx_password>.
-    The user has nothing in its home directory, and very few priviledges.
+
+<li>Add a user named <code>&lt;vx_username&gt;</code> with the password
+	<code>&lt;vx_password&gt;</code>. The user has nothing in its home
+	directory, and very few priviledges.
 
 <li>Connect an ethernet cable to the processor.
 
@@ -829,12 +828,12 @@ server, you can specify the 'file name', above, as
 <P><h3><li>Display files</h3>
 
 <P>synApps includes hundreds of display files intended for use with the EPICS
-display manager, MEDM, and translations of those files that work with CSS-BOY. 
-Other EPICS display managers exist, and I once did a mass automated translation
-of MEDM display files to the EDM display manager's file format, using software
-developed by others.  This translation was only partially satisfactory, but we
-don't have the resources to do the job better or more generically.  In this
-documentation, I'll limit attention to MEDM display files.
+display manager, MEDM, and translations of those files that work with CSS-BOY
+and caQtDM.  Other EPICS display managers exist, and I once did a mass automated
+translation of MEDM display files to the EDM display manager's file format,
+using software developed by others.  This translation was only partially
+satisfactory, but we don't have the resources to do the job better or more
+generically.  In this documentation, I'll limit attention to MEDM display files.
 
 
 
@@ -865,7 +864,8 @@ following files will be touched:
 	
 <P><dt><code>xxx/iocBoot/ioc*/auto_positions.req</code><br>
     <code>xxx/iocBoot/ioc*/auto_settings.req</code>
-<dd>specifies PV's to be saved/restored automatically
+<dd>specifies PV's to be saved periodically during operation, and restored
+	automatically when the ioc is rebooted.
 
 <P><dt><code>xxx/iocBoot/ioc*/saveData.req</code>
 <dd>identifies PV's used by the saveData software,  sscan records to be
@@ -1095,20 +1095,31 @@ as you would treat the scaler or mca software.
 
 <P>See <code>xxx/iocBoot/ioc*/bootParms</code> for sample boot parameters.
 
+<li>Display manager
+
+<P><ul>
 <P><li>MEDM
 
 <P>See the MEDM Operator's Manual for detailed information on the special needs of
 this X11/Motif program.  I'll assume those needs have been met.
 
-<P>Edit the file <code>xxx/start_epics_xxx</code> to so it sets the environment
- variable
-<code>EPICS_APP</code> to the directory that contains <code>xxxApp</code>.  If you plan to run MEDM on a
-workstation that isn't on the same subnet as the IOC's, you'll need to
-uncomment and edit the definition of the environment variable
-<code>EPICS_CA_ADDR_LIST</code>.  In principle, you should be able to name only the
-broadcast address for the subnet that contains the IOC's, but if this doesn't
-work, you can put in the IP addresses of all the IOC's you want to connect
-with, separated by spaces, as follows:
+<P>MEDM uses a search path list to find .adl files, and we'd like for that path
+list to refer to the synApps module versions actually in use.  To generate the
+search path list from an application's configure/RELEASE file, edit the file
+<code>xxx/start_epics_xxx</code> so it sets the environment variables
+<code>EPICS_APP</code> and <code>EPICS_APP_ADL_DIR</code>.  Here's an example:
+
+<pre>
+setenv EPICS_APP /home/oxygen/MOONEY/epics/synApps/support/xxx
+setenvEPICS_APP_ADL_DIR ${EPICS_APP}/xxxApp/op/adl
+</pre>
+
+If you plan to run MEDM on a workstation that isn't on the same subnet as the
+IOC's, you'll need to uncomment and edit the definition of the environment
+variable <code>EPICS_CA_ADDR_LIST</code>.  In principle, you should be able to
+name only the broadcast address for the subnet that contains the IOC's, but if
+this doesn't work, you can put in the IP addresses of all the IOC's you want to
+connect with, separated by spaces, as follows:
 
 	<pre>setenv EPICS_CA_ADDR_LIST "164.54.53.126 164.54.53.127"</pre>
 
@@ -1134,30 +1145,37 @@ directories that might have MEDM-display files and includes them in the
 environment variable EPICS_DISPLAY_PATH, cd's to xxxApp/op/adl, and runs MEDM
 with the default top-level display file.
 
+<P><li>caQtDM
+
+<P>caQtDM display files (*.ui) in synApps were translated from MEDM-display
+files (*.adl) with the adl2ui translator in caQtDM-2-8 (available from
+http://epics.web.psi.ch/software/caqtdm/).
+
+<P>caQtDM implements a search path list very much as in MEDM, so we can use the
+same technique to autogenerate that path from an application's configure/RELEASE
+file.  Edit the file <code>xxx/start_caQtDM</code> so it sets the environment
+variables <code>EPICS_APP</code> and <code>EPICS_APP_UI_DIR</code>.  Here's an
+example:
+
+<pre>
+setenv EPICS_APP /home/oxygen/MOONEY/epics/synApps/support/xxx
+setenv EPICS_APP_UI_DIR ${EPICS_APP}/xxxApp/op/ui
+</pre>
+
+<P>Other environment variables used by caQtDM are the same as for MEDM.
+
 <P><li>CSS-BOY
 
 <P>CSS-BOY display files (*.opi) in synApps were translated from MEDM-display
-files (*.adl) with the ADL-to-BOY translator in APS_CSS_v3.0.2 (available from
-http://css.aps.anl.gov/), followed by some stream editing to specify colors,
-fonts, and paths to files specified in linking containers.
+files (*.adl) using the ADL-to-BOY translator included with CSS-BOY.
 
-<P>CSS-BOY currently does not have the notion of a search path for display
-files, as MEDM does.  Instead, all display files must be present either
-literally or via soft links in the CSS workspace, and any file that references
-another file must specify the path to that file.  This is a little awkward for
-synApps, whose display files are located in separate modules.  The best
-compromise found so far is to create soft links in the CSS workspace, like this:
+<P>CSS-BOY can use a search path list for display files, as MEDM does, but the
+path is defined differently.  One way to set it is to select the menu
+"Edit/Preferences", then select "CSS Applications/Display/BOY" and type the path
+into the "OPI Search Path" box.  See CSS-BOY documentation for other options.
 
-<pre>
-ln -s ${SUPPORT}/calc-2-9/calcApp/op/opi ${CSS-WORKSPACE}/Default/synApps/calc
-</pre>
 
-<P>File paths in synApps .opi displays assume this structure, and a file that
-references a file in some other module does so like this:
-
-<pre>
-../calc/yysCalcoutRecord.opi
-</pre>
+</ul>
 
 <P><li>autosave/restore
 
@@ -1254,7 +1272,7 @@ other kinds:
 
 <ul>
 
-<li>sequences of operations (in <b>std</b>)
+<li>sequences of operations (in <b>calc</b>)
 <br><code>userStringSeqs10.db, userStringSeqs10_settings.req, userStringSeq*.adl</code>
 
 <P><li>feedback loops  (in <b>std</b>)
@@ -1279,14 +1297,14 @@ sections intended primarily for run-time programming by end users.  Examples
 include end-of-acquisition calculations for scalers and digital multimeters;
 region-of-interest summing, and background-subtraction for mca records.
 
-<li>MEDM-display editing
+<li>Display editing
 
 <P>End users know better than anybody what they want in a graphical user
-interface.  One thing they've demonstrated that they want, is the ability to
-have some control over the user interface without having to specify every little
+interface.  One thing they've demonstrated that they want is the ability to have
+some control over the user interface without having to specify every little
 detail to a programmer. MEDM provides end users with the ability easily to
-create custom displays, and  synApps provides over 600 stock user-interface
-fragments that can be called up from, or included as part of, a user crafted
+create custom displays, and  synApps provides over 800 user-interface files that
+can be copied from, called up from, or included as part of a user crafted
 display.
 
 <li>IOC command-file editing
@@ -1327,13 +1345,13 @@ support/calc/calcApp/src.
 <li>Development of State-Notation-Language programs
 
 <P>This is probably the next easiest, and the next most capable, way of adding
-compiled code to an application.  SNL also introduces (to this list) the notion
+compiled code to an application.  SNL also introduces to this list the notion
 of client-side program development, for an SNL program is a Channel Access
 client, even though it runs on an IOC. Again, synApps has a bunch of examples,
-which you can find by searching for ".st" files. 
+which you can find by searching for ".st" and ".stt" files. 
 
 <P>Documentation for SNL can be found in the <b>seq</b> module, a copy of which
-is bundled with synApps (though <b>seq</b> is not part of synApps).
+is bundled with synApps.
 
 <li>Device-support development
 
@@ -1345,8 +1363,8 @@ has, at least, the structure of the sort of support you will need.
 develop.  Everybody tries to find the closest approximation to what they need,
 and modifies it until it serves their purpose.  One important use of the EPICS
 tech-talk email list is to gather suggestions, from folks further up the
-learning curve, on what might be a good piece of code to modify for a particular
-purpose.
+learning curve, on what might be a good piece of code to use or modify for a
+particular purpose.
 
 <li>Development of client-side GUI programs
 
@@ -1367,8 +1385,8 @@ development, even if the developers are unaware of each other.
 <P>All of the extension strategies described above produce (or, at least
 <i>can</i> produce) results which are <i>fully</i> integrated into the control
 system.  This means that they can be used in further extensions by the same
-techniques.  Thus, motors ganged together by a transform record can be scanned,
-driven by a PID loop, or controlled by another userCalc.
+techniques.  Thus, for example, motors ganged together by a transform record can
+be scanned, driven by a PID loop, or controlled by another userCalc.
 
 <P>
 
@@ -1440,267 +1458,368 @@ record types intended for end users to program at run time.
 
 
 <hr>
-<P><h3>Appendix: Device/driver support in or distributed with synApps</h3>
+<P><h3>Appendix: Device support in or distributed with synApps (including support from EPICS base)</h3>
 <table border>
-<tr><th>record<th>bus-type<th>codename<th>username
-<tr><td>acalcout   <td>CONSTANT  <td>devaCalcoutSoft              <td>Soft Channel
-<tr><td>ai         <td>AB_IO     <td>devAiAb1771Ife               <td>AB-1771IFE
-<tr><td>ai         <td>AB_IO     <td>devAiAb1771Ife0to5V          <td>AB-1771IFE-0to5Volt
-<tr><td>ai         <td>AB_IO     <td>devAiAb1771IfeMa             <td>AB-1771IFE-4to20MA
-<tr><td>ai         <td>AB_IO     <td>devAiAb1771IfeSe             <td>AB-1771IFE-SE
-<tr><td>ai         <td>AB_IO     <td>devAiAb1771Il                <td>AB-1771IL-Analog In
-<tr><td>ai         <td>AB_IO     <td>devAiAb1771IrCopper          <td>AB-1771RTD-Copper
-<tr><td>ai         <td>AB_IO     <td>devAiAb1771IrPlatinum        <td>AB-1771RTD-Platinum
-<tr><td>ai         <td>AB_IO     <td>devAiAb1771Ixe               <td>AB-1771IXE-Millivolt In
-<tr><td>ai         <td>AB_IO     <td>devAiAbSlcDcm                <td>AB-SLC500DCM
-<tr><td>ai         <td>AB_IO     <td>devAiAbSlcDcmSigned          <td>AB-SLC500DCM-Signed
-<tr><td>ai         <td>BBGPIB_IO <td>devAiAX301                   <td>PZT Bug
-<tr><td>ai         <td>CONSTANT  <td>devAiTodSeconds              <td>Sec Past Epoch
-<tr><td>ai         <td>GPIB_IO   <td>devAiGP307Gpib               <td>Vg307 GPIB Instrument
-<tr><td>ai         <td>GPIB_IO   <td>devAiHeidAWE1024             <td>Heidenhein Encoder
-<tr><td>ai         <td>GPIB_IO   <td>devAiKeithleyDMM199          <td>KeithleyDMM199
-<tr><td>ai         <td>GPIB_IO   <td>devGpib                      <td>GPIB init/report
-<tr><td>ai         <td>INST_IO   <td>asynAiFloat64                <td>asynFloat64
-<tr><td>ai         <td>INST_IO   <td>asynAiFloat64Average         <td>asynFloat64Average
-<tr><td>ai         <td>INST_IO   <td>asynAiInt32                  <td>asynInt32
-<tr><td>ai         <td>INST_IO   <td>asynAiInt32Average           <td>asynInt32Average
-<tr><td>ai         <td>INST_IO   <td>devAiAb1791                  <td>Allen Bradley 1791
-<tr><td>ai         <td>INST_IO   <td>devAiAbDcm                   <td>Ab Dcm
-<tr><td>ai         <td>INST_IO   <td>devAiClusts                  <td>VX stats clusts
-<tr><td>ai         <td>INST_IO   <td>devAiHeidND261               <td>asyn ai HeidND261
-<tr><td>ai         <td>INST_IO   <td>devAiMKS                     <td>HPS SensaVac 937
-<tr><td>ai         <td>INST_IO   <td>devAiMPC                     <td>asyn MPC
-<tr><td>ai         <td>INST_IO   <td>devAiStats                   <td>VX stats
-<tr><td>ai         <td>INST_IO   <td>devAiStrParm                 <td>asyn ai stringParm
-<tr><td>ai         <td>INST_IO   <td>devAiTPG261                  <td>asyn TPG261
-<tr><td>ai         <td>INST_IO   <td>devAiTelevac                 <td>asyn Televac
-<tr><td>ai         <td>INST_IO   <td>devInterfaceAI1              <td>InterfaceAI1
-<tr><td>ai         <td>INST_IO   <td>devaiStream                  <td>stream
-<tr><td>ai         <td>VME_IO    <td>devAiA32Vme                  <td>Generic A32 VME
-<tr><td>ai         <td>VME_IO    <td>devAiAvmeMRD                 <td>devAvmeMRD
-<tr><td>ai         <td>VME_IO    <td>devAiBunchClkGen             <td>APS Bunch Clock
-<tr><td>ai         <td>VME_IO    <td>devAiVaroc                   <td>ESRF Varoc SSI Encoder Iface
-<tr><td>ai         <td>VME_IO    <td>devIK320Ai                   <td>Heidenhain IK320
-<tr><td>ai         <td>VME_IO    <td>devIK320GroupAi              <td>Heidenhain IK320 Group
-<tr><td>ao         <td>AB_IO     <td>devAoAb1771Ofe               <td>AB-1771OFE
-<tr><td>ao         <td>AB_IO     <td>devAoAbSlcDcm                <td>AB-SLC500DCM
-<tr><td>ao         <td>BBGPIB_IO <td>devAoAX301                   <td>PZT Bug
-<tr><td>ao         <td>GPIB_IO   <td>devAoHeidAWE1024             <td>Heidenhein Encoder
-<tr><td>ao         <td>GPIB_IO   <td>devAoKeithleyDMM199          <td>KeithleyDMM199
-<tr><td>ao         <td>INST_IO   <td>asynAoFloat64                <td>asynFloat64
-<tr><td>ao         <td>INST_IO   <td>asynAoInt32                  <td>asynInt32
-<tr><td>ao         <td>INST_IO   <td>devAoAb1791                  <td>Allen Bradley 1791
-<tr><td>ao         <td>INST_IO   <td>devAoAbDcm                   <td>Ab Dcm
-<tr><td>ao         <td>INST_IO   <td>devAoEurotherm               <td>asyn ao Eurotherm
-<tr><td>ao         <td>INST_IO   <td>devAoMPC                     <td>asyn MPC
-<tr><td>ao         <td>INST_IO   <td>devAoStats                   <td>VX stats
-<tr><td>ao         <td>INST_IO   <td>devAoStrParm                 <td>asyn ao stringParm
-<tr><td>ao         <td>INST_IO   <td>devAoTPG261                  <td>asyn TPG261
-<tr><td>ao         <td>INST_IO   <td>devInterfaceAO1              <td>InterfaceAO1
-<tr><td>ao         <td>INST_IO   <td>devaoStream                  <td>stream
-<tr><td>ao         <td>VME_IO    <td>devAoA32Vme                  <td>Generic A32 VME
-<tr><td>ao         <td>VME_IO    <td>devAoAvme9210                <td>AVME-9210
-<tr><td>ao         <td>VME_IO    <td>devAoBunchClkGen             <td>APS Bunch Clock
-<tr><td>ao         <td>VME_IO    <td>devAoVMI4116                 <td>VMIVME-4116
-<tr><td>asyn       <td>INST_IO   <td>asynRecordDevice             <td>asynRecordDevice
-<tr><td>bi         <td>AB_IO     <td>devBiAb                      <td>AB-Binary Input
-<tr><td>bi         <td>AB_IO     <td>devBiAb16                    <td>AB-16 bit BI
-<tr><td>bi         <td>AB_IO     <td>devBiAb32                    <td>AB-32 bit BI
-<tr><td>bi         <td>GPIB_IO   <td>devBiGP307Gpib               <td>Vg307 GPIB Instrument
-<tr><td>bi         <td>GPIB_IO   <td>devBiHeidAWE1024             <td>Heidenhein Encoder
-<tr><td>bi         <td>GPIB_IO   <td>devBiKeithleyDMM199          <td>KeithleyDMM199
-<tr><td>bi         <td>INST_IO   <td>asynBiInt32                  <td>asynInt32
-<tr><td>bi         <td>INST_IO   <td>asynBiUInt32Digital          <td>asynUInt32Digital
-<tr><td>bi         <td>INST_IO   <td>devBiAbDcm                   <td>Ab Dcm
-<tr><td>bi         <td>INST_IO   <td>devBiMPC                     <td>asyn MPC
-<tr><td>bi         <td>INST_IO   <td>devBiStrParm                 <td>asyn bi stringParm
-<tr><td>bi         <td>INST_IO   <td>devBiTPG261                  <td>asyn TPG261
-<tr><td>bi         <td>INST_IO   <td>devBiTelevac                 <td>asyn Televac
-<tr><td>bi         <td>INST_IO   <td>devbiStream                  <td>stream
-<tr><td>bi         <td>VME_IO    <td>devBiA32Vme                  <td>Generic A32 VME
-<tr><td>bi         <td>VME_IO    <td>devBiAvme9440                <td>AVME9440 I
-<tr><td>bi         <td>VME_IO    <td>devBiAvmeMRD                 <td>devAvmeMRD
-<tr><td>bi         <td>VME_IO    <td>devBiBunchClkGen             <td>APS Bunch Clock
-<tr><td>bi         <td>VME_IO    <td>devBiHP10895LaserAxis        <td>HP interferometer
-<tr><td>bo         <td>AB_IO     <td>devBoAb                      <td>AB-Binary Output
-<tr><td>bo         <td>AB_IO     <td>devBoAb16                    <td>AB-16 bit BO
-<tr><td>bo         <td>AB_IO     <td>devBoAb32                    <td>AB-32 bit BO
-<tr><td>bo         <td>BBGPIB_IO <td>devBoAX301                   <td>PZT Bug
-<tr><td>bo         <td>GPIB_IO   <td>devBoGP307Gpib               <td>Vg307 GPIB Instrument
-<tr><td>bo         <td>GPIB_IO   <td>devBoHeidAWE1024             <td>Heidenhein Encoder
-<tr><td>bo         <td>GPIB_IO   <td>devBoKeithleyDMM199          <td>KeithleyDMM199
-<tr><td>bo         <td>INST_IO   <td>asynBoInt32                  <td>asynInt32
-<tr><td>bo         <td>INST_IO   <td>asynBoUInt32Digital          <td>asynUInt32Digital
-<tr><td>bo         <td>INST_IO   <td>devBoAbDcm                   <td>Ab Dcm
-<tr><td>bo         <td>INST_IO   <td>devBoMPC                     <td>asyn MPC
-<tr><td>bo         <td>INST_IO   <td>devBoStrParm                 <td>asyn bo stringParm
-<tr><td>bo         <td>INST_IO   <td>devBoTPG261                  <td>asyn TPG261
-<tr><td>bo         <td>INST_IO   <td>devboStream                  <td>stream
-<tr><td>bo         <td>VME_IO    <td>devBoA32Vme                  <td>Generic A32 VME
-<tr><td>bo         <td>VME_IO    <td>devBoAvme9440                <td>AVME9440 O
-<tr><td>bo         <td>VME_IO    <td>devBoAvmeMRD                 <td>devAvmeMRD
-<tr><td>bo         <td>VME_IO    <td>devBoBunchClkGen             <td>APS Bunch Clock
-<tr><td>bo         <td>VME_IO    <td>devBoHP10895LaserAxis        <td>HP interferometer
-<tr><td>busy       <td>CONSTANT  <td>devBusySoft                  <td>Soft Channel
-<tr><td>busy       <td>CONSTANT  <td>devBusySoftRaw               <td>Raw Soft Channel
-<tr><td>busy       <td>INST_IO   <td>asynBusyInt32                <td>asynInt32
-<tr><td>calcout    <td>INST_IO   <td>devcalcoutStream             <td>stream
-<tr><td>epid       <td>CONSTANT  <td>devEpidSoft                  <td>Soft Channel
-<tr><td>epid       <td>CONSTANT  <td>devEpidSoftCB                <td>Async Soft Channel
-<tr><td>epid       <td>INST_IO   <td>devEpidFast                  <td>Fast Epid
-<tr><td>longin     <td>AB_IO     <td>devLiAbSlcDcm                <td>AB-SLC500DCM
-<tr><td>longin     <td>GPIB_IO   <td>devLiHeidAWE1024             <td>Heidenhein Encoder
-<tr><td>longin     <td>GPIB_IO   <td>devLiKeithleyDMM199          <td>KeithleyDMM199
-<tr><td>longin     <td>INST_IO   <td>asynLiInt32                  <td>asynInt32
-<tr><td>longin     <td>INST_IO   <td>asynLiUInt32Digital          <td>asynUInt32Digital
-<tr><td>longin     <td>INST_IO   <td>devLiAbDcm                   <td>Ab Dcm
-<tr><td>longin     <td>INST_IO   <td>devLiStrParm                 <td>asyn li stringParm
-<tr><td>longin     <td>INST_IO   <td>devlonginStream              <td>stream
-<tr><td>longin     <td>VME_IO    <td>devLiA32Vme                  <td>Generic A32 VME
-<tr><td>longin     <td>VME_IO    <td>devLiAvmeMRD                 <td>devAvmeMRD
-<tr><td>longin     <td>VME_IO    <td>devLiHP10895LaserAxis        <td>HP interferometer
-<tr><td>longout    <td>AB_IO     <td>devLoAbSlcDcm                <td>AB-SLC500DCM
-<tr><td>longout    <td>BBGPIB_IO <td>devLoAX301                   <td>PZT Bug
-<tr><td>longout    <td>GPIB_IO   <td>devLoHeidAWE1024             <td>Heidenhein Encoder
-<tr><td>longout    <td>GPIB_IO   <td>devLoKeithleyDMM199          <td>KeithleyDMM199
-<tr><td>longout    <td>INST_IO   <td>asynLoInt32                  <td>asynInt32
-<tr><td>longout    <td>INST_IO   <td>asynLoUInt32Digital          <td>asynUInt32Digital
-<tr><td>longout    <td>INST_IO   <td>devLoAbDcm                   <td>Ab Dcm
-<tr><td>longout    <td>INST_IO   <td>devLoStrParm                 <td>asyn lo stringParm
-<tr><td>longout    <td>INST_IO   <td>devlongoutStream             <td>stream
-<tr><td>longout    <td>VME_IO    <td>devLoA32Vme                  <td>Generic A32 VME
-<tr><td>longout    <td>VME_IO    <td>devLoHP10895LaserAxis        <td>HP interferometer
-<tr><td>mbbi       <td>AB_IO     <td>devMbbiAb                    <td>AB-Binary Input
-<tr><td>mbbi       <td>AB_IO     <td>devMbbiAb16                  <td>AB-16 bit BI
-<tr><td>mbbi       <td>AB_IO     <td>devMbbiAb32                  <td>AB-32 bit BI
-<tr><td>mbbi       <td>AB_IO     <td>devMbbiAbAdapterStat         <td>AB-Adapter Status
-<tr><td>mbbi       <td>AB_IO     <td>devMbbiAbCardStat            <td>AB-Card Status
-<tr><td>mbbi       <td>GPIB_IO   <td>devMbbiHeidAWE1024           <td>Heidenhein Encoder
-<tr><td>mbbi       <td>GPIB_IO   <td>devMbbiKeithleyDMM199        <td>KeithleyDMM199
-<tr><td>mbbi       <td>INST_IO   <td>asynMbbiInt32                <td>asynInt32
-<tr><td>mbbi       <td>INST_IO   <td>asynMbbiUInt32Digital        <td>asynUInt32Digital
-<tr><td>mbbi       <td>INST_IO   <td>devMbbiAbDcm                 <td>Ab Dcm
-<tr><td>mbbi       <td>INST_IO   <td>devMbbiTPG261                <td>asyn TPG261
-<tr><td>mbbi       <td>INST_IO   <td>devmbbiStream                <td>stream
-<tr><td>mbbi       <td>VME_IO    <td>devMbbiA32Vme                <td>Generic A32 VME
-<tr><td>mbbi       <td>VME_IO    <td>devMbbiAvme9440              <td>AVME9440 I
-<tr><td>mbbi       <td>VME_IO    <td>devMbbiAvmeMRD               <td>devAvmeMRD
-<tr><td>mbbi       <td>VME_IO    <td>devMbbiHP10895LaserAxis      <td>HP interferometer
-<tr><td>mbbiDirect <td>AB_IO     <td>devMbbiDirectAb              <td>AB-Binary Input
-<tr><td>mbbiDirect <td>AB_IO     <td>devMbbiDirectAb16            <td>AB-16 bit BI
-<tr><td>mbbiDirect <td>AB_IO     <td>devMbbiDirectAb32            <td>AB-32 bit BI
-<tr><td>mbbiDirect <td>INST_IO   <td>asynMbbiDirectUInt32Digital  <td>asynUInt32Digital
-<tr><td>mbbiDirect <td>INST_IO   <td>devmbbiDirectStream          <td>stream
-<tr><td>mbbo       <td>AB_IO     <td>devMbboAb                    <td>AB-Binary Output
-<tr><td>mbbo       <td>AB_IO     <td>devMbboAb16                  <td>AB-16 bit BO
-<tr><td>mbbo       <td>AB_IO     <td>devMbboAb32                  <td>AB-32 bit BO
-<tr><td>mbbo       <td>GPIB_IO   <td>devMbboHeidAWE1024           <td>Heidenhein Encoder
-<tr><td>mbbo       <td>GPIB_IO   <td>devMbboKeithleyDMM199        <td>KeithleyDMM199
-<tr><td>mbbo       <td>INST_IO   <td>asynMbboInt32                <td>asynInt32
-<tr><td>mbbo       <td>INST_IO   <td>asynMbboUInt32Digital        <td>asynUInt32Digital
-<tr><td>mbbo       <td>INST_IO   <td>devMbboAbDcm                 <td>Ab Dcm
-<tr><td>mbbo       <td>INST_IO   <td>devMbboMPC                   <td>asyn MPC
-<tr><td>mbbo       <td>INST_IO   <td>devMbboTPG261                <td>asyn TPG261
-<tr><td>mbbo       <td>INST_IO   <td>devmbboStream                <td>stream
-<tr><td>mbbo       <td>VME_IO    <td>devIK320Dir                  <td>Heidenhain IK320 Sign
-<tr><td>mbbo       <td>VME_IO    <td>devIK320Funct                <td>Heidenhain IK320 Command
-<tr><td>mbbo       <td>VME_IO    <td>devIK320ModeX3               <td>Heidenhain IK320 X3 Mode
-<tr><td>mbbo       <td>VME_IO    <td>devMbboA32Vme                <td>Generic A32 VME
-<tr><td>mbbo       <td>VME_IO    <td>devMbboAvme9440              <td>AVME9440 O
-<tr><td>mbbo       <td>VME_IO    <td>devMbboHP10895LaserAxis      <td>HP interferometer
-<tr><td>mbboDirect <td>AB_IO     <td>devMbboDirectAb              <td>AB-Binary Output
-<tr><td>mbboDirect <td>AB_IO     <td>devMbboDirectAb16            <td>AB-16 bit BO
-<tr><td>mbboDirect <td>AB_IO     <td>devMbboDirectAb32            <td>AB-32 bit BO
-<tr><td>mbboDirect <td>INST_IO   <td>asynMbboDirectUInt32Digital  <td>asynUInt32Digital
-<tr><td>mbboDirect <td>INST_IO   <td>devmbboDirectStream          <td>stream
-<tr><td>mca        <td>CONSTANT  <td>devMCA_soft                  <td>Soft Channel
-<tr><td>mca        <td>INST_IO   <td>devMcaAsyn                   <td>asynMCA
-<tr><td>mca        <td>VME_IO    <td>devSTR7201                   <td>Struck STR7201 MCS
-<tr><td>motor      <td>CONSTANT  <td>devMotorSoft                 <td>Soft Channel
-<tr><td>motor      <td>INST_IO   <td>devMotorAsyn                 <td>asynMotor
-<tr><td>motor      <td>VME_IO    <td>devE500                      <td>E500
-<tr><td>motor      <td>VME_IO    <td>devEMC18011                  <td>EMC18011
-<tr><td>motor      <td>VME_IO    <td>devESP300                    <td>ESP300
-<tr><td>motor      <td>VME_IO    <td>devEnsemble                  <td>Ensemble
-<tr><td>motor      <td>VME_IO    <td>devIM483PL                   <td>IM483PL
-<tr><td>motor      <td>VME_IO    <td>devIM483SM                   <td>IM483SM
-<tr><td>motor      <td>VME_IO    <td>devMAXv                      <td>OMS MAXv
-<tr><td>motor      <td>VME_IO    <td>devMCB4B                     <td>ACS MCB-4B
-<tr><td>motor      <td>VME_IO    <td>devMCDC2805                  <td>MCDC2805
-<tr><td>motor      <td>VME_IO    <td>devMDT695                    <td>MDT695
-<tr><td>motor      <td>VME_IO    <td>devMDrive                    <td>MDrive
-<tr><td>motor      <td>VME_IO    <td>devMM3000                    <td>MM3000
-<tr><td>motor      <td>VME_IO    <td>devMM4000                    <td>MM4000
-<tr><td>motor      <td>VME_IO    <td>devMVP2001                   <td>MVP2001
-<tr><td>motor      <td>VME_IO    <td>devMicos                     <td>Micos MoCo
-<tr><td>motor      <td>VME_IO    <td>devMotorSim                  <td>Motor Simulation
-<tr><td>motor      <td>VME_IO    <td>devOMS                       <td>OMS VME8/44
-<tr><td>motor      <td>VME_IO    <td>devOms58                     <td>OMS VME58
-<tr><td>motor      <td>VME_IO    <td>devOmsPC68                   <td>OMS PC68/78
-<tr><td>motor      <td>VME_IO    <td>devPC6K                      <td>PC6K
-<tr><td>motor      <td>VME_IO    <td>devPIC630                    <td>PI C630
-<tr><td>motor      <td>VME_IO    <td>devPIC662                    <td>PIC662
-<tr><td>motor      <td>VME_IO    <td>devPIC844                    <td>PIC844
-<tr><td>motor      <td>VME_IO    <td>devPIC848                    <td>PIC848
-<tr><td>motor      <td>VME_IO    <td>devPIC862                    <td>PIC862
-<tr><td>motor      <td>VME_IO    <td>devPIE516                    <td>PIE516
-<tr><td>motor      <td>VME_IO    <td>devPIE710                    <td>PIE710
-<tr><td>motor      <td>VME_IO    <td>devPIE816                    <td>PIE816
-<tr><td>motor      <td>VME_IO    <td>devPIJEDS                    <td>PIJEDS
-<tr><td>motor      <td>VME_IO    <td>devPM304                     <td>Mclennan PM304
-<tr><td>motor      <td>VME_IO    <td>devPM500                     <td>PM500
-<tr><td>motor      <td>VME_IO    <td>devPMNC87xx                  <td>PMNC87xx
-<tr><td>motor      <td>VME_IO    <td>devPmac                      <td>PMAC
-<tr><td>motor      <td>VME_IO    <td>devSC800                     <td>SC-800
-<tr><td>motor      <td>VME_IO    <td>devSPiiPlus                  <td>SPiiPlus
-<tr><td>motor      <td>VME_IO    <td>devSmartMotor                <td>SmartMotor
-<tr><td>motor      <td>VME_IO    <td>devSoloist                   <td>Soloist
-<tr><td>scalcout   <td>CONSTANT  <td>devsCalcoutSoft              <td>Soft Channel
-<tr><td>scalcout   <td>INST_IO   <td>devscalcoutStream            <td>stream
-<tr><td>scaler     <td>INST_IO   <td>devScalerAsyn                <td>Asyn Scaler
-<tr><td>scaler     <td>VME_IO    <td>devScaler                    <td>Joerger VSC8/16
-<tr><td>scaler     <td>VME_IO    <td>devScalerCamac               <td>CAMAC scaler
-<tr><td>scaler     <td>VME_IO    <td>devScalerSTR7201             <td>Struck STR7201 Scaler
-<tr><td>scaler     <td>VME_IO    <td>devScaler_VS                 <td>Joerger VS
-<tr><td>stringin   <td>CONSTANT  <td>devSiTodString               <td>Time of Day
-<tr><td>stringin   <td>GPIB_IO   <td>devSiGP307Gpib               <td>Vg307 GPIB Instrument
-<tr><td>stringin   <td>GPIB_IO   <td>devSiHeidAWE1024             <td>Heidenhein Encoder
-<tr><td>stringin   <td>GPIB_IO   <td>devSiKeithleyDMM199          <td>KeithleyDMM199
-<tr><td>stringin   <td>INST_IO   <td>asynSiOctetCmdResponse       <td>asynOctetCmdResponse
-<tr><td>stringin   <td>INST_IO   <td>asynSiOctetRead              <td>asynOctetRead
-<tr><td>stringin   <td>INST_IO   <td>asynSiOctetWriteRead         <td>asynOctetWriteRead
-<tr><td>stringin   <td>INST_IO   <td>devSiMPC                     <td>asyn MPC
-<tr><td>stringin   <td>INST_IO   <td>devSiSeq                     <td>Sequencer Internals
-<tr><td>stringin   <td>INST_IO   <td>devSiStrParm                 <td>asyn si stringParm
-<tr><td>stringin   <td>INST_IO   <td>devSiTPG261                  <td>asyn TPG261
-<tr><td>stringin   <td>INST_IO   <td>devStringinStats             <td>VX stats
-<tr><td>stringin   <td>INST_IO   <td>devstringinStream            <td>stream
-<tr><td>stringout  <td>GPIB_IO   <td>devSoHeidAWE1024             <td>Heidenhein Encoder
-<tr><td>stringout  <td>GPIB_IO   <td>devSoKeithleyDMM199          <td>KeithleyDMM199
-<tr><td>stringout  <td>INST_IO   <td>asynSoOctetWrite             <td>asynOctetWrite
-<tr><td>stringout  <td>INST_IO   <td>asynSoftGlue                 <td>softGlue
-<tr><td>stringout  <td>INST_IO   <td>devSoEurotherm               <td>asyn so Eurotherm
-<tr><td>stringout  <td>INST_IO   <td>devSoMPC                     <td>asyn MPC
-<tr><td>stringout  <td>INST_IO   <td>devSoStrParm                 <td>asyn so stringParm
-<tr><td>stringout  <td>INST_IO   <td>devstringoutStream           <td>stream
-<tr><td>stringout  <td>VME_IO    <td>devIK320Parm                 <td>Heidenhain IK320 Parameter
-<tr><td>swait      <td>CONSTANT  <td>devSWaitIoEvent              <td>Soft Channel
-<tr><td>waveform   <td>INST_IO   <td>asynFloat32ArrayWfIn         <td>asynFloat32ArrayIn
-<tr><td>waveform   <td>INST_IO   <td>asynFloat32ArrayWfOut        <td>asynFloat32ArrayOut
-<tr><td>waveform   <td>INST_IO   <td>asynFloat64ArrayWfIn         <td>asynFloat64ArrayIn
-<tr><td>waveform   <td>INST_IO   <td>asynFloat64ArrayWfOut        <td>asynFloat64ArrayOut
-<tr><td>waveform   <td>INST_IO   <td>asynInt16ArrayWfIn           <td>asynInt16ArrayIn
-<tr><td>waveform   <td>INST_IO   <td>asynInt16ArrayWfOut          <td>asynInt16ArrayOut
-<tr><td>waveform   <td>INST_IO   <td>asynInt32ArrayWfIn           <td>asynInt32ArrayIn
-<tr><td>waveform   <td>INST_IO   <td>asynInt32ArrayWfOut          <td>asynInt32ArrayOut
-<tr><td>waveform   <td>INST_IO   <td>asynInt8ArrayWfIn            <td>asynInt8ArrayIn
-<tr><td>waveform   <td>INST_IO   <td>asynInt8ArrayWfOut           <td>asynInt8ArrayOut
-<tr><td>waveform   <td>INST_IO   <td>asynWfOctetCmdResponse       <td>asynOctetCmdResponse
-<tr><td>waveform   <td>INST_IO   <td>asynWfOctetRead              <td>asynOctetRead
-<tr><td>waveform   <td>INST_IO   <td>asynWfOctetWrite             <td>asynOctetWrite
-<tr><td>waveform   <td>INST_IO   <td>asynWfOctetWriteRead         <td>asynOctetWriteRead
-<tr><td>waveform   <td>INST_IO   <td>devwaveformStream            <td>stream
-<tr><td>waveform   <td>VME_IO    <td>devWfBunchClkGen             <td>APS Bunch Clock
+<tr><th>record<th>bus-type<th>codename<th>DTYP name
+
+<tr><td>aai <td>CONSTANT <td>devAaiSoft <td>Soft Channel
+<tr><td>aai <td>INST_IO <td>devaaiStream <td>stream
+<tr><td>aao <td>CONSTANT <td>devAaoSoft <td>Soft Channel
+<tr><td>aao <td>INST_IO <td>devaaoStream <td>stream
+<tr><td>acalcout <td>CONSTANT <td>devaCalcoutSoft <td>Soft Channel
+<tr><td>ai <td>AB_IO <td>devAiAb1771Ife0to5V <td>AB-1771IFE-0to5Volt
+<tr><td>ai <td>AB_IO <td>devAiAb1771Ife <td>AB-1771IFE
+<tr><td>ai <td>AB_IO <td>devAiAb1771IfeMa <td>AB-1771IFE-4to20MA
+<tr><td>ai <td>AB_IO <td>devAiAb1771IfeSe <td>AB-1771IFE-SE
+<tr><td>ai <td>AB_IO <td>devAiAb1771Il <td>AB-1771IL-Analog In
+<tr><td>ai <td>AB_IO <td>devAiAb1771IrCopper <td>AB-1771RTD-Copper
+<tr><td>ai <td>AB_IO <td>devAiAb1771IrPlatinum <td>AB-1771RTD-Platinum
+<tr><td>ai <td>AB_IO <td>devAiAb1771Ixe <td>AB-1771IXE-Millivolt In
+<tr><td>ai <td>AB_IO <td>devAiAbSlcDcm <td>AB-SLC500DCM
+<tr><td>ai <td>AB_IO <td>devAiAbSlcDcmSigned <td>AB-SLC500DCM-Signed
+<tr><td>ai <td>BBGPIB_IO <td>devAiAX301 <td>PZT Bug
+<tr><td>ai <td>CONSTANT <td>devAiSoftRaw <td>Raw Soft Channel
+<tr><td>ai <td>CONSTANT <td>devAiSoft <td>Soft Channel
+<tr><td>ai <td> CONSTANT <td> devAiTodSeconds <td> Sec Past Epoch
+<tr><td>ai <td>CONSTANT <td>devAiTodSeconds <td>Sec Past Epoch
+<tr><td>ai <td>GPIB_IO <td>devAidg535 <td>dg535
+<tr><td>ai <td>GPIB_IO <td>devAiGP307Gpib <td>Vg307 GPIB Instrument
+<tr><td>ai <td>GPIB_IO <td>devAiHeidAWE1024 <td>Heidenhein Encoder
+<tr><td>ai <td>GPIB_IO <td>devAiKeithleyDMM199 <td>KeithleyDMM199
+<tr><td>ai <td>GPIB_IO <td>devAiTestGpib <td>GPIB Test
+<tr><td>ai <td>GPIB_IO <td>devGpib <td>GPIB init/report
+<tr><td>ai <td>INST_IO <td>asynAiFloat64 <td>asynFloat64
+<tr><td>ai <td>INST_IO <td>asynAiFloat64Average <td>asynFloat64Average
+<tr><td>ai <td>INST_IO <td>asynAiInt32 <td>asynInt32
+<tr><td>ai <td>INST_IO <td>asynAiInt32Average <td>asynInt32Average
+<tr><td>ai <td>INST_IO <td>devAiAb1791 <td>Allen Bradley 1791
+<tr><td>ai <td>INST_IO <td>devAiAbDcm <td>Ab Dcm
+<tr><td>ai <td>INST_IO <td>devAiCan <td>CANbus
+<tr><td>ai <td>INST_IO <td>devAiClusts <td>IOC stats clusts
+<tr><td>ai <td>INST_IO <td>devAiClusts <td>VX stats clusts
+<tr><td>ai <td>INST_IO <td>devAiGeneralTime <td>General Time
+<tr><td>ai <td>INST_IO <td>devAiHeidND261 <td>asyn ai HeidND261
+<tr><td>ai <td>INST_IO <td>devAiHuberDMC <td>Huber DMC 9200
+<tr><td>ai <td>INST_IO <td>devAiMKS <td>HPS SensaVac 937
+<tr><td>ai <td>INST_IO <td>devAiMPC <td>asyn MPC
+<tr><td>ai <td>INST_IO <td>devAiStats <td>IOC stats
+<tr><td>ai <td>INST_IO <td>devAiStats <td>VX stats
+<tr><td>ai <td>INST_IO <td>devaiStream <td>stream
+<tr><td>ai <td>INST_IO <td>devAiStrParm <td>asyn ai stringParm
+<tr><td>ai <td>        INST_IO <td> devAiTelevac <td>    asyn Televac
+<tr><td>ai <td>INST_IO <td>devAiTelevac <td>asyn Televac
+<tr><td>ai <td>        INST_IO <td> devAiTPG261 <td>    asyn TPG261
+<tr><td>ai <td>INST_IO <td>devAiTPG261 <td>asyn TPG261
+<tr><td>ai <td>INST_IO <td>devInterfaceAI1 <td>InterfaceAI1
+<tr><td>ai <td>INST_IO <td>devTimestampAI <td>Soft Timestamp
+<tr><td>ai <td>VME_IO <td>devAiA32Vme <td>Generic A32 VME
+<tr><td>ai <td>VME_IO <td>devAiAvmeMRD <td>devAvmeMRD
+<tr><td>ai <td>VME_IO <td>devAiBunchClkGen <td>APS Bunch Clock
+<tr><td>ai <td>VME_IO <td>devAiVaroc <td>ESRF Varoc SSI Encoder Iface
+<tr><td>ai <td>VME_IO <td>devIK320Ai <td>Heidenhain IK320
+<tr><td>ai <td>VME_IO <td>devIK320GroupAi <td>Heidenhain IK320 Group
+<tr><td>ao <td>AB_IO <td>devAoAb1771Ofe <td>AB-1771OFE
+<tr><td>ao <td>AB_IO <td>devAoAbSlcDcm <td>AB-SLC500DCM
+<tr><td>ao <td>BBGPIB_IO <td>devAoAX301 <td>PZT Bug
+<tr><td>ao <td>CONSTANT <td>devAoSoftCallback <td>Async Soft Channel
+<tr><td>ao <td>CONSTANT <td>devAoSoftRaw <td>Raw Soft Channel
+<tr><td>ao <td>CONSTANT <td>devAoSoft <td>Soft Channel
+<tr><td>ao <td>GPIB_IO <td>devAodg535 <td>dg535
+<tr><td>ao <td>GPIB_IO <td>devAoHeidAWE1024 <td>Heidenhein Encoder
+<tr><td>ao <td>GPIB_IO <td>devAoKeithleyDMM199 <td>KeithleyDMM199
+<tr><td>ao <td>GPIB_IO <td>devAoTestGpib <td>GPIB Test
+<tr><td>ao <td>INST_IO <td>asynAoFloat64 <td>asynFloat64
+<tr><td>ao <td>INST_IO <td>asynAoInt32 <td>asynInt32
+<tr><td>ao <td>INST_IO <td>devAoAb1791 <td>Allen Bradley 1791
+<tr><td>ao <td>INST_IO <td>devAoAbDcm <td>Ab Dcm
+<tr><td>ao <td>INST_IO <td>devAoCan <td>CANbus
+<tr><td>ao <td>INST_IO <td>devAoEurotherm <td>asyn ao Eurotherm
+<tr><td>ao <td>INST_IO <td>devAoMPC <td>asyn MPC
+<tr><td>ao <td>INST_IO <td>devAoStats <td>IOC stats
+<tr><td>ao <td>INST_IO <td>devAoStats <td>VX stats
+<tr><td>ao <td>INST_IO <td>devaoStream <td>stream
+<tr><td>ao <td>INST_IO <td>devAoStrParm <td>asyn ao stringParm
+<tr><td>ao <td>        INST_IO <td> devAoTPG261 <td>    asyn TPG261
+<tr><td>ao <td>INST_IO <td>devAoTPG261 <td>asyn TPG261
+<tr><td>ao <td>INST_IO <td>devInterfaceAO1 <td>InterfaceAO1
+<tr><td>ao <td>VME_IO <td>devAoA32Vme <td>Generic A32 VME
+<tr><td>ao <td>VME_IO <td>devAoAvme9210 <td>AVME-9210
+<tr><td>ao <td>VME_IO <td>devAoBunchClkGen <td>APS Bunch Clock
+<tr><td>ao <td>VME_IO <td>devAoVMI4116 <td>VMIVME-4116
+<tr><td>asyn <td>INST_IO <td>asynRecordDevice <td>asynRecordDevice
+<tr><td>bi <td>AB_IO <td>devBiAb16 <td>AB-16 bit BI
+<tr><td>bi <td>AB_IO <td>devBiAb32 <td>AB-32 bit BI
+<tr><td>bi <td>AB_IO <td>devBiAb <td>AB-Binary Input
+<tr><td>bi <td>CONSTANT <td>devBiSoftRaw <td>Raw Soft Channel
+<tr><td>bi <td>CONSTANT <td>devBiSoft <td>Soft Channel
+<tr><td>bi <td>GPIB_IO <td>devBidg535 <td>dg535
+<tr><td>bi <td>GPIB_IO <td>devBiGP307Gpib <td>Vg307 GPIB Instrument
+<tr><td>bi <td>GPIB_IO <td>devBiHeidAWE1024 <td>Heidenhein Encoder
+<tr><td>bi <td>GPIB_IO <td>devBiKeithleyDMM199 <td>KeithleyDMM199
+<tr><td>bi <td>GPIB_IO <td>devBiTestGpib <td>GPIB Test
+<tr><td>bi <td>INST_IO <td>asynBiInt32 <td>asynInt32
+<tr><td>bi <td>INST_IO <td>asynBiUInt32Digital <td>asynUInt32Digital
+<tr><td>bi <td>INST_IO <td>devBiAbDcm <td>Ab Dcm
+<tr><td>bi <td>INST_IO <td>devBiCan <td>CANbus
+<tr><td>bi <td>INST_IO <td>devBiMPC <td>asyn MPC
+<tr><td>bi <td>INST_IO <td>devbiStream <td>stream
+<tr><td>bi <td>INST_IO <td>devBiStrParm <td>asyn bi stringParm
+<tr><td>bi <td>        INST_IO <td> devBiTelevac <td>    asyn Televac
+<tr><td>bi <td>INST_IO <td>devBiTelevac <td>asyn Televac
+<tr><td>bi <td>INST_IO <td>devBiTip810 <td>Tip810
+<tr><td>bi <td>        INST_IO <td> devBiTPG261 <td>    asyn TPG261
+<tr><td>bi <td>INST_IO <td>devBiTPG261 <td>asyn TPG261
+<tr><td>bi <td>VME_IO <td>devBiA32Vme <td>Generic A32 VME
+<tr><td>bi <td>VME_IO <td>devBiAvme9440 <td>AVME9440 I
+<tr><td>bi <td>VME_IO <td>devBiAvmeMRD <td>devAvmeMRD
+<tr><td>bi <td>VME_IO <td>devBiBunchClkGen <td>APS Bunch Clock
+<tr><td>bi <td>VME_IO <td>devBiHP10895LaserAxis <td>HP interferometer
+<tr><td>bo <td>AB_IO <td>devBoAb16 <td>AB-16 bit BO
+<tr><td>bo <td>AB_IO <td>devBoAb32 <td>AB-32 bit BO
+<tr><td>bo <td>AB_IO <td>devBoAb <td>AB-Binary Output
+<tr><td>bo <td>BBGPIB_IO <td>devBoAX301 <td>PZT Bug
+<tr><td>bo <td>CONSTANT <td>devBoSoftCallback <td>Async Soft Channel
+<tr><td>bo <td>CONSTANT <td>devBoSoftRaw <td>Raw Soft Channel
+<tr><td>bo <td>CONSTANT <td>devBoSoft <td>Soft Channel
+<tr><td>bo <td>GPIB_IO <td>devBodg535 <td>dg535
+<tr><td>bo <td>GPIB_IO <td>devBoGP307Gpib <td>Vg307 GPIB Instrument
+<tr><td>bo <td>GPIB_IO <td>devBoHeidAWE1024 <td>Heidenhein Encoder
+<tr><td>bo <td>GPIB_IO <td>devBoKeithleyDMM199 <td>KeithleyDMM199
+<tr><td>bo <td>GPIB_IO <td>devBoTestGpib <td>GPIB Test
+<tr><td>bo <td>INST_IO <td>asynBoInt32 <td>asynInt32
+<tr><td>bo <td>INST_IO <td>asynBoUInt32Digital <td>asynUInt32Digital
+<tr><td>bo <td>INST_IO <td>devBoAbDcm <td>Ab Dcm
+<tr><td>bo <td>INST_IO <td>devBoCan <td>CANbus
+<tr><td>bo <td>INST_IO <td>devBoGeneralTime <td>General Time
+<tr><td>bo <td>INST_IO <td>devBoMPC <td>asyn MPC
+<tr><td>bo <td>INST_IO <td>devboStream <td>stream
+<tr><td>bo <td>INST_IO <td>devBoStrParm <td>asyn bo stringParm
+<tr><td>bo <td>        INST_IO <td> devBoTPG261 <td>    asyn TPG261
+<tr><td>bo <td>INST_IO <td>devBoTPG261 <td>asyn TPG261
+<tr><td>bo <td> INST_IO <td> softGlueShow <td> softGlueShow
+<tr><td>bo <td>VME_IO <td>devBoA32Vme <td>Generic A32 VME
+<tr><td>bo <td>VME_IO <td>devBoAvme9440 <td>AVME9440 O
+<tr><td>bo <td>VME_IO <td>devBoAvmeMRD <td>devAvmeMRD
+<tr><td>bo <td>VME_IO <td>devBoBunchClkGen <td>APS Bunch Clock
+<tr><td>bo <td>VME_IO <td>devBoHP10895LaserAxis <td>HP interferometer
+<tr><td>busy <td>CONSTANT <td>devBusySoftRaw <td>Raw Soft Channel
+<tr><td>busy <td>CONSTANT <td>devBusySoft <td>Soft Channel
+<tr><td>busy <td>INST_IO <td>asynBusyInt32 <td>asynInt32
+<tr><td>calcout <td>CONSTANT <td>devCalcoutSoftCallback <td>Async Soft Channel
+<tr><td>calcout <td>CONSTANT <td>devCalcoutSoft <td>Soft Channel
+<tr><td>calcout <td>INST_IO <td>devcalcoutStream <td>stream
+<tr><td>digitel <td>	INST_IO <td> devDigitelPump <td> asyn DigitelPump
+<tr><td>digitel <td>INST_IO <td>devDigitelPump <td>asyn DigitelPump
+<tr><td>epid <td>CONSTANT <td>devEpidSoftCB <td>Async Soft Channel
+<tr><td>epid <td>CONSTANT <td>devEpidSoft <td>Soft Channel
+<tr><td>epid <td>INST_IO <td>devEpidFast <td>Fast Epid
+<tr><td>event <td>CONSTANT <td>devEventSoft <td>Soft Channel
+<tr><td>longin <td>AB_IO <td>devLiAbSlcDcm <td>AB-SLC500DCM
+<tr><td>longin <td>CONSTANT <td>devLiSoft <td>Soft Channel
+<tr><td>longin <td>GPIB_IO <td>devLidg535 <td>dg535
+<tr><td>longin <td>GPIB_IO <td>devLiHeidAWE1024 <td>Heidenhein Encoder
+<tr><td>longin <td>GPIB_IO <td>devLiKeithleyDMM199 <td>KeithleyDMM199
+<tr><td>longin <td>GPIB_IO <td>devLiTestGpib <td>GPIB Test
+<tr><td>longin <td>INST_IO <td>asynLiInt32 <td>asynInt32
+<tr><td>longin <td>INST_IO <td>asynLiUInt32Digital <td>asynUInt32Digital
+<tr><td>longin <td>INST_IO <td>devLiAbDcm <td>Ab Dcm
+<tr><td>longin <td>INST_IO <td>devLiGeneralTime <td>General Time
+<tr><td>longin <td>INST_IO <td>devLiHuberDMC <td>Huber DMC 9200
+<tr><td>longin <td>INST_IO <td>devLiStrParm <td>asyn li stringParm
+<tr><td>longin <td>INST_IO <td>devlonginStream <td>stream
+<tr><td>longin <td>VME_IO <td>devLiA32Vme <td>Generic A32 VME
+<tr><td>longin <td>VME_IO <td>devLiAvmeMRD <td>devAvmeMRD
+<tr><td>longin <td>VME_IO <td>devLiHP10895LaserAxis <td>HP interferometer
+<tr><td>longout <td>AB_IO <td>devLoAbSlcDcm <td>AB-SLC500DCM
+<tr><td>longout <td>BBGPIB_IO <td>devLoAX301 <td>PZT Bug
+<tr><td>longout <td>CONSTANT <td>devLoSoftCallback <td>Async Soft Channel
+<tr><td>longout <td>CONSTANT <td>devLoSoft <td>Soft Channel
+<tr><td>longout <td>GPIB_IO <td>devLodg535 <td>dg535
+<tr><td>longout <td>GPIB_IO <td>devLoHeidAWE1024 <td>Heidenhein Encoder
+<tr><td>longout <td>GPIB_IO <td>devLoKeithleyDMM199 <td>KeithleyDMM199
+<tr><td>longout <td>GPIB_IO <td>devLoTestGpib <td>GPIB Test
+<tr><td>longout <td>INST_IO <td>asynLoInt32 <td>asynInt32
+<tr><td>longout <td>INST_IO <td>asynLoUInt32Digital <td>asynUInt32Digital
+<tr><td>longout <td>INST_IO <td>devLoAbDcm <td>Ab Dcm
+<tr><td>longout <td>INST_IO <td>devlongoutStream <td>stream
+<tr><td>longout <td>INST_IO <td>devLoStrParm <td>asyn lo stringParm
+<tr><td>longout <td> INST_IO <td> softGlueSigNum <td> softGlueSigNum
+<tr><td>longout <td>VME_IO <td>devLoA32Vme <td>Generic A32 VME
+<tr><td>longout <td>VME_IO <td>devLoHP10895LaserAxis <td>HP interferometer
+<tr><td>mbbi <td>AB_IO <td>devMbbiAb16 <td>AB-16 bit BI
+<tr><td>mbbi <td>AB_IO <td>devMbbiAb32 <td>AB-32 bit BI
+<tr><td>mbbi <td>AB_IO <td>devMbbiAb <td>AB-Binary Input
+<tr><td>mbbi <td>AB_IO <td>devMbbiAbAdapterStat <td>AB-Adapter Status
+<tr><td>mbbi <td>AB_IO <td>devMbbiAbCardStat <td>AB-Card Status
+<tr><td>mbbi <td>CONSTANT <td>devMbbiSoftRaw <td>Raw Soft Channel
+<tr><td>mbbi <td>CONSTANT <td>devMbbiSoft <td>Soft Channel
+<tr><td>mbbiDirect <td>AB_IO <td>devMbbiDirectAb16 <td>AB-16 bit BI
+<tr><td>mbbiDirect <td>AB_IO <td>devMbbiDirectAb32 <td>AB-32 bit BI
+<tr><td>mbbiDirect <td>AB_IO <td>devMbbiDirectAb <td>AB-Binary Input
+<tr><td>mbbiDirect <td>CONSTANT <td>devMbbiDirectSoftRaw <td>Raw Soft Channel
+<tr><td>mbbiDirect <td>CONSTANT <td>devMbbiDirectSoft <td>Soft Channel
+<tr><td>mbbiDirect <td>INST_IO <td>asynMbbiDirectUInt32Digital <td>asynUInt32Digital
+<tr><td>mbbiDirect <td>INST_IO <td>devMbbiDirectCan <td>CANbus
+<tr><td>mbbiDirect <td>INST_IO <td>devmbbiDirectStream <td>stream
+<tr><td>mbbi <td>GPIB_IO <td>devMbbidg535 <td>dg535
+<tr><td>mbbi <td>GPIB_IO <td>devMbbiHeidAWE1024 <td>Heidenhein Encoder
+<tr><td>mbbi <td>GPIB_IO <td>devMbbiKeithleyDMM199 <td>KeithleyDMM199
+<tr><td>mbbi <td>GPIB_IO <td>devMbbiTestGpib <td>GPIB Test
+<tr><td>mbbi <td>INST_IO <td>asynMbbiInt32 <td>asynInt32
+<tr><td>mbbi <td>INST_IO <td>asynMbbiUInt32Digital <td>asynUInt32Digital
+<tr><td>mbbi <td>INST_IO <td>devMbbiAbDcm <td>Ab Dcm
+<tr><td>mbbi <td>INST_IO <td>devMbbiCan <td>CANbus
+<tr><td>mbbi <td>INST_IO <td>devmbbiStream <td>stream
+<tr><td>mbbi <td>      INST_IO <td> devMbbiTPG261 <td>  asyn TPG261
+<tr><td>mbbi <td>INST_IO <td>devMbbiTPG261 <td>asyn TPG261
+<tr><td>mbbi <td>VME_IO <td>devMbbiA32Vme <td>Generic A32 VME
+<tr><td>mbbi <td>VME_IO <td>devMbbiAvme9440 <td>AVME9440 I
+<tr><td>mbbi <td>VME_IO <td>devMbbiAvmeMRD <td>devAvmeMRD
+<tr><td>mbbi <td>VME_IO <td>devMbbiHP10895LaserAxis <td>HP interferometer
+<tr><td>mbbo <td>AB_IO <td>devMbboAb16 <td>AB-16 bit BO
+<tr><td>mbbo <td>AB_IO <td>devMbboAb32 <td>AB-32 bit BO
+<tr><td>mbbo <td>AB_IO <td>devMbboAb <td>AB-Binary Output
+<tr><td>mbbo <td>CONSTANT <td>devMbboSoftCallback <td>Async Soft Channel
+<tr><td>mbbo <td>CONSTANT <td>devMbboSoftRaw <td>Raw Soft Channel
+<tr><td>mbbo <td>CONSTANT <td>devMbboSoft <td>Soft Channel
+<tr><td>mbboDirect <td>AB_IO <td>devMbboDirectAb16 <td>AB-16 bit BO
+<tr><td>mbboDirect <td>AB_IO <td>devMbboDirectAb32 <td>AB-32 bit BO
+<tr><td>mbboDirect <td>AB_IO <td>devMbboDirectAb <td>AB-Binary Output
+<tr><td>mbboDirect <td>CONSTANT <td>devMbboDirectSoftCallback <td>Async Soft Channel
+<tr><td>mbboDirect <td>CONSTANT <td>devMbboDirectSoftRaw <td>Raw Soft Channel
+<tr><td>mbboDirect <td>CONSTANT <td>devMbboDirectSoft <td>Soft Channel
+<tr><td>mbboDirect <td>INST_IO <td>asynMbboDirectUInt32Digital <td>asynUInt32Digital
+<tr><td>mbboDirect <td>INST_IO <td>devMbboDirectCan <td>CANbus
+<tr><td>mbboDirect <td>INST_IO <td>devmbboDirectStream <td>stream
+<tr><td>mbbo <td>GPIB_IO <td>devMbbodg535 <td>dg535
+<tr><td>mbbo <td>GPIB_IO <td>devMbboHeidAWE1024 <td>Heidenhein Encoder
+<tr><td>mbbo <td>GPIB_IO <td>devMbboKeithleyDMM199 <td>KeithleyDMM199
+<tr><td>mbbo <td>GPIB_IO <td>devMbboTestGpib <td>GPIB Test
+<tr><td>mbbo <td>INST_IO <td>asynMbboInt32 <td>asynInt32
+<tr><td>mbbo <td>INST_IO <td>asynMbboUInt32Digital <td>asynUInt32Digital
+<tr><td>mbbo <td>INST_IO <td>devMbboAbDcm <td>Ab Dcm
+<tr><td>mbbo <td>INST_IO <td>devMbboCan <td>CANbus
+<tr><td>mbbo <td>INST_IO <td>devMbboMPC <td>asyn MPC
+<tr><td>mbbo <td>INST_IO <td>devmbboStream <td>stream
+<tr><td>mbbo <td>      INST_IO <td> devMbboTPG261 <td>  asyn TPG261
+<tr><td>mbbo <td>INST_IO <td>devMbboTPG261 <td>asyn TPG261
+<tr><td>mbbo <td>VME_IO <td>devIK320Dir <td>Heidenhain IK320 Sign
+<tr><td>mbbo <td>VME_IO <td>devIK320Funct <td>Heidenhain IK320 Command
+<tr><td>mbbo <td>VME_IO <td>devIK320ModeX3 <td>Heidenhain IK320 X3 Mode
+<tr><td>mbbo <td>VME_IO <td>devMbboA32Vme <td>Generic A32 VME
+<tr><td>mbbo <td>VME_IO <td>devMbboAvme9440 <td>AVME9440 O
+<tr><td>mbbo <td>VME_IO <td>devMbboHP10895LaserAxis <td>HP interferometer
+<tr><td>mca <td>CONSTANT <td>devMCA_soft <td>Soft Channel
+<tr><td>mca <td>INST_IO <td>devMcaAsyn <td>asynMCA
+<tr><td>motor <td>CONSTANT <td>devMotorSoft <td>Soft Channel
+<tr><td>motor <td>INST_IO <td>devMotorAsyn <td>asynMotor
+<tr><td>motor <td>VME_IO <td>devE500 <td>E500
+<tr><td>motor <td>VME_IO <td>devEMC18011 <td>EMC18011
+<tr><td>motor <td>VME_IO <td>devESP300 <td>ESP300
+<tr><td>motor <td>VME_IO <td>devIM483PL <td>IM483PL
+<tr><td>motor <td>VME_IO <td>devIM483SM <td>IM483SM
+<tr><td>motor <td>VME_IO <td>devMAXv <td>OMS MAXv
+<tr><td>motor <td>VME_IO <td>devMCB4B <td>ACS MCB-4B
+<tr><td>motor <td>VME_IO <td>devMCDC2805 <td> MCDC2805
+<tr><td>motor <td>VME_IO <td>devMDrive <td> MDrive
+<tr><td>motor <td>VME_IO <td>devMDT695 <td>MDT695
+<tr><td>motor <td>VME_IO <td>devMicos <td>Micos MoCo
+<tr><td>motor <td>VME_IO <td>devMM3000 <td>MM3000
+<tr><td>motor <td>VME_IO <td>devMM4000 <td>MM4000
+<tr><td>motor <td>VME_IO <td>devMotorSim <td>Motor Simulation
+<tr><td>motor <td>VME_IO <td>devMVP2001 <td>MVP2001
+<tr><td>motor <td>VME_IO <td>devOms58 <td>OMS VME58
+<tr><td>motor <td>VME_IO <td>devOMS <td>OMS VME8/44
+<tr><td>motor <td>VME_IO <td>devOmsPC68 <td>OMS PC68/78
+<tr><td>motor <td>VME_IO <td>devPC6K <td>PC6K
+<tr><td>motor <td>VME_IO <td>devPIasyn <td>PI Motor GCS2
+<tr><td>motor <td>VME_IO <td>devPIC630 <td>PI C630
+<tr><td>motor <td>VME_IO <td>devPIC662 <td>PIC662
+<tr><td>motor <td>VME_IO <td>devPIC663 <td>PIC663
+<tr><td>motor <td>VME_IO <td>devPIC844 <td>PIC844
+<tr><td>motor <td>VME_IO <td>devPIC848 <td>PIC848
+<tr><td>motor <td>VME_IO <td>devPIC862 <td>PIC862
+<tr><td>motor <td>VME_IO <td>devPIE516 <td>PIE516
+<tr><td>motor <td>VME_IO <td>devPIE710 <td>PIE710
+<tr><td>motor <td>VME_IO <td>devPIE816 <td>PIE816
+<tr><td>motor <td>VME_IO <td>devPIJEDS <td>PIJEDS
+<tr><td>motor <td>VME_IO <td>devPM304 <td>Mclennan PM304
+<tr><td>motor <td>VME_IO <td>devPM500 <td> PM500
+<tr><td>motor <td>VME_IO <td>devPmac <td>PMAC
+<tr><td>motor <td>VME_IO <td>devPMNC87xx <td>PMNC87xx
+<tr><td>motor <td>VME_IO <td> devSC800 <td> SC-800
+<tr><td>motor <td>VME_IO <td>devSmartMotor <td> SmartMotor
+<tr><td>motor <td>VME_IO <td>devSoloist <td>Soloist
+<tr><td>motor <td>VME_IO <td>devSPiiPlus <td>SPiiPlus
+<tr><td>scalcout <td>CONSTANT <td>devsCalcoutSoft <td>Soft Channel
+<tr><td>scalcout <td>INST_IO <td>devscalcoutStream <td>stream
+<tr><td>scaler <td>INST_IO <td>devScalerAsyn <td>Asyn Scaler
+<tr><td>scaler <td>VME_IO <td>devScalerCamac <td>CAMAC scaler
+<tr><td>scaler <td>VME_IO <td>devScaler <td>Joerger VSC8/16
+<tr><td>scaler <td>VME_IO <td>devScaler_VS <td>Joerger VS
+<tr><td>steppermotor <td>AB_IO <td>devSmAB1746Hstp1 <td>Allen Bradley 1746-HTSP1
+<tr><td>stringin <td>CONSTANT <td>devSiSoft <td>Soft Channel
+<tr><td>stringin <td> CONSTANT <td> devSiTodString <td> Time of Day
+<tr><td>stringin <td>CONSTANT <td>devSiTodString <td>Time of Day
+<tr><td>stringin <td>GPIB_IO <td>devSidg535 <td>dg535
+<tr><td>stringin <td>GPIB_IO <td>devSiGP307Gpib <td>Vg307 GPIB Instrument
+<tr><td>stringin <td>GPIB_IO <td>devSiHeidAWE1024 <td>Heidenhein Encoder
+<tr><td>stringin <td>GPIB_IO <td>devSiKeithleyDMM199 <td>KeithleyDMM199
+<tr><td>stringin <td>GPIB_IO <td>devSiTestGpib <td>GPIB Test
+<tr><td>stringin <td>INST_IO <td>asynSiOctetCmdResponse <td>asynOctetCmdResponse
+<tr><td>stringin <td>INST_IO <td>asynSiOctetRead <td>asynOctetRead
+<tr><td>stringin <td>INST_IO <td>asynSiOctetWriteRead <td>asynOctetWriteRead
+<tr><td>stringin <td>INST_IO <td>devSiGeneralTime <td>General Time
+<tr><td>stringin <td>INST_IO <td>devSiHuberDMC <td>Huber DMC 9200
+<tr><td>stringin <td>INST_IO <td>devSiMPC <td>asyn MPC
+<tr><td>stringin <td>INST_IO <td>devSiStrParm <td>asyn si stringParm
+<tr><td>stringin <td>  INST_IO <td> devSiTPG261 <td>    asyn TPG261
+<tr><td>stringin <td>INST_IO <td>devSiTPG261 <td>asyn TPG261
+<tr><td>stringin <td> INST_IO <td>devSiWiener <td>CANbus
+<tr><td>stringin <td>INST_IO <td>devStringinEnvVar <td>IOC env var
+<tr><td>stringin <td>INST_IO <td>devStringinEpics <td>IOC epics var
+<tr><td>stringin <td>INST_IO <td>devStringinStats <td>IOC stats
+<tr><td>stringin <td>INST_IO <td>devStringinStats <td>VX stats
+<tr><td>stringin <td>INST_IO <td>devstringinStream <td>stream
+<tr><td>stringin <td>INST_IO <td>devTestBlockInp <td>testBlock
+<tr><td>stringin <td>INST_IO <td>devTimestampSI <td>Soft Timestamp
+<tr><td>stringout <td>CONSTANT <td>devSoSoftCallback <td>Async Soft Channel
+<tr><td>stringout <td>CONSTANT <td>devSoSoft <td>Soft Channel
+<tr><td>stringout <td>GPIB_IO <td>devSodg535 <td>dg535
+<tr><td>stringout <td>GPIB_IO <td>devSoHeidAWE1024 <td>Heidenhein Encoder
+<tr><td>stringout <td>GPIB_IO <td>devSoKeithleyDMM199 <td>KeithleyDMM199
+<tr><td>stringout <td>GPIB_IO <td>devSoTestGpib <td>GPIB Test
+<tr><td>stringout <td> INST_IO <td> asynSoftGlue <td> softGlue
+<tr><td>stringout <td>INST_IO <td>asynSoOctetWrite <td>asynOctetWrite
+<tr><td>stringout <td>INST_IO <td>devSoEurotherm <td>asyn so Eurotherm
+<tr><td>stringout <td>INST_IO <td>devSoMPC <td>asyn MPC
+<tr><td>stringout <td>INST_IO <td>devSoStdio <td>stdio
+<tr><td>stringout <td>INST_IO <td>devSoStrParm <td>asyn so stringParm
+<tr><td>stringout <td>INST_IO <td>devstringoutStream <td>stream
+<tr><td>stringout <td>VME_IO <td>devIK320Parm <td>Heidenhain IK320 Parameter
+<tr><td>subArray <td>CONSTANT <td>devSASoft <td>Soft Channel
+<tr><td>swait <td>CONSTANT <td>devSWaitIoEvent <td>Soft Channel
+<tr><td>vs <td>	INST_IO <td>	devVacSen <td>	asyn VacSen
+<tr><td>vs <td>INST_IO <td>devVacSen <td>asyn VacSen
+<tr><td>waveform <td>CONSTANT <td>devWfSoft <td>Soft Channel
+<tr><td>waveform <td>INST_IO <td>asynFloat32ArrayWfIn <td>asynFloat32ArrayIn
+<tr><td>waveform <td>INST_IO <td>asynFloat32ArrayWfOut <td>asynFloat32ArrayOut
+<tr><td>waveform <td>INST_IO <td>asynFloat64ArrayWfIn <td>asynFloat64ArrayIn
+<tr><td>waveform <td>INST_IO <td>asynFloat64ArrayWfOut <td>asynFloat64ArrayOut
+<tr><td>waveform <td>INST_IO <td>asynFloat64TimeSeries <td>asynFloat64TimeSeries
+<tr><td>waveform <td>INST_IO <td>asynInt16ArrayWfIn <td>asynInt16ArrayIn
+<tr><td>waveform <td>INST_IO <td>asynInt16ArrayWfOut <td>asynInt16ArrayOut
+<tr><td>waveform <td>INST_IO <td>asynInt32ArrayWfIn <td>asynInt32ArrayIn
+<tr><td>waveform <td>INST_IO <td>asynInt32ArrayWfOut <td>asynInt32ArrayOut
+<tr><td>waveform <td>INST_IO <td>asynInt32TimeSeries <td>asynInt32TimeSeries
+<tr><td>waveform <td>INST_IO <td>asynInt8ArrayWfIn <td>asynInt8ArrayIn
+<tr><td>waveform <td>INST_IO <td>asynInt8ArrayWfOut <td>asynInt8ArrayOut
+<tr><td>waveform <td>INST_IO <td>asynWfOctetCmdResponse <td>asynOctetCmdResponse
+<tr><td>waveform <td>INST_IO <td>asynWfOctetRead <td>asynOctetRead
+<tr><td>waveform <td>INST_IO <td>asynWfOctetWrite <td>asynOctetWrite
+<tr><td>waveform <td>INST_IO <td>asynWfOctetWriteRead <td>asynOctetWriteRead
+<tr><td>waveform <td>INST_IO <td>devwaveformStream <td>stream
+<tr><td>waveform <td>VME_IO <td>devWfBunchClkGen <td>APS Bunch Clock
 </table>
 
 
@@ -1712,7 +1831,6 @@ record types intended for end users to program at run time.
     (mooney@aps.anl.gov) <br> 
 	Software Services Group<br>
 	Advanced Photon Source, Argonne National Laboratory<br>
-    Last modified: Sept 1, 2010
 </address> 
 </body>
 </html>
