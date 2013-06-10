@@ -17,7 +17,7 @@ svn export $SVN/ip/tags/R2-14 ip-2-14
 svn export $SVN/ip330/tags/R2-7 ip330-2-7
 svn export $SVN/ipUnidig/tags/R2-9 ipUnidig-2-9
 svn export $SVN/love/tags/R3-2-5 love-3-2-5
-svn export $SVN/mca/tags/R7-3-1 mca-7-3-1
+svn export $SVN/mca/tags/R7-4 mca-7-4
 svn export $SVN/measComp/tags/R1-0 measComp-1-0
 svn export $SVN/modbus/tags/R2-4 modbus-2-4
 svn export $SVN/motor/tags/R6-8 motor-6-8
