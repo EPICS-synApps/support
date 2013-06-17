@@ -1,7 +1,17 @@
 #!/bin/env python
 
 """
-Find all the (dbd, db, adl, and lib) explicit dependencies in synApps
+Find all the (dbd, db, adl, and lib) explicit dependencies in synApps.
+usage: dependencies.py supportDir outfile
+
+Find the directories in 'supportDir' that are named in
+supportDir/configure/RELEASE.  This is the list of modules. Search modules to
+compile lists of resources published by each module (dbd, db, adl, and lib), and
+resources used by each module but not published by it (dbdUsed, dbUsed, adlUsed,
+and libUsed). From these lists, compile lists of the modules on which each
+module depends (dbd_depends, db_depends, adl_depends, lib_depends).  Write the
+lists to 'outfile'.  
+
 """
 
 import sys, os, glob, shutil, copy
@@ -224,5 +234,5 @@ def main(supportDir, outfilename):
 if __name__ == "__main__":
 	if len(sys.argv) < 3:
 		print "usage: dependencies.py supportDir outfile"
-		exit
+		sys.exit(1)
 	main(sys.argv[1], sys.argv[2])
