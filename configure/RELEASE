@@ -37,11 +37,11 @@ IP330=$(SUPPORT)/ip330-2-7
 IPAC=$(SUPPORT)/ipac-2-12
 IPUNIDIG=$(SUPPORT)/ipUnidig-2-9
 LOVE=$(SUPPORT)/love-3-2-5
-MCA=$(SUPPORT)/mca-7-3-1
+MCA=$(SUPPORT)/mca-7-4
 MEASCOMP=$(SUPPORT)/measComp-1-0
 MODBUS=$(SUPPORT)/modbus-2-4
 MOTOR=$(SUPPORT)/motor-6-8
-OPTICS=$(SUPPORT)/optics-2-9
+OPTICS=$(SUPPORT)/optics-2-9-1
 QUADEM=$(SUPPORT)/quadEM-4-0
 #http://www-csr.bessy.de/control/SoftDist/sequencer
 SNCSEQ=$(SUPPORT)/seq-2-1-12
@@ -52,5 +52,5 @@ STD=$(SUPPORT)/std-3-2
 STREAM=$(SUPPORT)/stream-2-6
 VAC=$(SUPPORT)/vac-1-4-1
 VME=$(SUPPORT)/vme-2-8-1
-XXX=$(SUPPORT)/xxx-5-7
+XXX=$(SUPPORT)/xxx-5-7-1
 
