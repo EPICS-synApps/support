@@ -1,0 +1,12 @@
+#!/bin/sh
+# usage: doSed <sed script> filename
+# example: doSed "s/tmm:/1bma:/g" stdApp.adl
+if [ $# -lt 2 ]; then
+	echo 'usage: doSed <sed script> filename'
+	echo 'example: doSed "s/tmm:/1bma:/g" stdApp.adl'
+	exit
+fi
+/bin/rm -f $2~ $2%
+/bin/mv $2 $2~
+sed $1 $2~ >$2
+/bin/rm -f $2~

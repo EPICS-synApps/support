@@ -1,0 +1,56 @@
+#FILENAME:      RELEASE
+#USAGE:         Specify directory paths to synApps support modules
+#Version:       $Revision$
+#Modified By:   $Author$
+#Last Modified: $Date$
+#HeadURL:       $URL$
+
+#NOTES
+#     - To remove modules from the build, delete or comment out the
+#       module name.
+
+SUPPORT=/home/oxygen/MOONEY/epics/synAppsSVN/support
+-include $(TOP)/configure/SUPPORT.$(EPICS_HOST_ARCH)
+EPICS_BASE=/home/oxygen/MOONEY/epics/bazaar/base-3.14
+-include $(TOP)/configure/EPICS_BASE 
+-include $(TOP)/configure/EPICS_BASE.$(EPICS_HOST_ARCH) 
+
+#/usr/local/iocapps/cvsroot/modules/bus/allenBradley
+ALLEN_BRADLEY=$(SUPPORT)/allenBradley-2-2
+AREA_DETECTOR=$(SUPPORT)/areaDetector-1-9-1
+#https://svn.aps.anl.gov/epics/asyn/
+ASYN=$(SUPPORT)/asyn-4-21
+AUTOSAVE=$(SUPPORT)/autosave-5-1
+BUSY=$(SUPPORT)/busy-1-6
+CALC=$(SUPPORT)/calc-3-2
+CAMAC=$(SUPPORT)/camac-2-7
+DAC128V=$(SUPPORT)/dac128V-2-7
+DELAYGEN=$(SUPPORT)/delaygen-1-1-0
+#http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
+DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-7
+DXP=$(SUPPORT)/dxp-3-2
+IP=$(SUPPORT)/ip-2-14
+IP330=$(SUPPORT)/ip330-2-7
+#https://svn.aps.anl.gov/epics/ipac/
+#IPAC=$(SUPPORT)/ipac-2-11
+# (V2-12? have outstanding commits since V2-11)
+IPAC=$(SUPPORT)/ipac-2-12
+IPUNIDIG=$(SUPPORT)/ipUnidig-2-9
+LOVE=$(SUPPORT)/love-3-2-5
+MCA=$(SUPPORT)/mca-7-4
+MEASCOMP=$(SUPPORT)/measComp-1-0
+MODBUS=$(SUPPORT)/modbus-2-4
+MOTOR=$(SUPPORT)/motor-6-8
+OPTICS=$(SUPPORT)/optics-2-9-1
+QUADEM=$(SUPPORT)/quadEM-4-0
+#http://www-csr.bessy.de/control/SoftDist/sequencer
+SNCSEQ=$(SUPPORT)/seq-2-1-13
+SOFTGLUE=$(SUPPORT)/softGlue-2-3
+SSCAN=$(SUPPORT)/sscan-2-9
+STD=$(SUPPORT)/std-3-2
+#http://epics.web.psi.ch/software/streamdevice/
+STREAM=$(SUPPORT)/stream-2-6
+VAC=$(SUPPORT)/vac-1-4-1
+VME=$(SUPPORT)/vme-2-8-1
+XXX=$(SUPPORT)/xxx-5-7-1
+

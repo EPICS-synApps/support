@@ -1,0 +1,110 @@
+setenv TOP /home/oxygen/MOONEY/python25_linux
+mkdir $TOP
+cd $TOP
+
+tar xf Python-2.5.2.tar
+tar xf PythonDocs_html-2.5.2.tar	(optional)
+tar xf ipython-0.8.2.tar			(optional)
+tar xf matplotlib-0.91.2.tar 
+tar xf numpy-1.0.4.tar
+tar xf wxPython-src-2.8.7.1.tar
+tar xf wxmpl-1.2.9.tar
+
+# Make sure old stuff in PYTHONPATH will not interfere with setup/install
+unsetenv PYTHONPATH
+
+cd $TOP/Python-2.5.2
+./configure --prefix ${TOP}
+make
+	# Complains: "Can't locate Tcl/Tk libs and/or/headers"
+MAke test
+
+	# Complains that it failed test_socket.  See test_socket.out
+make install
+
+# When the install finishes, ${TOP} will have acquired bin, lib,
+# include, and share directories, and the copy of python in the bin directory
+# is the one that must be used to setup/install other modules as python site
+# packages.  TTherefore, put the bin directory in front of other PATH directories.
+# For example:
+setenv PATH ${TOP}/bin:$PATH
+
+
+# After the top-level wxPython-src-2.8.7.1 has built and been installed,
+# then ${TOP}/lib must be added to the LD_LIBRARY_PATH for
+# the actual wxPython setup, and to 'import wx' from python.
+# For example:
+setenv LD_LIBRARY_PATH ${TOP}/lib:$LD_LIBRARY_PATH
+
+# build and install numpy
+cd ${TOP}/numpy-1.0.4
+${TOP}/bin/python setup.py install
+
+# wxWidgets
+cd ${TOP}/wxPython-src-2.8.7.1
+./configure --prefix=${TOP} --with-gtk --with-gnomeprint --with-opengl --enable-optimize --enable-debug_flag --enable-debug_gdb --enable-geometry --enable-graphics_ctx --enable-unicode --enable-rpath=${TOP}/lib --with-libjpeg=builtin --with-libpng=builtin --with-libtiff=builtin --with-zlib=builtin
+
+make
+make install
+make -C contrib/src/gizmos
+make -C contrib/src/gizmos install
+make -C contrib/src/stc
+make -C contrib/src/stc install
+
+# We'll need to use wxWidgets
+setenv LD_LIBRARY_PATH ${TOP}/lib:$LD_LIBRARY_PATH
+
+# wxPython
+cd ${TOP}/wxPython-src-2.8.7.1/wxPython
+${TOP}/bin/python setup.py build_ext --inplace --debug WX_CONFIG=${TOP}/wxPython-src-2.8.7.1/wx-config
+${TOP}/bin/python setup.py install WX_CONFIG=${TOP}/wxPython-src-2.8.7.1/wx-config
+
+# matplotlib
+cd ${TOP}/matplotlib-0.91.2
+cp setup.cfg.template setup.cfg
+
+# edit setup.cfg, adding the following line (not including the '# '):
+# backend = WXAgg
+${TOP}/bin/python setup.py build
+${TOP}/bin/python setup.py install
+
+# wxmpl
+cd ${TOP}/wxmpl-1.2.9
+${TOP}/bin/python setup.py build
+${TOP}/bin/python setup.py install --prefix ${TOP}
+
+##########################################################################
+# All the rest is to use pyinstaller to make a frozen copy of mdaExplorer
+# pyinstaller
+
+cd ${TOP}
+tar xf pyinstaller_1.3.tar
+cd ${TOP}/pyinstaller-1.3/source/linux
+${TOP}/bin/python Make.py -e
+make
+
+cd ${TOP}/pyinstaller-1.3
+${TOP}/bin/python Configure.py
+
+# mdaExplorer spec file
+setenv PYTHONPATH .:/home/oxygen/MOONEY/pythonlib
+setenv LD_LIBRARY_PATH ${TOP}/lib:$LD_LIBRARY_PATH
+${TOP}/bin/python Makespec.py /home/oxygen/MOONEY/pythonlib/mdaExplorer.py
+
+#edit mdaExplorer/mdaExplorer.spec to include matplotlib's data directory in the collection
+${TOP}/bin/python Build.py mdaExplorer/mdaExplorer.spec
+
+cd mdaExplorer
+tar cf distmdaExplorer.tar distmdaExplorer.tar
+
+# The user untars this file someplace which we'll call ${DIST}
+# Now ${DIST}/distmdaExplorer includes the directory matplotlibdata.  Matplotlib can
+# use the environment variable MATPLOTLIBDATA to tell it where to look for its data dir.
+# User must also set the environment variable LD_LIBRARY_PATH to include the distmdaExplorer
+# directory
+
+cd ${DIST}
+tar xf distmdaExplorer.tar
+setenv LD_LIBRARY_PATH ${DIST}/distmdaExplorer
+setenv MATPLOTLIBDATA ${DIST}/distmdaExplorer/matplotlibdata
+${DIST}/distmdaExplorer/mdaExplorer
