@@ -39,5 +39,5 @@ svn export $SVN/documentation/tags/synApps_5_7 documentation
 # get allenBradley-2-2 from ?
 svn export https://svn.aps.anl.gov/epics/asyn/tags/R4-21 asyn-4-21
 svn export https://svn.aps.anl.gov/epics/ipac/tags/V2-12 ipac-2-12
-# get seq-2-1-2 from http://www-csr.bessy.de/control/SoftDist/sequencer
+# get seq-2-1-13 from http://www-csr.bessy.de/control/SoftDist/sequencer
 # get devIocStats-3-1-7 from http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
