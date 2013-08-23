@@ -5,6 +5,8 @@
 # - supports reading, writing, and arithmetic operations for
 #   up to 4-dimensional MDA files.
 
+__version__ = '2.1'
+
 import sys
 import os
 import string

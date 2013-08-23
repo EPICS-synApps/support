@@ -2,28 +2,15 @@
 
 # $Id$
 
-"""
-Support for EPICS MDA files
+import os
+newpath = os.path.join('..', 'mdaPythonUtils/')
+newpath = os.path.abspath(newpath)
 
-use this file to install the mda support library with::
+print '''
+The support to install the mda package 
+has been relocated to this directory:\n\n\t%s
 
-   ./setup.py install
+cd to that directory and run this again:
 
-"""
-try:
-    import ez_setup
-    ez_setup.use_setuptools()
-except ImportError:
-    pass
-
-from setuptools import setup
-
-setup(
-    name='mdalib',
-    version='2.0',
-    author='Tim Mooney',
-    author_email = 'mooney@aps.anl.gov',
-    description = 'MDA support library',
-    license = 'EPICS',
-    py_modules = ['f_xdrlib', 'mda_f'],
-    )
+  python ./setup.py install
+''' % newpath
