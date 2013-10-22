@@ -6,7 +6,7 @@ topdirs={}
 
 def collectOpi(destList, dirname, fileList):
 	for f in fileList:
-		if f.endswith(".ui"):
+		if f.endswith(".ui") or f.endswith(".qss"):
 			destList.append(os.path.join(dirname,f))
 
 def main(src, dest):
