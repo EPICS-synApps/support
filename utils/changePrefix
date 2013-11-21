@@ -61,11 +61,13 @@ fi
 if [ -f ${old}Support.dbd ]; then
 	mv ${old}Support.dbd ${new}Support.dbd
 fi
-for file in *${old}*Include.dbd
-do
-	doSed "/Include\.dbd/s/${old}/${new}/g" $file
-	mv $file `echo $file | sed "s/${old}/${new}/g"`
-done
+if [ -f *${old}*Include.dbd ]; then
+	for file in *${old}*Include.dbd
+	do
+		doSed "/Include\.dbd/s/${old}/${new}/g" $file
+		mv $file `echo $file | sed "s/${old}/${new}/g"`
+	done
+fi
 doSed "s/${old}/${new}/g" Makefile
 
 printf "\r%-50s" "${new}App/Db"
