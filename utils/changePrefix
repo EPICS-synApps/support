@@ -68,7 +68,9 @@ do
 		mv $file `echo $file | sed "s/${old}/${new}/g"`
 	fi
 done
-doSed "s/${old}/${new}/g" Makefile
+#!doSed "s/${old}/${new}/g" Makefile
+# Be smarter about modifying the Makefile
+perl -pi.bak -e 's/${old}(?!\.dbd)/${new}/g' Makefile && rm -f Makefile.bak
 
 printf "\r%-50s" "${new}App/Db"
 cd ${TOP}/${new}App/Db
