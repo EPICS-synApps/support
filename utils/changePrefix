@@ -61,13 +61,13 @@ fi
 if [ -f ${old}Support.dbd ]; then
 	mv ${old}Support.dbd ${new}Support.dbd
 fi
-if [ -f *${old}*Include.dbd ]; then
-	for file in *${old}*Include.dbd
-	do
+for file in *${old}*Include.dbd
+do
+	if [ -f ${file} ]; then
 		doSed "/Include\.dbd/s/${old}/${new}/g" $file
 		mv $file `echo $file | sed "s/${old}/${new}/g"`
-	done
-fi
+	fi
+done
 doSed "s/${old}/${new}/g" Makefile
 
 printf "\r%-50s" "${new}App/Db"
@@ -99,13 +99,13 @@ for dir in ioc*
 		doSed "/registerRecordDeviceDriver/s/${old}/${new}/g" $file
 		doSed "/shellPromptSet/s/${old}/${new}/g" $file
 	done
-	if [ -f *.iocsh ]; then
-		for file in *.iocsh
-		do
+	for file in *.iocsh
+	do
+		if [ -f ${file} ]; then
 			printf "\r%-50s" "$file"
 			doSed "s/${old}:/${new}:/g" $file
-		done
-	fi
+		fi
+	done
 	for file in auto*.req
 	do
 		printf "\r%-50s" "$file"
