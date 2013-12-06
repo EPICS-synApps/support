@@ -70,7 +70,10 @@ do
 done
 #!doSed "s/${old}/${new}/g" Makefile
 # Be smarter about modifying the Makefile
-perl -pi.bak -e 's/${old}(?!\.dbd)/${new}/g' Makefile && rm -f Makefile.bak
+perl -pi.bak -e "s/${old}(?!\.dbd)/${new}/g" Makefile 
+if [ -f Makefile.bak ]; then
+  rm -f Makefile.bak
+fi
 
 printf "\r%-50s" "${new}App/Db"
 cd ${TOP}/${new}App/Db
