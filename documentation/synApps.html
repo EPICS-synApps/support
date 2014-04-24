@@ -10,6 +10,20 @@
 <body bgcolor="#FFFFFF">
 
 <h1>synApps 5.7</h1>
+
+<h1>Table of Contents</h1>
+<ul>
+  <li><a href="#Introduction">Introduction</a></li>
+  <li><a href="#Contents">Contents</a></li>
+  <li><a href="#How to deploy synApps">How to deploy synApps</a></li>
+  <li><a href="#How to build synApps">How to build synApps</a></li>
+  <li><a href="#How to make synApps work">How to make synApps work</a></li>
+  <li><a href="#How to extend synApps">How to extend synApps</a></li>
+  <li><a href="#The synApps utils directory">The synApps utils directory</a></li>
+  <li><a href="#Appendix">Appendix</a></li>
+</ul>
+
+<a name="Introduction"></a>
 <hr><h2>Introduction</h2><hr>
 
 <P>synApps is a collection of <a href=http://www.aps.anl.gov/epics>EPICS</a> software
@@ -109,6 +123,7 @@ you've done, to diagnose problems, and to extend synApps in any significant way.
 
 
 
+<a name="Contents"></a>
 <hr><h2>Contents</h2><hr>
 
 <P>Here's a list of the <b>modules</b> and <i>directories</i> in synApps:
@@ -331,6 +346,7 @@ like, synApps contains the following code:
 	programs, etc., that some have found useful.
 </ul>
 
+<a name="How to deploy synApps"></a>
 <hr><h2>How to deploy synApps</h2><hr>
 
 <P>Although synApps is distributed as a single 'support' directory, it's
@@ -583,6 +599,7 @@ modules, module names may not include the character '.'.  (The EPICS build rules
 expect '.' to be followed by a host or target architecture.)
 
 
+<a name="How to build synApps"></a>
 <hr><h2> How to build synApps</h2><hr>
 <ol>
 <h3><li>System configuration</h3>
@@ -766,6 +783,7 @@ just configured, and boot the crate.  If you don't know how to do this, read
 on.
 </ol>
 
+<a name="How to make synApps work"></a>
 <hr><h2>How to make synApps work</h2><hr>
 <ol>
 <h3><li>Setting up the IOC (vxWorks)</h3>
@@ -1216,6 +1234,7 @@ use the string instead.
 </ol>
 </ol>
 
+<a name="How to extend synApps"></a>
 <hr><h2>How to extend synApps</h2><hr>
 
 <P>Like all EPICS software, synApps can be extended in many ways, and at many
@@ -1395,6 +1414,7 @@ be scanned, driven by a PID loop, or controlled by another userCalc.
 
 
 
+<a name="The synApps utils directory"></a>
 <hr><h2>The synApps utils directory</h2><hr>
 
 <P>The synApps support/utils directory contains a variety of executables that
@@ -1457,6 +1477,7 @@ record types intended for end users to program at run time.
 </blockquote>
 
 
+<a name="Appendix"></a>
 <hr>
 <P><h3>Appendix: Device support in or distributed with synApps (including support from EPICS base)</h3>
 <table border>
