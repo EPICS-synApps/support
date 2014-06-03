@@ -138,7 +138,14 @@ for dir in ioc*
 		doSed "s/ioc${old}/ioc${new}/g" bootParms
 	fi
 	if [ -f run ]; then
-		doSed "s@/${old}@/${new}@g" run
+		doSed "s/${old}/${new}/g" run
+	fi
+	if [ -f in-screen.sh ]; then
+		doSed "s/${old}/${new}/g" in-screen.sh
+	fi
+	if [ -f "${old}.sh" ]; then
+		doSed "s/${old}/${new}/g" ${old}.sh
+		mv ${old}.sh ${new}.sh
 	fi
 done
 
