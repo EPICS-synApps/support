@@ -17,13 +17,15 @@ cd $1
 foreach d ( * )
 	if (( -d $d ) && (!(-l $d))) then
 		foreach i (`find $d -name adl -print`)
-			echo "copying from" $i
+			echo "copying \*.adl from" $i
 			cp -f $i/*.adl $2
+			echo "copying \*.gif from" $i
 			cp -f $i/*.gif $2
 		end
 		foreach i (`find $d -name medm -print`)
-			echo "copying from" $i
+			echo "copying \*.adl from" $i
 			cp -f $i/*.adl $2
+			echo "copying \*.gif from" $i
 			cp -f $i/*.gif $2
 		end
 	endif
