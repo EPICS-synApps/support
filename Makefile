@@ -40,7 +40,7 @@ endef
 ###### 1st Tier Support Modules - Only Depend on EPICS BASE ######
 
 MODULE_LIST  = DEVIOCSTATS SNCSEQ ALLEN_BRADLEY
-MODULE_LIST += IPAC AUTOSAVE
+MODULE_LIST += IPAC AUTOSAVE ALIVE
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 ###### 1.5 Tier Support Modules - Only Depend on 1st Tier ######
