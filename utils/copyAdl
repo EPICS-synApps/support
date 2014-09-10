@@ -8,7 +8,7 @@ endif
 
 if (!(-e $2)) mkdir $2
 if (!(-d $2)) then
-    echo "'$2' exists and is not a directory.  Nothing done."
+    echo "'$2' exists and is not a directory.   Nothing done."
     exit
 endif
 
