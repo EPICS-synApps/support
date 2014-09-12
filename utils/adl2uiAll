@@ -1,0 +1,111 @@
+#!/bin/csh -f
+unalias rm
+unalias cp
+unalias mv
+
+setenv SUPPORT /APSshare/epics/synApps_5_6/support
+setenv EPICS_APP /APSshare/epics/synApps_5_6/support/xxx-5-6
+setenv EPICS_APP_ADL_DIR ${EPICS_APP}/xxxApp/op/adl
+set output = `perl $EPICS_APP/release.pl $EPICS_APP`
+$output
+
+
+if ( ${?AREA_DETECTOR} ) then
+	cd ${AREA_DETECTOR}/ADApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?ASYN} ) then
+	cd ${ASYN}/opi
+	ln -s medm adl
+	${SUPPORT}/adlDir2uiDir
+	mv ui caqtdm
+	rm adl
+endif
+if ( ${?AUTOSAVE} ) then
+	cd ${AUTOSAVE}/asApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?BUSY} ) then
+	cd ${BUSY}/busyApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?CALC} ) then
+	cd ${CALC}/calcApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?CAMAC} ) then
+	cd ${CAMAC}/camacApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?DAC128V} ) then
+	cd ${DAC128V}/dac128VApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?DELAYGEN} ) then
+	cd ${DELAYGEN}/delaygenApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?DEVIOCSTATS} ) then
+	cd ${DEVIOCSTATS}/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?DXP} ) then
+	cd ${DXP}/dxpApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?IP} ) then
+	cd ${IP}/ipApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?IP330} ) then
+	cd ${IP330}/ip330App/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?IPUNIDIG} ) then
+	cd ${IPUNIDIG}/ipUnidigApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?LOVE} ) then
+	cd ${LOVE}/loveApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?MCA} ) then
+	cd ${MCA}/mcaApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?MODBUS} ) then
+	cd ${MODBUS}/modbusApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?MOTOR} ) then
+	cd ${MOTOR}/motorApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?OPTICS} ) then
+	cd ${OPTICS}/opticsApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?QUADEM} ) then
+	cd ${QUADEM}/quadEMApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?SOFTGLUE} ) then
+	cd ${SOFTGLUE}/softGlueApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?SSCAN} ) then
+	cd ${SSCAN}/sscanApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?STD} ) then
+	cd ${STD}/stdApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?VAC} ) then
+	cd ${VAC}/vacApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
+if ( ${?VME} ) then
+	cd ${VME}/vmeApp/op
+	${SUPPORT}/adlDir2uiDir
+endif
