@@ -1,5 +1,5 @@
 #rtype		adl file				prefix_macro	recordname_macro
-aSub		anyRecord.adl			P				R
+aSub		aSubRecord.adl			P				R
 acalcout	yyArrayCalc.adl			P				C
 ai			anyRecord.adl			P				R
 ao			anyRecord.adl			P				R
@@ -9,7 +9,7 @@ bo			anyRecord.adl			P				R
 busy		xxBusyRecord.adl		P				R
 calc		CalcRecord.adl			P				C
 calcout		yyCalcoutRecord.adl		P				C
-compress	anyRecord.adl			P				R
+compress	compress.adl			P				Q
 dfanout		anyRecord.adl			P				R
 epid		async_pid_control.adl	P				PID
 event		anyRecord.adl			P				R
@@ -18,13 +18,13 @@ longin		anyRecord.adl			P				R
 longout		anyRecord.adl			P				R
 mbbi		anyRecord.adl			P				R
 mbbiDirect	anyRecord.adl			P				R
-mbbo		anyRecord.adl			P				R
+mbbo		userMbbo.adl			P				C
 mbboDirect	anyRecord.adl			P				R
-mca			anyRecord.adl			P				R
+mca			simple_MCA.adl			P				M
 motor		motorx.adl				P				M
 permissive	anyRecord.adl			P				R
 scalcout	yysCalcoutRecord.adl	P				C
-scaler		anyRecord.adl			P				R
+scaler		scaler.adl				P				S
 scanparm	anyRecord.adl			P				R
 sel			anyRecord.adl			P				R
 seq			yySeq.adl				P				S
@@ -33,11 +33,11 @@ sseq		yySseq.adl				P				S
 state		anyRecord.adl			P				R
 stringin	anyRecord.adl			P				R
 stringout	anyRecord.adl			P				R
-sub			anyRecord.adl			P				R
+sub			subRecord.adl			P				R
 subArray	anyRecord.adl			P				R
 swait		yyWaitRecord.adl		P				C
 table		anyRecord.adl			P				R
 timestamp	anyRecord.adl			P				R
 transform	yyTransform.adl			P				T
-vme			anyRecord.adl			P				R
+vme			recVme.adl				P				Q
 waveform	anyRecord.adl			P				R
