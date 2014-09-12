@@ -19,7 +19,11 @@ except:
 	HAVE_CA = False
 
 databasePath = os.getcwd()
+databaseDefaultPath = databasePath
 medmPath = os.getcwd()
+medmDefaultPath = medmPath
+diPath = os.getcwd()
+diDefaultPath = diPath
 
 displayInfo = {
 	'aSub':			('anyRecord.adl',		'P', 'R'),
@@ -657,12 +661,12 @@ class myList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthMi
 		#print "selected items:", self.selectedItems
 		if (len(self.itemDataMap) <= 1):
 			return
-		global medmPath
+		global medmPath, medmDefaultPath
 		if len(self.frame.recordNames) <= 0:
 			return
 		wildcard = "(*.adl)|*.adl|All files (*.*)|*.*"
-		if medmPath == "":
-			medmPath = os.getcwd()
+		if medmDefaultPath == "":
+			medmDefaultPath = os.getcwd()
 		items = list(self.selectedItems)
 		item = items[0]
 		if item >= len(self.frame.recordNames):
@@ -673,11 +677,12 @@ class myList(wx.ListCtrl, listmix.ColumnSorterMixin, listmix.ListCtrlAutoWidthMi
 			fileName = fileName.split(":")[1]
 		fileName += ".adl"
 		dlg = wx.FileDialog(self, message="Save as ...",
-			defaultDir=medmPath, defaultFile=fileName, wildcard=wildcard,
+			defaultDir=medmDefaultPath, defaultFile=fileName, wildcard=wildcard,
 			style=wx.SAVE | wx.CHANGE_DIR)
 		ans = dlg.ShowModal()
 		if ans == wx.ID_OK:
 			medmPath = dlg.GetPath()
+			(medmDefaultPath, junk) = os.path.split(medmPath)
 		dlg.Destroy()
 		if ans == wx.ID_OK and medmPath:
 			self.SetCursor(wx.StockCursor(wx.CURSOR_WATCH))
@@ -941,6 +946,7 @@ class TopFrame(wx.Frame):
 
 	def openFile(self):
 		wildcard = "(*.dbd)|*.dbd|All files (*.*)|*.*"
+		print "default dir is ", os.getcwd()
 		dlg = wx.FileDialog(self, message="Choose a file",
 			defaultDir=os.getcwd(), defaultFile="", wildcard=wildcard,
 			style=wx.OPEN | wx.CHANGE_DIR)
@@ -961,16 +967,18 @@ class TopFrame(wx.Frame):
 			self.SendSizeEvent()
 
 	def on_openDB_MenuSelection(self, event):
-		global databasePath
+		global databasePath, databaseDefaultPath
 		wildcard = "(*.db)|*.db|All files (*.*)|*.*"
-		if databasePath == "":
-			databasePath = os.getcwd()
+		if databaseDefaultPath == "":
+			databaseDefaultPath = os.getcwd()
+		print "databaseDefaultPath", databaseDefaultPath
 		dlg = wx.FileDialog(self, message="Open ...",
-			defaultDir=databasePath, defaultFile="test.db", wildcard=wildcard,
+			defaultDir=databaseDefaultPath, defaultFile="test.db", wildcard=wildcard,
 			style=wx.OPEN | wx.CHANGE_DIR)
 		ans = dlg.ShowModal()
 		if ans == wx.ID_OK:
 			databasePath = dlg.GetPath()
+			(databaseDefaultPath, junk) = os.path.split(databasePath)
 		dlg.Destroy()
 		if ans == wx.ID_OK and databasePath:
 			self.SetCursor(wx.StockCursor(wx.CURSOR_WATCH))
@@ -987,7 +995,7 @@ class TopFrame(wx.Frame):
 
 
 	def on_writeDB_MenuSelection(self, event):
-		global databasePath
+		global databasePath, databaseDefaultPath
 		if self.dbdFileName.find("<NOT") != -1:
 			self.SetStatusText("You have to open a .dbd file first")
 			return
@@ -995,14 +1003,16 @@ class TopFrame(wx.Frame):
 			self.SetStatusText("No records")
 			return
 		wildcard = "(*.db)|*.db|All files (*.*)|*.*"
-		if databasePath == "":
-			databasePath = os.getcwd()
+		if databaseDefaultPath == "":
+			databaseDefaultPath = os.getcwd()
+		print "databaseDefaultPath", databaseDefaultPath
 		dlg = wx.FileDialog(self, message="Save as ...",
-			defaultDir=databasePath, defaultFile="test.db", wildcard=wildcard,
+			defaultDir=databaseDefaultPath, defaultFile="test.db", wildcard=wildcard,
 			style=wx.SAVE | wx.CHANGE_DIR)
 		ans = dlg.ShowModal()
 		if ans == wx.ID_OK:
 			databasePath = dlg.GetPath()
+			(databaseDefaultPath, junk) = os.path.split(databasePath)
 		dlg.Destroy()
 		if ans == wx.ID_OK and databasePath:
 			replaceDict = makeReplaceDict(self.replaceTargets, self.replaceStrings)
@@ -1013,18 +1023,20 @@ class TopFrame(wx.Frame):
 
 	def on_writeMEDM_MenuSelection(self, event):
 		id = event.GetId()
-		global medmPath
+		global medmPath, medmDefaultPath
 		if len(self.recordNames) <= 0:
 			self.SetStatusText("No records")
 			return
 		wildcard = "(*.adl)|*.adl|All files (*.*)|*.*"
-		if medmPath == "":
-			medmPath = os.getcwd()
+		if medmDefaultPath == "":
+			medmDefaultPath = os.getcwd()
+		print "medmDefaultPath", medmDefaultPath
 		dlg = wx.FileDialog(self, message="Save as ...",
-			defaultDir=medmPath, defaultFile="test.adl", wildcard=wildcard,
+			defaultDir=medmDefaultPath, defaultFile="test.adl", wildcard=wildcard,
 			style=wx.SAVE | wx.CHANGE_DIR)
 		if dlg.ShowModal() == wx.ID_OK:
 			medmPath = dlg.GetPath()
+			(medmDefaultPath, junk) = os.path.split(medmPath)
 		dlg.Destroy()
 		if medmPath:
 			self.SetCursor(wx.StockCursor(wx.CURSOR_WATCH))
@@ -1037,15 +1049,17 @@ class TopFrame(wx.Frame):
 			self.SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
 
 	def on_readDI_MenuSelection(self, event):
-		global displayInfo
+		global displayInfo, diPath, diDefaultPath
 
 		wildcard = "(*.txt)|*.txt|All files (*.*)|*.*"
-		diPath = os.getcwd()
+		if diDefaultPath == "":
+			diDefaultPath = os.getcwd()
 		dlg = wx.FileDialog(self, message="Open ...",
-			defaultDir=diPath, defaultFile="displayInfo.txt", wildcard=wildcard, style=wx.OPEN)
+			defaultDir=diDefaultPath, defaultFile="displayInfo.txt", wildcard=wildcard, style=wx.OPEN)
 		ans = dlg.ShowModal()
 		if ans == wx.ID_OK:
 			diPath = dlg.GetPath()
+			(diDefaultPath, junk) = os.path.split(diPath)
 		dlg.Destroy()
 
 		if ans == wx.ID_OK and diPath:
