@@ -9,7 +9,33 @@
   <h1 style="text-align: center">
     utils Release Notes</h1>
 
+  <h2 style="text-align: center">
+    synApps release 5-8</h2>
+  <ul>
+  	<li>copyUi.py - Copy all .ui and .qss to specified directory
 
+	<li>addTag.py - For a module that already has a module tag, tag that same
+		revision with another tag.
+
+	<li>adlDir2uiDir - Rewritten to change only .ui files in ui directory
+	
+	<li>adl2uiAll - translate all .adl files in synApps to .ui
+
+	<li>changePrefix:
+		<ul>
+		<li>Better handle testing for existence of files
+
+		<li>Made changePrefix smarter about changing prefix in src/Makefile
+
+		<li>Modified changePrefix to handle xxx.sh, as well as new versions of
+			run and in-screen.sh
+		</ul>
+
+	<li>snapDb.py - Maintain default paths for medm displays, databases, and
+		displayinfo files; specify display files for aSub, compress, mbbo, mca,
+		scaler, sub, and vme record types.
+
+  </ul>
 
   <h2 style="text-align: center">
     synApps release 5-7</h2>
