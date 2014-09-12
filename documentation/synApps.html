@@ -131,12 +131,18 @@ you've done, to diagnose problems, and to extend synApps in any significant way.
 <P><table border>
 <tr><td><b>Module</b>/<i>directory</i><th><b>description</b>
 
-<tr><td><b>areaDetector</b><td>Support for area (i.e., 2-D, or image) detectors,
-	including CCDs, pixel array detectors, and online imaging plates.  This
-	module replaces the <b>ccd</b> and <b>pilatus</b> modules.
+<tr><td><b>alive</b><td>Support for collecting, maintaining, and displaying
+	status information about a collection of EPICS IOCs.
+
+<tr><td><b>areaDetector</b><td>Support for cameras and other 2D detectors.
+	areaDetector consists of some core modules, and many detector-specific
+	modules; synApps contains only the top-level directory, <i>areaDetector</i>,
+	and the modules <i>ADCore</i> and <i>ADBinaries</i>.  See
+	<a href="https://github.com/areaDetector">areaDetector</a> for more information
 
 <tr><td><b>autosave</b><td>Support for saving software parameters at run time,
-	and restoring them during the next reboot.  Autosave is also a way to
+	and restoring them during the next reboot.  Autosave also provides a way to
+	manage collections of PV values at runtime (<i>configMenu</i>), and a way to 
 	initialize array PV's at boot time.
 
 <tr><td><b>busy</b><td>The busy record, which allows developers more ways to
@@ -161,9 +167,6 @@ you've done, to diagnose problems, and to extend synApps in any significant way.
 
 <tr><td><b>dxp</b><td>Support for X-Ray Instrumentation Associates's DXP digital
 signal processor
-
-<tr><td><b>ebrick</b><td>Support and sample application for low-cost PC-104 and
-uCDIMM based IOC.
 
 <tr><td><b>ip</b><td>Support for various serial, and other message-based,
 devices.
@@ -274,6 +277,8 @@ like, synApps contains the following code:
 
 <tr><td><b>ab*</b><td>AllenBradley-module custom records
 
+<tr><td><b>alive</b><td>Send IOC status to a central server.
+
 <tr><td><b>acalcout</b><td>calcout record extended to handle array expressions
 <tr><td><b>asyn</b><td>provide access to nearly all of the features of the
     asyn facility
@@ -343,7 +348,9 @@ like, synApps contains the following code:
 <P><li><h3>Miscellaneous</h3>
 
 	<P>The synApps support/utils directory contains a variety of scripts,
-	programs, etc., that some have found useful.
+	programs, etc., that some have found useful.  See <a href="#The synApps
+	utils directory">The synApps utils directory</a> for details.
+
 </ul>
 
 <a name="How to deploy synApps"></a>
@@ -375,6 +382,7 @@ with all the files you will have to edit before you can build or boot an IOC:
 <pre>
 synApps_X_X/support/
     Makefile
+    alive/
     allenBradley/
     areaDetector/
     asyn/
