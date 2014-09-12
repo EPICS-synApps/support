@@ -1,13 +1,35 @@
 #!/bin/csh
 
 # Run in *App/op directory to convert adl/*.adl to ui/*.ui
+#
+# Given an adl directory, create a ui directory and fill it
+# with translated .adl files.
+# If the ui directory already exists, it might be a SVN
+# directory, so we only want to overwrite .ui files.
+set newUiDir = "No"
 if (! -d ui) then
-	mkdir ui
+	echo "no ui dir found"
+	set newUiDir = "Yes"
+else
+	echo "ui dir found"
+	mv ui ui_save
 endif
+
+mkdir ui
 cp adl/* ui
 cd ui
-rm *_BAK.adl
+rm *BAK*
 foreach i (*.adl)
-	adl2ui $i
+#	adl2ui $i
+	adl2ui_MenuFix $i
 end
 rm *.adl
+
+if ($newUiDir == "No") then
+	echo "copying from ui to ui_save"
+	cd ..
+	rm ui_save/*.ui
+	mv ui/* ui_save
+	rm -rf ui
+	mv ui_save ui
+endif
