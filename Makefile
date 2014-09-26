@@ -56,7 +56,7 @@ MODULE_LIST  = ASYN CALC
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(ASYN)_DEPEND_DIRS = $(SNCSEQ) $(IPAC)
-$(CALC)_DEPEND_DIRS = $(SSCAN)
+$(CALC)_DEPEND_DIRS = $(SNCSEQ) $(SSCAN)
 
 ################### 3rd Tier Support Modules #####################
 
@@ -79,7 +79,7 @@ $(SOFTGLUE)_DEPEND_DIRS = $(ASYN) $(IPAC)
 
 ################### 4th Tier Support Modules #####################
 
-MODULE_LIST  = DELAYGEN MCA VME MOTOR MEASCOMP AREA_DETECTOR
+MODULE_LIST  = DELAYGEN MCA VME MOTOR AREA_DETECTOR
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(DELAYGEN)_DEPEND_DIRS = $(ASYN) $(AUTOSAVE) $(CALC) $(IP) $(IPAC) $(STREAM) 
@@ -88,7 +88,13 @@ $(VME)_DEPEND_DIRS      = $(SNCSEQ) $(STD)
 $(MOTOR)_DEPEND_DIRS    = $(ASYN) $(BUSY) $(IPAC) $(SNCSEQ) 
 $(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(AUTOSAVE) $(BUSY) $(CALC) $(SSCAN)
 #$(EBRICK)_DEPEND_DIRS   = $(ASYN) $(AUTOSAVE) $(CALC) $(SNCSEQ) $(SSCAN) $(STD)
-$(MEASCOMP)_DEPEND_DIRS   = $(ASYN) $(CALC) $(STD) $(BUSY) $(SSCAN) $(AUTOSAVE) $(SNCSEQ)  
+
+################### 4.5th Tier Support Modules #####################
+
+MODULE_LIST  = MEASCOMP
+$(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
+
+$(MEASCOMP)_DEPEND_DIRS   = $(ASYN) $(CALC) $(STD) $(MCA) $(BUSY) $(SSCAN) $(AUTOSAVE) $(SNCSEQ)  
 
 ################### 5th Tier Support Modules #####################
 # The conditional below should be a target arch, but those are not
