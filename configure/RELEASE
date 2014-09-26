@@ -11,46 +11,52 @@
 
 SUPPORT=/home/oxygen/MOONEY/epics/synAppsSVN/support
 -include $(TOP)/configure/SUPPORT.$(EPICS_HOST_ARCH)
-EPICS_BASE=/home/oxygen/MOONEY/epics/bazaar/base-3.14
+#EPICS_BASE=/home/oxygen/MOONEY/epics/bazaar/base-3.14
+#EPICS_BASE=/home/oxygen/MOONEY/epics/bazaar/base-3.15
+EPICS_BASE=/APSshare/epics/base-3.14.12.4
 -include $(TOP)/configure/EPICS_BASE 
 -include $(TOP)/configure/EPICS_BASE.$(EPICS_HOST_ARCH) 
 
 #/usr/local/iocapps/cvsroot/modules/bus/allenBradley
-ALLEN_BRADLEY=$(SUPPORT)/allenBradley-2-2
-AREA_DETECTOR=$(SUPPORT)/areaDetector-1-9-1
+ALIVE=$(SUPPORT)/alive
+ALLEN_BRADLEY=$(SUPPORT)/allenBradley-2-3
+AREA_DETECTOR=$(SUPPORT)/areaDetector-2-0
+ADCORE=$(AREA_DETECTOR)/ADCore
+ADBINARIES=$(AREA_DETECTOR)/ADBinaries
 #https://svn.aps.anl.gov/epics/asyn/
-ASYN=$(SUPPORT)/asyn-4-21
-AUTOSAVE=$(SUPPORT)/autosave-5-1
+ASYN=$(SUPPORT)/asyn-4-23
+#ASYN=$(SUPPORT)/asynSVN
+AUTOSAVE=$(SUPPORT)/autosave-5-4-2
 BUSY=$(SUPPORT)/busy-1-6
-CALC=$(SUPPORT)/calc-3-2
+CALC=$(SUPPORT)/calc-3-4-1
 CAMAC=$(SUPPORT)/camac-2-7
 DAC128V=$(SUPPORT)/dac128V-2-7
-DELAYGEN=$(SUPPORT)/delaygen-1-1-0
+DELAYGEN=$(SUPPORT)/delaygen-1-1-1
 #http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
-DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-7
-DXP=$(SUPPORT)/dxp-3-2
-IP=$(SUPPORT)/ip-2-14
+DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-11
+DXP=$(SUPPORT)/dxp-3-3
+IP=$(SUPPORT)/ip-2-16
 IP330=$(SUPPORT)/ip330-2-7
 #https://svn.aps.anl.gov/epics/ipac/
-#IPAC=$(SUPPORT)/ipac-2-11
-# (V2-12? have outstanding commits since V2-11)
 IPAC=$(SUPPORT)/ipac-2-12
 IPUNIDIG=$(SUPPORT)/ipUnidig-2-9
 LOVE=$(SUPPORT)/love-3-2-5
-MCA=$(SUPPORT)/mca-7-4
-MEASCOMP=$(SUPPORT)/measComp-1-0
-MODBUS=$(SUPPORT)/modbus-2-4
-MOTOR=$(SUPPORT)/motor-6-8
-OPTICS=$(SUPPORT)/optics-2-9-1
-QUADEM=$(SUPPORT)/quadEM-4-0
+MCA=$(SUPPORT)/mca-7-5
+MEASCOMP=$(SUPPORT)/measComp-1-1
+MODBUS=$(SUPPORT)/modbus-2-7
+#MOTOR=$(SUPPORT)/motor-6-8
+MOTOR=$(SUPPORT)/motor-6-9
+OPTICS=$(SUPPORT)/optics-2-9-2
+QUADEM=$(SUPPORT)/quadEM-4-1
 #http://www-csr.bessy.de/control/SoftDist/sequencer
-SNCSEQ=$(SUPPORT)/seq-2-1-13
-SOFTGLUE=$(SUPPORT)/softGlue-2-3
-SSCAN=$(SUPPORT)/sscan-2-9
-STD=$(SUPPORT)/std-3-2
+SNCSEQ=$(SUPPORT)/seq-2-1-16
+#SNCSEQ=$(SUPPORT)/seq-2-2-0-2
+SOFTGLUE=$(SUPPORT)/softGlue-2-4-1
+SSCAN=$(SUPPORT)/sscan-2-10
+STD=$(SUPPORT)/std-3-3
 #http://epics.web.psi.ch/software/streamdevice/
 STREAM=$(SUPPORT)/stream-2-6
 VAC=$(SUPPORT)/vac-1-4-1
-VME=$(SUPPORT)/vme-2-8-1
+VME=$(SUPPORT)/vme-2-8-2
 XXX=$(SUPPORT)/xxx-5-7-1
 
