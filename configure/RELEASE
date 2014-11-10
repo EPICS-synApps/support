@@ -56,5 +56,5 @@ STD=$(SUPPORT)/std-3-3
 STREAM=$(SUPPORT)/stream-2-6
 VAC=$(SUPPORT)/vac-1-5
 VME=$(SUPPORT)/vme-2-8-2
-XXX=$(SUPPORT)/xxx-5-7-1
+XXX=$(SUPPORT)/xxx-5-8
 
