@@ -227,6 +227,10 @@ def readScan(scanFile, verbose=0, out=sys.stdout, unpacker=None):
 		u.reset(buf)
 
 	scan.rank = u.unpack_int()
+	if (scan.rank > 20) or (scan.rank < 0):
+		print "* * * readScan('%s'): rank > 20.  probably a corrupt file" % scanFile.name
+		return None
+
 	scan.npts = u.unpack_int()
 	scan.curr_pt = u.unpack_int()
 	if verbose:
@@ -354,6 +358,10 @@ def readScanQuick(scanFile, unpacker=None, detToDat_offset=None):
 		u.reset(buf)
 
 	scan.rank = u.unpack_int()
+	if (scan.rank > 20) or (scan.rank < 0):
+		print "* * * readScanQuick('%s'): rank > 20.  probably a corrupt file" % scanFile.name
+		return None
+
 	scan.npts = u.unpack_int()
 	scan.curr_pt = u.unpack_int()
 
@@ -819,6 +827,9 @@ def skimScan(dataFile):
 	buf = dataFile.read(10000) # enough to read scan header
 	u = xdr.Unpacker(buf)
 	scan.rank = u.unpack_int()
+	if (scan.rank > 20) or (scan.rank < 0):
+		print "* * * skimScan('%s'): rank > 20.  probably a corrupt file" % dataFile.name
+		return None
 	scan.npts = u.unpack_int()
 	scan.curr_pt = u.unpack_int()
 	if (scan.curr_pt == 0):
@@ -886,17 +897,29 @@ def skimMDA(fname=None, verbose=False):
 	if (rank > 1):
 		dataFile.seek(dim[0].plower_scans[0])
 		dim.append(skimScan(dataFile))
-		dim[1].dim = 2
+		if (dim[1]):
+			dim[1].dim = 2
+		else:
+			if verbose: print "had a problem reading 2d from ", fname
+			return None
 
 	if (rank > 2):
 		dataFile.seek(dim[1].plower_scans[0])
 		dim.append(skimScan(dataFile))
-		dim[2].dim = 3
+		if (dim[2]):
+			dim[2].dim = 3
+		else:
+			if verbose: print "had a problem reading 3d from ", fname
+			return None
 
 	if (rank > 3):
 		dataFile.seek(dim[2].plower_scans[0])
 		dim.append(skimScan(dataFile))
-		dim[3].dim = 4
+		if (dim[3]):
+			dim[3].dim = 4
+		else:
+			if verbose: print "had a problem reading 4d from ", fname
+			return None
 
 	dataFile.close()
 	dict = {}

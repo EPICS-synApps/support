@@ -242,6 +242,14 @@ def findMacros(line):
 		macros.add(word[:j])
 	return macros
 
+def escapeQuote(s):
+	r = ""
+	for c in s:
+		if (c=='"'):
+			r += '\\'
+		r += c
+	return(r)
+
 def writeDatabase(fileName, recordInstanceList, replaceDict=None):
 
 	if (fileName):
@@ -260,7 +268,8 @@ def writeDatabase(fileName, recordInstanceList, replaceDict=None):
 		for (fieldName, value) in zip(r.fieldNames, r.fieldValues):
 			if type(value) == type(""):
 				value = doReplace(value, replaceDict)
-			line = '\tfield(%s,"%s")\n' % (fieldName, value)
+			#line = '\tfield(%s,"%s")\n' % (fieldName, value)
+			line = '\tfield(%s,"%s")\n' % (fieldName, escapeQuote(value))
 			newMacros = list(findMacros(line))
 			for m in newMacros:
 				macros.add(m)
