@@ -1005,7 +1005,7 @@ class TopFrame(wx.Frame):
 		wildcard = "(*.db)|*.db|All files (*.*)|*.*"
 		if databaseDefaultPath == "":
 			databaseDefaultPath = os.getcwd()
-		print "databaseDefaultPath", databaseDefaultPath
+		#print "databaseDefaultPath", databaseDefaultPath
 		dlg = wx.FileDialog(self, message="Save as ...",
 			defaultDir=databaseDefaultPath, defaultFile="test.db", wildcard=wildcard,
 			style=wx.SAVE | wx.CHANGE_DIR)
