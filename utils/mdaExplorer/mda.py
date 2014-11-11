@@ -897,17 +897,29 @@ def skimMDA(fname=None, verbose=False):
 	if (rank > 1):
 		dataFile.seek(dim[0].plower_scans[0])
 		dim.append(skimScan(dataFile))
-		dim[1].dim = 2
+		if (dim[1]):
+			dim[1].dim = 2
+		else:
+			if verbose: print "had a problem reading 2d from ", fname
+			return None
 
 	if (rank > 2):
 		dataFile.seek(dim[1].plower_scans[0])
 		dim.append(skimScan(dataFile))
-		dim[2].dim = 3
+		if (dim[2]):
+			dim[2].dim = 3
+		else:
+			if verbose: print "had a problem reading 3d from ", fname
+			return None
 
 	if (rank > 3):
 		dataFile.seek(dim[2].plower_scans[0])
 		dim.append(skimScan(dataFile))
-		dim[3].dim = 4
+		if (dim[3]):
+			dim[3].dim = 4
+		else:
+			if verbose: print "had a problem reading 4d from ", fname
+			return None
 
 	dataFile.close()
 	dict = {}
