@@ -7,6 +7,124 @@ content="text/html; charset=iso-8859-1">
 </head>
 
 <body bgcolor="#FFFFFF">
+<h1 align="center">synApps 5.8 Release Notes</h1>
+<ul>
+
+<li>
+<h2>Version changes from R5-7 to R5-8</h2>
+<table border>
+
+<tr><td>module<td>old version<td>new version
+<td>&nbsp;
+
+<tr><td>EPICS_BASE<td>3.14.12.3<td>3.14.12.4 or 3.15.1
+<td>&nbsp;
+
+<tr><td>ALIVE<td>-<td>?
+<td>new module
+
+<tr><td>ALLEN_BRADLEY<td>2-2<td>2-2
+<td>&nbsp;
+
+<tr><td>AREA_DETECTOR<br>ADCORE<br>ADBINARIES<td>1-9-1<br>&nbsp;<br>&nbsp;<td>2-0<br>2-1<br>2-1
+<td><a href="https://github.com/areaDetector/areaDetector/blob/master/RELEASE.md">release notes</a>
+<P>configure/RELEASE files modified to work with synApps "make release" build command.
+ <P>Note that synApps contains only ADCore and ADBinaries, because those modules require no vendor-supplied support.  Other modules are available from <a href="https://github.com/areaDetector/areaDetector">areaDetector on github</a>
+
+<tr><td>ASYN<td>4-21<td>4-24
+<td><a href="http://www.aps.anl.gov/epics/modules/soft/asyn/R4-24/RELEASE_NOTES.html">release notes</a>
+
+<tr><td>AUTOSAVE<td>5-1<td>5-5
+<td><a href="http://www.aps.anl.gov/bcda/synApps/autosave/autosaveReleaseNotes.html">release notes</a>
+
+<tr><td>BUSY<td>1-6<td>1-6-1
+<td><a href="http://www.aps.anl.gov/bcda/synApps/busy/busyReleaseNotes.html">release notes</a>
+
+<tr><td>CALC<td>3-2<td>3-4
+<td><a href="http://www.aps.anl.gov/bcda/synApps/calc/calcReleaseNotes.html">release notes</a>
+</ul>
+
+<tr><td>CAMAC<td>2-7<td>2-7
+<td>&nbsp;
+
+<tr><td>DAC128V<td>2-7<td>2-7
+<td>&nbsp;
+
+<tr><td>DELAYGEN<td>1-1-0<td>1-1-1
+<td><a href="http://www.aps.anl.gov/bcda/synApps/delaygen/delaygen_notes.html">release notes</a>
+
+<tr><td>DEVIOCSTATS<td>3-1-7<td>3-1-13
+<td><a href="http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/RELEASE_NOTES">release notes</a>
+
+<P>configure/RELEASE modified to work with synApps' "make release" build command.
+<tr><td>DXP<td>3-2<td>3-3
+<td><a href="http://cars.uchicago.edu/software/epics/dxpReleaseNotes.html">release notes</a>
+
+<tr><td>IP<td>2-14<td>2-16
+<td><a href="http://www.aps.anl.gov/bcda/synApps/ip/ipReleaseNotes.html">release notes</a>
+
+<tr><td>IP330<td>2-7<td>2-7
+<td><a href="http://cars.uchicago.edu/software/epics/ip330ReleaseNotes.html">release notes</a>
+
+<tr><td>IPAC<td>2-12<td>2-12*
+<td><a href="https://svn.aps.anl.gov/trac/epics/ipac/wiki/V2.12">release notes</a>
+<P>V2.12 with subversion commits through 2014-08-22
+<P>drvIpac/drvIpac.dbd modified to specify IP carrier types
+
+<tr><td>IPUNIDIG<td>2-9<td>2-9
+<td><a href="http://cars9.uchicago.edu/software/epics/ipUnidigReleaseNotes.html">release notes</a>
+
+<tr><td>LOVE<td>3-2-5<td>3-2-5
+<td><a href="http://www.aps.anl.gov/bcda/synApps/love/loveReleaseNotes.html">release notes</a>
+
+<tr><td>MCA<td>7-4<td>7-6
+<td><a href="http://cars.uchicago.edu/software/epics/mcaReleaseNotes.html">release notes</a>
+
+<tr><td>MEASCOMP<td>1-0<td>1-1
+<td><a href="http://cars.uchicago.edu/software/epics/measCompReleaseNotes.html">release notes</a>
+
+<tr><td>MODBUS<td>2-4<td>2-7
+<td><a href="http://cars.uchicago.edu/software/epics/modbusReleaseNotes.html">release notes</a>
+
+<tr><td>MOTOR<td>6-8<td>6-9
+<td><a href="http://www.aps.anl.gov/bcda/synApps/motor/R6-9/motor_release.html">release notes</a>
+
+<tr><td>OPTICS<td>2-9-1<td>2-9-3
+<td> <a href="http://www.aps.anl.gov/bcda/synApps/optics/opticsReleaseNotes.html">release notes</a>
+
+<tr><td>QUADEM<td>4-0<td>5-0
+<td> <a href="http://cars.uchicago.edu/software/epics/quadEMReleaseNotes.html">release notes</a>
+
+<tr><td>SNCSEQ<td>2-1-13<td>2-1-16 or 2-2
+<td><a href="http://www-csr.bessy.de/control/SoftDist/sequencer/Installation.html">release notes</a>
+
+<tr><td>SOFTGLUE<td>2-3<td>2-4-2
+<td><a href="http://www.aps.anl.gov/bcda/synApps/softGlue/softGlueReleaseNotes.html">release notes</a>
+
+<tr><td>SSCAN<td>2-9<td>2-10
+<td><a href="http://www.aps.anl.gov/bcda/synApps/sscan/sscanReleaseNotes.html">release notes</a>
+
+<tr><td>STD<td>3-2<td>3-3
+<td><a href="http://www.aps.anl.gov/bcda/synApps/std/stdReleaseNotes.html">release notes</a>
+
+<tr><td>STREAM<td>2-6<td>2-6<td>
+StreamDevice 2.6
+<P>Packaged into an EPICS module
+<P>streamDevice/Makefile modified to disable build of streamApp, which breaks the RTEMS build, because stream depends on calc, which now depends on the sequencer.
+
+<tr><td>VAC<td>1-4-1<td>1-5-1
+<td><a href="http://www.aps.anl.gov/bcda/synApps/vac/vacReleaseNotes.html">release notes</a>
+
+<tr><td>VME<td>2-8-1<td>2-8-2
+<td><a href="http://www.aps.anl.gov/bcda/synApps/vme/vmeReleaseNotes.html">release notes</a>
+
+<tr><td>XXX<td>5-7-1<td>5-8
+<td><a href="http://www.aps.anl.gov/bcda/synApps/xxx/xxxReleaseNotes.html">release notes</a>
+
+</table>
+
+</ul>
+
 <h1 align="center">synApps 5.7 Release Notes</h1>
 <ul>
 
