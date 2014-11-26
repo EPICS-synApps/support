@@ -14,7 +14,6 @@
 # for a subset of the cross-compiled target architectures
 # that Base is built for.
 #CROSS_COMPILER_TARGET_ARCHS = vxWorks-68040
-CROSS_COMPILER_TARGET_ARCHS = vxWorks-ppc32
 
 #Set the following variable to YES if libusb has been installled
 #on the host Linux system for the DXP support module,
