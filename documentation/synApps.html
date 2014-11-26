@@ -9,7 +9,7 @@
 
 <body bgcolor="#FFFFFF">
 
-<h1>synApps 5.7</h1>
+<h1>synApps 5.8</h1>
 
 <h1>Table of Contents</h1>
 <ul>
@@ -84,8 +84,9 @@ in calc/calcApp/Db
 <dd><code>userTransforms10.db</code>
 <dd><code>userTransforms10_settings.req</code><br>...
 
-<P><dt>display files, in calc/calcApp/op/adl, and calc/calcApp/op/opi
+<P><dt>display files, in calc/calcApp/op/adl, calc/calcApp/op/ui, and calc/calcApp/op/opi
 <dd><code>userTransforms10.adl</code><br>
+	<code>userTransforms10.ui</code><br>
     <code>userTransforms10.opi</code><br>...
 
 </dl>
@@ -112,7 +113,9 @@ with EPICS 3.14, an EPICS IOC can also be a set of tasks on a workstation
 running Linux, Windows, Cygwin, Solaris, RTEMS, Mac OS, and, no doubt, other
 operating systems.
 
-<li>The </i>EPICS Application Developer's Guide<i> is an essential reference for
+<li>The 
+<a href="http://www.aps.anl.gov/epics/base/R3-14/12-docs/AppDevGuide">
+</i>EPICS Application Developer's Guide<i></a> is an essential reference for
 anyone planning to develop or deploy EPICS software.  While you won't need to
 read the guide to build or run synApps, you will need it to understand what
 you've done, to diagnose problems, and to extend synApps in any significant way.
@@ -134,7 +137,7 @@ you've done, to diagnose problems, and to extend synApps in any significant way.
 <tr><td><b>alive</b><td>Support for collecting, maintaining, and displaying
 	status information about a collection of EPICS IOCs.
 
-<tr><td><b>areaDetector</b><td>Support for cameras and other 2D detectors.
+<tr><td><b>areaDetector<br>ADcore<br>ADBinaries</b><td>Support for cameras and other 2D detectors.
 	areaDetector consists of some core modules, and many detector-specific
 	modules; synApps contains only the top-level directory, <i>areaDetector</i>,
 	and the modules <i>ADCore</i> and <i>ADBinaries</i>.  See
@@ -146,9 +149,7 @@ you've done, to diagnose problems, and to extend synApps in any significant way.
 	initialize array PV's at boot time.
 
 <tr><td><b>busy</b><td>The busy record, which allows developers more ways to
-	indicate when an operation is complete.  Previously, this record was
-	provided by the <b>sscan</b> module, because the sscan record is one of its
-	beneficiaries.
+	indicate when an operation is complete.
 
 <tr><td><b>calc</b><td>Run-time expression evaluation, derived from the calcout
 	record in EPICS base, and extended to operate on strings, arrays, and to
@@ -219,11 +220,11 @@ devices.
 </table>
 
 <P>See support/configure/RELEASE for a complete set of compatible module
-versions.  This release of synApps is compatible with EPICS release 3.14.12,
-Tornado 2.2, and the following EPICS modules, which are produced and
-maintained by other members of the EPICS collaboration.  These modules are not
-part of synApps, but their maintainers have permitted us to distribute copies
-along with synApps:
+versions.  This release of synApps is compatible with EPICS releases 3.14.12.4
+and 3.15.1, vxWorks 5.5 and 6.9, and the following EPICS modules, which are
+produced and maintained by other members of the EPICS collaboration.  These
+modules are not part of synApps, but their maintainers have permitted us to
+distribute copies along with synApps:
 
 <P><table border>
 <tr><th>Module<th>description
@@ -234,9 +235,7 @@ along with synApps:
 source: http://www-csr.bessy.de/control/SoftDist/sequencer
 <tr><td><b>stream</b><td>configurable device support for message-based devices (PSI)<br>
 source: http://epics.web.psi.ch/software/streamdevice.
-<tr><td><b>vxStats</b><td>vxWorks statistics, modified by us (SNS)<br>
-<b>This module has been replaced by devIocStats, and will be removed from the
-next version of synApps.</b>
+
 <tr><td><b>devIocStats</b><td>IOC statistics, replaces vxStats (SLAC)<br>
 source: http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
 </table>
@@ -330,8 +329,9 @@ like, synApps contains the following code:
 	<dd>Backward compatible extension of the dynamic-link software
 		previously in EPICS base.  (New code should probably use
 		dbCaPutlinkCallback(), instead of recDynLink.)
-<dt>save_restore, dbrestore
-	<dd>Automatic parameter save and boot-time restore.
+<dt>autosave (save_restore, dbrestore, configMenu, asVerify, autosaveBuild)
+	<dd>Automatic parameter save and boot-time restore.  Run-time management
+	of collections of PV values.
 <dt>saveData
 	<dd>Saves scan data to files on an NFS-mounted disk (vxWorks), or to
 	a local disk (other operating systems).
@@ -348,8 +348,7 @@ like, synApps contains the following code:
 <P><li><h3>Miscellaneous</h3>
 
 	<P>The synApps support/utils directory contains a variety of scripts,
-	programs, etc., that some have found useful.  See <a href="#The synApps
-	utils directory">The synApps utils directory</a> for details.
+	programs, etc., that some have found useful.  See <a href="#The synApps utils directory">The synApps utils directory</a> for details.
 
 </ul>
 
@@ -687,17 +686,13 @@ need the following components from the following menu headings:
 <P><h3><li>Building and configuring the support directory</h3>
 
 
-<P>If you have a built copy of EPICS base 3.14.12.1 or later, then building the
+<P>If you have a built copy of EPICS base 3.14.12.4 or later, then building the
 synApps support directory should be very simple:
 
 <ol>
 
 <li>Edit support/configure/RELEASE, and support/configure/CONFIG_SITE, as noted
 above. 
-
-   <blockquote>If you are using Perl 5.6 or earlier, see comments in
-   support/configure/makeReleaseConsistent.pl for needed script
-   modifications.</blockquote>
 
 <li>Edit support/configure/EPICS_BASE.&lt;arch&gt;,
 support/configure/SUPPORT.&lt;arch&gt, as noted above, for the architectures you
@@ -709,7 +704,7 @@ want to build.
 <li>Set the environment variable <code>EPICS_HOST_ARCH</code> to the
    architecture (and compiler, if there is a choice) on which you are building.
    synApps is tested with the architectures <code>linux-x86_64</code>,
-   <code>cygwin-x86</code>, and <code>win32-x86</code>.
+   <code>win32-x86</code>, and <code>win64-x86</code>.
 
 <li>In support, run '<code>make release</code>'.   (See note below.)
 
@@ -752,7 +747,7 @@ synApps-version specific.)
 	# Do once when synApps is built:
 	cd $(SYNAPPS)/support/xxx
 	setenv EPICS_HOST_ARCH &lt;host architecture&gt;
-	gnumake clean uninstall
+	make clean uninstall
 	(repeat as needed for any other architectures)
 	tar cvf ../xxx.tar *
 
@@ -764,7 +759,7 @@ synApps-version specific.)
 	changePrefix xxx 1bma
 	mv iocBoot/iocvxWorks iocBoot/ioc1bma
 	edit iocBoot/ioc1bma/Makefile to specify the IOC processor type
-	gnumake
+	make
 </pre>
 
 <P>To put a second application, 1bmb, into 1bm, I run the following commands:
@@ -782,7 +777,7 @@ synApps-version specific.)
 	mv temp/iocBoot/ioc1bmb 1bm/iocBoot
 	rm -rf temp
 	cd 1bm
-	gnumake
+	make
 </pre>
 
 <P>Edit the files above to agree with your hardware, to load the databases you
@@ -863,7 +858,7 @@ generically.  In this documentation, I'll limit attention to MEDM display files.
 
 
 
-<P><h3><li>Fitting synApps to a particular set of hardware</h3>
+<P><h3><li>Fitting synApps to an application</h3>
 
 
 <P>This happens in the user directory.  Generally, you must tell "EPICS" what
@@ -891,7 +886,10 @@ following files will be touched:
 <P><dt><code>xxx/iocBoot/ioc*/auto_positions.req</code><br>
     <code>xxx/iocBoot/ioc*/auto_settings.req</code>
 <dd>specifies PV's to be saved periodically during operation, and restored
-	automatically when the ioc is rebooted.
+	automatically when the ioc is rebooted.  (But note that you can have these
+	files constructed for you during the boot process.  See <a
+	href="http://www.aps.anl.gov/bcda/synApps/autosave/autoSaveRestore_R5-5.html#autosaveBuild">autosaveBuild</a>
+	in the autosave documentation.)
 
 <P><dt><code>xxx/iocBoot/ioc*/saveData.req</code>
 <dd>identifies PV's used by the saveData software,  sscan records to be
@@ -1009,23 +1007,37 @@ recalibrating any motors.
 <P><li>Monochromators
 
 <P>Several varieties of crystal monochromators are supported in synApps: two
-constant-offset "channel-cut" monochromators, a high-resolution double-crystal
-monochromator, and a spherical-grating monochromator. Most are supported by
-databases paired with State Notation Language (SNL) programs, and several MEDM
-displays.  The EPICS databases <code>kohzuSeq.db</code>, SNL program
-<code>kohzuCtl.st</code>, and MEDM displays <code>kohzu*.adl</code> (also
-<code>kohzu*.gif</code>) are involved in control of two varieties of
-high-heat-load monochromators.  The EPICS database <code>hrSeq.db</code>, SNL
-program <code>hrCtl.st</code>, and MEDM displays <code>hSeq*.adl</code> are
-involved in control of the high-resolution double-crystal monochromator.  The
-spherical grating monochromator is supported by the database <code>SGM.db</code>
-and the displays <code>SGM*.adl</code>.
+constant-offset "channel-cut" monochromators, two varieties of a high-resolution
+four-crystal monochromator, a spherical-grating monochromator, and a multilayer
+monochromator. Most are supported by databases paired with State Notation
+Language (SNL) programs, and several MEDM displays.  The EPICS databases
+<code>kohzuSeq.db</code>, SNL program <code>kohzuCtl.st</code>, and MEDM
+displays <code>kohzu*.adl</code> (also <code>kohzu*.gif</code>) are involved in
+control of two varieties of high-heat-load monochromators.  The EPICS database
+<code>hrSeq.db</code>, SNL program <code>hrCtl.st</code>, and MEDM displays
+<code>hSeq*.adl</code> are involved in control of the high-resolution
+double-crystal monochromator.  The spherical grating monochromator is supported
+by the database <code>SGM.db</code> and the displays <code>SGM*.adl</code>.  The
+multilayer monochromator is supported by the database <code>ml_monoSeq.db</code>
+and displays <code>ml_mono*.adl</code>.
 
 <P><li>Filters
 <P>The APS standard user filters combine several motors and solenoids to control
 the placement of filter material in the beam path.  The databases
 <code>filterMotor.db</code> and <code>filterLock.db</code>, and the MEDM displays
 <code>*filter*.adl</code> are involved in this application.
+
+<P>synApps also supports the XIA filter/shutter box, with two independently
+developed solutions:
+
+<ul>
+<li>pf4: <br>
+pf4*.db<br>
+pf4*.adl
+<li>filterbox:<br>
+filterBladeNoSensor.db, filterDrive.db<br>
+filter_*_*.adl, filterbox_*.adl filter_drive*.adl
+</ul>
 
 <P><li>Basic run-time programming
 
@@ -1112,6 +1124,26 @@ calculations (e.g., to support dichroism experiments) can be done with the
 <code>4step.db</code> database and the related MEDM display, <code>4step.adl</code>. The entire
 measurement sequence can be involved in a scan by treating the 4step database
 as you would treat the scaler or mca software.
+
+<P><li>Signal averaging
+
+<P>Calculating the average of a series of PV values is supported by the
+<code>userAve10.db</code> database, and <code>userAve.adl</code> display. The
+database can calculate one-shot or running averages, and - for PID loops - can
+fit to a line, to mitigate the time delay inherent in signal averaging
+
+<P><li>Interpolation
+
+<P>EPICS supports breakpoint tables for linear interpolation of a dataset fixed
+at boot time.  The synApps <code>interp</code> support (in the <b>calc</b>
+module) can run a drive or readback value through an interpolation table built
+at run time.
+
+<P><li>Glue electronics
+
+<P>The <b>softGlue</b> module supports simple digital electronic circuits that
+can be built at run time.
+
 </ul>
 
 <P><h3><li>Running synApps</h3>
@@ -1356,11 +1388,12 @@ loadable database.  snapDb can also generate a first cut at a user interface for
 the database.
 
 <P>But most EPICS database development is done with a database-configuration
-tool, such as VDCT, or a text editor.  In any case, EPICS-database development
-typically involves the selection of device support, the specification of links
-and link attributes, and the setting of parameters. More sophisticated
-development also involves the programming of an initialization strategy into the
-database, and maybe the writing of an autosave-request file, for it.
+tool, such as VDCT, or with a text editor.  In any case, EPICS-database
+development typically involves the selection of device support, the
+specification of links and link attributes, and the setting of parameters. More
+sophisticated development also involves the programming of an initialization
+strategy into the database, and maybe the writing of an autosave-request file,
+for it.
 
 <li>Development of subroutines for the <i>sub</i> and <i>aSub</i> record types
 
@@ -1374,7 +1407,7 @@ support/calc/calcApp/src.
 <P>This is probably the next easiest, and the next most capable, way of adding
 compiled code to an application.  SNL also introduces to this list the notion
 of client-side program development, for an SNL program is a Channel Access
-client, even though it runs on an IOC. Again, synApps has a bunch of examples,
+client, even though it runs on an IOC. Again, synApps has many examples,
 which you can find by searching for ".st" and ".stt" files. 
 
 <P>Documentation for SNL can be found in the <b>seq</b> module, a copy of which
@@ -1435,7 +1468,7 @@ probably peculiar to the way synApps is used at APS.
 
 <dd>These are for the application developer's convenience in changing EPICS
 prefixes in a user directory.  You must be in the top level of the user
-directory to run changePrefix, and you should do a "gnumake clean uninstall"
+directory to run changePrefix, and you should do a "make clean uninstall"
 before running it.
 
 <P>Example of use:
