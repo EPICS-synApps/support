@@ -5,28 +5,28 @@ cd synApps_5_8
 svn export $SVN/support/tags/synApps_5_8 support
 cd support
 # modules
-svn export $SVN/alive/tags/Rx-x alive-x-x
+svn export $SVN/alive/tags/R1-0 alive-1-0
 svn export $SVN/autosave/tags/R5-5 autosave-5-5
 svn export $SVN/busy/tags/R1-6-1 busy-1-6-1
 svn export $SVN/calc/tags/R3-4-1 calc-3-4-1
 svn export $SVN/camac/tags/R2-7 camac-2-7
-svn export $SVN/dac128V/tags/R2-7 dac128V-2-7
+svn export $SVN/dac128V/tags/R2-8 dac128V-2-8
 svn export $SVN/delaygen/tags/R1-1-1 delaygen-1-1-1
-svn export $SVN/dxp/tags/R3-3 dxp-3-3
+svn export $SVN/dxp/tags/R3-4 dxp-3-4
 svn export $SVN/ip/tags/R2-16 ip-2-16
-svn export $SVN/ip330/tags/R2-7 ip330-2-7
-svn export $SVN/ipUnidig/tags/R2-9 ipUnidig-2-9
+svn export $SVN/ip330/tags/R2-8 ip330-2-8
+svn export $SVN/ipUnidig/tags/R2-10 ipUnidig-2-10
 svn export $SVN/love/tags/R3-2-5 love-3-2-5
 svn export $SVN/mca/tags/R7-6 mca-7-6
 svn export $SVN/measComp/tags/R1-1 measComp-1-1
 svn export $SVN/modbus/tags/R2-7 modbus-2-7
 svn export $SVN/motor/tags/R6-9 motor-6-9
 svn export $SVN/optics/tags/R2-9-3 optics-2-9-3
-svn export $SVN/quadEM/tags/R4-1 quadEM-4-1
+svn export $SVN/quadEM/tags/R5-0 quadEM-5-0
 svn export $SVN/softGlue/tags/R2-4-2 softGlue-2-4-2
 svn export $SVN/sscan/tags/R2-10 sscan-2-10
 svn export $SVN/std/tags/R3-3 std-3-3
-svn export $SVN/stream/tags/R2-6 stream-2-6
+svn export $SVN/stream/tags/R2-6a stream-2-6a
 svn export $SVN/vac/tags/R1-5-1 vac-1-5-1
 svn export $SVN/vme/tags/R2-8-2 vme-2-8-2
 svn export $SVN/xxx/tags/R5-8 xxx-5-8
@@ -39,7 +39,7 @@ svn export $SVN/documentation/tags/synApps_5_8 documentation
 # get areaDetector, ADCore, ADBinaries from https://github.com/areaDetector
 
 # get allenBradley-2-3 from ?
-svn export https://svn.aps.anl.gov/epics/asyn/tags/R4-24 asyn-4-24
+svn export https://svn.aps.anl.gov/epics/asyn/tags/R4-25 asyn-4-25
 svn export https://svn.aps.anl.gov/epics/ipac/tags/V2-13 ipac-2-13
 # get seq-2-1-16 or seq-2-2-0-3(?) from http://www-csr.bessy.de/control/SoftDist/sequencer
 # get devIocStats-3-1-13 from http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
