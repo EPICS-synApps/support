@@ -1,0 +1,94 @@
+record(waveform, "$(P)caputRecorderCommand") {
+    field(FTVL, "CHAR")
+    field(NELM, "$(N)")
+}
+record(waveform, "$(P)caputRecorderComment") {
+    field(FTVL, "CHAR")
+    field(NELM, "$(N)")
+}
+record(bo, "$(P)caputRecorderMacroStopStart") {
+	field(ZNAM, "Stop")
+	field(ONAM, "Start")
+}
+record(bo, "$(P)caputRecorderMacroRecording") {
+	field(ZNAM, "Done")
+	field(ONAM, "Recording")
+}
+record(stringout, "$(P)caputRecorderMacroName") {
+}
+record(stringout, "$(P)caputRecorderUserMessage") {
+}
+record(calcout, "$(P)caputRecorderPulse") {
+	field(SCAN, "1 second")
+	field(CALC, "val?0:1")
+}
+record(busy, "$(P)caputRecorderReloadMacros") {
+	field(ZNAM, "Done")
+	field(ONAM, "Reload Macros")
+}
+
+record(bo, "$(P)caputRecorderSetMacrosBusy") {
+	field(DOL, "1")
+	field(ZNAM, "Done")
+	field(ONAM, "Reload Macros")
+	field(OUT, "$(P)caputRecorderMacrosBusy PP")
+}
+record(busy, "$(P)caputRecorderMacrosBusy") {
+	field(ZNAM, "Done")
+	field(ONAM, "Reload Macros")
+}
+record(stringout, "$(P)caputRecorderMacro") {
+}
+record(mbbo, "$(P)caputRecorderMacros1") {
+	field(PINI, "YES")
+	field(ZRST,"Not loaded")
+	field(FLNK, "$(P)caputRecorderMacros1Put")
+}
+record(sseq, "$(P)caputRecorderMacros1Put") {
+	field(DOL1, "$(P)caputRecorderMacros1")
+	field(LNK1, "$(P)caputRecorderMacro PP")
+	field(FLNK, "$(P)caputRecorderSetMacrosBusy.PROC")
+}
+
+record(mbbo, "$(P)caputRecorderMacros2") {
+	field(PINI, "YES")
+	field(ZRST,"Not loaded")
+	field(FLNK, "$(P)caputRecorderMacros2Put")
+}
+record(sseq, "$(P)caputRecorderMacros2Put") {
+	field(DOL1, "$(P)caputRecorderMacros2")
+	field(LNK1, "$(P)caputRecorderMacro PP")
+	field(FLNK, "$(P)caputRecorderSetMacrosBusy.PROC")
+}
+
+record(busy, "$(P)caputRecorderExecuteMacro") {
+	field(ZNAM, "Done")
+	field(ONAM, "Do")
+}
+record(longout, "$(P)caputRecorderExecuteLoops") {
+	field(DOL, "1")
+}
+record(busy, "$(P)caputRecorderAbortMacro") {
+	field(ZNAM, "Done")
+	field(ONAM, "Abort")
+}
+record(stringout, "$(P)caputRecorderArg1Name") {
+}
+record(stringout, "$(P)caputRecorderArg1Value") {
+}
+record(stringout, "$(P)caputRecorderArg2Name") {
+}
+record(stringout, "$(P)caputRecorderArg2Value") {
+}
+record(stringout, "$(P)caputRecorderArg3Name") {
+}
+record(stringout, "$(P)caputRecorderArg3Value") {
+}
+record(stringout, "$(P)caputRecorderArg4Name") {
+}
+record(stringout, "$(P)caputRecorderArg4Value") {
+}
+record(stringout, "$(P)caputRecorderArg5Name") {
+}
+record(stringout, "$(P)caputRecorderArg5Value") {
+}
