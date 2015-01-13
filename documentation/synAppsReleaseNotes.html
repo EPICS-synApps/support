@@ -26,7 +26,7 @@ no longer be required to work with base 3.14.
 <tr><td>EPICS_BASE<td>3.14.12.3<td>3.14.12.4 or 3.15.1
 <td>&nbsp;
 
-<tr><td>ALIVE<td>-<td>?
+<tr><td>ALIVE<td>-<td>1-0
 <td>new module
 
 <tr><td>ALLEN_BRADLEY<td>2-2<td>2-2
@@ -37,7 +37,7 @@ no longer be required to work with base 3.14.
 <P>configure/RELEASE files modified to work with synApps "make release" build command.
  <P>Note that synApps contains only ADCore and ADBinaries, because those modules require no vendor-supplied support.  Other modules are available from <a href="https://github.com/areaDetector/areaDetector">areaDetector on github</a>
 
-<tr><td>ASYN<td>4-21<td>4-24
+<tr><td>ASYN<td>4-21<td>4-25
 <td><a href="http://www.aps.anl.gov/epics/modules/soft/asyn/R4-24/RELEASE_NOTES.html">release notes</a>
 
 <tr><td>AUTOSAVE<td>5-1<td>5-5
@@ -46,15 +46,18 @@ no longer be required to work with base 3.14.
 <tr><td>BUSY<td>1-6<td>1-6-1
 <td><a href="http://www.aps.anl.gov/bcda/synApps/busy/busyReleaseNotes.html">release notes</a>
 
-<tr><td>CALC<td>3-2<td>3-4
+<tr><td>CALC<td>3-2<td>3-4-2
 <td><a href="http://www.aps.anl.gov/bcda/synApps/calc/calcReleaseNotes.html">release notes</a>
 </ul>
 
 <tr><td>CAMAC<td>2-7<td>2-7
 <td>&nbsp;
 
-<tr><td>DAC128V<td>2-7<td>2-7
+<tr><td>CAPUTRECORDER<td>-<td>1-1
 <td>&nbsp;
+
+<tr><td>DAC128V<td>2-7<td>2-8
+<td><a href="http://cars.uchicago.edu/software/epics/dac128VDoc.html">release notes</a>
 
 <tr><td>DELAYGEN<td>1-1-0<td>1-1-1
 <td><a href="http://www.aps.anl.gov/bcda/synApps/delaygen/delaygen_notes.html">release notes</a>
@@ -63,21 +66,20 @@ no longer be required to work with base 3.14.
 <td><a href="http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/RELEASE_NOTES">release notes</a>
 
 <P>configure/RELEASE modified to work with synApps' "make release" build command.
-<tr><td>DXP<td>3-2<td>3-3
+<tr><td>DXP<td>3-2<td>3-4
 <td><a href="http://cars.uchicago.edu/software/epics/dxpReleaseNotes.html">release notes</a>
 
 <tr><td>IP<td>2-14<td>2-16
 <td><a href="http://www.aps.anl.gov/bcda/synApps/ip/ipReleaseNotes.html">release notes</a>
 
-<tr><td>IP330<td>2-7<td>2-7
+<tr><td>IP330<td>2-7<td>2-8
 <td><a href="http://cars.uchicago.edu/software/epics/ip330ReleaseNotes.html">release notes</a>
 
-<tr><td>IPAC<td>2-12<td>2-12*
-<td><a href="https://svn.aps.anl.gov/trac/epics/ipac/wiki/V2.12">release notes</a>
-<P>V2.12 with subversion commits through 2014-08-22
+<tr><td>IPAC<td>2-12<td>2-13
+<td><a href="https://svn.aps.anl.gov/trac/epics/ipac/wiki/V2.13">release notes</a>
 <P>drvIpac/drvIpac.dbd modified to specify IP carrier types
 
-<tr><td>IPUNIDIG<td>2-9<td>2-9
+<tr><td>IPUNIDIG<td>2-9<td>2-10
 <td><a href="http://cars9.uchicago.edu/software/epics/ipUnidigReleaseNotes.html">release notes</a>
 
 <tr><td>LOVE<td>3-2-5<td>3-2-5
@@ -102,7 +104,7 @@ no longer be required to work with base 3.14.
 <tr><td>QUADEM<td>4-0<td>5-0
 <td> <a href="http://cars.uchicago.edu/software/epics/quadEMReleaseNotes.html">release notes</a>
 
-<tr><td>SNCSEQ<td>2-1-13<td>2-1-16 or 2-2
+<tr><td>SNCSEQ<td>2-1-13<td>2-1-18 or 2-2-1
 <td><a href="http://www-csr.bessy.de/control/SoftDist/sequencer/Installation.html">release notes</a>
 
 <tr><td>SOFTGLUE<td>2-3<td>2-4-2
@@ -114,11 +116,15 @@ no longer be required to work with base 3.14.
 <tr><td>STD<td>3-2<td>3-3
 <td><a href="http://www.aps.anl.gov/bcda/synApps/std/stdReleaseNotes.html">release notes</a>
 
-<tr><td>STREAM<td>2-6<td>2-6<td>
-StreamDevice 2.6
-<P>Packaged into an EPICS module
-<P>streamDevice/Makefile modified to disable build of streamApp, which breaks the RTEMS build, because stream depends on calc, which now depends on the sequencer.
-
+<tr><td>STREAM<td>2-6<td>2-6a<td>
+StreamDevice 2.6 with modifications:
+<ul>
+<li>Packaged into an EPICS module
+<li>Modified with patches from the <a href="http://epics.web.psi.ch/software/streamdevice/">web site</a>, and with fixes in our local repository
+<li>streamDevice/Makefile modified to disable build of streamApp, which breaks
+the RTEMS build, because stream depends on calc, which now depends on the
+sequencer.
+</ul>
 <tr><td>VAC<td>1-4-1<td>1-5-1
 <td><a href="http://www.aps.anl.gov/bcda/synApps/vac/vacReleaseNotes.html">release notes</a>
 

@@ -155,6 +155,9 @@ you've done, to diagnose problems, and to extend synApps in any significant way.
 	record in EPICS base, and extended to operate on strings, arrays, and to
 	implement coupled expressions.
 
+<tr><td><b>caputRecorder</b><td>Support for recording a series of caputs as a
+python function, and replaying the series.
+
 <tr><td><b>camac</b><td>Support for CAMAC hardware.
 
 <tr><td><i>configure</i><td>Build files
@@ -388,6 +391,7 @@ synApps_X_X/support/
     busy/
     calc/
     camac/
+    caputRecorder/
     configure/
         CONFIG
         CONFIG_SITE                     <&mdash; EDIT to build
@@ -440,6 +444,7 @@ synApps_X_X/ioc/
         iocBoot/
             Makefile
             nfsCommands                 <&mdash; EDIT to run
+            accessSecurity.acf          <&mdash; EDIT to run
             ioc1bma/
                 Makefile                <&mdash; EDIT to build
                 *.cmd
@@ -457,6 +462,7 @@ synApps_X_X/ioc/
         start_epics_1bmb                <&mdash; EDIT to run user interface
         start_epics_1bmc                <&mdash; EDIT to run user interface
         start_epics_1bmd                <&mdash; EDIT to run user interface
+        start_putrecorder               <&mdash; EDIT to use caputRecorder
         1bmaApp/
         1bmbApp/
         1bmcApp/
@@ -560,6 +566,9 @@ and <code>make rebuild</code>, in the support directory.
 <dt><code>ioc/start_epics_xxx</code><br>
 	<dd>edit to specify the path to the application and display-file directories,
 		and the name of the top-level display file.
+<dt><code>ioc/start_putrecorder</code><br>
+	<dd>edit to specify the path to the application and its python directory,
+		and to specify the ioc prefixe(s) to monitor.
 </dl>
 </blockquote>
  
