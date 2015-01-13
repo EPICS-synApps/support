@@ -14,6 +14,15 @@ import sys
 import commands
 SVN="https://subversion.xray.aps.anl.gov/synApps"
 IPAC_SVN="https://svn.aps.anl.gov/epics"
+ASYN_SVN="https://svn.aps.anl.gov/epics"
+
+def getSVN_ROOT(module):
+	if (module == "ipac"):
+		return IPAC_SVN
+	elif (module == "asyn"):
+		return ASYN_SVN
+	else:
+		return SVN
 
 def tags(module, verbose=False):
 	"""
@@ -24,10 +33,7 @@ def tags(module, verbose=False):
 	 'R1-3': {'date': ('Mar', '30', '13:20'), 'rev': '10456', 'author': 'mooney'}}
 	"""
 	
-	if (module == "ipac"):
-		SVN_ROOT=IPAC_SVN
-	else:
-		SVN_ROOT=SVN
+	SVN_ROOT = getSVN_ROOT(module)
 
 	if verbose:
 		tagListRaw = commands.getoutput("svn ls -v %s/%s/tags" % (SVN_ROOT,module)).split('\n')
@@ -45,10 +51,7 @@ def tags(module, verbose=False):
 
 def highestRevisionNum(module, dir):
 
-	if (module == "ipac"):
-		SVN_ROOT=IPAC_SVN
-	else:
-		SVN_ROOT=SVN
+	SVN_ROOT = getSVN_ROOT(module)
 
 	maxRev = -1
 	maxTag = "None"
@@ -69,10 +72,7 @@ def highestRevisionNum(module, dir):
 def log(module, tag1=None, tag2=None):
 	# Find the difference between tag1 and tag2, or between tag1 and trunk
 
-	if (module == "ipac"):
-		SVN_ROOT=IPAC_SVN
-	else:
-		SVN_ROOT=SVN
+	SVN_ROOT = getSVN_ROOT(module)
 
 	if tag2 == None:
 		if tag1 == None:
