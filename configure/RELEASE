@@ -52,7 +52,7 @@ QUADEM=$(SUPPORT)/quadEM-5-0
 SNCSEQ=$(SUPPORT)/seq-2-2-1
 SOFTGLUE=$(SUPPORT)/softGlue-2-4-2
 SSCAN=$(SUPPORT)/sscan-2-10
-STD=$(SUPPORT)/std-3-3
+STD=$(SUPPORT)/std-3-4
 #http://epics.web.psi.ch/software/streamdevice/
 STREAM=$(SUPPORT)/stream-2-6a
 VAC=$(SUPPORT)/vac-1-5-1
