@@ -26,7 +26,7 @@ svn export $SVN/optics/tags/R2-9-3 optics-2-9-3
 svn export $SVN/quadEM/tags/R5-0 quadEM-5-0
 svn export $SVN/softGlue/tags/R2-4-2 softGlue-2-4-2
 svn export $SVN/sscan/tags/R2-10 sscan-2-10
-svn export $SVN/std/tags/R3-3 std-3-3
+svn export $SVN/std/tags/R3-4 std-3-4
 svn export $SVN/stream/tags/R2-6a stream-2-6a
 svn export $SVN/vac/tags/R1-5-1 vac-1-5-1
 svn export $SVN/vme/tags/R2-8-2 vme-2-8-2
