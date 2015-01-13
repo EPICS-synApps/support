@@ -1,5 +1,5 @@
 #!/bin/sh
-# changePrefix for synApps 5.6
+# changePrefix for synApps 5.8
 if [ $# -lt 2 ]; then
 	printf "%s\n" "usage: changePrefix old new"
 	printf "%s\n" "example: changePrefix xxx 1bma"
@@ -109,6 +109,14 @@ for dir in ioc*
 		if [ -f ${file} ]; then
 			printf "\r%-50s" "$file"
 			doSed "s/${old}:/${new}:/g" $file
+			doSed "s/${old}\./${new}./g" $file
+			doSed "s/ioc${old}/ioc${new}/g" $file
+			doSed "s/${old}Lib/${new}Lib/g" $file
+			doSed "s/${old}App/${new}App/g" $file
+			doSed "s/=${old}/=${new}/g" $file
+			doSed "/dbLoadDatabase/s/${old}/${new}/g" $file
+			doSed "/registerRecordDeviceDriver/s/${old}/${new}/g" $file
+			doSed "/shellPromptSet/s/${old}/${new}/g" $file
 		fi
 	done
 	for file in auto*.req
