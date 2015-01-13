@@ -48,9 +48,8 @@ MOTOR=$(SUPPORT)/motor-6-9
 OPTICS=$(SUPPORT)/optics-2-9-3
 QUADEM=$(SUPPORT)/quadEM-5-0
 #http://www-csr.bessy.de/control/SoftDist/sequencer
-#SNCSEQ=$(SUPPORT)/seq-2-1-16
-#SNCSEQ=$(SUPPORT)/seq-2-2-0-2
-SNCSEQ=$(SUPPORT)/seq-2-2-snapshot-2014-11-17
+#SNCSEQ=$(SUPPORT)/seq-2-1-18
+SNCSEQ=$(SUPPORT)/seq-2-2-1
 SOFTGLUE=$(SUPPORT)/softGlue-2-4-2
 SSCAN=$(SUPPORT)/sscan-2-10
 STD=$(SUPPORT)/std-3-3
