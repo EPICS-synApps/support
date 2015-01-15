@@ -35,7 +35,13 @@ no longer be required to work with base 3.14.
 <tr><td>AREA_DETECTOR<br>ADCORE<br>ADBINARIES<td>1-9-1<br>&nbsp;<br>&nbsp;<td>2-0<br>2-1<br>2-1
 <td><a href="https://github.com/areaDetector/areaDetector/blob/master/RELEASE.md">release notes</a>
 <P>configure/RELEASE files modified to work with synApps "make release" build command.
- <P>Note that synApps contains only ADCore and ADBinaries, because those modules require no vendor-supplied support.  Other modules are available from <a href="https://github.com/areaDetector/areaDetector">areaDetector on github</a>
+<P>Note that synApps contains only ADCore and ADBinaries, because those modules require no vendor-supplied support.  Other modules are available from <a href="https://github.com/areaDetector/areaDetector">areaDetector on github</a>
+<P>The copy in the synApps tar file has been modified: 
+<ul>
+<li>Makefile: "DIRS := $(DIRS) ADBinaries" -> "DIRS := $(DIRS) $(ADBINARIES)", and so on
+<li>RELEASE files have all been changed to support synApps "make release"
+<li>NDPluginSupport.dbd modified to add a newline to the last line (needed for 3.15.1).
+</ul>
 
 <tr><td>ASYN<td>4-21<td>4-25
 <td><a href="http://www.aps.anl.gov/epics/modules/soft/asyn/R4-24/RELEASE_NOTES.html">release notes</a>
@@ -51,7 +57,7 @@ no longer be required to work with base 3.14.
 </ul>
 
 <tr><td>CAMAC<td>2-7<td>2-7
-<td>&nbsp;
+<td>devCamacInclude.dbd modified to include stdSupport.dbd, (because std changed).
 
 <tr><td>CAPUTRECORDER<td>-<td>1-1
 <td>&nbsp;
