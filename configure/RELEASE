@@ -21,8 +21,8 @@ EPICS_BASE=/home/oxygen/MOONEY/epics/bazaar/base-3.14
 ALIVE=$(SUPPORT)/alive-1-0
 ALLEN_BRADLEY=$(SUPPORT)/allenBradley-2-3
 AREA_DETECTOR=$(SUPPORT)/areaDetector-2-0
-ADCORE=$(AREA_DETECTOR)/ADCore
-ADBINARIES=$(AREA_DETECTOR)/ADBinaries
+ADCORE=$(AREA_DETECTOR)/ADCore-2-1
+ADBINARIES=$(AREA_DETECTOR)/ADBinaries-2-1
 #https://svn.aps.anl.gov/epics/asyn/
 ASYN=$(SUPPORT)/asyn-4-25
 AUTOSAVE=$(SUPPORT)/autosave-5-5
@@ -50,7 +50,7 @@ QUADEM=$(SUPPORT)/quadEM-5-0
 #http://www-csr.bessy.de/control/SoftDist/sequencer
 #SNCSEQ=$(SUPPORT)/seq-2-1-18
 SNCSEQ=$(SUPPORT)/seq-2-2-1
-SOFTGLUE=$(SUPPORT)/softGlue-2-4-2
+SOFTGLUE=$(SUPPORT)/softGlue-2-4-3
 SSCAN=$(SUPPORT)/sscan-2-10
 STD=$(SUPPORT)/std-3-4
 #http://epics.web.psi.ch/software/streamdevice/
