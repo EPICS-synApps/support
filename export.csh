@@ -24,7 +24,7 @@ svn export $SVN/modbus/tags/R2-7 modbus-2-7
 svn export $SVN/motor/tags/R6-9 motor-6-9
 svn export $SVN/optics/tags/R2-9-3 optics-2-9-3
 svn export $SVN/quadEM/tags/R5-0 quadEM-5-0
-svn export $SVN/softGlue/tags/R2-4-2 softGlue-2-4-2
+svn export $SVN/softGlue/tags/R2-4-3 softGlue-2-4-3
 svn export $SVN/sscan/tags/R2-10 sscan-2-10
 svn export $SVN/std/tags/R3-4 std-3-4
 svn export $SVN/stream/tags/R2-6a stream-2-6a
