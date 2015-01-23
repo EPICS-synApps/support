@@ -29,7 +29,7 @@ AUTOSAVE=$(SUPPORT)/autosave-5-5
 BUSY=$(SUPPORT)/busy-1-6-1
 CALC=$(SUPPORT)/calc-3-4-2
 CAMAC=$(SUPPORT)/camac-2-7
-CAPUTRECORDER=$(SUPPORT)/caputRecorder-1-1
+CAPUTRECORDER=$(SUPPORT)/caputRecorder-1-2
 DAC128V=$(SUPPORT)/dac128V-2-8
 DELAYGEN=$(SUPPORT)/delaygen-1-1-1
 #http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
