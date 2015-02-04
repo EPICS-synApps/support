@@ -4,8 +4,12 @@
 use Cwd;
 use File::Copy 'move';
 
+my $num = 0;
+
 sub doSed
 {
+	$num = $num + 1;
+	
 	if ( @_ < 2 )
 	{
 		print "usage: doSed <sed script> filename\n";
@@ -13,17 +17,17 @@ sub doSed
 		exit;
     }
 	
-	$sed_script = $_[0];
-	$filename = $_[1];
+	my $sed_script = $_[0];
+	my $filename = $_[1];
 	
 	unlink "${filename}~";
 	unlink "${filename}%";
 	move $filename, "${filename}~";
-	`sed ${sed_script} ${filename}~ >${filename}`;
+	`sed "${sed_script}" ${filename}~ >${filename}`;
 	unlink "${filename}~";
 }
 
-$argc = @ARGV;
+my $argc = @ARGV;
 
 if ( $argc < 2 )
 {
@@ -32,8 +36,8 @@ if ( $argc < 2 )
 	exit 2;
 }
 
-$old = $ARGV[0];
-$new = $ARGV[1];
+my $old = $ARGV[0];
+my $new = $ARGV[1];
 
 if ( ! -d "${old}App" )
 {
@@ -47,7 +51,7 @@ if ( ! -d "iocBoot" )
 	exit 2;
 }
 
-$top = cwd();
+my $top = cwd();
 
 if ( -f "start_epics_${old}" )
 {
@@ -60,7 +64,7 @@ if ( -f "start_epics_${old}" )
 	doSed("s/${old}App/${new}App/g", "start_epics_${new}");
 	
 	#chmod a+x
-	$permissions = ((stat("start_epics_${new}"))[2] | oct("111"));
+	my $permissions = ((stat("start_epics_${new}"))[2] | oct("111"));
 	chmod $permissions, "start_epics_${new}";
 }
 
@@ -75,7 +79,7 @@ if ( -f "start_epics_${old}.bash" )
 	doSed("s/${old}App/${new}App/g", "start_epics_${new}.bash");
 	
 	#chmod a+x
-	$permissions = ((stat("start_epics_${new}.bash"))[2] | oct("111"));
+	my $permissions = ((stat("start_epics_${new}.bash"))[2] | oct("111"));
 	chmod $permissions, "start_epics_${new}.bash";
 }
 
@@ -107,12 +111,12 @@ if ( -f "${old}Support.dbd" )
 	move "${old}Support.dbd", "${new}Support.dbd";
 }
 
-foreach $file (glob("*${old}*Include.dbd"))
+foreach my $file (glob("*${old}*Include.dbd"))
 {
 	if ( -f $file )
 	{
-		doSed("/Include\.dbd/s/${old}/${new}/g", $file);
-		$newfile=~s/$old/$new/g;
+		doSed("/Include\\.dbd/s/${old}/${new}/g", $file);
+		my $newfile=~s/$old/$new/g;
 		move $file, $newfile;
 	}
 }
@@ -139,16 +143,16 @@ if (-d "ioc${old}" )
 	move "ioc${old}", "ioc${new}";
 }
 
-foreach $dir (glob("ioc*"))
+foreach my $dir (glob("ioc*"))
 {
 	chdir $dir;
 	
-	foreach $file (glob("*.cmd*"))
+	foreach my $file (glob("*.cmd*"))
 	{
 		printf "\r%-50s", "$file";
 		doSed("s!/${old}/!/${new}/!g", $file);
 		doSed("s/${old}:/${new}:/g", $file);
-		doSed("s/${old}\./${new}./g", $file);
+		doSed("s/${old}\\./${new}./g", $file);
 		doSed("s/ioc${old}/ioc${new}/g", $file);
 		doSed("s/${old}Lib/${new}Lib/g", $file);
 		doSed("s/${old}App/${new}App/g", $file);
@@ -158,7 +162,7 @@ foreach $dir (glob("ioc*"))
 		doSed("/shellPromptSet/s/${old}/${new}/g", $file);
 	}
 	
-	foreach $file (glob("*.iocsh"))
+	foreach my $file (glob("*.iocsh"))
 	{
 		if ( -f $file )
 		{
@@ -175,13 +179,13 @@ foreach $dir (glob("ioc*"))
 		}
 	}
 	
-	foreach $file (glob("auto*.req"))
+	foreach my $file (glob("auto*.req"))
 	{
 		printf "\r%-50s", $file;
 		doSed("s/${old}:/${new}:/g", $file);
 	}
 	
-	foreach $file (glob("*.substitutions"))
+	foreach my $file (glob("*.substitutions"))
 	{
 		printf "\r%-50s", $file;
 		doSed("s/${old}/${new}/g", $file);
@@ -189,7 +193,7 @@ foreach $dir (glob("ioc*"))
 		doSed("s/${old}App/${new}App/g", $file);
 	}
 	
-	foreach $file (glob("*.template"))
+	foreach my $file (glob("*.template"))
 	{
 		if ( -f $file )
 		{
@@ -232,13 +236,13 @@ printf "\r%-50s", "${new}App/op/adl";
 chdir "${top}/${new}App/op/adl";
 move "${old}.adl", "${new}.adl";
 
-foreach $file (glob("*.adl"))
+foreach my $file (glob("*.adl"))
 {
 	printf "\r%-50s", $file;
 	doSed("s/${old}:/${new}:/g", $file);
 	doSed("s/=${old}/=${new}/g", $file);
 	doSed("s/${old}App/${new}App/g", $file);
-	doSed("s/${old}\.adl/${new}.adl/g", $file);
+	doSed("s/${old}\\.adl/${new}.adl/g", $file);
 }
 
 chdir "${top}/${new}App/op";
@@ -246,7 +250,7 @@ if ( -d "./opi" )
 {
 	printf "\r%-50s", "${new}App/op/opi";
 	chdir "opi";
-	foreach $file (glob("*.opi"))
+	foreach my $file (glob("*.opi"))
 	{
 		printf "\r%-50s", $file;
 		doSed("s/${old}/${new}/g", $file);
@@ -258,7 +262,7 @@ if ( -d "./ui" )
 {
 	printf "\r%-50s", "${new}App/op/ui";
 	chdir "ui";
-	foreach $file (glob("*.ui"))
+	foreach my $file (glob("*.ui"))
 	{
 		printf "\r%-50s", $file;
 		doSed("s/${old}/${new}/g", $file);
@@ -270,7 +274,7 @@ if ( -d "./burt" )
 {
 	printf "\r%-50s", "${new}App/op/burt";
 	chdir "burt";
-	foreach $file (glob("*"))
+	foreach my $file (glob("*"))
 	{
 		printf "\r%-50s", $file;
 		doSed("s/${old}/${new}/g", $file);
