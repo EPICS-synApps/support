@@ -2,14 +2,10 @@
 # changePrefix for synApps 5.8
 
 use Cwd;
-use File::Copy 'move';
-
-my $num = 0;
+use File::Copy;
 
 sub doSed
 {
-	$num = $num + 1;
-	
 	if ( @_ < 2 )
 	{
 		print "usage: doSed <sed script> filename\n";
@@ -19,12 +15,8 @@ sub doSed
 	
 	my $sed_script = $_[0];
 	my $filename = $_[1];
-	
-	unlink "${filename}~";
-	unlink "${filename}%";
-	move $filename, "${filename}~";
-	`sed "${sed_script}" ${filename}~ >${filename}`;
-	unlink "${filename}~";
+		
+	`perl -pi -e '${sed_script}' ${filename}`
 }
 
 my $argc = @ARGV;
@@ -121,7 +113,7 @@ foreach my $file (glob("*${old}*Include.dbd"))
 	}
 }
 
-`perl -pi.bak -e "s/${old}(?!\.dbd)/${new}/g" Makefile`;
+`perl -pi.bak -e "s/${old}(?!\\.dbd)/${new}/g" Makefile`;
 
 if (-f "Makefile.bak" )
 {
@@ -157,9 +149,9 @@ foreach my $dir (glob("ioc*"))
 		doSed("s/${old}Lib/${new}Lib/g", $file);
 		doSed("s/${old}App/${new}App/g", $file);
 		doSed("s/=${old}/=${new}/g", $file);
-		doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
-		doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
-		doSed("/shellPromptSet/s/${old}/${new}/g", $file);
+		#doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
+		#doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
+		#doSed("/shellPromptSet/s/${old}/${new}/g", $file);
 	}
 	
 	foreach my $file (glob("*.iocsh"))
@@ -168,14 +160,14 @@ foreach my $dir (glob("ioc*"))
 		{
 			printf "\r%-50s", $file;
 			doSed("s/${old}:/${new}:/g", $file);
-			doSed("s/${old}\./${new}./g", $file);
+			doSed("s/${old}\\./${new}./g", $file);
 			doSed("s/ioc${old}/ioc${new}/g", $file);
 			doSed("s/${old}Lib/${new}Lib/g", $file);
 			doSed("s/${old}App/${new}App/g", $file);
 			doSed("s/=${old}/=${new}/g", $file);
-			doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
-			doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
-			doSed("/shellPromptSet/s/${old}/${new}/g", $file);
+			#doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
+			#doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
+			#doSed("/shellPromptSet/s/${old}/${new}/g", $file);
 		}
 	}
 	
