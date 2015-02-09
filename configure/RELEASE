@@ -25,7 +25,7 @@ ADCORE=$(AREA_DETECTOR)/ADCore-2-1
 ADBINARIES=$(AREA_DETECTOR)/ADBinaries-2-1
 #https://svn.aps.anl.gov/epics/asyn/
 ASYN=$(SUPPORT)/asyn-4-25
-AUTOSAVE=$(SUPPORT)/autosave-5-5
+AUTOSAVE=$(SUPPORT)/autosave-5-5-1
 BUSY=$(SUPPORT)/busy-1-6-1
 CALC=$(SUPPORT)/calc-3-4-2
 CAMAC=$(SUPPORT)/camac-2-7
