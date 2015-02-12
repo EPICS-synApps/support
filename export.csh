@@ -30,7 +30,7 @@ svn export $SVN/std/tags/R3-4 std-3-4
 svn export $SVN/stream/tags/R2-6a stream-2-6a
 svn export $SVN/vac/tags/R1-5-1 vac-1-5-1
 svn export $SVN/vme/tags/R2-8-2 vme-2-8-2
-svn export $SVN/xxx/tags/R5-8 xxx-5-8
+svn export $SVN/xxx/tags/R5-8-1 xxx-5-8-1
 # other directories
 svn export $SVN/configure/tags/synApps_5_8 configure
 svn export $SVN/utils/tags/synApps_5_8 utils
