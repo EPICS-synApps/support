@@ -10,7 +10,7 @@ svn export $SVN/autosave/tags/R5-5-1 autosave-5-5-1
 svn export $SVN/busy/tags/R1-6-1 busy-1-6-1
 svn export $SVN/calc/tags/R3-4-2 calc-3-4-2
 svn export $SVN/camac/tags/R2-7 camac-2-7
-svn export $SVN/caputRecorder/tags/R1-3-1 caputRecorder-1-3-1
+svn export $SVN/caputRecorder/tags/R1-4 caputRecorder-1-4
 svn export $SVN/dac128V/tags/R2-8 dac128V-2-8
 svn export $SVN/delaygen/tags/R1-1-1 delaygen-1-1-1
 svn export $SVN/dxp/tags/R3-4 dxp-3-4
@@ -30,7 +30,7 @@ svn export $SVN/std/tags/R3-4 std-3-4
 svn export $SVN/stream/tags/R2-6a stream-2-6a
 svn export $SVN/vac/tags/R1-5-1 vac-1-5-1
 svn export $SVN/vme/tags/R2-8-2 vme-2-8-2
-svn export $SVN/xxx/tags/R5-8-1 xxx-5-8-1
+svn export $SVN/xxx/tags/R5-8-2 xxx-5-8-2
 # other directories
 svn export $SVN/configure/tags/synApps_5_8 configure
 svn export $SVN/utils/tags/synApps_5_8 utils
