@@ -8,13 +8,13 @@ cd support
 svn export $SVN/alive/tags/R1-0-0 alive-1-0
 svn export $SVN/autosave/tags/R5-6 autosave-5-6
 svn export $SVN/busy/tags/R1-6-1 busy-1-6-1
-svn export $SVN/calc/tags/R3-4-2 calc-3-4-2
+svn export $SVN/calc/tags/R3-4-2 calc-3-4-2-1
 svn export $SVN/camac/tags/R2-7 camac-2-7
 svn export $SVN/caputRecorder/tags/R1-4-1 caputRecorder-1-4-1
 svn export $SVN/dac128V/tags/R2-8 dac128V-2-8
 svn export $SVN/delaygen/tags/R1-1-1 delaygen-1-1-1
 svn export $SVN/dxp/tags/R3-4 dxp-3-4
-svn export $SVN/ip/tags/R2-16 ip-2-16
+svn export $SVN/ip/tags/R2-17 ip-2-17
 svn export $SVN/ip330/tags/R2-8 ip330-2-8
 svn export $SVN/ipUnidig/tags/R2-10 ipUnidig-2-10
 svn export $SVN/love/tags/R3-2-5 love-3-2-5
