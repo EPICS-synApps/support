@@ -27,7 +27,7 @@ ADBINARIES=$(AREA_DETECTOR)/ADBinaries-2-1
 ASYN=$(SUPPORT)/asyn-4-25
 AUTOSAVE=$(SUPPORT)/autosave-5-6
 BUSY=$(SUPPORT)/busy-1-6-1
-CALC=$(SUPPORT)/calc-3-4-2
+CALC=$(SUPPORT)/calc-3-4-2-1
 CAMAC=$(SUPPORT)/camac-2-7
 CAPUTRECORDER=$(SUPPORT)/caputRecorder-1-4-1
 DAC128V=$(SUPPORT)/dac128V-2-8
@@ -35,7 +35,7 @@ DELAYGEN=$(SUPPORT)/delaygen-1-1-1
 #http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
 DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-13
 DXP=$(SUPPORT)/dxp-3-4
-IP=$(SUPPORT)/ip-2-16
+IP=$(SUPPORT)/ip-2-17
 IP330=$(SUPPORT)/ip330-2-8
 #https://svn.aps.anl.gov/epics/ipac/
 IPAC=$(SUPPORT)/ipac-2-13
