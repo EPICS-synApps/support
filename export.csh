@@ -40,7 +40,7 @@ svn export $SVN/documentation/tags/synApps_5_8 documentation
 # get areaDetector, ADCore, ADBinaries from https://github.com/areaDetector
 
 # get allenBradley-2-3 from ?
-svn export https://svn.aps.anl.gov/epics/asyn/tags/R4-25 asyn-4-25
+svn export https://svn.aps.anl.gov/epics/asyn/tags/R4-26 asyn-4-26
 svn export https://svn.aps.anl.gov/epics/ipac/tags/V2-13 ipac-2-13
 # get seq-2-1-18 or seq-2-2-1 from http://www-csr.bessy.de/control/SoftDist/sequencer
 # get devIocStats-3-1-13 from http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
