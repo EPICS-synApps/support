@@ -25,11 +25,11 @@ ADCORE=$(AREA_DETECTOR)/ADCore-2-1
 ADBINARIES=$(AREA_DETECTOR)/ADBinaries-2-1
 #https://svn.aps.anl.gov/epics/asyn/
 ASYN=$(SUPPORT)/asyn-4-25
-AUTOSAVE=$(SUPPORT)/autosave-5-5-1
+AUTOSAVE=$(SUPPORT)/autosave-5-6
 BUSY=$(SUPPORT)/busy-1-6-1
 CALC=$(SUPPORT)/calc-3-4-2
 CAMAC=$(SUPPORT)/camac-2-7
-CAPUTRECORDER=$(SUPPORT)/caputRecorder-1-4
+CAPUTRECORDER=$(SUPPORT)/caputRecorder-1-4-1
 DAC128V=$(SUPPORT)/dac128V-2-8
 DELAYGEN=$(SUPPORT)/delaygen-1-1-1
 #http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
@@ -57,5 +57,5 @@ STD=$(SUPPORT)/std-3-4
 STREAM=$(SUPPORT)/stream-2-6a
 VAC=$(SUPPORT)/vac-1-5-1
 VME=$(SUPPORT)/vme-2-8-2
-XXX=$(SUPPORT)/xxx-5-8-2
+XXX=$(SUPPORT)/xxx-5-8-3
 
