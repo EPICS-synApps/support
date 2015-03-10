@@ -6,7 +6,7 @@ svn export $SVN/support/tags/synApps_5_8 support
 cd support
 # modules
 svn export $SVN/alive/tags/R1-0-0 alive-1-0
-svn export $SVN/autosave/tags/R5-6 autosave-5-6
+svn export $SVN/autosave/tags/R5-6-1 autosave-5-6-1
 svn export $SVN/busy/tags/R1-6-1 busy-1-6-1
 svn export $SVN/calc/tags/R3-4-2 calc-3-4-2-1
 svn export $SVN/camac/tags/R2-7 camac-2-7
