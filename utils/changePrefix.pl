@@ -273,4 +273,23 @@ if ( -d "./burt" )
 	}
 }
 
+chdir "${top}/${new}App/op";
+if ( -d "./python" )
+{
+	printf "\r%-50s", "${new}App/op/python";
+	chdir "python";
+
+
+	if ( -f "macros_${old}.py" )
+	{
+		move "macros_${old}.py", "macros_${new}.py";
+	}
+
+	foreach my $file (glob("*"))
+	{
+		printf "\r%-50s", $file;
+		doSed("s/${old}:/${new}:/g", $file);
+	}
+}
+
 printf "\r%-50s\n", "Done.";
