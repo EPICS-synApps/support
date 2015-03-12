@@ -13,7 +13,8 @@ SUPPORT=/home/oxygen/MOONEY/epics/synAppsSVN/support
 -include $(TOP)/configure/SUPPORT.$(EPICS_HOST_ARCH)
 #EPICS_BASE=/home/oxygen/MOONEY/epics/bazaar/base-3.14
 #EPICS_BASE=/home/oxygen/MOONEY/epics/bazaar/base-3.15
-EPICS_BASE=/APSshare/epics/base-3.14.12.4
+#EPICS_BASE=/APSshare/epics/base-3.14.12.4
+EPICS_BASE=/home/oxygen/MOONEY/epics/base-3.14.12.5-rc1
 -include $(TOP)/configure/EPICS_BASE 
 -include $(TOP)/configure/EPICS_BASE.$(EPICS_HOST_ARCH) 
 
@@ -53,7 +54,7 @@ QUADEM=$(SUPPORT)/quadEM-5-0
 #SNCSEQ=$(SUPPORT)/seq-2-1-18
 SNCSEQ=$(SUPPORT)/seq-2-2-1
 SOFTGLUE=$(SUPPORT)/softGlue-2-4-3
-SSCAN=$(SUPPORT)/sscan-2-10
+SSCAN=$(SUPPORT)/sscan-2-10-1
 STD=$(SUPPORT)/std-3-4
 #http://epics.web.psi.ch/software/streamdevice/
 STREAM=$(SUPPORT)/stream-2-6a
