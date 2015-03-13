@@ -38,9 +38,34 @@ svn export $SVN/documentation/tags/synApps_5_8 documentation
 
 
 # get areaDetector, ADCore, ADBinaries from https://github.com/areaDetector
+wget https://github.com/areaDetector/areaDetector/archive/R2-0.tar.gz
+tar zxf R2-0.tar.gz
+rm R2-0.tar.gz
+
+cd areaDetector-R2-0
+wget https://github.com/areaDetector/ADCore/archive/R2-1.tar.gz
+tar zxf R2-1.tar.gz
+rm R2-1.tar.gz
+
+wget https://github.com/areaDetector/ADBinaries/archive/R2-1.tar.gz
+tar zxf R2-1.tar.gz
+rm R2-1.tar.gz
+
+cd ..
 
 # get allenBradley-2-3 from ?
+#setenv CVSROOT /usr/local/iocapps/cvsroot
+#cvs export -r R2-3-asd1 -d allenBradley-2-3 modules/bus/allenBradley
+
 svn export https://svn.aps.anl.gov/epics/asyn/tags/R4-26 asyn-4-26
 svn export https://svn.aps.anl.gov/epics/ipac/tags/V2-13 ipac-2-13
+
 # get seq-2-1-18 or seq-2-2-1 from http://www-csr.bessy.de/control/SoftDist/sequencer
+setenv SEQ_URL http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-2.2.1.tar.gz
+wget http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-2.2.1.tar.gz
+tar zxf seq-2.2.1.tar.gz
+mv seq-2.2.1 seq-2-2-1
+rm seq-2.2.1.tar.gz
+
 # get devIocStats-3-1-13 from http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
+svn export https://svn.code.sf.net/p/epics/svn/applications/tags/iocStats/3-1-13 devIocStats-3-1-13
