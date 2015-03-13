@@ -39,16 +39,17 @@ endef
 
 ###### 1st Tier Support Modules - Only Depend on EPICS BASE ######
 
-MODULE_LIST  = DEVIOCSTATS SNCSEQ ALLEN_BRADLEY
+MODULE_LIST =  SNCSEQ ALLEN_BRADLEY
 MODULE_LIST += IPAC AUTOSAVE ALIVE CAPUTRECORDER
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 ###### 1.5 Tier Support Modules - Only Depend on 1st Tier ######
 # sscan now depends on seq, via scanProgress.st, but sscan can also build
 # without seq.
-MODULE_LIST = SSCAN 
+MODULE_LIST = SSCAN DEVIOCSTATS
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 $(SSCAN)_DEPEND_DIRS     = $(SNCSEQ)
+$(DEVIOCSTATS)_DEPEND_DIRS     = $(SNCSEQ)
 
 ###### 2nd Tier Support Modules - Only Depend on 1st Tier ########
 
