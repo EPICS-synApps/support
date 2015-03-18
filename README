@@ -25,11 +25,14 @@ configure/RELEASE.win32-x86 (for win32-x86 only)
 
 Makefile
 Makefile.win32-x86 (for win32-x86 only)
-        - Select modules to build.
-        Add/delete support modules by adding/deleting
-        '#' to the two entries for each support module;  
-                SUPPORT_DIRS += $(module)
-                RELEASE_FILES += $(module)/configure/RELEASE
+        - To remove modules from the build, 
+	  delete or comment out the module in the
+	  <synApps>/configure/RELEASE file; not in the Makefile
+	- Select modules to build.
+ 	  Add/delete support modules by adding/deleting
+ 	  '#' to the two entries for each support module;
+ 	  	  SUPPORT_DIRS += $(module)
+ 	  	  RELEASE_FILES += $(module)/configure/RELEASE
 
 To build synApps:
         set EPICS_HOST_ARCH appropriately (e.g., solaris-sparc)
