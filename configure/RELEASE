@@ -8,6 +8,8 @@
 #NOTES
 #     - To remove modules from the build, delete or comment out the
 #       module name.
+#     - Refer to the "MODULE_LIST" in <synApps>/configure/Makefile 
+#       for the inter-dependencies of the different modules.
 
 SUPPORT=/home/oxygen/MOONEY/epics/synAppsSVN/support
 -include $(TOP)/configure/SUPPORT.$(EPICS_HOST_ARCH)
