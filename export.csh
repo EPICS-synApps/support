@@ -53,9 +53,11 @@ rm R2-1.tar.gz
 
 cd ..
 
-# get allenBradley-2-3 from ?
-#setenv CVSROOT /usr/local/iocapps/cvsroot
-#cvs export -r R2-3-asd1 -d allenBradley-2-3 modules/bus/allenBradley
+# get allenBradley-2-3
+wget http://www.aps.anl.gov/epics/download/modules/allenBradley-2.3.tar.gz
+tar xf allenBradley-2.3.tar.gz
+mv allenBradley-2.3 allenBradley-2-3
+rm allenBradley-2.3.tar.gz
 
 svn export https://svn.aps.anl.gov/epics/asyn/tags/R4-26 asyn-4-26
 svn export https://svn.aps.anl.gov/epics/ipac/tags/V2-13 ipac-2-13
