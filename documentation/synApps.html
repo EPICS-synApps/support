@@ -1215,8 +1215,11 @@ with the default top-level display file.
 <P><li>caQtDM
 
 <P>caQtDM display files (*.ui) in synApps were translated from MEDM-display
-files (*.adl) with the adl2ui translator in caQtDM-2-8 (available from
-http://epics.web.psi.ch/software/caqtdm/).
+files (*.adl) with the adl2ui translator in caQtDM-3-8-10 (available from
+http://epics.web.psi.ch/software/caqtdm/).  (Actually, the version used to 
+translate .adl files in xxx and other synApps modules was modified from the
+pristine version, so that related display menu buttons would look as they do
+in MEDM.)
 
 <P>caQtDM implements a search path list very much as in MEDM, so we can use the
 same technique to autogenerate that path from an application's configure/RELEASE
@@ -1246,13 +1249,18 @@ into the "OPI Search Path" box.  See CSS-BOY documentation for other options.
 
 <P><li>autosave/restore
 
-<P>You must give the crate write permission to xxx/iocBoot/ioc*/autosave so it can
+<P>You must give a vxWorks IOC write permission to xxx/iocBoot/ioc*/autosave so it can
 write the files auto_positions.sav and auto_settings.sav there.  It's also
 helpful to set the autosave directory's 'group' bit so that files the crate
 writes will be owned by the owner of the directory instead of by
 <vxworks_user>.  Normally, I do this:
 
     <pre>chmod a+w,g+s autosave</pre>
+
+<P>If you are using autosaveBuild, you must give a vxWorks IOC write permission
+to xxx/iocBoot/ioc*, so that it can write request files it builds.  Also, you
+must use a version of vxWorks that can append to files via NFS.  vxWorks 6.9.4.1
+works.
 
 <P>To modify the list of PV's that are saved and restored, edit the files
 
@@ -1364,6 +1372,18 @@ other kinds:
 sections intended primarily for run-time programming by end users.  Examples
 include end-of-acquisition calculations for scalers and digital multimeters;
 region-of-interest summing, and background-subtraction for mca records.
+
+<li><a href=http://www.aps.anl.gov/bcda/synApps/caputRecorder/caputRecorder_releases.html>caputRecorder</a>
+ macro recording
+
+<P>Users who know how to accomplish a task by executing or modifying EPICS records
+can write software to automate that task using caputRecorder:
+<ol>
+<li>Enter a macro name to identify the task.
+<li>Press caputRecorder's "Start" button.
+<li>Perform the task manually.
+<li>Press caputRecorder's "Stop" button.
+</ol><P>
 
 <li>Display editing
 
