@@ -25,7 +25,7 @@ ALIVE=$(SUPPORT)/alive-1-0
 ALLEN_BRADLEY=$(SUPPORT)/allenBradley-2-3
 AREA_DETECTOR=$(SUPPORT)/areaDetector-R2-0
 ADCORE=$(AREA_DETECTOR)/ADCore-R2-2
-ADBINARIES=$(AREA_DETECTOR)/ADBinaries-R2-1
+ADBINARIES=$(AREA_DETECTOR)/ADBinaries-R2-2
 #https://svn.aps.anl.gov/epics/asyn/
 ASYN=$(SUPPORT)/asyn-4-26
 AUTOSAVE=$(SUPPORT)/autosave-5-6-1
