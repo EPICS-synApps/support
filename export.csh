@@ -47,9 +47,9 @@ wget https://github.com/areaDetector/ADCore/archive/R2-2.tar.gz
 tar zxf R2-2.tar.gz
 rm R2-2.tar.gz
 
-wget https://github.com/areaDetector/ADBinaries/archive/R2-1.tar.gz
-tar zxf R2-1.tar.gz
-rm R2-1.tar.gz
+wget https://github.com/areaDetector/ADBinaries/archive/R2-2.tar.gz
+tar zxf R2-2.tar.gz
+rm R2-2.tar.gz
 
 cd ..
 
