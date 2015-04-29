@@ -2597,7 +2597,8 @@ class TopFrame(wx.Frame):
 			self.SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
 
 def main():
-	app = wx.PySimpleApp()
+	#app = wx.PySimpleApp()
+	app = wx.App(False)
 	frame = TopFrame(None, -1, 'MDA Explorer', size=(800,500))
 	frame.Center()
 	(hS, vS) = frame.GetSize()
