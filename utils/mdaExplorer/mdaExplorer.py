@@ -920,14 +920,14 @@ class CanvasFrame(wx.Frame):
 					y[i].data = numpy.array(y[i].data, copy = 0)
 				data = select2DSlice(y[i].data, self.indexList, self.widthList)
 				if frame.plot2D_autoAspect:
-					im = ax.imshow(data, aspect='auto', extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
+					im = ax.imshow(data, aspect='auto', extent=dataMinMax, origin = 'upper', interpolation = 'nearest')
 				else:
-					im = ax.imshow(data, extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
+					im = ax.imshow(data, extent=dataMinMax, origin = 'upper', interpolation = 'nearest')
 			else:
 				if frame.plot2D_autoAspect:
-					im = ax.imshow(y[i].data, aspect='auto', extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
+					im = ax.imshow(y[i].data, aspect='auto', extent=dataMinMax, origin = 'upper', interpolation = 'nearest')
 				else:
-					im = ax.imshow(y[i].data, extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
+					im = ax.imshow(y[i].data, extent=dataMinMax, origin = 'upper', interpolation = 'nearest')
 			if frame.plot2D_withColorBar:
 				fig.colorbar(im)
 
@@ -1029,9 +1029,9 @@ class CanvasFrame(wx.Frame):
 				y[i].data = numpy.array(y[i].data, copy = 0)
 			data = select2DSlice(y[i].data, self.indexList, self.widthList)
 			if frame.plot2D_autoAspect:
-				im = ax.imshow(data, aspect='auto', extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
+				im = ax.imshow(data, aspect='auto', extent=dataMinMax, origin = 'upper', interpolation = 'nearest')
 			else:
-				im = ax.imshow(data, extent=dataMinMax, origin = 'lower', interpolation = 'nearest')
+				im = ax.imshow(data, extent=dataMinMax, origin = 'upper', interpolation = 'nearest')
 			if frame.plot2D_withColorBar:
 				fig.colorbar(im)
 
