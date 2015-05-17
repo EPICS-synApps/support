@@ -4,6 +4,8 @@ REM     to GnuWin32 binaries should be on Path
 REM This script relies on command line version of svn to be on the PATH.  
 REM     Later versions of TortoiseSVN provide a command line version of SVN
 REM     but this may not be installed by default
+REM This script relies on a command line version of git to be on the PATH.
+REM     Command line git is available from GIT Development Community.
 set SVN=https://subversion.xray.aps.anl.gov/synApps
 mkdir synApps_5_8
 cd synApps_5_8
