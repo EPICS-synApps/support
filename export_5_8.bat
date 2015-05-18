@@ -59,7 +59,7 @@ move R2-2 ADCore-R2-2.tar.gz
 gzip -d ADCore-R2-2.tar.gz
 bsdtar xf ADCore-R2-2.tar
 rmdir ADCore
-move ADCore-R2-2 ADCore
+REM move ADCore-R2-2 ADCore
 rm ADCore-R2-2.tar
 
 wget --no-check-certificate https://github.com/areaDetector/ADBinaries/archive/R2-2.tar.gz
@@ -67,7 +67,7 @@ move R2-2 ADBinaries-R2-2.tar.gz
 gzip -d ADBinaries-R2-2.tar.gz
 bsdtar xf ADBinaries-R2-2.tar
 rmdir ADBinaries
-move ADBinaries-R2-2 ADBinaries
+REM move ADBinaries-R2-2 ADBinaries
 rm ADBinaries-R2-2.tar
 
 cd ..
