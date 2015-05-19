@@ -72,6 +72,28 @@ rm ADBinaries-R2-2.tar
 
 cd ..
 
+REM Modify copied Template config files
+REM "----------------"
+copy areaDetector-R2-0\configure\EXAMPLE_RELEASE_LIBS.local areaDetector-R2-0\configure\RELEASE_LIBS.local 
+copy areaDetector-R2-0\configure\EXAMPLE_RELEASE_PATHS.local areaDetector-R2-0\configure\RELEASE_PATHS.local 
+copy areaDetector-R2-0\configure\EXAMPLE_RELEASE_PRODS.local areaDetector-R2-0\configure\RELEASE_PRODS.local 
+REM "Modify AreaDetector Template ConfigFile RELEASE_LIBS.local"
+sed.exe -e "s/asyn-4-22/asyn-4-26/" -i areaDetector-R2-0\configure\RELEASE_LIBS.local
+sed.exe -e "s/ADCore/ADCore-R2-2/" -i areaDetector-R2-0\configure\RELEASE_LIBS.local
+sed.exe -e "s/ADCore/ADCore-R2-2/" -i areaDetector-R2-0\Makefile
+sed.exe -e "s/ADBinaries/ADBinaries-R2-2/" -i areaDetector-R2-0\configure\RELEASE_LIBS.local
+sed.exe -e "s/ADBinaries/ADBinaries-R2-2/" -i areaDetector-R2-0\Makefile
+REM "Modify AreaDetector Template ConfigFile RELEASE_PATHS.local"
+sed.exe -e "s/\/corvette\/home\/epics\/devel/C:\/PICAM\/synApps_5_8\/support/" -i areaDetector-R2-0\configure\RELEASE_PATHS.local
+sed.exe -e "s/\/corvette\/usr\/local\/epics/C:\/PICAM/" -i areaDetector-R2-0\configure\RELEASE_PATHS.local
+sed.exe -e "s/areaDetector-2-0/areaDetector-R2-0/" -i areaDetector-R2-0\configure\RELEASE_PATHS.local
+sed.exe -e "s/base-3.14.12.3/base-3.14.12.5/" -i areaDetector-R2-0\configure\RELEASE_PATHS.local
+REM "Modify AreaDetector Template ConfigFile RELEASE_PRODS.local"
+sed.exe -e "s/autosave-5-1/autosave-5-6-1/" -i areaDetector-R2-0\configure\RELEASE_PRODS.local
+sed.exe -e "s/busy-1-6/busy-1-6-1/" -i areaDetector-R2-0\configure\RELEASE_PRODS.local
+sed.exe -e "s/sscan-2-9/sscan-2-10-1/" -i areaDetector-R2-0\configure\RELEASE_PRODS.local
+sed.exe -e "s/calc-3-2/calc-3-4-2-1/" -i areaDetector-R2-0\configure\RELEASE_PRODS.local
+
 REM get allenBradley-2-3
 wget http://www.aps.anl.gov/epics/download/modules/allenBradley-2.3.tar.gz
 gzip -d allenBradley-2.3.tar.gz
