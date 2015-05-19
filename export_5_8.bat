@@ -93,6 +93,7 @@ sed.exe -e "s/autosave-5-1/autosave-5-6-1/" -i areaDetector-R2-0\configure\RELEA
 sed.exe -e "s/busy-1-6/busy-1-6-1/" -i areaDetector-R2-0\configure\RELEASE_PRODS.local
 sed.exe -e "s/sscan-2-9/sscan-2-10-1/" -i areaDetector-R2-0\configure\RELEASE_PRODS.local
 sed.exe -e "s/calc-3-2/calc-3-4-2-1/" -i areaDetector-R2-0\configure\RELEASE_PRODS.local
+del sed??????
 
 REM get allenBradley-2-3
 wget http://www.aps.anl.gov/epics/download/modules/allenBradley-2.3.tar.gz
