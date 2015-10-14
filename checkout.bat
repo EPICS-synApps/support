@@ -8,18 +8,47 @@ mkdir synAppsSVN
 cd synAppsSVN
 
 rem For file access
-rem set SVN=file:///home/joule/SVNSYNAP/svn
+rem set APS_SVN=file:///home/joule/SVNSYNAP/svn
 
 rem For https access
-set SVN=https://subversion.xray.aps.anl.gov/synApps
+set APS_SVN=https://subversion.xray.aps.anl.gov/synApps
+set GIT_SVN=https://github.com/epics-modules
 
-svn co %SVN%/support/trunk support
+svn co %APS_SVN%/support/trunk support
 cd support
 
-set items= autosave busy calc camac caputRecorder configure
-set items=%items% dac128V delaygen documentation dxp ebrick
-set items=%items% ip ip330 ipUnidig love mca measComp modbus motor
-set items=%items% optics quadEM sscan softGlue std stream
-set items=%items% utils vac vme xxx
+set aps_items=      
+set git_items=
 
-FOR %%i IN (%items%) DO svn co %SVN%/%%i/trunk %%i
+set aps_items=%aps_items% autosave
+set aps_items=%aps_items% busy
+set aps_items=%aps_items% calc
+set git_items=%git_items% camac
+set aps_items=%aps_items% caputRecorder
+set aps_items=%aps_items% configure
+set git_items=%git_items% dac128V   
+set aps_items=%aps_items% delaygen
+set aps_items=%aps_items% documentation
+set git_items=%git_items% dxp
+set aps_items=%aps_items% ebrick
+set aps_items=%aps_items% ip
+set git_items=%git_items% ip330
+set git_items=%git_items% ipUnidig
+set aps_items=%aps_items% love
+set git_items=%git_items% mca
+set git_items=%git_items% measComp
+set git_items=%git_items% modbus
+set aps_items=%aps_items% motor
+set aps_items=%aps_items% optics
+set git_items=%git_items% quadEM
+set aps_items=%aps_items% sscan
+set aps_items=%aps_items% softGlue
+set aps_items=%aps_items% std
+set aps_items=%aps_items% stream
+set aps_items=%aps_items% utils
+set aps_items=%aps_items% vac
+set aps_items=%aps_items% vme
+set aps_items=%aps_items% xxx
+
+FOR %%i IN (%aps_items%) DO svn co %APS_SVN%/%%i/trunk %%i
+FOR %%i IN (%git_items%) DO svn co %GIT_SVN%/%%i/trunk %%i
