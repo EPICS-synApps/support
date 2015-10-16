@@ -20,8 +20,9 @@ cd support
 set aps_items=      
 set git_items=
 
-set aps_items=%aps_items% autosave
-set aps_items=%aps_items% busy
+set aps_items=%aps_items% alive
+set git_items=%git_items% autosave
+set git_items=%git_items% busy
 set aps_items=%aps_items% calc
 set git_items=%git_items% camac
 set aps_items=%aps_items% caputRecorder
@@ -38,7 +39,7 @@ set aps_items=%aps_items% love
 set git_items=%git_items% mca
 set git_items=%git_items% measComp
 set git_items=%git_items% modbus
-set aps_items=%aps_items% motor
+set git_items=%git_items% motor
 set aps_items=%aps_items% optics
 set git_items=%git_items% quadEM
 set aps_items=%aps_items% sscan
