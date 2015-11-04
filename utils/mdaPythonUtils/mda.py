@@ -1395,13 +1395,14 @@ def findDescInEnv(name, env):
 	return "{%s}" % desc[2]
 
 def getDescFromEnv(data):
-	for d in data[1:]:
-		for p in d.p:
-			if not p.desc:
-				p.desc = findDescInEnv(p.name, data[0])
-		for d in d.d:
-			if not d.desc:
-				d.desc = findDescInEnv(d.name, data[0])
+	if (data):
+		for d in data[1:]:
+			for p in d.p:
+				if not p.desc:
+					p.desc = findDescInEnv(p.name, data[0])
+			for d in d.d:
+				if not d.desc:
+					d.desc = findDescInEnv(d.name, data[0])
 
 ########################
 # opMDA and related code
