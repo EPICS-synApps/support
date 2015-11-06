@@ -10,55 +10,61 @@ cd synAppsSVN
 
 ### For https access
 setenv APS_SVN    https://subversion.xray.aps.anl.gov/synApps
-setenv GIT_SVN    https://github.com/epics-modules
+setenv GIT_BASE   https://github.com
 
 ### checkout the main synApps/support
 svn co ${APS_SVN}/support/trunk support
 cd support
 
 setenv APS_ITEMS ""
-setenv GIT_ITEMS ""
+setenv GIT_DRIVERS ""
+setenv GIT_ADMIN ""
 
 ### define where each module is located now
-setenv APS_ITEMS "${APS_ITEMS} alive"
-setenv APS_ITEMS "${APS_ITEMS} calc"
-setenv APS_ITEMS "${APS_ITEMS} caputRecorder"
-setenv APS_ITEMS "${APS_ITEMS} configure"
-setenv APS_ITEMS "${APS_ITEMS} delaygen"
-setenv APS_ITEMS "${APS_ITEMS} documentation"
 setenv APS_ITEMS "${APS_ITEMS} ebrick"
-setenv APS_ITEMS "${APS_ITEMS} ip"
-setenv APS_ITEMS "${APS_ITEMS} love"
 setenv APS_ITEMS "${APS_ITEMS} optics"
 setenv APS_ITEMS "${APS_ITEMS} softGlue"
 setenv APS_ITEMS "${APS_ITEMS} sscan"
-setenv APS_ITEMS "${APS_ITEMS} std"
 setenv APS_ITEMS "${APS_ITEMS} stream"
-setenv APS_ITEMS "${APS_ITEMS} utils"
-setenv APS_ITEMS "${APS_ITEMS} vac"
-setenv APS_ITEMS "${APS_ITEMS} vme"
 setenv APS_ITEMS "${APS_ITEMS} xxx"
 
-setenv GIT_ITEMS "${GIT_ITEMS} autosave"
-setenv GIT_ITEMS "${GIT_ITEMS} busy"
-setenv GIT_ITEMS "${GIT_ITEMS} camac"
-setenv GIT_ITEMS "${GIT_ITEMS} dac128V"
-setenv GIT_ITEMS "${GIT_ITEMS} dxp"
-setenv GIT_ITEMS "${GIT_ITEMS} ip330"
-setenv GIT_ITEMS "${GIT_ITEMS} ipUnidig"
-setenv GIT_ITEMS "${GIT_ITEMS} mca"
-setenv GIT_ITEMS "${GIT_ITEMS} measComp"
-setenv GIT_ITEMS "${GIT_ITEMS} modbus"
-setenv GIT_ITEMS "${GIT_ITEMS} motor"
-setenv GIT_ITEMS "${GIT_ITEMS} quadEM"
+setenv GIT_DRIVERS "${GIT_DRIVERS} alive"
+setenv GIT_DRIVERS "${GIT_DRIVERS} autosave"
+setenv GIT_DRIVERS "${GIT_DRIVERS} busy"
+setenv GIT_DRIVERS "${GIT_DRIVERS} calc"
+setenv GIT_DRIVERS "${GIT_DRIVERS} camac"
+setenv GIT_DRIVERS "${GIT_DRIVERS} caputRecorder"
+setenv GIT_DRIVERS "${GIT_DRIVERS} dac128V"
+setenv GIT_DRIVERS "${GIT_DRIVERS} delaygen"
+setenv GIT_DRIVERS "${GIT_DRIVERS} dxp"
+setenv GIT_DRIVERS "${GIT_DRIVERS} ip"
+setenv GIT_DRIVERS "${GIT_DRIVERS} ip330"
+setenv GIT_DRIVERS "${GIT_DRIVERS} ipUnidig"
+setenv GIT_DRIVERS "${GIT_DRIVERS} love"
+setenv GIT_DRIVERS "${GIT_DRIVERS} mca"
+setenv GIT_DRIVERS "${GIT_DRIVERS} measComp"
+setenv GIT_DRIVERS "${GIT_DRIVERS} modbus"
+setenv GIT_DRIVERS "${GIT_DRIVERS} motor"
+setenv GIT_DRIVERS "${GIT_DRIVERS} quadEM"
+setenv GIT_DRIVERS "${GIT_DRIVERS} std"
+setenv GIT_DRIVERS "${GIT_DRIVERS} vac"
+setenv GIT_DRIVERS "${GIT_DRIVERS} vme"
 
+setenv GIT_ADMIN "${GIT_ADMIN} utils"
+setenv GIT_ADMIN "${GIT_ADMIN} configure"
+setenv GIT_ADMIN "${GIT_ADMIN} documentation"
+
+### checkout driver modules from GitHub using subversion
+foreach i ( ${GIT_ADMIN} )
+    svn co ${GIT_BASE}/EPICS-synApps/$i/trunk $i
+end
+
+### checkout driver modules from GitHub using subversion
+foreach i ( ${GIT_DRIVERS} )
+    svn co ${GIT_BASE}/epics-modules/$i/trunk $i
+end
 
 ### checkout modules from the APS subversion repository
 foreach i ( ${APS_ITEMS} )
     svn co ${APS_SVN}/$i/trunk $i
-end
-
-### checkout modules from GitHub using subversion
-foreach i ( ${GIT_ITEMS} )
-    svn co ${GIT_SVN}/$i/trunk $i
 end
