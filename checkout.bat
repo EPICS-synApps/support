@@ -14,7 +14,7 @@ rem For https access
 set APS_SVN=https://subversion.xray.aps.anl.gov/synApps
 set GIT_BASE=https://github.com
 
-svn co %APS_SVN%/support/trunk support
+svn co %GIT_BASE%/support/trunk support
 cd support
 
 set aps_items=      
@@ -22,11 +22,6 @@ set git_drivers=
 set git_admin=
 
 set aps_items=%aps_items% ebrick
-set aps_items=%aps_items% optics
-set aps_items=%aps_items% softGlue
-set aps_items=%aps_items% sscan
-set aps_items=%aps_items% stream
-set aps_items=%aps_items% xxx
 
 set git_drivers=%git_drivers% alive
 set git_drivers=%git_drivers% autosave
@@ -44,11 +39,16 @@ set git_drivers=%git_drivers% love
 set git_drivers=%git_drivers% mca
 set git_drivers=%git_drivers% measComp
 set git_drivers=%git_drivers% modbus
+set git_drivers=%git_drivers% optics
 set git_drivers=%git_drivers% motor
 set git_drivers=%git_drivers% quadEM
+set git_drivers=%git_drivers% softGlue
+set git_drivers=%git_drivers% sscan
 set git_drivers=%git_drivers% std
+set git_drivers=%git_drivers% stream
 set git_drivers=%git_drivers% vac
 set git_drivers=%git_drivers% vme
+set git_drivers=%git_drivers% xxx
 
 set git_admin=%git_admin% configure
 set git_admin=%git_admin% documentation
