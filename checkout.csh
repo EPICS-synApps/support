@@ -13,7 +13,7 @@ setenv APS_SVN    https://subversion.xray.aps.anl.gov/synApps
 setenv GIT_BASE   https://github.com
 
 ### checkout the main synApps/support
-svn co ${APS_SVN}/support/trunk support
+svn co ${GIT_BASE}/EPICS-synApps/support/trunk support
 cd support
 
 setenv APS_ITEMS ""
@@ -22,11 +22,6 @@ setenv GIT_ADMIN ""
 
 ### define where each module is located now
 setenv APS_ITEMS "${APS_ITEMS} ebrick"
-setenv APS_ITEMS "${APS_ITEMS} optics"
-setenv APS_ITEMS "${APS_ITEMS} softGlue"
-setenv APS_ITEMS "${APS_ITEMS} sscan"
-setenv APS_ITEMS "${APS_ITEMS} stream"
-setenv APS_ITEMS "${APS_ITEMS} xxx"
 
 setenv GIT_DRIVERS "${GIT_DRIVERS} alive"
 setenv GIT_DRIVERS "${GIT_DRIVERS} autosave"
@@ -45,10 +40,15 @@ setenv GIT_DRIVERS "${GIT_DRIVERS} mca"
 setenv GIT_DRIVERS "${GIT_DRIVERS} measComp"
 setenv GIT_DRIVERS "${GIT_DRIVERS} modbus"
 setenv GIT_DRIVERS "${GIT_DRIVERS} motor"
+setenv GIT_DRIVERS "${GIT_DRIVERS} optics"
 setenv GIT_DRIVERS "${GIT_DRIVERS} quadEM"
+setenv GIT_DRIVERS "${GIT_DRIVERS} softGlue"
+setenv GIT_DRIVERS "${GIT_DRIVERS} sscan"
 setenv GIT_DRIVERS "${GIT_DRIVERS} std"
+setenv GIT_DRIVERS "${GIT_DRIVERS} stream"
 setenv GIT_DRIVERS "${GIT_DRIVERS} vac"
 setenv GIT_DRIVERS "${GIT_DRIVERS} vme"
+setenv GIT_DRIVERS "${GIT_DRIVERS} xxx"
 
 setenv GIT_ADMIN "${GIT_ADMIN} utils"
 setenv GIT_ADMIN "${GIT_ADMIN} configure"
