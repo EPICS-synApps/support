@@ -1,7 +1,5 @@
 rem checkout.bat
 
-:: TODO: test on Windows OS
-
 echo off
 
 rem clone all the synApps modules from GitHub
