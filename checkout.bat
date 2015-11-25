@@ -14,7 +14,7 @@ rem For https access
 set APS_SVN=https://subversion.xray.aps.anl.gov/synApps
 set GIT_BASE=https://github.com
 
-svn co %GIT_BASE%/support/trunk support
+svn co %GIT_BASE%/EPICS-synApps/support/trunk support
 cd support
 
 set aps_items=      
