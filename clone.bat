@@ -2,26 +2,19 @@ rem checkout.bat
 
 echo off
 
-rem Checkout the synApps trunk from the subversion repository
+rem clone all the synApps modules from GitHub
 
-mkdir synAppsSVN
-cd synAppsSVN
+mkdir synAppsGIT
+cd synAppsGIT
 
-rem For file access
-rem set APS_SVN=file:///home/joule/SVNSYNAP/svn
-
-rem For https access
-set APS_SVN=https://subversion.xray.aps.anl.gov/synApps
 set GIT_BASE=https://github.com
 
-svn co %GIT_BASE%/EPICS-synApps/support/trunk support
+rem clone the main synApps/support
+git clone %GIT_BASE%/EPICS-synApps/support
 cd support
 
-set aps_items=      
 set git_drivers=
 set git_admin=
-
-set aps_items=%aps_items% ebrick
 
 set git_drivers=%git_drivers% alive
 set git_drivers=%git_drivers% autosave
@@ -54,6 +47,6 @@ set git_admin=%git_admin% configure
 set git_admin=%git_admin% documentation
 set git_admin=%git_admin% utils
 
-FOR %%i IN (%git_admin%) DO svn co %GIT_BASE%/EPICS-synApps/%%i/trunk %%i
-FOR %%i IN (%git_drivers%) DO svn co %GIT_BASE%/epics-modules/%%i/trunk %%i
-FOR %%i IN (%aps_items%) DO svn co %APS_SVN%/%%i/trunk %%i
+FOR %%i IN (%git_admin%) DO git clone %GIT_BASE%/EPICS-synApps/%%i.git
+FOR %%i IN (%git_drivers%) DO git clone %GIT_BASE%/epics-modules/%%i.git
+git clone --recursive https://github.com/areaDetector/areaDetector.git
