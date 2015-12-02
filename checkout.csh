@@ -24,6 +24,7 @@ setenv GIT_ADMIN ""
 setenv APS_ITEMS "${APS_ITEMS} ebrick"
 
 setenv GIT_DRIVERS "${GIT_DRIVERS} alive"
+setenv GIT_DRIVERS "${GIT_DRIVERS} asyn"
 setenv GIT_DRIVERS "${GIT_DRIVERS} autosave"
 setenv GIT_DRIVERS "${GIT_DRIVERS} busy"
 setenv GIT_DRIVERS "${GIT_DRIVERS} calc"

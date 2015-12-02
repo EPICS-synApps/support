@@ -17,6 +17,7 @@ set git_drivers=
 set git_admin=
 
 set git_drivers=%git_drivers% alive
+set git_drivers=%git_drivers% asyn
 set git_drivers=%git_drivers% autosave
 set git_drivers=%git_drivers% busy
 set git_drivers=%git_drivers% calc

@@ -16,6 +16,7 @@ setenv GIT_ADMIN ""
 
 ### define where each module is located now
 setenv GIT_DRIVERS "${GIT_DRIVERS} alive"
+setenv GIT_DRIVERS "${GIT_DRIVERS} asyn"
 setenv GIT_DRIVERS "${GIT_DRIVERS} autosave"
 setenv GIT_DRIVERS "${GIT_DRIVERS} busy"
 setenv GIT_DRIVERS "${GIT_DRIVERS} calc"
