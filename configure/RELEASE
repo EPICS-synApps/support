@@ -18,6 +18,7 @@ EPICS_BASE=/home/oxygen/MOONEY/epics/base-3.14.12.5
 
 #/usr/local/iocapps/cvsroot/modules/bus/allenBradley
 ALIVE=$(SUPPORT)/alive-1-0-1
+# http://www.aps.anl.gov/epics/modules/bus/allenBradley
 ALLEN_BRADLEY=$(SUPPORT)/allenBradley-2-3
 AREA_DETECTOR=$(SUPPORT)/areaDetector-2-4
 ADCORE=$(AREA_DETECTOR)/ADCore
@@ -31,6 +32,7 @@ CAMAC=$(SUPPORT)/camac-2-7
 CAPUTRECORDER=$(SUPPORT)/caputRecorder-1-5-1
 DAC128V=$(SUPPORT)/dac128V-2-8
 DELAYGEN=$(SUPPORT)/delaygen-1-1-1
+# http://sourceforge.net/projects/epics/files/devIocStats/
 DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-14
 DXP=$(SUPPORT)/dxp-3-5
 IP=$(SUPPORT)/ip-2-17
@@ -56,4 +58,3 @@ STREAM=$(SUPPORT)/stream-2-6c
 VAC=$(SUPPORT)/vac-1-6
 VME=$(SUPPORT)/vme-2-8-2
 XXX=$(SUPPORT)/xxx-5-8-4
-
