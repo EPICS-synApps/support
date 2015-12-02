@@ -1,9 +1,5 @@
 #FILENAME:      RELEASE
 #USAGE:         Specify directory paths to synApps support modules
-#Version:       $Revision$
-#Modified By:   $Author$
-#Last Modified: $Date$
-#HeadURL:       $URL$
 
 #NOTES
 #     - To remove modules from the build, delete or comment out the
