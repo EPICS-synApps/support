@@ -39,21 +39,30 @@ endef
 
 ###### 1st Tier Support Modules - Only Depend on EPICS BASE ######
 
-MODULE_LIST =  SNCSEQ ALLEN_BRADLEY
-MODULE_LIST += IPAC AUTOSAVE ALIVE CAPUTRECORDER
+MODULE_LIST  =  
+MODULE_LIST += SNCSEQ 
+MODULE_LIST += ALLEN_BRADLEY
+MODULE_LIST += IPAC 
+MODULE_LIST += AUTOSAVE 
+MODULE_LIST += ALIVE 
+MODULE_LIST += CAPUTRECORDER
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 ###### 1.5 Tier Support Modules - Only Depend on 1st Tier ######
 # sscan now depends on seq, via scanProgress.st, but sscan can also build
 # without seq.
-MODULE_LIST = SSCAN DEVIOCSTATS
+MODULE_LIST  =  
+MODULE_LIST += SSCAN 
+MODULE_LIST += DEVIOCSTATS
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 $(SSCAN)_DEPEND_DIRS     = $(SNCSEQ)
 $(DEVIOCSTATS)_DEPEND_DIRS     = $(SNCSEQ)
 
 ###### 2nd Tier Support Modules - Only Depend on 1st Tier ########
 
-MODULE_LIST  = ASYN CALC
+MODULE_LIST  = 
+MODULE_LIST += ASYN 
+MODULE_LIST += CALC
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(ASYN)_DEPEND_DIRS = $(SNCSEQ) $(IPAC)
@@ -61,8 +70,19 @@ $(CALC)_DEPEND_DIRS = $(SNCSEQ) $(SSCAN)
 
 ################### 3rd Tier Support Modules #####################
 
-MODULE_LIST  = BUSY STD DAC128V IP330 IPUNIDIG LOVE
-MODULE_LIST += IP OPTICS STREAM MODBUS VAC SOFTGLUE
+MODULE_LIST  =  
+MODULE_LIST += BUSY 
+MODULE_LIST += STD 
+MODULE_LIST += DAC128V 
+MODULE_LIST += IP330 
+MODULE_LIST += IPUNIDIG 
+MODULE_LIST += LOVE
+MODULE_LIST += IP 
+MODULE_LIST += OPTICS 
+MODULE_LIST += STREAM 
+MODULE_LIST += MODBUS 
+MODULE_LIST += VAC 
+MODULE_LIST += SOFTGLUE
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(BUSY)_DEPEND_DIRS     = $(ASYN)
@@ -80,7 +100,12 @@ $(SOFTGLUE)_DEPEND_DIRS = $(ASYN) $(IPAC)
 
 ################### 4th Tier Support Modules #####################
 
-MODULE_LIST  = DELAYGEN MCA VME MOTOR AREA_DETECTOR
+MODULE_LIST  =  
+MODULE_LIST += DELAYGEN 
+MODULE_LIST += MCA 
+MODULE_LIST += VME 
+MODULE_LIST += MOTOR 
+MODULE_LIST += AREA_DETECTOR
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(DELAYGEN)_DEPEND_DIRS = $(ASYN) $(AUTOSAVE) $(CALC) $(IP) $(IPAC) $(STREAM) 
@@ -92,7 +117,8 @@ $(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(AUTOSAVE) $(BUSY) $(CALC) $(SSCAN)
 
 ################### 4.5th Tier Support Modules #####################
 
-MODULE_LIST  = MEASCOMP
+MODULE_LIST  =  
+MODULE_LIST += MEASCOMP
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(MEASCOMP)_DEPEND_DIRS   = $(ASYN) $(CALC) $(STD) $(MCA) $(BUSY) $(SSCAN) $(AUTOSAVE) $(SNCSEQ)  
@@ -100,7 +126,9 @@ $(MEASCOMP)_DEPEND_DIRS   = $(ASYN) $(CALC) $(STD) $(MCA) $(BUSY) $(SSCAN) $(AUT
 ################### 5th Tier Support Modules #####################
 # The conditional below should be a target arch, but those are not
 # defined at this level.
-MODULE_LIST = CAMAC QUADEM
+MODULE_LIST  =  
+MODULE_LIST += CAMAC 
+MODULE_LIST += QUADEM
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(CAMAC)_DEPEND_DIRS    = $(CALC) $(SSCAN) $(MOTOR) $(STD)
@@ -109,7 +137,8 @@ $(QUADEM)_DEPEND_DIRS   = $(AREA_DETECTOR) $(ASYN) $(AUTOSAVE) $(BUSY) $(IPAC) $
 ################### 6th Tier Support Modules #####################
 # The conditional below should be a target arch, but those are not
 # defined at this level.
-MODULE_LIST = DXP
+MODULE_LIST  =  
+MODULE_LIST += DXP
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(DXP)_DEPEND_DIRS = $(AREA_DETECTOR) $(ASYN) $(AUTOSAVE) $(BUSY) $(CALC) $(CAMAC) $(MCA) $(SNCSEQ) $(SSCAN)
