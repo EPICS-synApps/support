@@ -40,6 +40,9 @@ define  MODULE_defined
   RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_LIBS.local)
   RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_LIBS.local.$(EPICS_HOST_ARCH))
   RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_LIBS.$(EPICS_HOST_ARCH))
+  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_PRODS.local)
+  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_PRODS.local.$(EPICS_HOST_ARCH))
+  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_PRODS.$(EPICS_HOST_ARCH))
   endif  
 endef
 
