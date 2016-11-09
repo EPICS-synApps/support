@@ -11,4 +11,4 @@ refer to http://www.aps.anl.gov/bcda/synApps/license.php
 
 ## HTML documentation
 
-* [HTML documentation](http://htmlpreview.github.com/?https://github.com/EPICS-synApps/utils/blob/master/documentation/README.md)
+* [HTML documentation](https://github.com/EPICS-synApps/utils/blob/master/documentation/README.md)
