@@ -155,6 +155,11 @@ for dir in ioc*
 		doSed "s/${old}/${new}/g" ${old}.sh
 		mv ${old}.sh ${new}.sh
 	fi
+	for file in autosave/*.cfg
+	do
+		printf "\r%-50s" "$file"
+		doSed "s/${old}:/${new}:/g" $file
+	done
 done
 
 printf "\r%-50s" "${new}App/op/adl"
@@ -173,6 +178,7 @@ cd ${TOP}/${new}App/op
 if [ -d opi ]; then
 	printf "\r%-50s" "${new}App/op/opi"
 	cd opi
+	mv ${old}\.opi ${new}\.opi
 	for file in *.opi
 	do
 		printf "\r%-50s" "$file"
@@ -184,6 +190,7 @@ cd ${TOP}/${new}App/op
 if [ -d ui ]; then
 	printf "\r%-50s" "${new}App/op/ui"
 	cd ui
+	mv ${old}\.ui ${new}\.ui
 	for file in *.ui
 	do
 		printf "\r%-50s" "$file"
