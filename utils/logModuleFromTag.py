@@ -12,9 +12,9 @@ usage:
 
 import sys
 import commands
-SVN="https://subversion.xray.aps.anl.gov/synApps"
-IPAC_SVN="https://svn.aps.anl.gov/epics"
-ASYN_SVN="https://svn.aps.anl.gov/epics"
+SVN="https://github.com/epics-modules"
+IPAC_SVN="https://github.com/epics-modules"
+ASYN_SVN="https://github.com/epics-modules"
 
 def getSVN_ROOT(module):
 	if (module == "ipac"):
