@@ -275,9 +275,13 @@ rm ${TAG}.tar.gz
 echo 'ASYN=$(SUPPORT)/asyn-'${TAG} >>RELEASE_files.txt
 
 # ipac
-setenv TAG V2-14
-svn export https://svn.aps.anl.gov/epics/ipac/tags/${TAG} ipac-${TAG}
-echo 'IPAC=$(SUPPORT)/ipac-'${TAG} >>RELEASE_files.txt
+setenv TAG 2.14
+setenv DASHTAG 2-14
+wget https://github.com/epics-modules/ipac/archive/${TAG}.tar.gz
+tar zxf ${TAG}.tar.gz
+mv ipac-${TAG} ipac-${DASHTAG}
+echo 'IPAC=$(SUPPORT)/ipac-'${DASHTAG} >>RELEASE_files.txt
+rm ${TAG}.tar.gz
 
 # seq
 wget http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-2.2.3.tar.gz
