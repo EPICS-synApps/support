@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ### clone all the synApps modules from GitHub
 
@@ -11,41 +11,43 @@ export GIT_BASE=https://github.com
 git clone ${GIT_BASE}/EPICS-synApps/support
 cd support
 
-export GIT_DRIVERS=
-export GIT_ADMIN=
+GIT_DRIVERS=
+GIT_ADMIN=
 
 ### define where each module is located now
-export GIT_DRIVERS+=" alive"
-export GIT_DRIVERS+=" asyn"
-export GIT_DRIVERS+=" autosave"
-export GIT_DRIVERS+=" busy"
-export GIT_DRIVERS+=" calc"
-export GIT_DRIVERS+=" camac"
-export GIT_DRIVERS+=" caputRecorder"
-export GIT_DRIVERS+=" dac128V"
-export GIT_DRIVERS+=" delaygen"
-export GIT_DRIVERS+=" dxp"
-export GIT_DRIVERS+=" ip"
-export GIT_DRIVERS+=" ip330"
-export GIT_DRIVERS+=" ipUnidig"
-export GIT_DRIVERS+=" love"
-export GIT_DRIVERS+=" mca"
-export GIT_DRIVERS+=" measComp"
-export GIT_DRIVERS+=" modbus"
-export GIT_DRIVERS+=" motor"
-export GIT_DRIVERS+=" optics"
-export GIT_DRIVERS+=" quadEM"
-export GIT_DRIVERS+=" softGlue"
-export GIT_DRIVERS+=" sscan"
-export GIT_DRIVERS+=" std"
-export GIT_DRIVERS+=" stream"
-export GIT_DRIVERS+=" vac"
-export GIT_DRIVERS+=" vme"
-export GIT_DRIVERS+=" xxx"
+GIT_DRIVERS+=" alive"
+GIT_DRIVERS+=" asyn"
+GIT_DRIVERS+=" autosave"
+GIT_DRIVERS+=" busy"
+GIT_DRIVERS+=" calc"
+GIT_DRIVERS+=" camac"
+GIT_DRIVERS+=" caputRecorder"
+GIT_DRIVERS+=" dac128V"
+GIT_DRIVERS+=" delaygen"
+GIT_DRIVERS+=" dxp"
+GIT_DRIVERS+=" ip"
+GIT_DRIVERS+=" ip330"
+GIT_DRIVERS+=" ipUnidig"
+GIT_DRIVERS+=" love"
+GIT_DRIVERS+=" mca"
+GIT_DRIVERS+=" measComp"
+GIT_DRIVERS+=" modbus"
+GIT_DRIVERS+=" motor"
+GIT_DRIVERS+=" optics"
+GIT_DRIVERS+=" quadEM"
+GIT_DRIVERS+=" softGlue"
+GIT_DRIVERS+=" sscan"
+GIT_DRIVERS+=" std"
+GIT_DRIVERS+=" stream"
+GIT_DRIVERS+=" vac"
+GIT_DRIVERS+=" vme"
+GIT_DRIVERS+=" xxx"
+export GIT_DRIVERS
 
-export GIT_ADMIN+=" utils"
-export GIT_ADMIN+=" configure"
-export GIT_ADMIN+=" documentation"
+GIT_ADMIN+=" utils"
+GIT_ADMIN+=" configure"
+GIT_ADMIN+=" documentation"
+export GIT_ADMIN
 
 ### clone driver modules from GitHub
 for i in ${GIT_ADMIN}; do
