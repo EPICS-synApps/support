@@ -17,6 +17,7 @@ rm ${TAG}.tar.gz
 cd support
 
 echo '#Edit configure/RELEASE with the content of this file' >RELEASE_files.txt
+echo SUPPORT=`pwd` >>RELEASE_files.txt
 
 # modules ##################################################################
 
@@ -161,7 +162,7 @@ rm ${TAG}.tar.gz
 echo 'SOFTGLUE=$(SUPPORT)/softGlue-'${TAG} >>RELEASE_files.txt
 
 # sscan
-setenv TAG R2-10-1
+setenv TAG R2-10-2
 wget https://github.com/epics-modules/sscan/archive/${TAG}.tar.gz
 tar zxf ${TAG}.tar.gz
 rm ${TAG}.tar.gz
@@ -237,26 +238,32 @@ tar zxf ${TAG}.tar.gz
 mv documentation-${TAG} documentation
 rm ${TAG}.tar.gz
 
-# get areaDetector, ADCore, ADBinaries from https://github.com/areaDetector
-setenv TAG R2-4
+# get areaDetector, ADCore, ADSupport, ADSimDetector from https://github.com/areaDetector
+setenv TAG R2-6
 wget https://github.com/areaDetector/areaDetector/archive/${TAG}.tar.gz
 tar zxf ${TAG}.tar.gz
 rm ${TAG}.tar.gz
-echo 'AREADETECTOR=$(SUPPORT)/areaDetector-'${TAG} >>RELEASE_files.txt
+echo 'AREA_DETECTOR=$(SUPPORT)/areaDetector-'${TAG} >>RELEASE_files.txt
 
 cd areaDetector-${TAG}
 
-setenv TAG R2-4
+setenv TAG R2-6
 wget https://github.com/areaDetector/ADCore/archive/${TAG}.tar.gz
 tar zxf ${TAG}.tar.gz
 rm ${TAG}.tar.gz
-echo 'ADCORE=$(AREADETECTOR)/ADCore-'${TAG} >>../RELEASE_files.txt
+echo 'ADCORE=$(AREA_DETECTOR)/ADCore-'${TAG} >>../RELEASE_files.txt
 
-setenv TAG R2-2
-wget https://github.com/areaDetector/ADBinaries/archive/${TAG}.tar.gz
+setenv TAG R1-1
+wget https://github.com/areaDetector/ADSupport/archive/${TAG}.tar.gz
 tar zxf ${TAG}.tar.gz
 rm ${TAG}.tar.gz
-echo 'ADBINARIES=$(AREADETECTOR)/ADBinaries-'${TAG} >>../RELEASE_files.txt
+echo 'ADSUPPORT=$(AREA_DETECTOR)/ADSupport-'${TAG} >>../RELEASE_files.txt
+
+setenv TAG R2-4
+wget https://github.com/areaDetector/ADSimDetector/archive/${TAG}.tar.gz
+tar zxf ${TAG}.tar.gz
+rm ${TAG}.tar.gz
+echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector-'${TAG} >>../RELEASE_files.txt
 
 cd ..
 
@@ -268,7 +275,7 @@ rm allenBradley-2.3.tar.gz
 echo 'ALLENBRADLEY=$(SUPPORT)/allenBradley-2-3' >>RELEASE_files.txt
 
 # asyn
-setenv TAG R4-30
+setenv TAG R4-31
 wget https://github.com/epics-modules/asyn/archive/${TAG}.tar.gz
 tar zxf ${TAG}.tar.gz
 rm ${TAG}.tar.gz
@@ -284,12 +291,14 @@ echo 'IPAC=$(SUPPORT)/ipac-'${DASHTAG} >>RELEASE_files.txt
 rm ${TAG}.tar.gz
 
 # seq
-wget http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-2.2.3.tar.gz
-tar zxf seq-2.2.3.tar.gz
+setenv TAG 2.2.4
+setenv DASHTAG 2-2-4
+wget http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-${TAG}.tar.gz
+tar zxf seq-${TAG}.tar.gz
 # The synApps build can't handle '.'
-mv seq-2.2.3 seq-2-2-3
-rm seq-2.2.3.tar.gz
-echo 'SNCSEQ=$(SUPPORT)/seq-2-2-3' >>RELEASE_files.txt
+mv seq-${TAG} seq-${DASHTAG}
+rm seq-${TAG}.tar.gz
+echo 'SNCSEQ=$(SUPPORT)/seq-${DASHTAG}' >>RELEASE_files.txt
 
 # iocStats
 wget https://github.com/epics-modules/iocStats/archive/3.1.14.tar.gz
