@@ -10,20 +10,19 @@ get_repo()
 	MODULE_NAME=$2
 	RELEASE_NAME=$3
 	TAG=$4
-	PREFIX=$5
 	
 	echo
 	echo "Grabbing $MODULE_NAME at tag: $TAG"
 	echo
 	
-	git clone git://github.com/$PROJECT/$MODULE_NAME.git $PREFIX$MODULE_NAME-${TAG/./-}  >> git_status.txt
+	git clone git://github.com/$PROJECT/$MODULE_NAME.git $MODULE_NAME-${TAG/./-}  >> git_status.txt
 	
 	CURR=$(pwd)
 	
-	cd $PREFIX$MODULE_NAME-${TAG/./-}
+	cd $MODULE_NAME-${TAG/./-}
 	git checkout -q $TAG
 	cd $CURR
-	echo "$RELEASE_NAME=\$(SUPPORT)/$PREFIX$MODULE_NAME-${TAG/./-}" >> RELEASE_files.txt
+	echo "$RELEASE_NAME=\$(SUPPORT)/$MODULE_NAME-${TAG/./-}" >> RELEASE_files.txt
 	
 	echo
 }
@@ -82,11 +81,19 @@ get_repo    epics-modules    std              STD              R3-4-1
 get_repo    epics-modules    vac              VAC              R1-5-1
 get_repo    epics-modules    vme              VME              R2-8-2
 get_repo    epics-modules    xxx              XXX              R5-8
-get_repo    areaDetector     areaDetector     AREA_DETECTOR    R2-6
-get_repo    areaDetector     ADCore           ADCORE           R2-6      areaDetector-R2-6/
-get_repo    areaDetector     ADSupport        ADSUPPORT        R1-1      areaDetector-R2-6/
-get_repo    areaDetector     ADSimDetector    ADSIMDETECTOR    R2-4      areaDetector-R2-6/
 get_repo    epics-modules    stream           STREAM           R2-7-7
+get_repo    areaDetector     areaDetector     AREA_DETECTOR    R2-6
+
+cd areaDetector-R2-6
+git submodule init
+git submodule update ADCore
+git submodule update ADSupport
+git submodule update ADSimDetector
+cd ..
+
+echo 'ADCORE=$(AREA_DETECTOR)/ADCore' >> RELEASE_files.txt
+echo 'ADSUPPORT=$(AREA_DETECTOR)/ADSupport' >> RELEASE_files.txt
+echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector' >> RELEASE_files.txt
 
 cd stream-master
 git submodule init
