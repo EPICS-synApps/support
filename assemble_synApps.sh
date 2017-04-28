@@ -82,9 +82,10 @@ get_repo    epics-modules    std              STD              R3-4-1
 get_repo    epics-modules    vac              VAC              R1-5-1
 get_repo    epics-modules    vme              VME              R2-8-2
 get_repo    epics-modules    xxx              XXX              R5-8
-get_repo    areaDetector     areaDetector     AREADETECTOR     R2-4
-get_repo    areaDetector     ADCore           ADCORE           R2-4      areaDetector-R2-4/
-get_repo    areaDetector     ADBinaries       ADBINARIES       R2-2      areaDetector-R2-4/
+get_repo    areaDetector     areaDetector     AREA_DETECTOR    R2-6
+get_repo    areaDetector     ADCore           ADCORE           R2-6      areaDetector-R2-6/
+get_repo    areaDetector     ADSupport        ADSUPPORT        R1-1      areaDetector-R2-6/
+get_repo    areaDetector     ADSimDetector    ADSIMDETECTOR    R2-4      areaDetector-R2-6/
 get_repo    epics-modules    stream           STREAM           master
 
 cd stream-master
