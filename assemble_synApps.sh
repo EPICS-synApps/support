@@ -86,7 +86,7 @@ get_repo    areaDetector     areaDetector     AREA_DETECTOR    R2-6
 get_repo    areaDetector     ADCore           ADCORE           R2-6      areaDetector-R2-6/
 get_repo    areaDetector     ADSupport        ADSUPPORT        R1-1      areaDetector-R2-6/
 get_repo    areaDetector     ADSimDetector    ADSIMDETECTOR    R2-4      areaDetector-R2-6/
-get_repo    epics-modules    stream           STREAM           master
+get_repo    epics-modules    stream           STREAM           R2-7-7
 
 cd stream-master
 git submodule init
