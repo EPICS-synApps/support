@@ -1,10 +1,29 @@
 #!/bin/bash
+shopt -s expand_aliases
 
 # This file is intended to gather everything in or used in synApps.
 # The version numbers in this file are not guaranteed to be up to date,
 # and the modules are not guaranteed to work or even build together.
 
-get_repo()
+shallow_repo()
+{
+	PROJECT=$1
+	MODULE_NAME=$2
+	RELEASE_NAME=$3
+	TAG=$4
+	
+	echo
+	echo "Grabbing $MODULE_NAME at tag: $TAG"
+	echo
+	
+	git clone --branch $TAG --depth 1 git://github.com/$PROJECT/$MODULE_NAME.git $MODULE_NAME-${TAG/./-}  >> git_status.txt
+	
+	echo "$RELEASE_NAME=\$(SUPPORT)/$MODULE_NAME-${TAG/./-}" >> RELEASE_files.txt
+	
+	echo
+}
+
+full_repo()
 {
 	PROJECT=$1
 	MODULE_NAME=$2
@@ -27,7 +46,14 @@ get_repo()
 	echo
 }
 
-get_support()
+
+shallow_support()
+{
+	git clone --branch $2 --depth 1 git://github.com/EPICS-synApps/$1.git
+}
+
+
+full_support()
 {
 	git clone -q git://github.com/EPICS-synApps/$1.git
 	cd $1
@@ -35,6 +61,13 @@ get_support()
 	cd ..
 }
 
+alias get_support='shallow_support'
+alias get_repo='shallow_repo'
+
+if [ "$1" == "full" ]; then
+	alias get_support='full_support'
+	alias get_repo='full_repo'
+fi
 
 
 # Assume user has nothing but this file, just in case that's true.
@@ -52,7 +85,7 @@ echo '#Edit configure/RELEASE with the content of this file' >RELEASE_files.txt
 
 # modules ##################################################################
 
-#get_repo   Git Project      Git Repo         RELEASE Name     Tag        Subdirectory
+#get_repo   Git Project      Git Repo         RELEASE Name     Tag
 get_repo    epics-modules    alive            ALIVE            R1-0-1
 get_repo    epics-modules    asyn             ASYN             R4-31
 get_repo    epics-modules    autosave         AUTOSAVE         R5-7-1
