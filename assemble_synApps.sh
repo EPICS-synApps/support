@@ -128,7 +128,7 @@ echo 'ADCORE=$(AREA_DETECTOR)/ADCore' >> RELEASE_files.txt
 echo 'ADSUPPORT=$(AREA_DETECTOR)/ADSupport' >> RELEASE_files.txt
 echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector' >> RELEASE_files.txt
 
-cd stream-master
+cd stream-R2-7-7
 git submodule init
 git submodule update
 cd ..
