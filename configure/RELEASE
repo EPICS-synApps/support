@@ -32,12 +32,10 @@ CAMAC=$(SUPPORT)/camac-2-7
 CAPUTRECORDER=$(SUPPORT)/caputRecorder-1-5-1
 DAC128V=$(SUPPORT)/dac128V-2-8
 DELAYGEN=$(SUPPORT)/delaygen-1-1-1
-# http://sourceforge.net/projects/epics/files/devIocStats/
 DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-14
 DXP=$(SUPPORT)/dxp-3-5
 IP=$(SUPPORT)/ip-2-17
 IP330=$(SUPPORT)/ip330-2-8
-#https://svn.aps.anl.gov/epics/ipac/
 IPAC=$(SUPPORT)/ipac-2-13
 IPUNIDIG=$(SUPPORT)/ipUnidig-2-10
 LOVE=$(SUPPORT)/love-3-2-5
