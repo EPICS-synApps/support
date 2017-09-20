@@ -24,6 +24,18 @@ setup(
     author='Tim Mooney',
     author_email = 'mooney@aps.anl.gov',
     description = 'MDA support library',
+    long_description = """
+    Python support library for EPICS synApps MDA-format data files
+    
+    Install the Python mda support library:
+    
+        cd synApps/support/utils/mdaPythonUtils
+        python ./setup.py install
+        # -or-
+        pip install .
+    
+    """,
     license = 'EPICS',
+    url = 'https://github.com/EPICS-synApps/utils/tree/master/mdaPythonUtils',
     py_modules = ['f_xdrlib', 'mda'],
     )
