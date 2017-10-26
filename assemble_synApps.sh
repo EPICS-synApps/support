@@ -1,9 +1,41 @@
 #!/bin/bash
 shopt -s expand_aliases
 
-# This file is intended to gather everything in or used in synApps.
-# The version numbers in this file are not guaranteed to be up to date,
-# and the modules are not guaranteed to work or even build together.
+ALLENBRADLEY=2.3
+ALIVE=R1-0-1
+AREA_DETECTOR=R2-6
+ASYN=R4-31
+AUTOSAVE=R5-7-1
+BUSY=R1-6-1
+CALC=R3-6-1
+CAMAC=R2-7
+CAPUTRECORDER=R1-6
+DAC128V=R2-8
+DELAYGEN=R1-1-1
+DXP=R3-5
+DEVIOCSTATS=3.1.14
+IP=R2-10
+IPAC=2.14
+IP330=R2-8
+IPUNIDIG=R2-10
+LOVE=R3-2-5
+MCA=R7-6
+MEASCOMP=R1-3-1
+MODBUS=R2-9
+MOTOR=R6-9
+OPTICS=R2-11
+QUADEM=R7-0
+SNCSEQ=2.2.4
+SOFTGLUE=R2-8
+SSCAN=R2-10-2
+STD=R3-4-1
+STREAM=R2-7-7
+VAC=R1-5-1
+VME=R2-8-2
+XXX=R5-8
+
+
+
 
 shallow_repo()
 {
@@ -85,39 +117,56 @@ echo '#Edit configure/RELEASE with the content of this file' >RELEASE_files.txt
 
 # modules ##################################################################
 
-#get_repo   Git Project      Git Repo         RELEASE Name     Tag
-get_repo    epics-modules    alive            ALIVE            R1-0-1
-get_repo    epics-modules    asyn             ASYN             R4-31
-get_repo    epics-modules    autosave         AUTOSAVE         R5-7-1
-get_repo    epics-modules    busy             BUSY             R1-6-1
-get_repo    epics-modules    calc             CALC             R3-6-1
-get_repo    epics-modules    camac            CAMAC            R2-7
-get_repo    epics-modules    caputRecorder    CAPUTRECORDER    R1-6
-get_repo    epics-modules    dac128V          DAC128V          R2-8
-get_repo    epics-modules    delaygen         DELAYGEN         R1-1-1
-get_repo    epics-modules    dxp              DXP              R3-5
-get_repo    epics-modules    iocStats         DEVIOCSTATS      3.1.14
-get_repo    epics-modules    ip               IP               R2-10
-get_repo    epics-modules    ipac             IPAC             2.14
-get_repo    epics-modules    ip330            IP330            R2-8
-get_repo    epics-modules    ipUnidig         IPUNIDIG         R2-10
-get_repo    epics-modules    love             LOVE             R3-2-5
-get_repo    epics-modules    mca              MCA              R7-6
-get_repo    epics-modules    measComp         MEASCOMP         R1-3-1
-get_repo    epics-modules    modbus           MODBUS           R2-9
-get_repo    epics-modules    motor            MOTOR            R6-9
-get_repo    epics-modules    optics           OPTICS           R2-11
-get_repo    epics-modules    quadEM           QUADEM           R7-0
-get_repo    epics-modules    softGlue         SOFTGLUE         R2-8
-get_repo    epics-modules    sscan            SSCAN            R2-10-2
-get_repo    epics-modules    std              STD              R3-4-1
-get_repo    epics-modules    vac              VAC              R1-5-1
-get_repo    epics-modules    vme              VME              R2-8-2
-get_repo    epics-modules    xxx              XXX              R5-8
-get_repo    epics-modules    stream           STREAM           R2-7-7
-get_repo    areaDetector     areaDetector     AREA_DETECTOR    R2-6
+#                               get_repo Git Project    Git Repo       RELEASE Name   Tag
+if [[ $ALIVE ]];         then   get_repo epics-modules  alive          ALIVE          $ALIVE         ; fi
+if [[ $ASYN ]];          then   get_repo epics-modules  asyn           ASYN           $ASYN          ; fi
+if [[ $AUTOSAVE ]];      then   get_repo epics-modules  autosave       AUTOSAVE       $AUTOSAVE      ; fi
+if [[ $BUSY ]];          then   get_repo epics-modules  busy           BUSY           $BUSY          ; fi
+if [[ $CALC ]];          then   get_repo epics-modules  calc           CALC           $CALC          ; fi
+if [[ $CAMAC ]];         then   get_repo epics-modules  camac          CAMAC          $CAMAC         ; fi
+if [[ $CAPUTRECORDER ]]; then   get_repo epics-modules  caputRecorder  CAPUTRECORDER  $CAPUTRECORDER ; fi
+if [[ $DAC128V ]];       then   get_repo epics-modules  dac128V        DAC128V        $DAC128V       ; fi
+if [[ $DELAYGEN ]];      then   get_repo epics-modules  delaygen       DELAYGEN       $DELAYGEN      ; fi
+if [[ $DXP ]];           then   get_repo epics-modules  dxp            DXP            $DXP           ; fi
+if [[ $DEVIOCSTATS ]];   then   get_repo epics-modules  iocStats       DEVIOCSTATS    $DEVIOCSTATS   ; fi
+if [[ $IP ]];            then   get_repo epics-modules  ip             IP             $IP            ; fi
+if [[ $IPAC ]];          then   get_repo epics-modules  ipac           IPAC           $IPAC          ; fi
+if [[ $IP330 ]];         then   get_repo epics-modules  ip330          IP330          $IP330         ; fi
+if [[ $IPUNIDIG ]];      then   get_repo epics-modules  ipUnidig       IPUNIDIG       $IPUNIDIG      ; fi
+if [[ $LOVE ]];          then   get_repo epics-modules  love           LOVE           $LOVE          ; fi
+if [[ $MCA ]];           then   get_repo epics-modules  mca            MCA            $MCA           ; fi
+if [[ $MEASCOMP ]];      then   get_repo epics-modules  measComp       MEASCOMP       $MEASCOMP      ; fi
+if [[ $MODBUS ]];        then   get_repo epics-modules  modbus         MODBUS         $MODBUS        ; fi
+if [[ $MOTOR ]];         then   get_repo epics-modules  motor          MOTOR          $MOTOR         ; fi
+if [[ $OPTICS ]];        then   get_repo epics-modules  optics         OPTICS         $OPTICS        ; fi
+if [[ $QUADEM ]];        then   get_repo epics-modules  quadEM         QUADEM         $QUADEM        ; fi
+if [[ $SOFTGLUE ]];      then   get_repo epics-modules  softGlue       SOFTGLUE       $SOFTGLUE      ; fi
+if [[ $SSCAN ]];         then   get_repo epics-modules  sscan          SSCAN          $SSCAN         ; fi
+if [[ $STD ]];           then   get_repo epics-modules  std            STD            $STD           ; fi
+if [[ $VAC ]];           then   get_repo epics-modules  vac            VAC            $VAC           ; fi
+if [[ $VME ]];           then   get_repo epics-modules  vme            VME            $VME           ; fi
+if [[ $XXX ]];           then   get_repo epics-modules  xxx            XXX            $XXX           ; fi
 
-cd areaDetector-R2-6
+
+if [[ $STREAM ]]
+then
+
+get_repo  epics-modules  stream  STREAM  $STREAM
+
+cd stream-$STREAM
+git submodule init
+git submodule update
+cd ..
+
+fi
+
+
+if [[ $AREA_DETECTOR ]]
+then 
+
+get_repo  areaDetector  areaDetector  AREA_DETECTOR
+
+cd areaDetector-$AREA_DETECTOR
 git submodule init
 git submodule update ADCore
 git submodule update ADSupport
@@ -128,32 +177,46 @@ echo 'ADCORE=$(AREA_DETECTOR)/ADCore' >> RELEASE_files.txt
 echo 'ADSUPPORT=$(AREA_DETECTOR)/ADSupport' >> RELEASE_files.txt
 echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector' >> RELEASE_files.txt
 
-cd stream-R2-7-7
-git submodule init
-git submodule update
-cd ..
+fi
 
 
-# get allenBradley-2-3
-wget http://www.aps.anl.gov/epics/download/modules/allenBradley-2.3.tar.gz
-tar xf allenBradley-2.3.tar.gz
-mv allenBradley-2.3 allenBradley-2-3
-rm -f allenBradley-2.3.tar.gz
-echo 'ALLENBRADLEY=$(SUPPORT)/allenBradley-2-3' >>RELEASE_files.txt
+if [[ $SNCSEQ ]]
+then
 
 # seq
-wget http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-2.2.4.tar.gz
-tar zxf seq-2.2.4.tar.gz
+wget http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-$SNCSEQ.tar.gz
+tar zxf seq-$SNCSEQ.tar.gz
 # The synApps build can't handle '.'
-mv seq-2.2.4 seq-2-2-4
-rm -f seq-2.2.4.tar.gz
-echo 'SNCSEQ=$(SUPPORT)/seq-2-2-4' >>RELEASE_files.txt
+mv seq-$SNCSEQ seq-${SNCSEQ/./-}
+rm -f seq-$SNCSEQ.tar.gz
+echo "SNCSEQ=\$(SUPPORT)/seq-${SNCSEQ/./-}" >>RELEASE_files.txt
+
+fi
+
+if [[ $ALLENBRADLEY ]]
+then
+
+# get allenBradley-2-3
+wget http://www.aps.anl.gov/epics/download/modules/allenBradley-$ALLENBRADLEY.tar.gz
+tar xf allenBradley-$ALLENBRADLEY.tar.gz
+mv allenBradley-$ALLENBRADLEY allenBradley-${ALLENBRADLEY/./-}
+rm -f allenBradley-$ALLENBRADLEY.tar.gz
+echo "ALLENBRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY/./-}" >>RELEASE_files.txt
+
+fi
+
+
+if [[ $ETHERIP ]]
+then
 
 # etherIP
-#wget https://github.com/EPICSTools/ether_ip/archive/ether_ip-2-26.tar.gz
-#tar zxf ether_ip-2-26.tar.gz
-#mv ether_ip-ether_ip-2-26 ether_ip-2-26
-#rm -f ether_ip-2-26.tar.gz
-#echo 'ETHERIP=$(SUPPORT)/ether_ip-2-26' >>RELEASE_files.txt
+wget https://github.com/EPICSTools/ether_ip/archive/ether_ip-2-26.tar.gz
+tar zxf ether_ip-2-26.tar.gz
+mv ether_ip-ether_ip-2-26 ether_ip-2-26
+rm -f ether_ip-2-26.tar.gz
+echo 'ETHERIP=$(SUPPORT)/ether_ip-2-26' >>RELEASE_files.txt
+
+
+fi
 
 echo "See RELEASE_files.txt"
