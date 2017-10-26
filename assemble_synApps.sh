@@ -1,6 +1,13 @@
 #!/bin/bash
 shopt -s expand_aliases
 
+EPICS_BASE=/APSshare/epics/base-3.15.5
+
+SUPPORT=synApps_5_8
+CONFIGURE=synApps_5_8
+UTILS=synApps_5_8
+DOCUMENTATION=synApps_5_8
+
 ALLENBRADLEY=2.3
 ALIVE=R1-0-1
 AREA_DETECTOR=R2-6
@@ -48,9 +55,9 @@ shallow_repo()
 	echo "Grabbing $MODULE_NAME at tag: $TAG"
 	echo
 	
-	git clone --branch $TAG --depth 1 git://github.com/$PROJECT/$MODULE_NAME.git $MODULE_NAME-${TAG/./-}  >> git_status.txt
+	git clone -q --branch $TAG --depth 1 git://github.com/$PROJECT/$MODULE_NAME.git $MODULE_NAME-${TAG/./-}
 	
-	echo "$RELEASE_NAME=\$(SUPPORT)/$MODULE_NAME-${TAG/./-}" >> RELEASE_files.txt
+	echo "$RELEASE_NAME=\$(SUPPORT)/$MODULE_NAME-${TAG/./-}" >> ./configure/RELEASE
 	
 	echo
 }
@@ -66,14 +73,14 @@ full_repo()
 	echo "Grabbing $MODULE_NAME at tag: $TAG"
 	echo
 	
-	git clone git://github.com/$PROJECT/$MODULE_NAME.git $MODULE_NAME-${TAG/./-}  >> git_status.txt
+	git clone -q git://github.com/$PROJECT/$MODULE_NAME.git $MODULE_NAME-${TAG/./-}
 	
 	CURR=$(pwd)
 	
 	cd $MODULE_NAME-${TAG/./-}
 	git checkout -q $TAG
 	cd $CURR
-	echo "$RELEASE_NAME=\$(SUPPORT)/$MODULE_NAME-${TAG/./-}" >> RELEASE_files.txt
+	echo "$RELEASE_NAME=\$(SUPPORT)/$MODULE_NAME-${TAG/./-}" >> ./configure/RELEASE
 	
 	echo
 }
@@ -81,7 +88,7 @@ full_repo()
 
 shallow_support()
 {
-	git clone --branch $2 --depth 1 git://github.com/EPICS-synApps/$1.git
+	git clone -q --branch $2 --depth 1 git://github.com/EPICS-synApps/$1.git
 }
 
 
@@ -106,14 +113,19 @@ fi
 mkdir synApps
 cd synApps
 
-get_support support synApps_5_8
+get_support support $SUPPORT
 cd support
 
-get_support configure        synApps_5_8
-get_support utils            synApps_5_8
-get_support documentation    synApps_5_8
+get_support configure      $CONFIGURE
+get_support utils          $UTILS
+get_support documentation  $DOCUMENTATION
 
-echo '#Edit configure/RELEASE with the content of this file' >RELEASE_files.txt
+
+echo "SUPPORT=${pwd}/support" > configure/RELEASE
+echo '-include $(TOP)/configure/SUPPORT.$(EPICS_HOST_ARCH)' >> configure/RELEASE
+echo "EPICS_BASE=$EPICS_BASE" >> configure/RELEASE
+echo '-include $(TOP)/configure/EPICS_BASE' >> configure/RELEASE
+echo '-include $(TOP)/configure/EPICS_BASE.$(EPICS_HOST_ARCH)' >> configure/RELEASE
 
 # modules ##################################################################
 
