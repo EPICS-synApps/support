@@ -126,6 +126,8 @@ echo '-include $(TOP)/configure/SUPPORT.$(EPICS_HOST_ARCH)' >> configure/RELEASE
 echo "EPICS_BASE=$EPICS_BASE" >> configure/RELEASE
 echo '-include $(TOP)/configure/EPICS_BASE' >> configure/RELEASE
 echo '-include $(TOP)/configure/EPICS_BASE.$(EPICS_HOST_ARCH)' >> configure/RELEASE
+echo "" >> configure/RELEASE
+echo "" >> configure/RELEASE
 
 # modules ##################################################################
 
@@ -185,9 +187,9 @@ git submodule update ADSupport
 git submodule update ADSimDetector
 cd ..
 
-echo 'ADCORE=$(AREA_DETECTOR)/ADCore' >> RELEASE_files.txt
-echo 'ADSUPPORT=$(AREA_DETECTOR)/ADSupport' >> RELEASE_files.txt
-echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector' >> RELEASE_files.txt
+echo 'ADCORE=$(AREA_DETECTOR)/ADCore' >> ./configure/RELEASE
+echo 'ADSUPPORT=$(AREA_DETECTOR)/ADSupport' >> ./configure/RELEASE
+echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector' >> ./configure/RELEASE
 
 fi
 
@@ -201,7 +203,7 @@ tar zxf seq-$SNCSEQ.tar.gz
 # The synApps build can't handle '.'
 mv seq-$SNCSEQ seq-${SNCSEQ/./-}
 rm -f seq-$SNCSEQ.tar.gz
-echo "SNCSEQ=\$(SUPPORT)/seq-${SNCSEQ/./-}" >>RELEASE_files.txt
+echo "SNCSEQ=\$(SUPPORT)/seq-${SNCSEQ/./-}" >> ./configure/RELEASE
 
 fi
 
@@ -213,7 +215,7 @@ wget http://www.aps.anl.gov/epics/download/modules/allenBradley-$ALLENBRADLEY.ta
 tar xf allenBradley-$ALLENBRADLEY.tar.gz
 mv allenBradley-$ALLENBRADLEY allenBradley-${ALLENBRADLEY/./-}
 rm -f allenBradley-$ALLENBRADLEY.tar.gz
-echo "ALLENBRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY/./-}" >>RELEASE_files.txt
+echo "ALLENBRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY/./-}" >> ./configure/RELEASE
 
 fi
 
@@ -226,7 +228,7 @@ wget https://github.com/EPICSTools/ether_ip/archive/ether_ip-2-26.tar.gz
 tar zxf ether_ip-2-26.tar.gz
 mv ether_ip-ether_ip-2-26 ether_ip-2-26
 rm -f ether_ip-2-26.tar.gz
-echo 'ETHERIP=$(SUPPORT)/ether_ip-2-26' >>RELEASE_files.txt
+echo 'ETHERIP=$(SUPPORT)/ether_ip-2-26' >> ./configure/RELEASE
 
 
 fi
