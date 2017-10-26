@@ -176,7 +176,7 @@ fi
 if [[ $AREA_DETECTOR ]]
 then 
 
-get_repo  areaDetector  areaDetector  $AREA_DETECTOR
+get_repo  areaDetector  areaDetector  AREA_DETECTOR  $AREA_DETECTOR
 
 cd areaDetector-$AREA_DETECTOR
 git submodule init
@@ -230,5 +230,3 @@ echo 'ETHERIP=$(SUPPORT)/ether_ip-2-26' >>RELEASE_files.txt
 
 
 fi
-
-echo "See RELEASE_files.txt"
