@@ -164,7 +164,7 @@ fi
 if [[ $AREA_DETECTOR ]]
 then 
 
-get_repo  areaDetector  areaDetector  AREA_DETECTOR
+get_repo  areaDetector  areaDetector  $AREA_DETECTOR
 
 cd areaDetector-$AREA_DETECTOR
 git submodule init
