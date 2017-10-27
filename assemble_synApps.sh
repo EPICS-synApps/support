@@ -125,7 +125,7 @@ get_support utils          $UTILS
 get_support documentation  $DOCUMENTATION
 
 
-echo "SUPPORT=$(pwd)/support" > configure/RELEASE
+echo "SUPPORT=$(pwd)" > configure/RELEASE
 echo '-include $(TOP)/configure/SUPPORT.$(EPICS_HOST_ARCH)' >> configure/RELEASE
 echo "EPICS_BASE=$EPICS_BASE" >> configure/RELEASE
 echo '-include $(TOP)/configure/EPICS_BASE' >> configure/RELEASE
