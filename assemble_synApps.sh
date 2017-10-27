@@ -51,13 +51,15 @@ shallow_repo()
 	RELEASE_NAME=$3
 	TAG=$4
 	
+	FOLDER_NAME=$MODULE_NAME-${TAG//./-}
+	
 	echo
 	echo "Grabbing $MODULE_NAME at tag: $TAG"
 	echo
 	
-	git clone -q --branch $TAG --depth 1 git://github.com/$PROJECT/$MODULE_NAME.git $MODULE_NAME-${TAG/./-}
+	git clone -q --branch $TAG --depth 1 git://github.com/$PROJECT/$MODULE_NAME.git $FOLDER_NAME
 	
-	echo "$RELEASE_NAME=\$(SUPPORT)/$MODULE_NAME-${TAG/./-}" >> ./configure/RELEASE
+	echo "$RELEASE_NAME=\$(SUPPORT)/$FOLDER_NAME" >> ./configure/RELEASE
 	
 	echo
 }
@@ -69,18 +71,20 @@ full_repo()
 	RELEASE_NAME=$3
 	TAG=$4
 	
+	FOLDER_NAME=$MODULE_NAME-${TAG//./-}
+	
 	echo
 	echo "Grabbing $MODULE_NAME at tag: $TAG"
 	echo
 	
-	git clone -q git://github.com/$PROJECT/$MODULE_NAME.git $MODULE_NAME-${TAG/./-}
+	git clone -q git://github.com/$PROJECT/$MODULE_NAME.git $FOLDER_NAME
 	
 	CURR=$(pwd)
 	
-	cd $MODULE_NAME-${TAG/./-}
+	cd $FOLDER_NAME
 	git checkout -q $TAG
 	cd $CURR
-	echo "$RELEASE_NAME=\$(SUPPORT)/$MODULE_NAME-${TAG/./-}" >> ./configure/RELEASE
+	echo "$RELEASE_NAME=\$(SUPPORT)/$FOLDER_NAME" >> ./configure/RELEASE
 	
 	echo
 }
@@ -201,9 +205,9 @@ then
 wget http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-$SNCSEQ.tar.gz
 tar zxf seq-$SNCSEQ.tar.gz
 # The synApps build can't handle '.'
-mv seq-$SNCSEQ seq-${SNCSEQ/./-}
+mv seq-$SNCSEQ seq-${SNCSEQ//./-}
 rm -f seq-$SNCSEQ.tar.gz
-echo "SNCSEQ=\$(SUPPORT)/seq-${SNCSEQ/./-}" >> ./configure/RELEASE
+echo "SNCSEQ=\$(SUPPORT)/seq-${SNCSEQ//./-}" >> ./configure/RELEASE
 
 fi
 
@@ -213,9 +217,9 @@ then
 # get allenBradley-2-3
 wget http://www.aps.anl.gov/epics/download/modules/allenBradley-$ALLENBRADLEY.tar.gz
 tar xf allenBradley-$ALLENBRADLEY.tar.gz
-mv allenBradley-$ALLENBRADLEY allenBradley-${ALLENBRADLEY/./-}
+mv allenBradley-$ALLENBRADLEY allenBradley-${ALLENBRADLEY//./-}
 rm -f allenBradley-$ALLENBRADLEY.tar.gz
-echo "ALLENBRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY/./-}" >> ./configure/RELEASE
+echo "ALLENBRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY//./-}" >> ./configure/RELEASE
 
 fi
 
@@ -232,3 +236,6 @@ echo 'ETHERIP=$(SUPPORT)/ether_ip-2-26' >> ./configure/RELEASE
 
 
 fi
+
+
+make release
