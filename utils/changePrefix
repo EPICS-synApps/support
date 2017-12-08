@@ -124,7 +124,7 @@ for dir in ioc*
 		printf "\r%-50s" "$file"
 		doSed "s/${old}:/${new}:/g" $file
 	done
-	for file in *.substitutions
+	for file in substitutions/*.substitutions
 	do
 		printf "\r%-50s" "$file"
 		doSed "s/${old}/${new}/g" $file
@@ -145,20 +145,24 @@ for dir in ioc*
 		doSed "s!/${old}/!/${new}/!g" bootParms
 		doSed "s/ioc${old}/ioc${new}/g" bootParms
 	fi
-	if [ -f run ]; then
-		doSed "s/${old}/${new}/g" run
-	fi
-	if [ -f in-screen.sh ]; then
-		doSed "s/${old}/${new}/g" in-screen.sh
-	fi
-	if [ -f "${old}.sh" ]; then
-		doSed "s/${old}/${new}/g" ${old}.sh
-		mv ${old}.sh ${new}.sh
+	if [ -d softioc ]; then
+		if [ -f softioc/run ]; then
+			doSed "s/${old}/${new}/g" softioc/run
+		fi
+		if [ -f softioc/in-screen.sh ]; then
+			doSed "s/${old}/${new}/g" softioc/in-screen.sh
+		fi
+		if [ -f "softioc/${old}.sh" ]; then
+			doSed "s/${old}/${new}/g" softioc/${old}.sh
+			mv "softioc/${old}.sh" "softioc/${new}.sh"
+		fi
 	fi
 	for file in autosave/*.cfg
 	do
-		printf "\r%-50s" "$file"
-		doSed "s/${old}:/${new}:/g" $file
+		if [ -f "$file" ]; then
+			printf "\r%-50s" "$file"
+			doSed "s/${old}:/${new}:/g" $file
+		fi
 	done
 done
 
@@ -190,11 +194,12 @@ cd ${TOP}/${new}App/op
 if [ -d ui ]; then
 	printf "\r%-50s" "${new}App/op/ui"
 	cd ui
-	mv ${old}\.ui ${new}\.ui
 	for file in *.ui
 	do
-		printf "\r%-50s" "$file"
-		doSed "s/${old}/${new}/g" $file
+		if [ -f "$file" ]; then
+			printf "\r%-50s" "$file"
+			doSed "s/${old}/${new}/g" $file
+		fi
 	done
 fi
 
