@@ -26,8 +26,6 @@ include $(CONFIG)/RULES_DIRS
 
 ADLs := $(filter-out $(wildcard $(ADL_DIR)/*_BAK.adl), $(wildcard $(ADL_DIR)/*.adl))
 
-.PHONY: all 
-
 ifdef ADL2UI
 UIs := $(subst adl/,$(UI_DIR),$(ADLs:.adl=.ui))
 ui/autoconvert/%.ui: adl/%.adl
@@ -48,8 +46,8 @@ opi/autoconvert/%.opi: adl/%.adl
 	$(MV) -f $(ADL_DIR)/$(notdir $@) $(dir $@)
 endif
 
-all : $(UIs) $(EDLs) $(OPIs)
+build install : $(UIs) $(EDLs) $(OPIs)
 
-clean :
+realclean clean :
 	$(RM) $(UIs) $(EDLs) $(OPIs)
 
