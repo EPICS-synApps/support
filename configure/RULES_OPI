@@ -25,24 +25,30 @@ include $(CONFIG)/RULES_DIRS
 #        export CAQTDM_DISPLAY_PATH+=:$(STYLESHEET_QSS_DIR)
 
 ADLs := $(filter-out $(wildcard $(ADL_DIR)/*_BAK.adl), $(wildcard $(ADL_DIR)/*.adl))
-UIs := $(subst adl/,$(UI_DIR),$(ADLs:.adl=.ui))
-EDLs := $(subst adl/,$(EDL_DIR),$(ADLs:.adl=.edl))
-OPIs := $(subst adl/,$(OPI_DIR),$(ADLs:.adl=.opi))
 
 .PHONY: all 
 
-all : $(UIs) $(EDLs) $(OPIs)
-
+ifdef ADL2UI
+UIs := $(subst adl/,$(UI_DIR),$(ADLs:.adl=.ui))
 ui/autoconvert/%.ui: adl/%.adl
 	$(ADL2UI) $<
 	$(MV) -f $(notdir $@) $(dir $@)
+endif
 
+ifdef ADL2EDL
+EDLs := $(subst adl/,$(EDL_DIR),$(ADLs:.adl=.edl))
 edl/autoconvert/%.edl: adl/%.adl
 	$(ADL2EDL) $< $@
+endif
 
+ifdef CSS
+OPIs := $(subst adl/,$(OPI_DIR),$(ADLs:.adl=.opi))
 opi/autoconvert/%.opi: adl/%.adl
-	$(CSS) $(ADLs)
-	$(MV) -f $(ADL_DIR)/*.opi $(dir $@)
+	$(CSS) $<
+	$(MV) -f $(ADL_DIR)/$(notdir $@) $(dir $@)
+endif
+
+all : $(UIs) $(EDLs) $(OPIs)
 
 clean :
 	$(RM) $(UIs) $(EDLs) $(OPIs)
