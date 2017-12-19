@@ -38,9 +38,3 @@ export LINUX_NET_INSTALLED
 # define INSTALL_LOCATION here
 #INSTALL_LOCATION=<fullpathname>
 
-# These are needed only to convert adl files to ui, edl, and opi
-# Define these as the full paths to the executables if they are not in the PATH
-ADL2UI = adl2ui
-ADL2EDL = adl2edl
-CSS = css -nosplash -application org.csstudio.opibuilder.adl2boy.application
-
