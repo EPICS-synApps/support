@@ -27,21 +27,21 @@ include $(CONFIG)/RULES_DIRS
 ADLs := $(filter-out $(wildcard $(ADL_DIR)/*_BAK.adl), $(wildcard $(ADL_DIR)/*.adl))
 
 ifdef ADL2UI
-UIs := $(subst adl/,$(UI_DIR),$(ADLs:.adl=.ui))
-ui/autoconvert/%.ui: adl/%.adl
+UIs := $(subst $(ADL_DIR),$(UI_DIR),$(ADLs:.adl=.ui))
+$(UI_DIR)%.ui: $(ADL_DIR)%.adl
 	$(ADL2UI) $<
 	$(MV) -f $(notdir $@) $(dir $@)
 endif
 
 ifdef ADL2EDL
-EDLs := $(subst adl/,$(EDL_DIR),$(ADLs:.adl=.edl))
-edl/autoconvert/%.edl: adl/%.adl
+EDLs := $(subst $(ADL_DIR),$(EDL_DIR),$(ADLs:.adl=.edl))
+$(EDL_DIR)%.edl: $(ADL_DIR)%.adl
 	$(ADL2EDL) $< $@
 endif
 
 ifdef CSS
-OPIs := $(subst adl/,$(OPI_DIR),$(ADLs:.adl=.opi))
-opi/autoconvert/%.opi: adl/%.adl
+OPIs := $(subst $(ADL_DIR),$(OPI_DIR),$(ADLs:.adl=.opi))
+$(OPI_DIR)%.opi: $(ADL_DIR)%.adl
 	$(CSS) $<
 	$(MV) -f $(ADL_DIR)/$(notdir $@) $(dir $@)
 endif
