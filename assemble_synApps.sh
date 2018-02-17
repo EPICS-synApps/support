@@ -83,7 +83,7 @@ full_repo()
 	
 	cd $FOLDER_NAME
 	git checkout -q $TAG
-	cd $CURR
+	cd "$CURR"
 	echo "$RELEASE_NAME=\$(SUPPORT)/$FOLDER_NAME" >> ./configure/RELEASE
 	
 	echo
