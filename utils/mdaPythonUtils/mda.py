@@ -12,11 +12,12 @@ import os
 import string
 
 have_fast_xdr = False
-try:
-	import f_xdrlib as xdr
-	have_fast_xdr = True
-except:
-	import xdrlib as xdr
+#try:
+#	import f_xdrlib as xdr
+#	have_fast_xdr = True
+#except:
+#	import xdrlib as xdr
+import xdrlib as xdr
 
 try:
 	import Tkinter
@@ -202,7 +203,7 @@ def posName(i):
 	else:
 		return "?"
 
-def verboseData(data, out=sys.stdout):
+def verboseData(data, out=sys.stdout, asHex=False):
 	if ((len(data)>0) and (type(data[0]) == type([]))):
 		for i in len(data):
 			verboseData(data[i], out)
@@ -210,7 +211,10 @@ def verboseData(data, out=sys.stdout):
 		out.write("[")
 		for datum in data:
 			if (type(datum) == type(0)):
-				out.write(" %d" % datum)
+				if (asHex):
+					out.write(" 0x%x" % datum)
+				else:
+					out.write(" %d" % datum)
 			else:
 				out.write(" %.5f" % datum)
 		out.write(" ]\n")
@@ -218,8 +222,15 @@ def verboseData(data, out=sys.stdout):
 def readScan(scanFile, verbose=0, out=sys.stdout, unpacker=None):
 	"""usage: (scan,num) = readScan(scanFile, verbose=0, out=sys.stdout)"""
 
+	if (verbose):
+		if (unpacker):
+			out.write("\nreadScan('0x%x'): entry\n" % (unpacker.get_position()))
+		else:
+			out.write("\nreadScan('%s'): entry\n" % (scanFile.name))
+			
+
 	scan = scanDim()	# data structure to hold scan info and data
-	buf = scanFile.read(10000) # enough to read scan header
+	buf = scanFile.read(100000) # enough to read scan header and info
 	if unpacker == None:
 		u = xdr.Unpacker(buf)
 	else:
@@ -228,15 +239,15 @@ def readScan(scanFile, verbose=0, out=sys.stdout, unpacker=None):
 
 	scan.rank = u.unpack_int()
 	if (scan.rank > 20) or (scan.rank < 0):
-		print "* * * readScan('%s'): rank > 20.  probably a corrupt file" % scanFile.name
-		return None
+		out.write("* * * readScan('%s'): rank > 20.  Probably a corrupt file\n" % (scanFile.name))
+		return (None, None)
 
 	scan.npts = u.unpack_int()
 	scan.curr_pt = u.unpack_int()
 	if verbose:
-		print "scan.rank = ", `scan.rank`
-		print "scan.npts = ", `scan.npts`
-		print "scan.curr_pt = ", `scan.curr_pt`
+		out.write("scan.rank = %d\n" % (scan.rank))
+		out.write("scan.npts = %d\n" % (scan.npts))
+		out.write("scan.curr_pt = %d\n" % (scan.curr_pt))
 
 	if (scan.rank > 1):
 		# if curr_pt < npts, plower_scans will have garbage for pointers to
@@ -245,45 +256,47 @@ def readScan(scanFile, verbose=0, out=sys.stdout, unpacker=None):
 			scan.plower_scans = u.unpack_farray_int(scan.npts)
 		else:
 			scan.plower_scans = u.unpack_farray(scan.npts, u.unpack_int)
-		if verbose: print "scan.plower_scans = ", `scan.plower_scans`
+		if verbose:
+			out.write("scan.plower_scans = ")
+			verboseData(scan.plower_scans, out, asHex=True)
 	namelength = u.unpack_int()
 	scan.name = u.unpack_string()
-	if verbose: print "scan.name = ", `scan.name`
+	if verbose: out.write("scan.name = %s\n" % (scan.name))
 	timelength = u.unpack_int()
 	scan.time = u.unpack_string()
-	if verbose: print "scan.time = ", `scan.time`
+	if verbose: out.write("scan.time = %s\n" % (repr(scan.time)))
 	scan.np = u.unpack_int()
-	if verbose: print "scan.np = ", `scan.np`
+	if verbose: out.write("scan.np = %d\n" % (scan.np))
 	scan.nd = u.unpack_int()
-	if verbose: print "scan.nd = ", `scan.nd`
+	if verbose: out.write("scan.nd = %d\n" % (scan.nd))
 	scan.nt = u.unpack_int()
-	if verbose: print "scan.nt = ", `scan.nt`
+	if verbose: out.write("scan.nt = %d\n" % (scan.nt))
 	for j in range(scan.np):
 		scan.p.append(scanPositioner())
 		scan.p[j].number = u.unpack_int()
 		scan.p[j].fieldName = posName(scan.p[j].number)
-		if verbose: print "positioner ", j
+		if verbose: out.write("positioner %d\n" % (j))
 		length = u.unpack_int() # length of name string
 		if length: scan.p[j].name = u.unpack_string()
-		if verbose: print "scan.p[%d].name = %s" % (j, `scan.p[j].name`)
+		if verbose: out.write("scan.p[%d].name = %s\n" % (j, scan.p[j].name))
 		length = u.unpack_int() # length of desc string
 		if length: scan.p[j].desc = u.unpack_string()
-		if verbose: print "scan.p[%d].desc = %s" % (j, `scan.p[j].desc`)
+		if verbose: out.write("scan.p[%d].desc = %s\n" % (j, scan.p[j].desc))
 		length = u.unpack_int() # length of step_mode string
 		if length: scan.p[j].step_mode = u.unpack_string()
-		if verbose: print "scan.p[%d].step_mode = %s" % (j, `scan.p[j].step_mode`)
+		if verbose: out.write("scan.p[%d].step_mode = %s\n" % (j, scan.p[j].step_mode))
 		length = u.unpack_int() # length of unit string
 		if length: scan.p[j].unit = u.unpack_string()
-		if verbose: print "scan.p[%d].unit = %s" % (j, `scan.p[j].unit`)
+		if verbose: out.write("scan.p[%d].unit = %s\n" % (j, scan.p[j].unit))
 		length = u.unpack_int() # length of readback_name string
 		if length: scan.p[j].readback_name = u.unpack_string()
-		if verbose: print "scan.p[%d].readback_name = %s" % (j, `scan.p[j].readback_name`)
+		if verbose: out.write("scan.p[%d].readback_name = %s\n" % (j, scan.p[j].readback_name))
 		length = u.unpack_int() # length of readback_desc string
 		if length: scan.p[j].readback_desc = u.unpack_string()
-		if verbose: print "scan.p[%d].readback_desc = %s" % (j, `scan.p[j].readback_desc`)
+		if verbose: out.write("scan.p[%d].readback_desc = %s\n" % (j, scan.p[j].readback_desc))
 		length = u.unpack_int() # length of readback_unit string
 		if length: scan.p[j].readback_unit = u.unpack_string()
-		if verbose: print "scan.p[%d].readback_unit = %s" % (j, `scan.p[j].readback_unit`)
+		if verbose: out.write("scan.p[%d].readback_unit = %s\n" % (j, scan.p[j].readback_unit))
 
 	file_loc_det = scanFile.tell() - (len(buf) - u.get_position())
 
@@ -291,26 +304,26 @@ def readScan(scanFile, verbose=0, out=sys.stdout, unpacker=None):
 		scan.d.append(scanDetector())
 		scan.d[j].number = u.unpack_int()
 		scan.d[j].fieldName = detName(scan.d[j].number)
-		if verbose: print "detector ", j
+		if verbose: out.write("detector %d\n" % (j))
 		length = u.unpack_int() # length of name string
 		if length: scan.d[j].name = u.unpack_string()
-		if verbose: print "scan.d[%d].name = %s" % (j, `scan.d[j].name`)
+		if verbose: out.write("scan.d[%d].name = %s\n" % (j, scan.d[j].name))
 		length = u.unpack_int() # length of desc string
 		if length: scan.d[j].desc = u.unpack_string()
-		if verbose: print "scan.d[%d].desc = %s" % (j, `scan.d[j].desc`)
+		if verbose: out.write("scan.d[%d].desc = %s\n" % (j, scan.d[j].desc))
 		length = u.unpack_int() # length of unit string
 		if length: scan.d[j].unit = u.unpack_string()
-		if verbose: print "scan.d[%d].unit = %s" % (j, `scan.d[j].unit`)
+		if verbose: out.write("scan.d[%d].unit = %s\n" % (j, scan.d[j].unit))
 
 	for j in range(scan.nt):
 		scan.t.append(scanTrigger())
 		scan.t[j].number = u.unpack_int()
-		if verbose: print "trigger ", j
+		if verbose: out.write("trigger %d\n" % (j))
 		length = u.unpack_int() # length of name string
 		if length: scan.t[j].name = u.unpack_string()
-		if verbose: print "scan.t[%d].name = %s" % (j, `scan.t[j].name`)
+		if verbose: out.write("scan.t[%d].name = %s\n" % (j, scan.t[j].name))
 		scan.t[j].command = u.unpack_float()
-		if verbose: print "scan.t[%d].command = %s" % (j, `scan.t[j].command`)
+		if verbose: out.write("scan.t[%d].command = %f\n" % (j, scan.t[j].command))
 
 	### read data
 	# positioners
@@ -346,7 +359,7 @@ def readScan(scanFile, verbose=0, out=sys.stdout, unpacker=None):
 	return (scan, (file_loc_data-file_loc_det))
 
 useDetToDatOffset = 1
-def readScanQuick(scanFile, unpacker=None, detToDat_offset=None):
+def readScanQuick(scanFile, unpacker=None, detToDat_offset=None, out=sys.stdout):
 	"""usage: readScanQuick(scanFile, unpacker=None)"""
 
 	scan = scanDim()	# data structure to hold scan info and data
@@ -359,7 +372,7 @@ def readScanQuick(scanFile, unpacker=None, detToDat_offset=None):
 
 	scan.rank = u.unpack_int()
 	if (scan.rank > 20) or (scan.rank < 0):
-		print "* * * readScanQuick('%s'): rank > 20.  probably a corrupt file" % scanFile.name
+		out.write("* * * readScanQuick('%s'): rank > 20.  Probably a corrupt file\n" % (scanFile.name))
 		return None
 
 	scan.npts = u.unpack_int()
@@ -425,7 +438,7 @@ def readScanQuick(scanFile, unpacker=None, detToDat_offset=None):
 		file_loc = scanFile.tell() - (len(buf) - u.get_position())
 		diff = file_loc - (file_loc_det + detToDat_offset)
 		if diff != 0:
-			print "oldSeek, newSeek, o-n=", file_loc, file_loc_det + detToDat_offset, diff
+			out.write("oldSeek=0x%x, newSeek=0x%x, o-n=%d\n" % (file_loc, file_loc_det + detToDat_offset, diff))
 		scanFile.seek(file_loc)
 	else:
 		for j in range(scan.nd):
@@ -543,8 +556,10 @@ def readMDA(fname=None, maxdim=4, verbose=0, showHelp=0, outFile=None, useNumpy=
 	# read file header
 	version = u.unpack_float()
 	if verbose: out.write("MDA version = %.3f\n" % version)
-	if abs(version - 1.3) > .01:
-		print "I can't read MDA version %f.  Is this really an MDA file?" % version
+	if (abs(version - 1.3) > .01) and (abs(version - 1.4) > .01):
+		out.write("I can't read MDA version %f.  Is this really an MDA file?\n" % (version))
+		if (outFile):
+			close(out)
 		return None
 
 	scan_number = u.unpack_int()
@@ -576,31 +591,40 @@ def readMDA(fname=None, maxdim=4, verbose=0, showHelp=0, outFile=None, useNumpy=
 	if ((rank > 1) and (maxdim > 1)):
 		# collect 2D data
 		for i in range(dim[0].curr_pt):
-			scanFile.seek(dim[0].plower_scans[i])
-			if (i==0):
-				(s,detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
-				dim.append(s)
-				dim[1].dim = 2
-				# replace data arrays [1,2,3] with [[1,2,3]]
-				for j in range(dim[1].np):
-					dim[1].p[j].data = [dim[1].p[j].data]
-				for j in range(dim[1].nd):
-					dim[1].d[j].data = [dim[1].d[j].data]
+			if (dim[0].plower_scans[i] == 0):
+				if verbose: out.write("1D point %d/%d; declining to seek null file loc; appending zeros\n" % (i, dim[0].curr_pt))
+				# append empty data arrays.  If i==0; this won't work.
+				numP = len(dim[1].p)
+				for j in range(numP): dim[1].p[j].data.append([0]*len(dim[1].p[j].data[0]))
+				numD = len(dim[1].d)
+				for j in range(numD): dim[1].d[j].data.append([0]*len(dim[1].d[j].data[0]))
 			else:
-				if readQuick:
-					s = readScanQuick(scanFile, unpacker=u, detToDat_offset=detToDat)
+				scanFile.seek(dim[0].plower_scans[i])
+				if verbose: out.write("1D point %d/%d; seek = 0x%x\n" % (i, dim[0].curr_pt, dim[0].plower_scans[i]))
+				if (i==0):
+					(s,detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
+					dim.append(s)
+					dim[1].dim = 2
+					# replace data arrays [1,2,3] with [[1,2,3]]
+					for j in range(dim[1].np):
+						dim[1].p[j].data = [dim[1].p[j].data]
+					for j in range(dim[1].nd):
+						dim[1].d[j].data = [dim[1].d[j].data]
 				else:
-					(s,junk) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
-				# append data arrays
-				# [ [1,2,3], [2,3,4] ] -> [ [1,2,3], [2,3,4], [3,4,5] ]
-				numP = min(s.np, len(dim[1].p))
-				if (s.np > numP):
-					print "First scan had %d positioners; This one only has %d." % (s.np, numP)
-				for j in range(numP): dim[1].p[j].data.append(s.p[j].data)
-				numD = min(s.nd, len(dim[1].d))
-				if (s.nd > numD):
-					print "First scan had %d detectors; This one only has %d." % (s.nd, numD)
-				for j in range(numD): dim[1].d[j].data.append(s.d[j].data)
+					if readQuick:
+						s = readScanQuick(scanFile, unpacker=u, detToDat_offset=detToDat)
+					else:
+						(s,junk) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
+					# append data arrays
+					# [ [1,2,3], [2,3,4] ] -> [ [1,2,3], [2,3,4], [3,4,5] ]
+					numP = min(s.np, len(dim[1].p))
+					if (s.np > numP):
+						out.write("First scan had %d positioners; This one only has %d.\n" % (len(dim[1].p), s.np))
+					for j in range(numP): dim[1].p[j].data.append(s.p[j].data)
+					numD = min(s.nd, len(dim[1].d))
+					if (s.nd > numD):
+						out.write("First scan had %d detectors; This one only has %d.\n" % (len(dim[1].d), s.nd))
+					for j in range(numD): dim[1].d[j].data.append(s.d[j].data)
 		if use_numpy:
 			for p in dim[1].p:
 				p.data = numpy.array(p.data)
@@ -612,38 +636,68 @@ def readMDA(fname=None, maxdim=4, verbose=0, showHelp=0, outFile=None, useNumpy=
 		#print "dim[0].curr_pt=",dim[0].curr_pt
 		for i in range(dim[0].curr_pt):
 			#print "i=%d of %d points" % (i, dim[0].curr_pt)
-			scanFile.seek(dim[0].plower_scans[i])
-			(s1,detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
-			#print "s1.curr_pt=", s1.curr_pt
-			for j in range(s1.curr_pt):
-				#print "j=%d of %d points" % (j, s1.curr_pt)
-				scanFile.seek(s1.plower_scans[j])
-				if (j==0) or not readQuick:
-					(s, detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
-				else:
-					s = readScanQuick(scanFile, unpacker=u, detToDat_offset=detToDat)
-				if ((i == 0) and (j == 0)):
-					dim.append(s)
-					dim[2].dim = 3
-					# replace data arrays [1,2,3] with [[[1,2,3]]]
-					for k in range(dim[2].np):
-						dim[2].p[k].data = [[dim[2].p[k].data]]
-					for k in range(dim[2].nd):
-						dim[2].d[k].data = [[dim[2].d[k].data]]
-				else:
-					# append data arrays
-					numP = min(s.np, len(dim[2].p))
-					if (s.np > numP):
-						print "First scan had %d positioners; This one only has %d." % (s.np, numP)
+			if (dim[0].plower_scans[i] == 0):
+				if verbose: out.write("1D point %d/%d; declining to seek null file loc\n" % (i, dim[0].curr_pt))
+				# append empty data arrays.  If i==0, this won't work
+				s1 = dim[2]
+				for j in range(s1.curr_pt):
+					# append empty data arrays
+					numP = len(dim[2].p)
 					for k in range(numP):
 						if j==0: dim[2].p[k].data.append([])
-						dim[2].p[k].data[i].append(s.p[k].data)
-					numD = min(s.nd, len(dim[2].d))
-					if (s.nd > numD):
-						print "First scan had %d detectors; This one only has %d." % (s.nd, numD)
+						dim[2].p[k].data[i].append([0]*len(dim[2].p[k].data[0]))
+					numD = len(dim[2].d)
 					for k in range(numD):
 						if j==0: dim[2].d[k].data.append([])
-						dim[2].d[k].data[i].append(s.d[k].data)
+						dim[2].d[k].data[i].append([0]*len(dim[2].d[k].data[0]))
+			else:
+				scanFile.seek(dim[0].plower_scans[i])
+				(s1,detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
+				#print "s1.curr_pt=", s1.curr_pt
+				for j in range(s1.curr_pt):
+					#print "j=%d of %d points" % (j, s1.curr_pt)
+					if (s1.plower_scans[j] == 0):
+						if verbose: out.write("2D point [%d,%d]/[%d,%d]; declining to seek null file loc; appending zeros\n" %
+							(i,j, dim[0].curr_pt, s1.curr_pt))
+						# append empty data arrays
+						numP = len(dim[2].p)
+						for k in range(numP):
+							if j==0: dim[2].p[k].data.append([])
+							#print "appending list of length %d" % len(dim[2].p[k].data[0][0])
+							dim[2].p[k].data[i].append([0]*len(dim[2].p[k].data[0][0]))
+						numD = len(dim[2].d)
+						for k in range(numD):
+							if j==0: dim[2].d[k].data.append([])
+							dim[2].d[k].data[i].append([0]*len(dim[2].d[k].data[0][0]))
+					else:
+						scanFile.seek(s1.plower_scans[j])
+						if verbose: out.write("2D point %d/%d; seek = 0x%x\n" % (j, s1.curr_pt, s1.plower_scans[j]))
+						if (j==0) or not readQuick:
+							(s, detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
+						else:
+							s = readScanQuick(scanFile, unpacker=u, detToDat_offset=detToDat)
+						if ((i == 0) and (j == 0)):
+							dim.append(s)
+							dim[2].dim = 3
+							# replace data arrays [1,2,3] with [[[1,2,3]]]
+							for k in range(dim[2].np):
+								dim[2].p[k].data = [[dim[2].p[k].data]]
+							for k in range(dim[2].nd):
+								dim[2].d[k].data = [[dim[2].d[k].data]]
+						else:
+							# append data arrays
+							numP = min(s.np, len(dim[2].p))
+							if (s.np > numP):
+								out.write("First scan had %d positioners; This one only has %d.\n" % (len(dim[2].p), s.np))
+							for k in range(numP):
+								if j==0: dim[2].p[k].data.append([])
+								dim[2].p[k].data[i].append(s.p[k].data)
+							numD = min(s.nd, len(dim[2].d))
+							if (s.nd > numD):
+								out.write("First scan had %d detectors; This one only has %d.\n" % (len(dim[2].d), s.nd))
+							for k in range(numD):
+								if j==0: dim[2].d[k].data.append([])
+								dim[2].d[k].data[i].append(s.d[k].data)
 		if use_numpy:
 			for p in dim[2].p:
 				p.data = numpy.array(p.data)
@@ -653,40 +707,52 @@ def readMDA(fname=None, maxdim=4, verbose=0, showHelp=0, outFile=None, useNumpy=
 	if ((rank > 3) and (maxdim > 3)):
 		# collect 4D data
 		for i in range(dim[0].curr_pt):
-			scanFile.seek(dim[0].plower_scans[i])
-			(s1, detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
-			for j in range(s1.curr_pt):
-				scanFile.seek(s1.plower_scans[j])
-				(s2, detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
-				for k in range(s2.curr_pt):
-					scanFile.seek(s2.plower_scans[k])
-					if (k==0) or not readQuick:
-						(s, detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
+			if (dim[0].plower_scans[i] == 0):
+				if verbose: out.write("1D point %d/%d; declining to seek null file loc\n" % (i, dim[0].curr_pt))
+			else:
+				scanFile.seek(dim[0].plower_scans[i])
+				(s1, detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
+				for j in range(s1.curr_pt):
+					if (s1.plower_scans[j] == 0):
+						if verbose: out.write("2D point [%d,%d]/[%d,%d]; declining to seek null file loc\n" %
+							(i,j, dim[0].curr_pt, s1.curr_pt))
 					else:
-						s = readScanQuick(scanFile, unpacker=u, detToDat_offset=detToDat)
-					if ((i == 0) and (j == 0) and (k == 0)):
-						dim.append(s)
-						dim[3].dim = 4
-						for m in range(dim[3].np):
-							dim[3].p[m].data = [[[dim[3].p[m].data]]]
-						for m in range(dim[3].nd):
-							dim[3].d[m].data = [[[dim[3].d[m].data]]]
-					else:
-						# append data arrays
-						if j==0 and k==0:
-							for m in range(dim[3].np):
-								dim[3].p[m].data.append([[]])
-								dim[3].p[m].data[i][0].append(s.p[m].data)
-							for m in range(dim[3].nd):
-								dim[3].d[m].data.append([[]])
-								dim[3].d[m].data[i][0].append(s.d[m].data)
-						else:
-							for m in range(dim[3].np):
-								if k==0: dim[3].p[m].data[i].append([])
-								dim[3].p[m].data[i][j].append(s.p[m].data)
-							for m in range(dim[3].nd):
-								if k==0: dim[3].d[m].data[i].append([])
-								dim[3].d[m].data[i][j].append(s.d[m].data)
+						scanFile.seek(s1.plower_scans[j])
+						(s2, detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
+						for k in range(s2.curr_pt):
+							if (s2.plower_scans[k] == 0):
+								if verbose: out.write("3D point %d/%d; declining to seek null file loc\n" % (k, s2.curr_pt))
+							else:
+								scanFile.seek(s2.plower_scans[k])
+								if verbose: out.write("4D point [%d,%d,%d]/[%d,%d,%d]; seek = 0x%x\n" %
+									(i, j, k, dim[0].curr_pt, s1.curr_pt, s2.curr_pt, s2.plower_scans[k]))
+								if (k==0) or not readQuick:
+									(s, detToDat) = readScan(scanFile, max(0,verbose-1), out, unpacker=u)
+								else:
+									s = readScanQuick(scanFile, unpacker=u, detToDat_offset=detToDat)
+								if ((i == 0) and (j == 0) and (k == 0)):
+									dim.append(s)
+									dim[3].dim = 4
+									for m in range(dim[3].np):
+										dim[3].p[m].data = [[[dim[3].p[m].data]]]
+									for m in range(dim[3].nd):
+										dim[3].d[m].data = [[[dim[3].d[m].data]]]
+								else:
+									# append data arrays
+									if j==0 and k==0:
+										for m in range(dim[3].np):
+											dim[3].p[m].data.append([[]])
+											dim[3].p[m].data[i][0].append(s.p[m].data)
+										for m in range(dim[3].nd):
+											dim[3].d[m].data.append([[]])
+											dim[3].d[m].data[i][0].append(s.d[m].data)
+									else:
+										for m in range(dim[3].np):
+											if k==0: dim[3].p[m].data[i].append([])
+											dim[3].p[m].data[i][j].append(s.p[m].data)
+										for m in range(dim[3].nd):
+											if k==0: dim[3].d[m].data[i].append([])
+											dim[3].d[m].data[i][j].append(s.d[m].data)
 		if use_numpy:
 			for p in dim[3].p:
 				p.data = numpy.array(p.data)
@@ -771,13 +837,13 @@ def readMDA(fname=None, maxdim=4, verbose=0, showHelp=0, outFile=None, useNumpy=
 	dim.append(dict)
 	dim.reverse()
 	if verbose or showHelp:
-		print "\n%s is a %d-D file; %d dimensions read in." % (fname, dim[0]['rank'], len(dim)-1)
-		print "dim[0] = dictionary of %d scan-environment PVs" % (len(dim[0]))
-		print "   usage: dim[0]['sampleEntry'] ->", dim[0]['sampleEntry']
+		out.write("\n%s is a %d-D file; %d dimensions read in.\n" % (fname, dim[0]['rank'], len(dim)-1))
+		out.write("dim[0] = dictionary of %d scan-environment PVs\n" % (len(dim[0])))
+		out.write("   usage: dim[0]['sampleEntry'] -> %s\n" % (repr(dim[0]['sampleEntry'])))
 		for i in range(1,len(dim)):
-			print "dim[%d] = %s" % (i, str(dim[i]))
-		print "   usage: dim[1].p[2].data -> 1D array of positioner 2 data"
-		print "   usage: dim[2].d[7].data -> 2D array of detector 7 data"
+			out.write("dim[%d] = %s\n" % (i, str(dim[i])))
+		out.write("   usage: dim[1].p[2].data -> 1D array of positioner 2 data\n")
+		out.write("   usage: dim[2].d[7].data -> 2D array of detector 7 data\n")
 
 	if showHelp:
 		print " "
