@@ -842,8 +842,8 @@ def readMDA(fname=None, maxdim=4, verbose=0, showHelp=0, outFile=None, useNumpy=
 		out.write("   usage: dim[0]['sampleEntry'] -> %s\n" % (repr(dim[0]['sampleEntry'])))
 		for i in range(1,len(dim)):
 			out.write("dim[%d] = %s\n" % (i, str(dim[i])))
-		out.write("   usage: dim[1].p[2].data -> 1D array of positioner 2 data\n")
-		out.write("   usage: dim[2].d[7].data -> 2D array of detector 7 data\n")
+		out.write("   usage: dim[1].p[2].data -> 1D array of positioner 1 data\n")
+		out.write("   usage: dim[2].d[7].data -> 2D array of detector 6 data\n")
 
 	if showHelp:
 		print " "
