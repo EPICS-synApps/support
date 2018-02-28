@@ -57,7 +57,7 @@ shallow_repo()
 	echo "Grabbing $MODULE_NAME at tag: $TAG"
 	echo
 	
-	git clone -q --branch $TAG --depth 1 git://github.com/$PROJECT/$MODULE_NAME.git $FOLDER_NAME
+	git clone -q --branch $TAG --depth 1 https://github.com/$PROJECT/$MODULE_NAME.git $FOLDER_NAME
 	
 	echo "$RELEASE_NAME=\$(SUPPORT)/$FOLDER_NAME" >> ./configure/RELEASE
 	
@@ -77,13 +77,13 @@ full_repo()
 	echo "Grabbing $MODULE_NAME at tag: $TAG"
 	echo
 	
-	git clone -q git://github.com/$PROJECT/$MODULE_NAME.git $FOLDER_NAME
+	git clone -q https://github.com/$PROJECT/$MODULE_NAME.git $FOLDER_NAME
 	
 	CURR=$(pwd)
 	
 	cd $FOLDER_NAME
 	git checkout -q $TAG
-	cd $CURR
+	cd "$CURR"
 	echo "$RELEASE_NAME=\$(SUPPORT)/$FOLDER_NAME" >> ./configure/RELEASE
 	
 	echo
@@ -92,13 +92,13 @@ full_repo()
 
 shallow_support()
 {
-	git clone -q --branch $2 --depth 1 git://github.com/EPICS-synApps/$1.git
+	git clone -q --branch $2 --depth 1 https://github.com/EPICS-synApps/$1.git
 }
 
 
 full_support()
 {
-	git clone -q git://github.com/EPICS-synApps/$1.git
+	git clone -q https://github.com/EPICS-synApps/$1.git
 	cd $1
 	git checkout -q $2
 	cd ..
