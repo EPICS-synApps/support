@@ -77,6 +77,7 @@ $(CALC)_DEPEND_DIRS = $(SNCSEQ) $(SSCAN)
 
 MODULE_LIST  = BUSY STD DAC128V IP330 IPUNIDIG LOVE
 MODULE_LIST += IP OPTICS STREAM MODBUS VAC SOFTGLUE
+MODULE_LIST += LUA
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(BUSY)_DEPEND_DIRS     = $(ASYN)
@@ -91,6 +92,7 @@ $(STREAM)_DEPEND_DIRS   = $(ASYN) $(CALC) $(SSCAN)
 $(MODBUS)_DEPEND_DIRS   = $(ASYN)
 $(VAC)_DEPEND_DIRS      = $(ASYN) $(IPAC)
 $(SOFTGLUE)_DEPEND_DIRS = $(ASYN) $(IPAC)
+$(LUA)_DEPEND_DIRS      = $(LUA)
 
 ################### 4th Tier Support Modules #####################
 
