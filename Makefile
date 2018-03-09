@@ -92,11 +92,11 @@ $(STREAM)_DEPEND_DIRS   = $(ASYN) $(CALC) $(SSCAN)
 $(MODBUS)_DEPEND_DIRS   = $(ASYN)
 $(VAC)_DEPEND_DIRS      = $(ASYN) $(IPAC)
 $(SOFTGLUE)_DEPEND_DIRS = $(ASYN) $(IPAC)
-$(LUA)_DEPEND_DIRS      = $(LUA)
+$(LUA)_DEPEND_DIRS      = $(ASYN)
 
 ################### 4th Tier Support Modules #####################
 
-MODULE_LIST  = DELAYGEN MCA VME MOTOR AREA_DETECTOR
+MODULE_LIST  = DELAYGEN MCA VME MOTOR AREA_DETECTOR SOFTGLUEZYNQ
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 $(DELAYGEN)_DEPEND_DIRS = $(ASYN) $(AUTOSAVE) $(CALC) $(IP) $(IPAC) $(STREAM) 
@@ -104,6 +104,7 @@ $(MCA)_DEPEND_DIRS      = $(ASYN) $(AUTOSAVE) $(BUSY) $(CALC) $(SNCSEQ) $(SSCAN)
 $(VME)_DEPEND_DIRS      = $(SNCSEQ) $(STD)
 $(MOTOR)_DEPEND_DIRS    = $(ASYN) $(BUSY) $(IPAC) $(SNCSEQ) 
 $(AREA_DETECTOR)_DEPEND_DIRS = $(ASYN) $(AUTOSAVE) $(BUSY) $(CALC) $(SSCAN)
+$(SOFTGLUEZYNQ)_DEPEND_DIRS = $(ASYN) $(SNCSEQ) $(STD)
 #$(EBRICK)_DEPEND_DIRS   = $(ASYN) $(AUTOSAVE) $(CALC) $(SNCSEQ) $(SSCAN) $(STD)
 
 ################### 4.5th Tier Support Modules #####################
