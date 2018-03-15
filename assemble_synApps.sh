@@ -3,43 +3,46 @@ shopt -s expand_aliases
 
 EPICS_BASE=/APSshare/epics/base-3.15.5
 
-SUPPORT=synApps_5_8
+SUPPORT=master
 CONFIGURE=synApps_5_8
 UTILS=synApps_5_8
 DOCUMENTATION=synApps_5_8
 
 ALLENBRADLEY=2.3
-ALIVE=R1-0-1
-AREA_DETECTOR=R2-6
-ASYN=R4-31
-AUTOSAVE=R5-7-1
-BUSY=R1-6-1
-CALC=R3-6-1
-CAMAC=R2-7
-CAPUTRECORDER=R1-6
-DAC128V=R2-8
-DELAYGEN=R1-1-1
-DXP=R3-5
-DEVIOCSTATS=3.1.14
-IP=R2-10
-IPAC=2.14
-IP330=R2-8
-IPUNIDIG=R2-10
-LOVE=R3-2-5
-MCA=R7-6
-MEASCOMP=R1-3-1
-MODBUS=R2-9
-MOTOR=R6-9
-OPTICS=R2-11
-QUADEM=R7-0
+ALIVE=master
+AREA_DETECTOR=master
+ASYN=R4-33
+AUTOSAVE=R5-9
+BUSY=R1-7
+CALC=R3-7
+CAMAC=master
+CAPUTRECORDER=R1-7
+DAC128V=R2-9
+DELAYGEN=master
+DXP=R4-0
+DEVIOCSTATS=master
+IP=R2-19
+IPAC=master
+IP330=R2-9
+IPUNIDIG=R2-11
+LOVE=master
+LUA=master
+MCA=R7-7
+MEASCOMP=master
+MODBUS=R2-10-1
+MOTOR=R6-10
+OPTICS=R2-13
+QUADEM=R9-1
 SNCSEQ=2.2.4
-SOFTGLUE=R2-8
-SSCAN=R2-10-2
-STD=R3-4-1
-STREAM=R2-7-7
-VAC=R1-5-1
-VME=R2-8-2
-XXX=R5-8
+SOFTGLUE=master
+SOFTGLUEZYNQ=master
+SSCAN=R2-11-1
+STD=master
+STREAM=master
+VAC=master
+VME=master
+YOKOGAWA_DAS=master
+XXX=master
 
 
 
@@ -124,8 +127,9 @@ get_support configure      $CONFIGURE
 get_support utils          $UTILS
 get_support documentation  $DOCUMENTATION
 
+SUPPORT=$(pwd)
 
-echo "SUPPORT=$(pwd)" > configure/RELEASE
+echo "SUPPORT=$SUPPORT" > configure/RELEASE
 echo '-include $(TOP)/configure/SUPPORT.$(EPICS_HOST_ARCH)' >> configure/RELEASE
 echo "EPICS_BASE=$EPICS_BASE" >> configure/RELEASE
 echo '-include $(TOP)/configure/EPICS_BASE' >> configure/RELEASE
@@ -152,6 +156,7 @@ if [[ $IPAC ]];          then   get_repo epics-modules  ipac           IPAC     
 if [[ $IP330 ]];         then   get_repo epics-modules  ip330          IP330          $IP330         ; fi
 if [[ $IPUNIDIG ]];      then   get_repo epics-modules  ipUnidig       IPUNIDIG       $IPUNIDIG      ; fi
 if [[ $LOVE ]];          then   get_repo epics-modules  love           LOVE           $LOVE          ; fi
+if [[ $LUA ]];           then   get_repo epics-modules  lua            LUA            $LUA           ; fi
 if [[ $MCA ]];           then   get_repo epics-modules  mca            MCA            $MCA           ; fi
 if [[ $MEASCOMP ]];      then   get_repo epics-modules  measComp       MEASCOMP       $MEASCOMP      ; fi
 if [[ $MODBUS ]];        then   get_repo epics-modules  modbus         MODBUS         $MODBUS        ; fi
@@ -159,10 +164,12 @@ if [[ $MOTOR ]];         then   get_repo epics-modules  motor          MOTOR    
 if [[ $OPTICS ]];        then   get_repo epics-modules  optics         OPTICS         $OPTICS        ; fi
 if [[ $QUADEM ]];        then   get_repo epics-modules  quadEM         QUADEM         $QUADEM        ; fi
 if [[ $SOFTGLUE ]];      then   get_repo epics-modules  softGlue       SOFTGLUE       $SOFTGLUE      ; fi
+if [[ $SOFTGLUEZYNQ ]];  then   get_repo epics-modules  softGlueZynq   SOFTGLUEZYNQ   $SOFTGLUEZYNQ  ; fi
 if [[ $SSCAN ]];         then   get_repo epics-modules  sscan          SSCAN          $SSCAN         ; fi
 if [[ $STD ]];           then   get_repo epics-modules  std            STD            $STD           ; fi
 if [[ $VAC ]];           then   get_repo epics-modules  vac            VAC            $VAC           ; fi
 if [[ $VME ]];           then   get_repo epics-modules  vme            VME            $VME           ; fi
+if [[ $YOKOGAWA_DAS ]];  then   get_repo BCDA-APS       Yokogawa_MW100 YOKOGAWA_DAS   $YOKOGAWA_DAS  ; fi
 if [[ $XXX ]];           then   get_repo epics-modules  xxx            XXX            $XXX           ; fi
 
 
@@ -189,7 +196,35 @@ git submodule init
 git submodule update ADCore
 git submodule update ADSupport
 git submodule update ADSimDetector
-cd ..
+
+cd configure
+cp EXAMPLE_CONFIG_SITE.local CONFIG_SITE.local
+
+# Graphics Magick doesn't compile on vxWorks
+echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.vxWorks
+
+# We are still using Epics v3
+echo 'WITH_PVA = NO' >> CONFIG_SITE.local.linux-x86_64
+echo 'WITH_PVA = NO' >> CONFIG_SITE.local.vxWorks
+echo 'WITH_PVA = NO' >> CONFIG_SITE.local.win32-x86
+echo 'WITH_PVA = NO' >> CONFIG_SITE.local.windows-x64
+
+#HDF5 flag for windows
+echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)'
+
+#Can't just use default RELEASE.local because it has simDetector commented out
+echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector' >> RELEASE.local
+echo 'ADSUPPORT=$(AREA_DETECTOR)/ADSupport' >> RELEASE.local
+echo '-include $(TOP)/configure/RELEASE.local.$(EPICS_HOST_ARCH)' >> RELEASE.local
+
+echo "SUPPORT=$SUPPORT" >> RELEASE_SUPPORT.local
+echo "EPICS_BASE=$EPICS_BASE" >> RELEASE_BASE.local
+
+# make release will give the correct paths for these files, so we just need to rename them
+cp EXAMPLE_RELEASE_PRODS.local RELEASE_PRODS.local
+cp EXAMPLE_RELEASE_LIBS.local RELEASE_LIBS.local
+
+cd ../..
 
 echo 'ADCORE=$(AREA_DETECTOR)/ADCore' >> ./configure/RELEASE
 echo 'ADSUPPORT=$(AREA_DETECTOR)/ADSupport' >> ./configure/RELEASE
@@ -219,7 +254,7 @@ wget http://www.aps.anl.gov/epics/download/modules/allenBradley-$ALLENBRADLEY.ta
 tar xf allenBradley-$ALLENBRADLEY.tar.gz
 mv allenBradley-$ALLENBRADLEY allenBradley-${ALLENBRADLEY//./-}
 rm -f allenBradley-$ALLENBRADLEY.tar.gz
-echo "ALLENBRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY//./-}" >> ./configure/RELEASE
+echo "ALLEN_BRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY//./-}" >> ./configure/RELEASE
 
 fi
 
