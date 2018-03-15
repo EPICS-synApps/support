@@ -172,6 +172,17 @@ if [[ $VME ]];           then   get_repo epics-modules  vme            VME      
 if [[ $YOKOGAWA_DAS ]];  then   get_repo BCDA-APS       Yokogawa_MW100 YOKOGAWA_DAS   $YOKOGAWA_DAS  ; fi
 if [[ $XXX ]];           then   get_repo epics-modules  xxx            XXX            $XXX           ; fi
 
+#Blow away iocStats existing RELEASE file until SUPPORT is ever defined
+if [[ $DEVIOCSTATS ]];   then
+cd iocStats-$DEVIOCSTATS
+cd configure
+echo "EPICS_BASE=." >> RELEASE
+echo "SUPPORT=." >> RELEASE
+echo "SNCSEQ=." >> RELEASE
+echo '-include $(SUPPORT)/configure/EPICS_BASE.$(EPICS_HOST_ARCH)' >> RELEASE
+cd ../..
+fi
+
 
 if [[ $STREAM ]]
 then
