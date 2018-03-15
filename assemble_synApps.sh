@@ -210,7 +210,8 @@ echo 'WITH_PVA = NO' >> CONFIG_SITE.local.win32-x86
 echo 'WITH_PVA = NO' >> CONFIG_SITE.local.windows-x64
 
 #HDF5 flag for windows
-echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)'
+echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)' >> CONFIG_SITE.local.win32-x86
+echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)' >> CONFIG_SITE.local.windows-x64
 
 #Can't just use default RELEASE.local because it has simDetector commented out
 echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector' >> RELEASE.local
