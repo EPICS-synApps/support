@@ -59,11 +59,12 @@ $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 ###### 1.5 Tier Support Modules - Only Depend on 1st Tier ######
 # sscan now depends on seq, via scanProgress.st, but sscan can also build
-# without seq.
-MODULE_LIST = SSCAN DEVIOCSTATS
+# without seq. Yokogawa DAS can also build without seq.
+MODULE_LIST = SSCAN DEVIOCSTATS YOKOGAWA_DAS
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 $(SSCAN)_DEPEND_DIRS     = $(SNCSEQ)
 $(DEVIOCSTATS)_DEPEND_DIRS     = $(SNCSEQ)
+$(YOKOGAWA_DAS)_DEPEND_DIRS = $(SNCSEQ)
 
 ###### 2nd Tier Support Modules - Only Depend on 1st Tier ########
 
