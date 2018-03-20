@@ -219,6 +219,8 @@ echo 'WITH_PVA = NO' >> CONFIG_SITE.local.linux-x86_64
 echo 'WITH_PVA = NO' >> CONFIG_SITE.local.vxWorks
 echo 'WITH_PVA = NO' >> CONFIG_SITE.local.win32-x86
 echo 'WITH_PVA = NO' >> CONFIG_SITE.local.windows-x64
+echo 'WITH_PVA = NO' >> CONFIG_SITE.local.win32-x86-static
+echo 'WITH_PVA = NO' >> CONFIG_SITE.local.windows-x64-static
 
 #HDF5 flag for windows
 echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)' >> CONFIG_SITE.local.win32-x86
