@@ -1,7 +1,7 @@
 #!/bin/bash
 shopt -s expand_aliases
 
-EPICS_BASE=/opt/epics/base
+EPICS_BASE=/APSshare/epics/base-3.15.5
 
 SUPPORT=master
 CONFIGURE=synApps_5_8
