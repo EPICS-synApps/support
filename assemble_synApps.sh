@@ -1,7 +1,7 @@
 #!/bin/bash
 shopt -s expand_aliases
 
-EPICS_BASE=/APSshare/epics/base-3.15.5
+EPICS_BASE=/opt/epics/base
 
 SUPPORT=master
 CONFIGURE=synApps_5_8
@@ -21,6 +21,7 @@ DAC128V=R2-9
 DELAYGEN=master
 DXP=R4-0
 DEVIOCSTATS=master
+GALIL=master
 IP=R2-19
 IPAC=2.15
 IP330=R2-9
@@ -43,7 +44,6 @@ VAC=master
 VME=master
 YOKOGAWA_DAS=master
 XXX=master
-
 
 
 
@@ -151,6 +151,7 @@ if [[ $DAC128V ]];       then   get_repo epics-modules  dac128V        DAC128V  
 if [[ $DELAYGEN ]];      then   get_repo epics-modules  delaygen       DELAYGEN       $DELAYGEN      ; fi
 if [[ $DXP ]];           then   get_repo epics-modules  dxp            DXP            $DXP           ; fi
 if [[ $DEVIOCSTATS ]];   then   get_repo epics-modules  iocStats       DEVIOCSTATS    $DEVIOCSTATS   ; fi
+if [[ $GALIL ]];         then   get_repo motorapp       Galil-3-0      GALIL          $GALIL         ; fi
 if [[ $IP ]];            then   get_repo epics-modules  ip             IP             $IP            ; fi
 if [[ $IPAC ]];          then   get_repo epics-modules  ipac           IPAC           $IPAC          ; fi
 if [[ $IP330 ]];         then   get_repo epics-modules  ip330          IP330          $IP330         ; fi
@@ -286,5 +287,16 @@ echo 'ETHERIP=$(SUPPORT)/ether_ip-2-26' >> ./configure/RELEASE
 
 fi
 
+if [[ $GALIL ]]
+then
+
+mv Galil-3-0-$GALIL/3-6 galil-3-6
+rm -Rf Galil-3-0-$GALIL
+cp galil-3-6/config/GALILRELEASE galil-3-6/configure/RELEASE
+echo 'GALIL=$(SUPPORT)/galil-3-6' >> ./configure/RELEASE
+sed -i 's/MODULE_LIST[ ]*=[ ]*MEASCOMP/MODULE_LIST = MEASCOMP GALIL/g' Makefile
+sed -i '/\$(MEASCOMP)_DEPEND_DIRS/a \$(GALIL)_DEPEND_DIRS = \$(AUTOSAVE) \$(SNCSEQ) \$(SSCAN) \$(CALC) \$(ASYN) \$(BUSY) \$(MOTOR) \$(IPAC)' Makefile
+
+fi
 
 make release
