@@ -26,7 +26,7 @@ IP=R2-19-1
 IPAC=2.15
 IP330=R2-9
 IPUNIDIG=R2-11
-LOVE=V3-2-6
+LOVE=R3-2-6
 LUA=R1-2
 MCA=R7-7
 MEASCOMP=R2-0
@@ -175,8 +175,9 @@ if [[ $XXX ]];           then   get_repo epics-modules  xxx            XXX      
 
 #Blow away iocStats existing RELEASE file until SUPPORT is ever defined
 if [[ $DEVIOCSTATS ]];   then
-cd iocStats-$DEVIOCSTATS
+cd iocStats-${DEVIOCSTATS//./-}
 cd configure
+rm -f RELEASE
 echo "EPICS_BASE=." >> RELEASE
 echo "SUPPORT=." >> RELEASE
 echo "SNCSEQ=." >> RELEASE
