@@ -3,9 +3,9 @@ shopt -s expand_aliases
 
 EPICS_BASE=/APSshare/epics/base-3.15.5
 
-SUPPORT=master
-CONFIGURE=synApps_5_8
-UTILS=synApps_5_8
+SUPPORT=R6-0
+CONFIGURE=R6-0
+UTILS=R6-0
 DOCUMENTATION=synApps_5_8
 
 ALLENBRADLEY=2.3
