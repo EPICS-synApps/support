@@ -5,3 +5,4 @@
 #ADL2EDL = adl2edl
 #CSS = css -nosplash -application org.csstudio.opibuilder.adl2boy.application
 
+LINUX_NET_INSTALLED = NO
