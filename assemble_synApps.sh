@@ -170,7 +170,7 @@ if [[ $SSCAN ]];         then   get_repo epics-modules  sscan          SSCAN    
 if [[ $STD ]];           then   get_repo epics-modules  std            STD            $STD           ; fi
 if [[ $VAC ]];           then   get_repo epics-modules  vac            VAC            $VAC           ; fi
 if [[ $VME ]];           then   get_repo epics-modules  vme            VME            $VME           ; fi
-if [[ $YOKOGAWA_DAS ]];  then   get_repo BCDA-APS       Yokogawa_MW100 YOKOGAWA_DAS   $YOKOGAWA_DAS  ; fi
+if [[ $YOKOGAWA_DAS ]];  then   get_repo epics-modules  Yokogawa_DAS   YOKOGAWA_DAS   $YOKOGAWA_DAS  ; fi
 if [[ $XXX ]];           then   get_repo epics-modules  xxx            XXX            $XXX           ; fi
 
 #Blow away iocStats existing RELEASE file until SUPPORT is ever defined
