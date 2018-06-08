@@ -194,6 +194,13 @@ get_repo  epics-modules  stream  STREAM  $STREAM
 cd stream-$STREAM
 git submodule init
 git submodule update
+
+#Temporary patch until new version of StreamDevice is released
+if [[ $SSCAN ]]
+then
+sed -i 's/#PROD_LIBS += sscan/PROD_LIBS += sscan/g' StreamDevice/streamApp/Makefile
+fi
+
 cd ..
 
 fi
