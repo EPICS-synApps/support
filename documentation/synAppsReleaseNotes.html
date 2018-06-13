@@ -7,6 +7,132 @@ content="text/html; charset=iso-8859-1">
 </head>
 
 <body bgcolor="#FFFFFF">
+<h1 align="center">synApps 6.0 Release Notes</h1>
+<ul>
+
+<P>This version of synApps is specifically targeted against epics base 3.15. While the modules will still build against earlier versions of base, the ioc shell scripts provided with the modules may rely on 3.15-specific support.
+
+<P>Modules now can contain an iocsh folder which provide ioc shell scripts to individually load a device onto an IOC. These are designed for use with the iocshLoad function in base and the scripts have comments describing the macros that should be set to use them.
+
+
+<li>
+<h2>Version changes from R5-8 to R6-0</h2>
+<table border>
+
+<tr><td>module<td>old version<td>new version
+<td>notes
+
+<tr><td>EPICS_BASE<td>3.14.12.4<td>3.15.6
+<td>&nbsp;
+
+<tr><td>ALIVE<td>1-0<td>1-1-0
+<td><a href="http://htmlpreview.github.io/?https://github.com/epics-modules/alive/blob/R1-1-0/documentation/aliveReleaseNotes.html">release notes</a>
+
+<tr><td>ALLEN_BRADLEY<td>2-3<td>2-3
+<td>&nbsp;
+
+<tr><td>AREA_DETECTOR<td>2-0<td>3-3
+<td><a href="https://github.com/areaDetector/blob/master/RELEASE.md">release notes</a>
+
+<tr><td>ASYN<td>4-26<td>4-33
+<td><a href="https://epics.anl.gov/modules/soft/asyn/R4-33/RELEASE_NOTES.html">release notes</a>
+
+<tr><td>AUTOSAVE<td>5-6-1<td>5-9
+<td><a href="http://htmlpreview.github.io/?https://github.com/epics-modules/autosave/blob/R5-9/documentation/autosaveReleaseNotes.html">release notes</a>
+
+<tr><td>BUSY<td>1-6-1<td>1-7
+<td><a href="http://htmlpreview.github.io/?https://github.com/epics-modules/busy/blob/R1-7/documentation/busyReleaseNotes.html">release notes</a>
+
+<tr><td>CALC<td>3-4-2-1<td>3-7-1
+<td><a href="http://htmlpreview.github.io/?https://github.com/epics-modules/calc/blob/R3-7-1/documentation/calcReleaseNotes.html">release notes</a>
+</ul>
+
+<tr><td>CAMAC<td>2-7<td>2-7-1
+<td>Minor changes to make sure module builds
+
+<tr><td>CAPUTRECORDER<td>1-4-2<td>1-7-1
+<td><a href="http://htmlpreview.github.io/?https://github.com/epics-modules/caputRecorder/blob/R1-7-1/documentation/caputRecorderReleaseNotes.html">release notes</a>
+
+<tr><td>DAC128V<td>2-8<td>2-9
+<td><a href="http://cars.uchicago.edu/software/epics/dac128VReleaseNotes.html">release notes</a>
+
+<tr><td>DELAYGEN<td>1-1-1<td>1-1-2
+<td><a href="http://www.aps.anl.gov/bcda/synApps/delaygen/delaygen_notes.html">release notes</a>
+
+<tr><td>DEVIOCSTATS<td>3-1-13<td>3-1-15
+<td><a href="http://www.slac.stanford.edu/grp/ssrl/spear/epics/site/devIocStats/RELEASE_NOTES">release notes</a>
+
+<P>configure/RELEASE modified to work with synApps' "make release" build command.
+<tr><td>DXP<td>3-4<td>4-0
+<td><a href="http://cars.uchicago.edu/software/epics/dxpReleaseNotes.html">release notes</a>
+
+<tr><td>IP<td>2-17<td>2-19-1
+<td><a href="http://htmlpreview.github.io/?https://github.com/epics-modules/ip/blob/R2-19/documentation/ipReleaseNotes.html">release notes</a>
+
+<tr><td>IP330<td>2-8<td>2-9
+<td><a href="http://cars.uchicago.edu/software/epics/ip330ReleaseNotes.html">release notes</a>
+
+<tr><td>IPAC<td>2-13<td>2-15
+<td><a href="https://github.com/epics-modules/ipac/wiki">release notes</a>
+
+<tr><td>IPUNIDIG<td>2-10<td>2-11
+<td><a href="http://cars9.uchicago.edu/software/epics/ipUnidigReleaseNotes.html">release notes</a>
+
+<tr><td>LOVE<td>3-2-5<td>3-2-6
+<td><a href="http://htmlpreview.github.io/?https://github.com/epics-modules/love/blob/R3-2-6/documentation/loveReleaseNotes.html">release notes</a>
+
+<tr><td>LUA<td>-<td>1-2
+<td>New Module
+
+<tr><td>MCA<td>7-6<td>7-7
+<td><a href="http://cars.uchicago.edu/software/epics/mcaReleaseNotes.html">release notes</a>
+
+<tr><td>MEASCOMP<td>1-1<td>2-1
+<td><a href="http://cars.uchicago.edu/software/epics/measCompReleaseNotes.html">release notes</a>
+
+<tr><td>MODBUS<td>2-7<td>2-10-1
+<td><a href="http://cars.uchicago.edu/software/epics/modbusReleaseNotes.html">release notes</a>
+
+<tr><td>MOTOR<td>6-9<td>6-10-1
+<td><a href="http://htmlpreview.github.io/?https://github.com/epics-modules/motor/blob/R6-10-1/documentation/motor_release.html">release notes</a>
+
+<tr><td>OPTICS<td>2-9-3<td>2-13-1
+<td> <a href="http://htmlpreview.github.io/?https://github.com/epics-modules/optics/blob/R2-13-1/documentation/opticsReleaseNotes.html">release notes</a>
+
+<tr><td>QUADEM<td>5-0<td>9-1
+<td> <a href="http://cars.uchicago.edu/software/epics/quadEMReleaseNotes.html">release notes</a>
+
+<tr><td>SNCSEQ<td>2-2-1<td>2-2-5
+<td><a href="https://www-csr.bessy.de/control/SoftDist/sequencer/ReleaseNotes-2-2.html#release-notes-2-2-5">release notes</a>
+
+<tr><td>SOFTGLUE<td>2-4-3<td>2-8-1
+<td><a href="http://htmlpreview.github.io/?https://github.com/epics-modules/softGlue/blob/R2-8-1/documentation/softGlueReleaseNotes.html">release notes</a>
+
+<tr><td>SSCAN<td>2-10-1<td>2-11-1
+<td><a href="http://htmlpreview.github.io/?https://github.com/epics-modules/sscan/blob/R2-11-1/documentation/sscanReleaseNotes.html">release notes</a>
+
+<tr><td>STD<td>3-4<td>3-5
+<td><a href="http://htmlpreview.github.io/?https://github.com/epics-modules/std/blob/R3-5/documentation/stdReleaseNotes.html">release notes</a>
+
+<tr><td>STREAM<td>2-6a<td>2-7-7a
+<td>StreamDevice at commit 76115ae
+
+<tr><td>VAC<td>1-5-1<td>1-7
+<td><a href="http://htmlpreview.github.io/?https://github.com/epics-modules/vac/blob/R1-7/documentation/vacReleaseNotes.html">release notes</a>
+
+<tr><td>VME<td>2-8-2<td>2-9
+<td><a href="http://htmlpreview.github.io/?https://github.com/epics-modules/vme/blob/R2-9/documentation/vmeReleaseNotes.html">release notes</a>
+
+<tr><td>XXX<td>5-8-3<td>6-0
+<td><a href="http://htmlpreview.github.io/?https://github.com/epics-modules/xxx/blob/R6-0/documentation/xxxReleaseNotes.html">release notes</a>
+
+</table>
+
+</ul>
+
+
+
+<body bgcolor="#FFFFFF">
 <h1 align="center">synApps 5.8 Release Notes</h1>
 <ul>
 
