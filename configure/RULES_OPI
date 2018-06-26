@@ -34,9 +34,14 @@ $(UI_DIR)%.ui: $(ADL_DIR)%.adl
 endif
 
 ifdef ADL2EDL
+ifeq (,$(wildcard $(EDMFONTFILE)))
+	ADL2EDL_FONTS=''
+else
+	ADL2EDL_FONTS=-f $(EDMFONTFILE)
+endif
 EDLs := $(subst $(ADL_DIR),$(EDL_DIR),$(ADLs:.adl=.edl))
 $(EDL_DIR)%.edl: $(ADL_DIR)%.adl
-	$(ADL2EDL) $< $@
+	$(ADL2EDL) -rgb $(ADL2EDL_FONTS) $< $@
 endif
 
 ifdef CSS
