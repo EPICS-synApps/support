@@ -10,7 +10,7 @@ DOCUMENTATION=R6-0
 
 ALLENBRADLEY=2.3
 ALIVE=R1-1-0
-AREA_DETECTOR=master
+AREA_DETECTOR=R3-3
 ASYN=R4-33
 AUTOSAVE=R5-9
 BUSY=R1-7
@@ -19,7 +19,8 @@ CAMAC=R2-7-1
 CAPUTRECORDER=R1-7-1
 DAC128V=R2-9
 DELAYGEN=R1-2-0
-DXP=R4-0
+DXP=R5-0
+DXPSITORO=R1-0
 DEVIOCSTATS=3.1.15
 #GALIL=V3-6
 IP=R2-19-1
@@ -27,7 +28,7 @@ IPAC=2.15
 IP330=R2-9
 IPUNIDIG=R2-11
 LOVE=R3-2-6
-LUA=R1-2
+LUA=R1-2-1
 MCA=R7-7
 MEASCOMP=R2-1
 MODBUS=R2-10-1
@@ -42,7 +43,7 @@ STD=master
 STREAM=R2-7-7a
 VAC=R1-7
 VME=R2-9
-YOKOGAWA_DAS=master
+YOKOGAWA_DAS=R1-0-0
 XXX=master
 
 
@@ -150,6 +151,7 @@ if [[ $CAPUTRECORDER ]]; then   get_repo epics-modules  caputRecorder  CAPUTRECO
 if [[ $DAC128V ]];       then   get_repo epics-modules  dac128V        DAC128V        $DAC128V       ; fi
 if [[ $DELAYGEN ]];      then   get_repo epics-modules  delaygen       DELAYGEN       $DELAYGEN      ; fi
 if [[ $DXP ]];           then   get_repo epics-modules  dxp            DXP            $DXP           ; fi
+if [[ $DXPSITORO ]];     then   get_repo epics-modules  dxpSITORO      DXPSITORO      $DXPSITORO     ; fi
 if [[ $DEVIOCSTATS ]];   then   get_repo epics-modules  iocStats       DEVIOCSTATS    $DEVIOCSTATS   ; fi
 if [[ $GALIL ]];         then   get_repo motorapp       Galil-3-0      GALIL          $GALIL         ; fi
 if [[ $IP ]];            then   get_repo epics-modules  ip             IP             $IP            ; fi
