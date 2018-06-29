@@ -1,5 +1,13 @@
 #!/bin/bash
+trap die ERR SIGINT
+
 shopt -s expand_aliases
+
+function die
+{
+    echo "Signal caught, exiting."
+    exit -1
+}
 
 EPICS_BASE=/APSshare/epics/base-3.15.5
 
@@ -54,17 +62,17 @@ shallow_repo()
 	MODULE_NAME=$2
 	RELEASE_NAME=$3
 	TAG=$4
-	
+
 	FOLDER_NAME=$MODULE_NAME-${TAG//./-}
-	
+
 	echo
 	echo "Grabbing $MODULE_NAME at tag: $TAG"
 	echo
-	
+
 	git clone -q --branch $TAG --depth 1 https://github.com/$PROJECT/$MODULE_NAME.git $FOLDER_NAME
-	
+
 	echo "$RELEASE_NAME=\$(SUPPORT)/$FOLDER_NAME" >> ./configure/RELEASE
-	
+
 	echo
 }
 
@@ -74,22 +82,22 @@ full_repo()
 	MODULE_NAME=$2
 	RELEASE_NAME=$3
 	TAG=$4
-	
+
 	FOLDER_NAME=$MODULE_NAME-${TAG//./-}
-	
+
 	echo
 	echo "Grabbing $MODULE_NAME at tag: $TAG"
 	echo
-	
+
 	git clone -q https://github.com/$PROJECT/$MODULE_NAME.git $FOLDER_NAME
-	
+
 	CURR=$(pwd)
-	
+
 	cd $FOLDER_NAME
 	git checkout -q $TAG
 	cd "$CURR"
 	echo "$RELEASE_NAME=\$(SUPPORT)/$FOLDER_NAME" >> ./configure/RELEASE
-	
+
 	echo
 }
 
@@ -118,7 +126,10 @@ fi
 
 
 # Assume user has nothing but this file, just in case that's true.
-mkdir synApps
+if [ ! -d synApps ];then
+    mkdir synApps
+fi
+
 cd synApps
 
 get_support support $SUPPORT
@@ -209,7 +220,7 @@ fi
 
 
 if [[ $AREA_DETECTOR ]]
-then 
+then
 
 get_repo  areaDetector  areaDetector  AREA_DETECTOR  $AREA_DETECTOR
 
