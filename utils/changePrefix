@@ -11,12 +11,16 @@ sub doSed
 		print "usage: doSed <sed script> filename\n";
 		print 'example: doSed "s/tmm:/1bma:/g" stdApp.adl\n';
 		exit;
-    }
+	}
 	
 	my $sed_script = $_[0];
 	my $filename = $_[1];
-		
-	`perl -pi -e '${sed_script}' ${filename}`
+	
+	if ( -f $filename )
+	{
+		`perl -pi.bak -e '${sed_script}' ${filename}`;
+		unlink("${filename}.bak");
+	}
 }
 
 my $argc = @ARGV;
