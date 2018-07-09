@@ -211,8 +211,20 @@ foreach my $dir (glob("ioc*"))
 	
 	foreach my $file (glob("auto*.req"))
 	{
-		printf "\r%-50s", $file;
-		doSed("s/${old}:/${new}:/g", $file);
+		if ( -f $file )
+		{
+			printf "\r%-50s", $file;
+			doSed("s/${old}:/${new}:/g", $file);
+		}
+	}
+	
+	foreach my $file (glob("autosave/*.cfg"))
+	{
+		if ( -f $file )
+		{
+			printf "\r%-50s", $file;
+			doSed("s/${old}:/${new}:/g", $file);
+		}
 	}
 	
 	foreach my $file (glob("*.substitutions"))
@@ -295,6 +307,9 @@ if ( -d "./opi" )
 	printf "\r%-50s", "${new}App/op/opi";
 	chdir "opi";
 	
+	move "${old}.opi", "${new}.opi";
+	move "autoconvert/${old}.opi", "autoconvert/${new}.opi";
+	
 	foreach my $file (glob("*.opi"))
 	{
 		if ( -f $file )
@@ -319,6 +334,9 @@ if ( -d "./ui" )
 {
 	printf "\r%-50s", "${new}App/op/ui";
 	chdir "ui";
+	
+	move "${old}.ui", "${new}.ui";
+	move "autoconvert/${old}.ui", "autoconvert/${new}.ui";
 	
 	foreach my $file (glob("*.ui"))
 	{
