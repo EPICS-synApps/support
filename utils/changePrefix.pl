@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# changePrefix for synApps 5.8
+# changePrefix for synApps 6.0
 
 use Cwd;
 use File::Copy;
@@ -45,34 +45,34 @@ if ( ! -d "iocBoot" )
 
 my $top = cwd();
 
-if ( -f "start_epics_${old}" )
+if ( -f "start_caQtDM_${old}" )
 {
-	printf "\r%-50s", "start_epics_${new}";
-	move "start_epics_${old}", "start_epics_${new}";
-	doSed("s!/${old}!/${new}!g", "start_epics_${new}");
-	doSed("s/${old}.adl/${new}.adl/g", "start_epics_${new}");
-	doSed("s/=${old}:/=${new}:/g", "start_epics_${new}");
-	doSed("s/ioc${old}/ioc${new}/g", "start_epics_${new}");
-	doSed("s/${old}App/${new}App/g", "start_epics_${new}");
+	printf "\r%-50s", "start_caQtDM_${new}";
+	move "start_caQtDM_${old}", "start_caQtDM_${new}";
+	doSed("s!/${old}!/${new}!g", "start_caQtDM_${new}");
+	doSed("s/${old}.adl/${new}.adl/g", "start_caQtDM_${new}");
+	doSed("s/=${old}:/=${new}:/g", "start_caQtDM_${new}");
+	doSed("s/ioc${old}/ioc${new}/g", "start_caQtDM_${new}");
+	doSed("s/${old}App/${new}App/g", "start_caQtDM_${new}");
 	
 	#chmod a+x
-	my $permissions = ((stat("start_epics_${new}"))[2] | oct("111"));
-	chmod $permissions, "start_epics_${new}";
+	my $permissions = ((stat("start_caQtDM_${new}"))[2] | oct("111"));
+	chmod $permissions, "start_caQtDM_${new}";
 }
 
-if ( -f "start_epics_${old}.bash" )
+if ( -f "start_MEDM_${old}" )
 {
-	printf "\r%-50s", "start_epics_${new}.bash";
-	move "start_epics_${old}.bash", "start_epics_${new}.bash";
-	doSed("s!/${old}!/${new}!g", "start_epics_${new}.bash");
-	doSed("s/${old}.adl/${new}.adl/g", "start_epics_${new}.bash");
-	doSed("s/=${old}:/=${new}:/g", "start_epics_${new}.bash");
-	doSed("s/ioc${old}/ioc${new}/g", "start_epics_${new}.bash");
-	doSed("s/${old}App/${new}App/g", "start_epics_${new}.bash");
+	printf "\r%-50s", "start_MEDM_${new}";
+	move "start_MEDM_${old}", "start_MEDM_${new}";
+	doSed("s!/${old}!/${new}!g", "start_MEDM_${new}");
+	doSed("s/${old}.adl/${new}.adl/g", "start_MEDM_${new}");
+	doSed("s/=${old}:/=${new}:/g", "start_MEDM_${new}");
+	doSed("s/ioc${old}/ioc${new}/g", "start_MEDM_${new}");
+	doSed("s/${old}App/${new}App/g", "start_MEDM_${new}");
 	
 	#chmod a+x
-	my $permissions = ((stat("start_epics_${new}.bash"))[2] | oct("111"));
-	chmod $permissions, "start_epics_${new}.bash";
+	my $permissions = ((stat("start_MEDM_${new}"))[2] | oct("111"));
+	chmod $permissions, "start_MEDM_${new}";
 }
 
 if ( -f "setup_epics_common" )
@@ -141,20 +141,58 @@ foreach my $dir (glob("ioc*"))
 	
 	foreach my $file (glob("*.cmd*"))
 	{
-		printf "\r%-50s", "$file";
-		doSed("s!/${old}/!/${new}/!g", $file);
-		doSed("s/${old}:/${new}:/g", $file);
-		doSed("s/${old}\\./${new}./g", $file);
-		doSed("s/ioc${old}/ioc${new}/g", $file);
-		doSed("s/${old}Lib/${new}Lib/g", $file);
-		doSed("s/${old}App/${new}App/g", $file);
-		doSed("s/=${old}/=${new}/g", $file);
-		#doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
-		#doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
-		#doSed("/shellPromptSet/s/${old}/${new}/g", $file);
+		if ( -f $file )
+		{
+			printf "\r%-50s", "$file";
+			doSed("s!/${old}/!/${new}/!g", $file);
+			doSed("s/${old}:/${new}:/g", $file);
+			doSed("s/${old}\\./${new}./g", $file);
+			doSed("s/ioc${old}/ioc${new}/g", $file);
+			doSed("s/${old}Lib/${new}Lib/g", $file);
+			doSed("s/${old}App/${new}App/g", $file);
+			doSed("s/=${old}/=${new}/g", $file);
+			#doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
+			#doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
+			#doSed("/shellPromptSet/s/${old}/${new}/g", $file);
+		}
+	}
+	
+	foreach my $file (glob("examples/*.cmd*"))
+	{
+		if ( -f $file )
+		{
+			printf "\r%-50s", "$file";
+			doSed("s!/${old}/!/${new}/!g", $file);
+			doSed("s/${old}:/${new}:/g", $file);
+			doSed("s/${old}\\./${new}./g", $file);
+			doSed("s/ioc${old}/ioc${new}/g", $file);
+			doSed("s/${old}Lib/${new}Lib/g", $file);
+			doSed("s/${old}App/${new}App/g", $file);
+			doSed("s/=${old}/=${new}/g", $file);
+			#doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
+			#doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
+			#doSed("/shellPromptSet/s/${old}/${new}/g", $file);
+		}
 	}
 	
 	foreach my $file (glob("*.iocsh"))
+	{
+		if ( -f $file )
+		{
+			printf "\r%-50s", $file;
+			doSed("s/${old}:/${new}:/g", $file);
+			doSed("s/${old}\\./${new}./g", $file);
+			doSed("s/ioc${old}/ioc${new}/g", $file);
+			doSed("s/${old}Lib/${new}Lib/g", $file);
+			doSed("s/${old}App/${new}App/g", $file);
+			doSed("s/=${old}/=${new}/g", $file);
+			#doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
+			#doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
+			#doSed("/shellPromptSet/s/${old}/${new}/g", $file);
+		}
+	}
+	
+	foreach my $file (glob("examples/*.iocsh"))
 	{
 		if ( -f $file )
 		{
@@ -179,10 +217,24 @@ foreach my $dir (glob("ioc*"))
 	
 	foreach my $file (glob("*.substitutions"))
 	{
-		printf "\r%-50s", $file;
-		doSed("s/${old}/${new}/g", $file);
-		doSed("s/${old}:/${new}:/g", $file);
-		doSed("s/${old}App/${new}App/g", $file);
+		if ( -f $file )
+		{
+			printf "\r%-50s", $file;
+			doSed("s/${old}/${new}/g", $file);
+			doSed("s/${old}:/${new}:/g", $file);
+			doSed("s/${old}App/${new}App/g", $file);
+		}
+	}
+	
+	foreach my $file (glob("substitutions/*.substitutions"))
+	{
+		if ( -f $file )
+		{
+			printf "\r%-50s", $file;
+			doSed("s/${old}/${new}/g", $file);
+			doSed("s/${old}:/${new}:/g", $file);
+			doSed("s/${old}App/${new}App/g", $file);
+		}
 	}
 	
 	foreach my $file (glob("*.template"))
@@ -205,20 +257,20 @@ foreach my $dir (glob("ioc*"))
 		doSed("s/ioc${old}/ioc${new}/g", "bootParms");
 	}
 	
-	if ( -f "run" )
+	if ( -f "softioc/run" )
 	{
-		doSed("s/${old}/${new}/g", "run");
+		doSed("s/${old}/${new}/g", "softioc/run");
 	}
 	
-	if ( -f "in-screen.sh" )
+	if ( -f "softioc/in-screen.sh" )
 	{
-		doSed("s/${old}/${new}/g", "in-screen.sh");
+		doSed("s/${old}/${new}/g", "softioc/in-screen.sh");
 	}
 	
-	if ( -f "${old}.sh" )
+	if ( -f "softioc/${old}.sh" )
 	{
-		doSed("s/${old}/${new}/g", "${old}.sh");
-		move "${old}.sh", "${new}.sh";
+		doSed("s/${old}/${new}/g", "softioc/${old}.sh");
+		move "softioc/${old}.sh", "softioc/${new}.sh";
 	}
 	
 	chdir ".."
@@ -242,10 +294,23 @@ if ( -d "./opi" )
 {
 	printf "\r%-50s", "${new}App/op/opi";
 	chdir "opi";
+	
 	foreach my $file (glob("*.opi"))
 	{
-		printf "\r%-50s", $file;
-		doSed("s/${old}/${new}/g", $file);
+		if ( -f $file )
+		{
+			printf "\r%-50s", $file;
+			doSed("s/${old}/${new}/g", $file);
+		}
+	}
+	
+	foreach my $file (glob("autoconvert/*.opi"))
+	{
+		if ( -f $file )
+		{
+			printf "\r%-50s", $file;
+			doSed("s/${old}/${new}/g", $file);
+		}
 	}
 }
 
@@ -254,10 +319,23 @@ if ( -d "./ui" )
 {
 	printf "\r%-50s", "${new}App/op/ui";
 	chdir "ui";
+	
 	foreach my $file (glob("*.ui"))
 	{
-		printf "\r%-50s", $file;
-		doSed("s/${old}/${new}/g", $file);
+		if ( -f $file )
+		{
+			printf "\r%-50s", $file;
+			doSed("s/${old}/${new}/g", $file);
+		}
+	}
+	
+	foreach my $file (glob("autoconvert/*.ui"))
+	{
+		if ( -f $file )
+		{
+			printf "\r%-50s", $file;
+			doSed("s/${old}/${new}/g", $file);
+		}
 	}
 }
 
