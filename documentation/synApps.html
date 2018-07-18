@@ -9,7 +9,7 @@
 
 <body bgcolor="#FFFFFF">
 
-<h1>synApps 5.8</h1>
+<h1>synApps 6.0</h1>
 
 <h1>Table of Contents</h1>
 <ul>
@@ -171,6 +171,8 @@ python function, and replaying the series.
 
 <tr><td><b>dxp</b><td>Support for X-Ray Instrumentation Associates's DXP digital
 signal processor
+	
+<tr><td><b>dxpSITORO</b><td>Support for XIA SITORO based FalconX spectrometers 
 
 <tr><td><b>ip</b><td>Support for various serial, and other message-based,
 devices.
@@ -180,6 +182,8 @@ devices.
 <tr><td><b>ipUnidig</b><td>Support for an IndustryPack digital I/O module
 
 <tr><td><b>love</b><td>Support for Love controllers
+	
+<tr><td><b>lua</b><td>Support for Lua scripting language features
 
 <tr><td><b>mca</b><td>Support for multichannel analyzers and multichannel
 	scalers.
@@ -198,6 +202,9 @@ devices.
 
 <tr><td><b>softGlue</b><td>Support for user-programmed "wiring" of custom FPGA
 	content loaded into an Acromag IP-EP201 module.
+	
+<tr><td><b>softGlueZynq</b><td>Support for user-programmed "wiring" of custom FPGA
+	content loaded into a Xilinx Zynq board.
 
 <tr><td><b>sscan</b><td>Support for scans (programmed control and data
 	acquisition).
@@ -219,15 +226,17 @@ devices.
 <tr><td><b>vme</b><td>Support for VME hardware
 
 <tr><td><b>xxx</b><td>Sample user-application directory
+	
+<tr><td><b>Yokogawa_DAS</b><td>Support for the Yokogawa MW100 Digital Acquisition Unit.
 
 </table>
 
 <P>See support/configure/RELEASE for a complete set of compatible module
-versions.  This release of synApps is compatible with EPICS releases 3.14.12.4
-and 3.15.1, vxWorks 5.5 and 6.9, and the following EPICS modules, which are
-produced and maintained by other members of the EPICS collaboration.  These
-modules are not part of synApps, but their maintainers have permitted us to
-distribute copies along with synApps:
+versions.  This release of synApps is compatible with EPICS 3.15 releases, 
+vxWorks 6.9, and the following EPICS modules, which are produced 
+and maintained by other members of the EPICS collaboration.  These modules 
+are not part of synApps, but their maintainers have permitted us to distribute 
+copies along with synApps:
 
 <P><table border>
 <tr><th>Module<th>description
@@ -263,7 +272,7 @@ display files, etc.
 Services, and Accelerator Controls groups of the Advanced Photon Source (APS); by developers in
 APS Collaborative Access Teams &ndash; notably, Mark Rivers (CARS-CAT); and by developers in
 the EPICS collaboration outside of the APS &ndash; notably, those at the Diamond Light Source,
-the Berliner Elektronenspeicherring-Gesellschaft für Synchrotronstrahlung (BESSY), the Stanford
+the Berliner Elektronenspeicherring-Gesellschaft fÃ¼r Synchrotronstrahlung (BESSY), the Stanford
 Linear Accelerator Center (SLAC), the Swiss Light Source (SLS)/Paul Scherrer Institut (PSI),
 the National Synchrotron Light Source (NSLS), the Deutsches Elektronen Synchrotron (DESY), the
 Spallation Neutron Source (SNS), the Australian Light Source, and the Canadian Light Source.
@@ -291,6 +300,7 @@ like, synApps contains the following code:
 <tr><td><b>digitel</b><td>vac-module custom record
 <tr><td><b>epid</b><td>Extended version of the PID record, previously in EPICS base.
 	Intended for implementing feedback loops
+<tr><td><b>luarecord</b><td>Record with scriptable behavior
 <tr><td><b>mca</b><td>support for multichannel analyzers, and some other
 	array-valued detectors
 <tr><td><b>motor</b><td>stepper and servo motors, "soft" motor
@@ -338,6 +348,8 @@ like, synApps contains the following code:
 <dt>saveData
 	<dd>Saves scan data to files on an NFS-mounted disk (vxWorks), or to
 	a local disk (other operating systems).
+<dt>lua
+	<dd>Support for running scripts to control the value of standard records
 </dl>
 
 <P><li><h3>Documentation</h3>
@@ -563,7 +575,7 @@ and <code>make rebuild</code>, in the support directory.
 <dt><code>ioc/setup_epics_common</code><br>
 	<dd>set the value of Channel Access variables, such as
 		EPICS_CA_MAX_ARRAY_BYTES. 
-<dt><code>ioc/start_epics_xxx</code><br>
+<dt><code>ioc/start_***_xxx</code><br>
 	<dd>edit to specify the path to the application and display-file directories,
 		and the name of the top-level display file.
 <dt><code>ioc/start_putrecorder</code><br>
@@ -635,14 +647,11 @@ that they don't even remember configuring.
 
 <ul>
 <li>The EPICS extension, <a href="http://www.aps.anl.gov/epics/extensions/msi/index.php">msi</a>,
-    version 1-5 or higher.  This tool is needed to build some softGlue databases.
+    version 1-5 or higher.  If attempting to build with EPICS base 3.14, this tool is needed to 
+    build some softGlue databases, EPICS base 3.15 and above include this as part of base.
 
 <P><li>Linux:
 <dl>
-<dt>libtiff.a,libjpeg.a, libz.a, libsz.a, libNexus.a, libhdf5.a, libnetCDF.a,
-and associated header files<dd>needed for the
-<b>areaDetector</b> module.  Note that versions of these files are included in
-<b>areaDetector</b> for some architectures. 
 <dt>libusb.a, and associated header files<dd>needed for the <b>dxp</b> module
 </dl>
 
@@ -1390,7 +1399,7 @@ can write software to automate that task using caputRecorder:
 <P>End users know better than anybody what they want in a graphical user
 interface.  One thing they've demonstrated that they want is the ability to have
 some control over the user interface without having to specify every little
-detail to a programmer. MEDM provides end users with the ability easily to
+detail to a programmer. MEDM/caQtDM/CSS-Boy provides end users with the ability easily to
 create custom displays, and  synApps provides over 800 user-interface files that
 can be copied from, called up from, or included as part of a user crafted
 display.
