@@ -28,7 +28,7 @@ IPAC=2.15
 IP330=R2-9
 IPUNIDIG=R2-11
 LOVE=R3-2-6
-LUA=R1-2-1
+LUA=R1-2-2
 MCA=R7-7
 MEASCOMP=R2-1
 MODBUS=R2-11
@@ -222,8 +222,11 @@ git submodule update ADSimDetector
 cd configure
 cp EXAMPLE_CONFIG_SITE.local CONFIG_SITE.local
 
-# Graphics Magick doesn't compile on vxWorks
+# vxWorks has pthread and other issues
 echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.vxWorks
+echo 'WITH_HDF5 = NO' >> CONFIG_SITE.local.vxWorks
+echo 'WITH_BLOSC = NO' >> CONFIG_SITE.local.vxWorks
+echo 'WITH_NEXUS = NO' >> CONFIG_SITE.local.vxWorks
 
 # We are still using Epics v3
 echo 'WITH_PVA = NO' >> CONFIG_SITE.local.linux-x86_64
@@ -235,7 +238,9 @@ echo 'WITH_PVA = NO' >> CONFIG_SITE.local.windows-x64-static
 
 #HDF5 flag for windows
 echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)' >> CONFIG_SITE.local.win32-x86
+echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)' >> CONFIG_SITE.local.win32-x86-static
 echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)' >> CONFIG_SITE.local.windows-x64
+echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)' >> CONFIG_SITE.local.windows-x64-static
 
 #Can't just use default RELEASE.local because it has simDetector commented out
 echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector' >> RELEASE.local
