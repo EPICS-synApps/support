@@ -55,6 +55,7 @@ if ( -f "start_caQtDM_${old}" )
 	move "start_caQtDM_${old}", "start_caQtDM_${new}";
 	doSed("s!/${old}!/${new}!g", "start_caQtDM_${new}");
 	doSed("s/${old}.adl/${new}.adl/g", "start_caQtDM_${new}");
+	doSed("s/${old}.ui/${new}.ui/g", "start_caQtDM_${new}");
 	doSed("s/=${old}:/=${new}:/g", "start_caQtDM_${new}");
 	doSed("s/ioc${old}/ioc${new}/g", "start_caQtDM_${new}");
 	doSed("s/${old}App/${new}App/g", "start_caQtDM_${new}");
@@ -347,7 +348,7 @@ if ( -d "./ui" )
 		if ( -f $file )
 		{
 			printf "\r%-50s", $file;
-			doSed("s/${old}/${new}/g", $file);
+			doSed("s/${old}/${new}/gi", $file);
 		}
 	}
 	
@@ -356,7 +357,7 @@ if ( -d "./ui" )
 		if ( -f $file )
 		{
 			printf "\r%-50s", $file;
-			doSed("s/${old}/${new}/g", $file);
+			doSed("s/${old}/${new}/gi", $file);
 		}
 	}
 }
