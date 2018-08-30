@@ -1,0 +1,99 @@
+3 0 0
+helvetica-medium-r-12.0
+helvetica-medium-r-14.0
+
+#
+# Font spec strategy
+# Generally we prefer scalable fonts, specified w/ zero point size, field 8, and zero avg width, field 12
+# For example
+# -adobe-helvetica-(medium,bold)-(r,o)-normal--0-(80,100,120,140,180,240)-75-75-p-0-*-*
+# before the non-scalable font spec which uses a wild card
+# -adobe-helvetica-(medium,bold)-(r,o)-normal--*-(80,100,120,140,180,240)-75-75-p-*-*-*
+#
+
+#
+# For the newer RedHat RHEL6 machines, the available 75dpi fonts
+# generally don't provide larger than 24.0 point sizes.
+# Instead of just providing a generic match at the end of these font groups,
+# which maps all the font sizes for that group to the generic font, I split
+# these font groups, thus allowing a different font spec to be selected for the
+# larger font sizes.   We rarely use these larger sizes, so defaulting to a
+# generic font for them allows the screen to render while still keeping a
+# good match for the smaller font sizes
+#
+
+# Helvetica sizes 8,10,12,14,18,and 24
+helvetica={
+-adobe-helvetica-(medium,bold)-(r,o)-normal--0-(80,100,120,140,180,240)-75-75-p-0-*-*
+-adobe-helvetica-(medium,bold)-(r,o)-normal--*-(80,100,120,140,180,240)-75-75-p-*-*-*
+-*-helvetica-(medium,bold)-(r,o)-normal--0-(80,100,120,140,180,240)-75-75-p-0-*-*
+-*-helvetica-(medium,bold)-(r,o)-normal--*-(80,100,120,140,180,240)-75-75-p-*-*-*
+-urw-urw gothic l-(medium,bold)-(r,o)-normal--0-(80,100,120,140,180,240)-75-75-p-0-*-*
+-*-helvetica-(medium,bold)-(r,o)-normal--*-(80,100,120,140,180,240)-*-*-p-*-*-*
+}
+
+# Helvetica sizes 32.0, 48.0, and 72.0 may need a different font spec on some machines,
+# so we create another font group w/ the same family name for them
+#helvetica={
+#-adobe-helvetica-(medium,bold)-(r,o)-normal--0-(320,480,720)-75-75-p-0-*-*
+#-adobe-helvetica-(medium,bold)-(r,o)-normal--*-(320,480,720)-75-75-p-*-*-*
+#-*-helvetica-(medium,bold)-(r,o)-normal--0-(320,480,720)-75-75-p-0-*-*
+#-*-helvetica-(medium,bold)-(r,o)-normal--*-(320,480,720)-75-75-p-*-*-*
+#-urw-urw gothic l-(medium,bold)-(r,o)-normal--0-(320,480,720)-75-75-p-0-*-*
+#}
+
+utopia={
+-*-utopia-(medium,bold)-(r,i)-normal--0-(80,90,100,110,120,140,180,240,320,340,480,720)-75-75-p-0-*-*
+-*-utopia-(medium,bold)-(r,i)-normal--*-(80,90,100,110,120,140,180,240,320,340,480,720)-75-75-p-*-*-*
+-*-utopia-(regular,bold)-(r,i)-normal--*-(80,90,100,110,120,140,180,240,320,340,480,720)-75-75-p-*-*-*
+-urw-urw bookman l-(medium,bold)-(r,i)-normal--0-(80,90,100,110,120,140,180,240,320,340,480,720)-75-75-p-0-*-*
+}
+
+new century schoolbook={
+-urw-century schoolbook l-(medium,bold)-(r,i)-normal--0-(80,100,120,140,180,240,320,480,720)-75-75-p-0-*-*
+-*-century schoolbook l-(medium,bold)-(r,i)-normal--0-(80,100,120,140,180,240,320,480,720)-75-75-p-0-*-*
+-*-new century schoolbook-(medium,bold)-(r,i)-normal--0-(80,100,120,140,180,240,320,480,720)-75-75-p-0-*-*
+-*-new century schoolbook-(medium,bold)-(r,i)-normal--*-(80,100,120,140,180,240,320,480,720)-75-75-p-*-*-*
+-*-*schoolbook*-(medium,bold)-(r,i)-normal--0-(80,100,120,140,180,240,320,480,720)-75-75-p-0-*-*
+}
+
+# times sizes 8,10,12,14,18,and 24
+times={
+-adobe-times-(medium,bold)-(r,i)-normal--0-(80,100,120,140,180,240)-75-75-p-0-*-*
+-adobe-times-(medium,bold)-(r,i)-normal--*-(80,100,120,140,180,240)-75-75-p-*-*-*
+-*-times-(medium,bold)-(r,i)-normal--0-(80,100,120,140,180,240)-75-75-p-0-*-*
+-*-times-(medium,bold)-(r,i)-normal--*-(80,100,120,140,180,240)-75-75-p-*-*-*
+-urw-urw bookman l-(medium,bold)-(r,i)-normal--0-(80,100,120,140,180,240)-75-75-p-0-*-*
+-*-times-(medium,bold)-(r,i)-normal--*-(80,100,120,140,180,240)-*-*-p-*-*-*
+}
+
+# times sizes 32.0, 48.0, and 72.0 may need a different font spec on some machines,
+# so we create another font group w/ the same family name for them
+times={
+-adobe-times-(medium,bold)-(r,i)-normal--0-(320,480,720)-75-75-p-0-*-*
+-adobe-times-(medium,bold)-(r,i)-normal--*-(320,480,720)-75-75-p-*-*-*
+-*-times-(medium,bold)-(r,i)-normal--0-(320,480,720)-75-75-p-0-*-*
+-*-times-(medium,bold)-(r,i)-normal--*-(320,480,720)-75-75-p-*-*-*
+-urw-urw bookman l-(medium,bold)-(r,i)-normal--0-(320,480,720)-75-75-p-0-*-*
+-*-times-(medium,bold)-(r,i)-normal--*-(320,480,720)-*-*-p-*-*-*
+}
+
+# courier sizes 8,10,12,14,18,and 24
+courier={
+-adobe-courier-(medium,bold)-(r,o)-normal--0-(80,100,120,140,180,240)-75-75-m-0-*-*
+-adobe-courier-(medium,bold)-(r,o)-normal--*-(80,100,120,140,180,240)-75-75-m-*-*-*
+-*-courier-(medium,bold)-(r,o)-normal--0-(80,100,120,140,180,240)-75-75-*-0-*-*
+-*-courier-(medium,bold)-(r,o)-normal--*-(80,100,120,140,180,240)-75-75-*-*-*-*
+-bitstream-*courier*-(medium,bold)-(r,i)-normal--0-(80,100,120,140,180,240)-75-75-*-0-*-*
+}
+
+# courier sizes 32.0, 48.0, and 72.0 may need a different font spec on some machines,
+# so we create another font group w/ the same family name for them
+courier={
+-adobe-courier-(medium,bold)-(r,o)-normal--0-(320,480,720)-75-75-m-0-*-*
+-adobe-courier-(medium,bold)-(r,o)-normal--*-(320,480,720)-75-75-m-*-*-*
+-*-courier-(medium,bold)-(r,o)-normal--0-(320,480,720)-75-75-*-0-*-*
+-*-courier-(medium,bold)-(r,o)-normal--*-(320,480,720)-75-75-*-*-*-*
+-bitstream-*courier*-(medium,bold)-(r,i)-normal--0-(320,480,720)-75-75-*-0-*-*
+}
+
