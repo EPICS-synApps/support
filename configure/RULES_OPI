@@ -1,5 +1,3 @@
-include $(CONFIG)/RULES_DIRS
-
 # these environment definitions are suggested to suppress
 # console notices when converting:
 # 
