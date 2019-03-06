@@ -1,11 +1,11 @@
-.TH MDA-LS 1 "February 2013" "MDA Utilities" "MDA Utilities"
+.TH MDA-LS 1 "July 2018" "MDA Utilities" "MDA Utilities"
 
 .SH NAME
 mda-ls \- displays basic properties of EPICS MDA files in a directory
 
 .SH SYNOPSIS
 .B mda-ls
-.RB [ \-hvf ]
+.RB [ \-hvfs ]
 .RB [ \-p\c
 .IR "\ positioner" ]
 .RB [ \-d\c
@@ -21,8 +21,12 @@ a directory.  By default, the following are shown: name of the file,
 overall dimensionality of the file, and positioners with their
 dimensionalties shown.  If the file was not completed, the highest
 dimensionality is represented by the completed number of points,
-followed by the requested number in parentheses.  There is an option
-for showing the fuller 
+followed by the requested number in parentheses.  If the file
+generates an error while loading, its status will be shown as
+.I Invalid. 
+By default, the validity of the entire files will be checked, but
+minimal checking can be enabled to save time.  There is an option for
+showing the fuller
 .B mda-ls
 listing, which shows the time of the beginning of the scan; to see
 more information about a certain file, use
@@ -47,6 +51,10 @@ Show the version information.
 .B \-f
 Show the fuller listing, which includes the time of the beginning of the
 scan.
+.TP 
+.B \-s
+Use the simpler error checking, instead of checking the entire 
+file.
 .TP
 .BI \-p \ positioner
 File are selected that use the specified

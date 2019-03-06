@@ -1,14 +1,76 @@
 MDA Utilities Version Changelog
 
 
+From 1.4.1 to 1.4.2
+
+mda2ascii:
+    Added the -b switch, which will comment out blank lines.  These
+    blanks lines can cause problems for readers and this should have
+    been the default behavior, but I don't want to break any existing
+    parsers that expect these blank lines.
+mda-load library:
+    Noncritical bug fixes.
+source distribution:
+    Reworked the directory structure, moving the source code into the
+    "src" directory.  The make command will now recurse into both the
+    "doc" and "src" directories.  The documentation directory will now
+    also build from source files, instead of including the PDF files.
+    Removed the Solaris support from the Makefile.
+
+From 1.4.0 to 1.4.1
+
+mda2ascii:
+    Changed way scan tree is traversed for multidimensional files.
+    Instead of trusting the header dimensions array for scan sizes,
+    use the sizes in the scans themselves.  Allows correct conversion
+    for irregular files, or files that have bad values in the
+    dimensions array (technically the file is damaged then).
+mda-info:
+    Simply state that a scan is irregular, as previous output was
+    misleading.
+
+
+From 1.3.1 to 1.4.0
+
+mda-load library: 
+    Added mda_check(), to have an easy way to check the validity of a
+    file. Added mda_update() function that will load an updated MDA
+    file, attempting to use the previously loaded and supplied MDA
+    data. Completed error handling, made sure to release all memory on
+    error.  Check for MDA file structural errors (like negative number
+    of positioners).
+mda-ls: 
+    Enabled entire file checking by default, allow this to be turned off
+    with -s switch.
+mda-info: 
+    Enabled entire file checking by default, allow this to be turned off
+    with -s switch.
+
+
+From 1.3.0 to 1.3.1
+
+mda-load library: 
+    Added another check for corrupted files.
+mda2ascii: 
+    When processing multiple files, the program will now skip an
+    invalid file instead of stopping execution.
+mda-ls: 
+    The program will no longer halt when it encounters an invalid
+    file.
+xdr_hack:
+    To help Windows users, added code for faking enough of the XDR
+    routines that are needed for decoding the MDA format (which
+    Windows lacks).  This code should NOT be used if there is native
+    support, and has to be manually enabled in the Makefile.  There is
+    support for both big- and little-endian systems.
+
+
 From 1.2.2 to 1.3.0
 
 mda-load library: 
     Added another check for corrupted files.
-
 mda2ascii:
     Refactored the code behind -f option to be more efficient.
-
 mdatree2ascii
     Added new script utility for converting entire directory trees of
     files into new corresponding trees containing the output.

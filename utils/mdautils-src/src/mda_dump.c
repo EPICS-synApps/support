@@ -1,5 +1,5 @@
 /*************************************************************************\
-* Copyright (c) 2013 UChicago Argonne, LLC,
+* Copyright (c) 2018 UChicago Argonne, LLC,
 *               as Operator of Argonne National Laboratory.
 * This file is distributed subject to a Software License Agreement
 * found in file LICENSE that is included with this distribution. 
@@ -7,11 +7,13 @@
 
 
 /*
-
   Written by Dohn A. Arms, Argonne National Laboratory
   Send comments to dohnarms@anl.gov
   
+  Change History:
+  ===========================================================================
   0.1   -- July 2005
+           Initial
   0.1.1 -- December 2006
            Added support for files that have more than 32k points
   1.0.0 -- November 2009
@@ -19,18 +21,17 @@
            in order to access data directly
   1.0.1 -- August 2010
            Show actual offset of the scan and PV Extras as encountered
-  1.1   -- November 2010
   1.1.1 -- March 2011
            Have counted strings immediately freed after printing them.
   1.2   -- March 2011
            Fixed integer issues by tying short to int16_t, long to int32_t,
            and char to int8_t.  Changed %li to %i in printf's.  For MacOS
            Darwin, add fix to use xdr_char instead of xdr_int8_t.
-  1.2.1 -- January 2012
-           Minor build tweak
-  1.2.2 -- June 2012
   1.3.0 -- February 2013
            Use printf correctly
+  1.3.1 -- February 2014
+           Apply XDR hack to file
+  ===========================================================================
 
  */
 
@@ -43,48 +44,49 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-#include <rpc/types.h>
-#include <rpc/xdr.h>
-
 #include <unistd.h>
 
-#define VERSION       "1.3.0 (February 2013)"
-#define YEAR          "2013"
-#define VERSIONNUMBER "1.3.0"
+#define VERSION       "1.4.2 (July 2018)"
+#define YEAR          "2018"
+#define VERSIONNUMBER "1.4.2"
 
 
+#ifdef XDR_HACK
+  #include "xdr_hack.h"
+#else
+  #include <rpc/types.h>
+  #include <rpc/xdr.h>
 
-static bool_t xdr_counted_string( XDR *xdrs, char **p)
-{
-  int mode;
-  int32_t length;
+  static bool_t xdr_counted_string( XDR *xdrs, char **p)
+  {
+    int mode;
+    int32_t length;
 
-  mode = (xdrs->x_op == XDR_DECODE);
+    mode = (xdrs->x_op == XDR_DECODE);
 
-  /* If writing, obtain the length */
-  if( !mode)
-    length = strlen(*p);
+    /* If writing, obtain the length */
+    if( !mode)
+      length = strlen(*p);
 
-  /* Transfer the string length */
-  if( !xdr_int32_t(xdrs, &length))
-    return 0;
+    /* Transfer the string length */
+    if( !xdr_int32_t(xdrs, &length))
+      return 0;
 
-  //  printf("length = %ld\n", length);
+    /* If reading, obtain room for the string */
+    if (mode)
+      {
+        *p = (char *) malloc( (length + 1) * sizeof(char) );
+        (*p)[length] = '\0'; /* Null termination */
+      }
 
-  /* If reading, obtain room for the string */
-  if (mode)
-    {
-      *p = (char *) malloc( (length + 1) * sizeof(char) );
-      (*p)[length] = '\0'; /* Null termination */
-    }
-
-  /* If the string length is nonzero, transfer it */
-  return(length ? xdr_string(xdrs, p, length) : 1);
-}
+    /* If the string length is nonzero, transfer it */
+    return(length ? xdr_string(xdrs, p, length) : 1);
+  }
+#endif
 
 
-/* 
-   This function was set up to fflush after every printf in case of a crash 
+/*
+   This function was set up to fflush after every printf in case of a crash
    but that was too slow, but I left it in case someone wants to reenable .
 */
 void print( char *fmt, ...)
@@ -161,7 +163,7 @@ double d_print( XDR *xdrs, char *fmt )
   return dd;
 }
 
-// does NOT return string, but simply frees it as nothing cares 
+// does NOT return string, but simply frees it as nothing cares
 // about the actual value, and this eats memory stupidly
 void cs_print( XDR *xdrs, char *fmt )
 {
@@ -378,8 +380,8 @@ void mda_dump_extra( XDR *xdrs)
       if( !xdr_int16_t(xdrs, &type) )
 	return;
 
-      if( (type != EXTRA_PV_STRING) && (type != EXTRA_PV_INT8) && 
-	  (type != EXTRA_PV_INT16) &&  (type != EXTRA_PV_INT32) && 
+      if( (type != EXTRA_PV_STRING) && (type != EXTRA_PV_INT8) &&
+	  (type != EXTRA_PV_INT16) &&  (type != EXTRA_PV_INT32) &&
 	  (type != EXTRA_PV_FLOAT) && (type != EXTRA_PV_DOUBLE))
 	{
 	  print( "    Type = %i (UNKNOWN)\n", type);
@@ -408,12 +410,12 @@ void mda_dump_extra( XDR *xdrs)
 
 	    bytes = (int8_t *) malloc( count * sizeof(int8_t));
 #ifndef DARWIN
-	    if( !xdr_vector( xdrs, (char *) bytes, count, 
-			     sizeof( int8_t), (xdrproc_t) xdr_int8_t))
+	    if( !xdr_vector( xdrs, (char *) bytes, count,
+                             sizeof( int8_t), (xdrproc_t) xdr_int8_t))
 #else
-              // MacOS Darwin is missing xdr_int8_t, 
+              // MacOS Darwin is missing xdr_int8_t,
               //have to fake it with xdr_char
-	    if( !xdr_vector( xdrs, (char *) bytes, count, 
+	    if( !xdr_vector( xdrs, (char *) bytes, count,
 			     sizeof( int8_t), (xdrproc_t) xdr_char))
 #endif
 	      return;
@@ -435,7 +437,7 @@ void mda_dump_extra( XDR *xdrs)
 	    print( "    Value%s = ", (count == 1) ? "" : "s");
 
 	    shorts = (int16_t *) malloc( count * sizeof(int16_t));
-	    if( !xdr_vector( xdrs, (char *) shorts, count, 
+	    if( !xdr_vector( xdrs, (char *) shorts, count,
 			     sizeof( int16_t), (xdrproc_t) xdr_int16_t))
 	      return;
 
@@ -458,7 +460,7 @@ void mda_dump_extra( XDR *xdrs)
 	    print( "    Value%s = ", (count == 1) ? "" : "s");
 
 	    longs = (int32_t *) malloc( count * sizeof(int32_t));
-	    if( !xdr_vector( xdrs, (char *) longs, count, 
+	    if( !xdr_vector( xdrs, (char *) longs, count,
 			     sizeof( int32_t), (xdrproc_t) xdr_int32_t))
 	      return ;
 
@@ -481,7 +483,7 @@ void mda_dump_extra( XDR *xdrs)
 	    print( "    Value%s = ", (count == 1) ? "" : "s");
 
 	    floats = (float *) malloc( count * sizeof(float));
-	    if( !xdr_vector( xdrs, (char *) floats, count, 
+	    if( !xdr_vector( xdrs, (char *) floats, count,
 			     sizeof( float), (xdrproc_t) xdr_float))
 	      return ;
 
@@ -504,7 +506,7 @@ void mda_dump_extra( XDR *xdrs)
 	    print( "    Value%s = ", (count == 1) ? "" : "s");
 
 	    doubles = (double *) malloc( count * sizeof(double));
-	    if( !xdr_vector( xdrs, (char *) doubles, count, 
+	    if( !xdr_vector( xdrs, (char *) doubles, count,
 			     sizeof( double), (xdrproc_t) xdr_double))
 	      return;
 
@@ -527,7 +529,10 @@ void mda_dump_extra( XDR *xdrs)
 
 int mda_dump( char *file)
 {
-  XDR xdrstream;
+#ifndef XDR_HACK
+  XDR xdrs;
+#endif
+  XDR *xdrstream;
 
   FILE *input;
 
@@ -541,16 +546,22 @@ int mda_dump( char *file)
     }
 
 
-  xdrstdio_create(&xdrstream, input, XDR_DECODE);
-  
+#ifdef XDR_HACK
+  xdrstream = input;
+#else
+  xdrstream = &xdrs;
+  xdrstdio_create(xdrstream, input, XDR_DECODE);
+#endif
 
-  extraflag = mda_dump_header( &xdrstream);
-  mda_dump_scan( &xdrstream);
+  extraflag = mda_dump_header( xdrstream);
+  mda_dump_scan( xdrstream);
   if( extraflag)
-    mda_dump_extra( &xdrstream);
+    mda_dump_extra( xdrstream);
 
 
-  xdr_destroy( &xdrstream);
+#ifndef XDR_HACK
+  xdr_destroy( xdrstream);
+#endif
 
   fclose(input);
 

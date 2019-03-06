@@ -1,11 +1,11 @@
-.TH MDA2ASCII 1 "February 2013" "MDA Utilities" "MDA Utilities"
+.TH MDA2ASCII 1 "July 2018" "MDA Utilities" "MDA Utilities"
 
 .SH NAME
 mda2ascii \- convert EPICS MDA files to ASCII format
 
 .SH SYNOPSIS
 .B mda2ascii
-.RB [ \-hvmtfe1a ]
+.RB [ \-hvmtbfe1a ]
 .RB [ \-x\c
 .IR "\ extension" ]
 .RB [ \-d\c
@@ -61,6 +61,9 @@ added as columns, with the corresponding single values.
 .TP
 .B \-t
 Trim off all the commented header lines, leaving only values.
+.TP
+.B \-b
+Comment out blank lines.
 .TP
 .B \-f
 Friendlier data presentation, with all the data columns having a

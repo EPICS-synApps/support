@@ -1,5 +1,5 @@
 /*************************************************************************\
-* Copyright (c) 2013 UChicago Argonne, LLC,
+* Copyright (c) 2018 UChicago Argonne, LLC,
 *               as Operator of Argonne National Laboratory.
 * This file is distributed subject to a Software License Agreement
 * found in file LICENSE that is included with this distribution. 
@@ -7,7 +7,6 @@
 
 
 /*
-
   Written by Dohn A. Arms, Argonne National Laboratory
   Send comments to dohnarms@anl.gov
   
@@ -18,7 +17,6 @@
            Added several new functions for accessing scans or the extra PV's
                  without loading the entire file.
   0.2.1 -- March 2009
-           Removed several memory leaks.
   1.0   -- October 2009
            Renamed structures.
   1.1   -- November 2010
@@ -30,6 +28,8 @@
   1.2.2 -- June 2012
            Added preprocessor commands for c++ compatibility
   1.3.0 -- February 2013
+  1.3.1 -- February 2014
+  1.4.0 -- July 2016
  */
 
 
@@ -117,7 +117,7 @@ struct mda_pv
   int16_t type;
   int16_t count;
   char   *unit;
-  char   *values; /* used to be void *, but gave a lot of headaches */
+  char   *values;
 };
 
 
@@ -172,7 +172,7 @@ struct mda_scan *mda_scan_load( FILE *fptr);
 struct mda_scan *mda_subscan_load( FILE *fptr, int depth, int *indices, 
 				      int recursive);
 struct mda_extra *mda_extra_load( FILE *fptr);
-
+struct mda_file *mda_update( FILE *fptr, struct mda_file *previous_mda);
 
 void mda_unload( struct mda_file *mda);
 void mda_header_unload( struct mda_header *header);
@@ -180,6 +180,7 @@ void mda_scan_unload( struct mda_scan *scan);
 void mda_extra_unload( struct mda_extra *extra);
 
 
+int mda_test( FILE *fptr);
 struct mda_fileinfo *mda_info_load( FILE *fptr);
 void mda_info_unload( struct mda_fileinfo *fileinfo);
 

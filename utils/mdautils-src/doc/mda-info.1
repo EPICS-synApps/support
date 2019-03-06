@@ -1,11 +1,11 @@
-.TH MDA-INFO 1 "February 2013" "MDA Utilities" "MDA Utilities"
+.TH MDA-INFO 1 "July 2018" "MDA Utilities" "MDA Utilities"
 
 .SH NAME
 mda-info \- prints out information about a MDA file
 
 .SH SYNOPSIS
 .B mda-info
-.RB [ \-hv ]
+.RB [ \-hvs ]
 .I "file"
 
 .SH DESCRIPTION
@@ -25,7 +25,8 @@ the name of the MDA file.  If a file is irregular, it is stated as
 such and the actual overall scan size is shown, taken from the individual
 scans themselves.
 .PP
-This program does not load the entire file, so it's fast.
+The program by default will check the validity of the entire file, but
+minimal checking can be enabled to save time.
 
 .SH OPTIONS
 .TP 
@@ -34,6 +35,10 @@ Show the help screen.
 .TP 
 .B \-v
 Show the version information.
+.TP 
+.B \-s
+Use the simpler error checking, instead of checking the entire 
+file.
 
 .SH AUTHOR
 Dohn A. Arms
