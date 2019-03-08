@@ -15,7 +15,11 @@ sub searchFolder
 	
 	foreach my $file (@subs)
 	{
-		if (-d $file)
+		if (index($file, "all_adl") > -1)
+		{
+			next;
+		}
+		elsif (-d $file)
 		{
 			searchFolder($collection, $file, $ext);
 		}
