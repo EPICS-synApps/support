@@ -177,7 +177,7 @@ all_edl:
 	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'edl'
 	
 all_ui:
-	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'ui'
+	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'ui,qss'
 	
 all_opi:
 	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'opi'
