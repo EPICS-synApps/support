@@ -168,3 +168,14 @@ release:
 	echo ' '
 	$(PERL) $(TOP)/configure/makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
 
+all_adl:
+	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'adl'
+	
+all_edl
+	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'edl'
+	
+all_ui:
+	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'ui'
+	
+all_opi:
+	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'opi'
