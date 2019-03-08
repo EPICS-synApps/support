@@ -7,25 +7,31 @@ sub searchFolder
 {	
 	my $collection = $_[0];
 	my $cur = $_[1];
-	my $ext = $_[2];
+	my @exts = @{ $_[2] };
 	
 	my @subs = glob(File::Spec->catfile($cur, "*"));
 
-	print"Searching: $cur\n";
+	print "Searching: $cur\n";
 	
 	foreach my $file (@subs)
 	{
-		if (index($file, "all_adl") > -1)
+		if (index($file, "all_") > -1)
 		{
 			next;
 		}
 		elsif (-d $file)
 		{
-			searchFolder($collection, $file, $ext);
+			searchFolder($collection, $file, \@exts);
 		}
-		elsif (index($file, ".$ext") == (length($file) - length($ext) - 1))
+		else
 		{
-			copy $file, $collection or die "File cannot be copied.";
+			foreach my $ext (@exts)
+			{				
+				if (index($file, ".$ext") == (length($file) - length($ext) - 1))
+				{
+					copy $file, $collection or die "File cannot be copied.";
+				}
+			}
 		}
 	}
 }
@@ -40,9 +46,11 @@ if ( $argc < 2 || $argc > 2)
 }
 
 my $top_dir = $ARGV[0];
-my $file_ext = $ARGV[1];
-my $collection_dir = File::Spec->catdir($top_dir, "all_$file_ext");
+my @file_exts = split(",", $ARGV[1]);
+
+my $primary = $file_exts[0];
+my $collection_dir = File::Spec->catdir($top_dir, "all_$primary");
 
 mkdir $collection_dir;
 
-searchFolder($collection_dir, $top_dir, $file_ext);
+searchFolder($collection_dir, $top_dir, \@file_exts);
