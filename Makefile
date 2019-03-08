@@ -171,7 +171,7 @@ release:
 all_adl:
 	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'adl'
 	
-all_edl
+all_edl:
 	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'edl'
 	
 all_ui:
