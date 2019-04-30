@@ -29,6 +29,8 @@ include $(TOP)/configure/CONFIG
 
 DIRS := $(DIRS) $(filter-out $(DIRS), configure)
 
+GET_DEPENDS := $(SUPPORT)/utils/depends.pl $(call FIND_TOOL,convertRelease.pl)
+
 define  MODULE_defined
   ifdef $(1)
   SUPPORT_DIRS  += $($(1))
@@ -52,10 +54,9 @@ define  MODULE_defined
   RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE.local)
   RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE.local.$(EPICS_HOST_ARCH))
   RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE.$(EPICS_HOST_ARCH))
+  $(eval $$($(1))_DEPEND_DIRS := $(shell $(GET_DEPENDS) $($(1)) $(1) "$(MODULE_LIST)"))
   endif  
 endef
-
-GET_DEPENDS := $(SUPPORT)/utils/depends.pl $(call FIND_TOOL,convertRelease.pl)
 
 ###### Support Modules ######
 
@@ -70,7 +71,6 @@ MODULE_LIST += MCA VME MOTOR AREA_DETECTOR
 MODULE_LIST += SOFTGLUEZYNQ MEASCOMP CAMAC
 MODULE_LIST += QUADEM DXP DXPSITORO XXX
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
-$(foreach mod, $(MODULE_LIST), $(eval $$($(mod))_DEPEND_DIRS := $(shell $(GET_DEPENDS) $($(mod)) $(mod) "$(MODULE_LIST)")))
 
 ################### End of Support-Modules #####################
 
@@ -92,6 +92,3 @@ release:
 	echo RELEASE_FILES=$(RELEASE_FILES)
 	echo ' '
 	$(PERL) $(TOP)/configure/makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
-
-test:
-	@echo $($(XXX)_DEPEND_DIRS)
