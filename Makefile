@@ -92,3 +92,18 @@ release:
 	echo RELEASE_FILES=$(RELEASE_FILES)
 	echo ' '
 	$(PERL) $(TOP)/configure/makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
+
+
+.PHONY: all_adl all_edl all_ui all_opi
+	
+all_adl:
+	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'adl'
+	
+all_edl:
+	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'edl'
+	
+all_ui:
+	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'ui,qss'
+	
+all_opi:
+	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'opi'
