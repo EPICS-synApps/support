@@ -6,20 +6,19 @@
 #HeadURL:       $URL$
 
 #NOTES
-#     - The "MODULE_LIST" order is based on compile time dependencies.
 #     - The user must modify SUPPORT and EPICS_BASE in the
 #       <synApps>/support/configure directory for the local configuration.
+#
 #     - To support multiple configurations, use multiple configure* directories
+#
 #     - Support modules can be shared between configurations only if
 #       dependencies are not violated.  Only the "DIRS" are the target of
 #       gnumake.  If this configuration is using a support module built by
 #       another configuration, then the SUPPORT_DIRS line for that support
 #       module must be commented out (i.e, must begin with a '#').
+#
 #     - To remove modules from the build, delete or comment out the module
 #       in the <synApps>/configure/RELEASE file; not here.
-
-# Note the only dependencies that matter in $(<module>)_DEPEND_DIRS are
-# compile-time dependencies.
 
 TOP = .
 
@@ -60,16 +59,44 @@ endef
 
 ###### Support Modules ######
 
-MODULE_LIST =  SNCSEQ ALLEN_BRADLEY IPAC 
-MODULE_LIST += AUTOSAVE ALIVE CAPUTRECORDER
-MODULE_LIST += ETHERIP SSCAN DEVIOCSTATS
-MODULE_LIST += YOKOGAWA_DAS ASYN CALC BUSY
-MODULE_LIST += STD DAC128V IP330 IPUNIDIG 
-MODULE_LIST += LOVE IP OPTICS STREAM MODBUS 
-MODULE_LIST += VAC SOFTGLUE LUA DELAYGEN
-MODULE_LIST += MCA VME MOTOR AREA_DETECTOR
-MODULE_LIST += SOFTGLUEZYNQ MEASCOMP CAMAC
-MODULE_LIST += QUADEM DXP DXPSITORO XXX
+MODULE_LIST =  ALLEN_BRADLEY 
+MODULE_LIST += ALIVE 
+MODULE_LIST += AREA_DETECTOR
+MODULE_LIST += ASYN 
+MODULE_LIST += AUTOSAVE 
+MODULE_LIST += BUSY
+MODULE_LIST += CALC 
+MODULE_LIST += CAMAC
+MODULE_LIST += CAPUTRECORDER
+MODULE_LIST += DAC128V 
+MODULE_LIST += DELAYGEN
+MODULE_LIST += DEVIOCSTATS
+MODULE_LIST += DXP 
+MODULE_LIST += DXPSITORO 
+MODULE_LIST += ETHERIP 
+MODULE_LIST += IPAC 
+MODULE_LIST += IP 
+MODULE_LIST += IP330 
+MODULE_LIST += IPUNIDIG 
+MODULE_LIST += LOVE 
+MODULE_LIST += LUA 
+MODULE_LIST += MCA 
+MODULE_LIST += MEASCOMP 
+MODULE_LIST += MODBUS 
+MODULE_LIST += MOTOR
+MODULE_LIST += OPTICS 
+MODULE_LIST += QUADEM 
+MODULE_LIST += SNCSEQ
+MODULE_LIST += SOFTGLUE 
+MODULE_LIST += SOFTGLUEZYNQ 
+MODULE_LIST += SSCAN 
+MODULE_LIST += STD 
+MODULE_LIST += STREAM 
+MODULE_LIST += VAC 
+MODULE_LIST += VME 
+MODULE_LIST += XXX
+MODULE_LIST += YOKOGAWA_DAS 
+
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 ################### End of Support-Modules #####################
