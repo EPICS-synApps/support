@@ -6,6 +6,8 @@ TARGETS = $(CONFIG_TARGETS)
 CONFIGS += $(subst ../,,$(wildcard $(CONFIG_INSTALLS)))
 CHECK_RELEASE = YES
 
+CFG += CONFIG_REQ
+
 include $(TOP)/configure/RULES
 
 # Configure is not a top-level directory, but it seems easier for us to pretend
