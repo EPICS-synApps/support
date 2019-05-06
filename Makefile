@@ -101,7 +101,7 @@ $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
 ################### End of Support-Modules #####################
 
-DIRS = $(SUPPORT_DIRS)
+DIRS := $(DIRS) $(SUPPORT_DIRS)
 
 ACTIONS += uninstall realuninstall distclean cvsclean
 
