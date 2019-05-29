@@ -1,50 +1,50 @@
 #!/bin/bash
 shopt -s expand_aliases
 
-EPICS_BASE=/APSshare/epics/base-3.15.5
+EPICS_BASE=/APSshare/epics/base-3.15.6
 
-SUPPORT=R6-0
-CONFIGURE=R6-0
-UTILS=R6-0
-DOCUMENTATION=R6-0
+SUPPORT=master
+CONFIGURE=master
+UTILS=master
+DOCUMENTATION=master
 
 ALLENBRADLEY=2.3
-ALIVE=R1-1-0
+ALIVE=master
 AREA_DETECTOR=R3-3-1
-ASYN=R4-33
-AUTOSAVE=R5-9
-BUSY=R1-7
-CALC=R3-7-1
-CAMAC=R2-7-1
-CAPUTRECORDER=R1-7-1
-DAC128V=R2-9
-DELAYGEN=R1-2-0
-DXP=R5-0
-DXPSITORO=R1-1
-DEVIOCSTATS=3.1.15
+ASYN=master
+AUTOSAVE=master
+BUSY=master
+CALC=master
+CAMAC=master
+CAPUTRECORDER=master
+DAC128V=master
+DELAYGEN=master
+DXP=master
+DXPSITORO=master
+DEVIOCSTATS=3.1.16
 #GALIL=V3-6
-IP=R2-19-1
-IPAC=2.15
-IP330=R2-9
-IPUNIDIG=R2-11
-LOVE=R3-2-6
-LUA=R1-2-2
-MCA=R7-7
-MEASCOMP=R2-1
-MODBUS=R2-11
-MOTOR=R6-10-1
-OPTICS=R2-13-1
-QUADEM=R9-1
-SNCSEQ=2.2.5
-SOFTGLUE=R2-8-1
-SOFTGLUEZYNQ=R2-0-1
-SSCAN=R2-11-1
-STD=R3-5
-STREAM=R2-7-7c
-VAC=R1-7
-VME=R2-9
-YOKOGAWA_DAS=R1-0-0
-XXX=R6-0
+IP=master
+IPAC=master
+IP330=master
+IPUNIDIG=master
+LOVE=master
+LUA=master
+MCA=master
+MEASCOMP=master
+MODBUS=master
+MOTOR=master
+OPTICS=master
+QUADEM=master
+SNCSEQ=2.2.6
+SOFTGLUE=master
+SOFTGLUEZYNQ=master
+SSCAN=master
+STD=master
+STREAM=2.8.8
+VAC=master
+VME=master
+YOKOGAWA_DAS=master
+XXX=master
 
 
 
@@ -140,72 +140,41 @@ echo "" >> configure/RELEASE
 
 # modules ##################################################################
 
-#                               get_repo Git Project    Git Repo       RELEASE Name   Tag
-if [[ $ALIVE ]];         then   get_repo epics-modules  alive          ALIVE          $ALIVE         ; fi
-if [[ $ASYN ]];          then   get_repo epics-modules  asyn           ASYN           $ASYN          ; fi
-if [[ $AUTOSAVE ]];      then   get_repo epics-modules  autosave       AUTOSAVE       $AUTOSAVE      ; fi
-if [[ $BUSY ]];          then   get_repo epics-modules  busy           BUSY           $BUSY          ; fi
-if [[ $CALC ]];          then   get_repo epics-modules  calc           CALC           $CALC          ; fi
-if [[ $CAMAC ]];         then   get_repo epics-modules  camac          CAMAC          $CAMAC         ; fi
-if [[ $CAPUTRECORDER ]]; then   get_repo epics-modules  caputRecorder  CAPUTRECORDER  $CAPUTRECORDER ; fi
-if [[ $DAC128V ]];       then   get_repo epics-modules  dac128V        DAC128V        $DAC128V       ; fi
-if [[ $DELAYGEN ]];      then   get_repo epics-modules  delaygen       DELAYGEN       $DELAYGEN      ; fi
-if [[ $DXP ]];           then   get_repo epics-modules  dxp            DXP            $DXP           ; fi
-if [[ $DXPSITORO ]];     then   get_repo epics-modules  dxpSITORO      DXPSITORO      $DXPSITORO     ; fi
-if [[ $DEVIOCSTATS ]];   then   get_repo epics-modules  iocStats       DEVIOCSTATS    $DEVIOCSTATS   ; fi
-if [[ $GALIL ]];         then   get_repo motorapp       Galil-3-0      GALIL          $GALIL         ; fi
-if [[ $IP ]];            then   get_repo epics-modules  ip             IP             $IP            ; fi
-if [[ $IPAC ]];          then   get_repo epics-modules  ipac           IPAC           $IPAC          ; fi
-if [[ $IP330 ]];         then   get_repo epics-modules  ip330          IP330          $IP330         ; fi
-if [[ $IPUNIDIG ]];      then   get_repo epics-modules  ipUnidig       IPUNIDIG       $IPUNIDIG      ; fi
-if [[ $LOVE ]];          then   get_repo epics-modules  love           LOVE           $LOVE          ; fi
-if [[ $LUA ]];           then   get_repo epics-modules  lua            LUA            $LUA           ; fi
-if [[ $MCA ]];           then   get_repo epics-modules  mca            MCA            $MCA           ; fi
-if [[ $MEASCOMP ]];      then   get_repo epics-modules  measComp       MEASCOMP       $MEASCOMP      ; fi
-if [[ $MODBUS ]];        then   get_repo epics-modules  modbus         MODBUS         $MODBUS        ; fi
-if [[ $MOTOR ]];         then   get_repo epics-modules  motor          MOTOR          $MOTOR         ; fi
-if [[ $OPTICS ]];        then   get_repo epics-modules  optics         OPTICS         $OPTICS        ; fi
-if [[ $QUADEM ]];        then   get_repo epics-modules  quadEM         QUADEM         $QUADEM        ; fi
-if [[ $SOFTGLUE ]];      then   get_repo epics-modules  softGlue       SOFTGLUE       $SOFTGLUE      ; fi
-if [[ $SOFTGLUEZYNQ ]];  then   get_repo epics-modules  softGlueZynq   SOFTGLUEZYNQ   $SOFTGLUEZYNQ  ; fi
-if [[ $SSCAN ]];         then   get_repo epics-modules  sscan          SSCAN          $SSCAN         ; fi
-if [[ $STD ]];           then   get_repo epics-modules  std            STD            $STD           ; fi
-if [[ $VAC ]];           then   get_repo epics-modules  vac            VAC            $VAC           ; fi
-if [[ $VME ]];           then   get_repo epics-modules  vme            VME            $VME           ; fi
-if [[ $YOKOGAWA_DAS ]];  then   get_repo epics-modules  Yokogawa_DAS   YOKOGAWA_DAS   $YOKOGAWA_DAS  ; fi
-if [[ $XXX ]];           then   get_repo epics-modules  xxx            XXX            $XXX           ; fi
-
-#Blow away iocStats existing RELEASE file until SUPPORT is ever defined
-if [[ $DEVIOCSTATS ]];   then
-cd iocStats-${DEVIOCSTATS//./-}
-cd configure
-rm -f RELEASE
-echo "EPICS_BASE=." >> RELEASE
-echo "SUPPORT=." >> RELEASE
-echo "SNCSEQ=." >> RELEASE
-echo '-include $(SUPPORT)/configure/EPICS_BASE.$(EPICS_HOST_ARCH)' >> RELEASE
-cd ../..
-fi
-
-
-if [[ $STREAM ]]
-then
-
-get_repo  epics-modules  stream  STREAM  $STREAM
-
-cd stream-$STREAM
-git submodule init
-git submodule update
-
-#Temporary patch until new version of StreamDevice is released
-if [[ $SSCAN ]]
-then
-sed -i 's/#PROD_LIBS += sscan/PROD_LIBS += sscan/g' StreamDevice/streamApp/Makefile
-fi
-
-cd ..
-
-fi
+#                               get_repo Git Project            Git Repo       RELEASE Name   Tag
+if [[ $ALIVE ]];         then   get_repo epics-modules          alive          ALIVE          $ALIVE         ; fi
+if [[ $ASYN ]];          then   get_repo epics-modules          asyn           ASYN           $ASYN          ; fi
+if [[ $AUTOSAVE ]];      then   get_repo epics-modules          autosave       AUTOSAVE       $AUTOSAVE      ; fi
+if [[ $BUSY ]];          then   get_repo epics-modules          busy           BUSY           $BUSY          ; fi
+if [[ $CALC ]];          then   get_repo epics-modules          calc           CALC           $CALC          ; fi
+if [[ $CAMAC ]];         then   get_repo epics-modules          camac          CAMAC          $CAMAC         ; fi
+if [[ $CAPUTRECORDER ]]; then   get_repo epics-modules          caputRecorder  CAPUTRECORDER  $CAPUTRECORDER ; fi
+if [[ $DAC128V ]];       then   get_repo epics-modules          dac128V        DAC128V        $DAC128V       ; fi
+if [[ $DELAYGEN ]];      then   get_repo epics-modules          delaygen       DELAYGEN       $DELAYGEN      ; fi
+if [[ $DXP ]];           then   get_repo epics-modules          dxp            DXP            $DXP           ; fi
+if [[ $DXPSITORO ]];     then   get_repo epics-modules          dxpSITORO      DXPSITORO      $DXPSITORO     ; fi
+if [[ $DEVIOCSTATS ]];   then   get_repo epics-modules          iocStats       DEVIOCSTATS    $DEVIOCSTATS   ; fi
+if [[ $GALIL ]];         then   get_repo motorapp               Galil-3-0      GALIL          $GALIL         ; fi
+if [[ $IP ]];            then   get_repo epics-modules          ip             IP             $IP            ; fi
+if [[ $IPAC ]];          then   get_repo epics-modules          ipac           IPAC           $IPAC          ; fi
+if [[ $IP330 ]];         then   get_repo epics-modules          ip330          IP330          $IP330         ; fi
+if [[ $IPUNIDIG ]];      then   get_repo epics-modules          ipUnidig       IPUNIDIG       $IPUNIDIG      ; fi
+if [[ $LOVE ]];          then   get_repo epics-modules          love           LOVE           $LOVE          ; fi
+if [[ $LUA ]];           then   get_repo epics-modules          lua            LUA            $LUA           ; fi
+if [[ $MCA ]];           then   get_repo epics-modules          mca            MCA            $MCA           ; fi
+if [[ $MEASCOMP ]];      then   get_repo epics-modules          measComp       MEASCOMP       $MEASCOMP      ; fi
+if [[ $MODBUS ]];        then   get_repo epics-modules          modbus         MODBUS         $MODBUS        ; fi
+if [[ $MOTOR ]];         then   get_repo epics-modules          motor          MOTOR          $MOTOR         ; fi
+if [[ $OPTICS ]];        then   get_repo epics-modules          optics         OPTICS         $OPTICS        ; fi
+if [[ $QUADEM ]];        then   get_repo epics-modules          quadEM         QUADEM         $QUADEM        ; fi
+if [[ $SOFTGLUE ]];      then   get_repo epics-modules          softGlue       SOFTGLUE       $SOFTGLUE      ; fi
+if [[ $SOFTGLUEZYNQ ]];  then   get_repo epics-modules          softGlueZynq   SOFTGLUEZYNQ   $SOFTGLUEZYNQ  ; fi
+if [[ $SSCAN ]];         then   get_repo epics-modules          sscan          SSCAN          $SSCAN         ; fi
+if [[ $STD ]];           then   get_repo epics-modules          std            STD            $STD           ; fi
+if [[ $STREAM ]];        then   get_repo paulscherrerinstitute  StreamDevice   STREAM         $STREAM        ; fi
+if [[ $VAC ]];           then   get_repo epics-modules          vac            VAC            $VAC           ; fi
+if [[ $VME ]];           then   get_repo epics-modules          vme            VME            $VME           ; fi
+if [[ $YOKOGAWA_DAS ]];  then   get_repo epics-modules          Yokogawa_DAS   YOKOGAWA_DAS   $YOKOGAWA_DAS  ; fi
+if [[ $XXX ]];           then   get_repo epics-modules          xxx            XXX            $XXX           ; fi
 
 
 if [[ $AREA_DETECTOR ]]
@@ -228,6 +197,9 @@ echo 'WITH_HDF5 = NO' >> CONFIG_SITE.local.vxWorks
 echo 'WITH_BLOSC = NO' >> CONFIG_SITE.local.vxWorks
 echo 'WITH_NEXUS = NO' >> CONFIG_SITE.local.vxWorks
 
+# linux-arm doesn't have certain X11 files
+echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
+
 # We are still using Epics v3
 echo 'WITH_PVA = NO' >> CONFIG_SITE.local.linux-x86_64
 echo 'WITH_PVA = NO' >> CONFIG_SITE.local.vxWorks
@@ -245,6 +217,7 @@ echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)' >> CONFIG_SITE.local.windows-x64-static
 #Can't just use default RELEASE.local because it has simDetector commented out
 echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector' >> RELEASE.local
 echo 'ADSUPPORT=$(AREA_DETECTOR)/ADSupport' >> RELEASE.local
+echo '-include $(TOP)/configure/RELEASE_PRODS.local' >> RELEASE.local
 echo '-include $(TOP)/configure/RELEASE.local.$(EPICS_HOST_ARCH)' >> RELEASE.local
 
 echo "SUPPORT=$SUPPORT" >> RELEASE_SUPPORT.local
