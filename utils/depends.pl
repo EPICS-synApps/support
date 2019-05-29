@@ -35,10 +35,7 @@ foreach my $test (@list)
 	
 	# Only match against the list of modules given
 	if (exists($modcheck{$test}))
-	{
-		print $test;
-		print "\n";
-		
+	{		
 		# Put $() around the macros
 		$output = $output . "\$\($test\) ";
 	}
