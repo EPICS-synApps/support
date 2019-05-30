@@ -288,6 +288,10 @@ fi
 
 if [[ $STREAM ]]
 	cd StreamDevice-$STREAM
+	
+	#Use the EPICS makefile, rather than PSI's
+	rm GNUmakefile
+	
 	echo "SSCAN=" >> ./configure/RELEASE
 	sed -i 's/#PROD_LIBS += sscan/PROD_LIBS += sscan/g' ./streamApp/Makefile
 	cd ..
