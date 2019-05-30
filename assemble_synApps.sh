@@ -253,12 +253,6 @@ echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector' >> ./configure/RELEASE
 
 fi
 
-if [[ $MCA ]]
-	cd mca-$MCA
-	echo "LINUX_LIBUSB-1.0_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86_64.linux-arm
-	cd ..
-fi
-
 if [[ $DXP ]]
 	cd dxp-$DXP
 	echo "LINUX_USB_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86_64.linux-arm
@@ -267,6 +261,27 @@ fi
 
 if [[ $DXPSITORO ]]
 	cd dxpSITORO-$DXPSITORO
+	echo "CROSS_COMPILER_TARGET_ARCHS = vxWorks-ppc32 vxWorks-ppc32-debug vxWorks-ppc32sf vxWorks-ppc32sf-debug" >> configure/CONFIG_SITE
+	cd ..
+fi
+
+if [[ $MCA ]]
+	cd mca-$MCA
+	echo "LINUX_LIBUSB-1.0_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86_64.linux-arm
+	cd ..
+fi
+
+if [[ $MOTOR ]]
+	cd motor-$MOTOR
+	
+	git submodule init
+	git submodule update
+	
+	cd ..
+fi
+
+if [[ $QUADEM ]]
+	cd quadEM-$QUADEM
 	echo "CROSS_COMPILER_TARGET_ARCHS = vxWorks-ppc32 vxWorks-ppc32-debug vxWorks-ppc32sf vxWorks-ppc32sf-debug" >> configure/CONFIG_SITE
 	cd ..
 fi
