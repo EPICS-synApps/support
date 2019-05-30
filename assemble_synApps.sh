@@ -287,12 +287,22 @@ if [[ $QUADEM ]]
 fi
 
 if [[ $STREAM ]]
-	cd StreamDevice-$STREAM
+	cd StreamDevice-${STREAM//./-}
 	
-	#Use the EPICS makefile, rather than PSI's
+	# Use the EPICS makefile, rather than PSI's
 	rm GNUmakefile
 	
+	# Don't install to synApps/support
+	sed -i 's/TOP = ../TOP = ./g' ./Makefile
+	sed -i 's/TOP = ..\/../TOP = ../g' ./streamApp/Makefile
+	sed -i 's/TOP = ..\/../TOP = ../g' ./src/Makefile
+	sed -i 's/INSTALL_LOCATION = $(TOP)/INSTALL_LOCATION = $(STREAM)/g' ./configure/CONFIG_APP
+	
+	# Comment out PCRE
+	sed -i 's/PCRE =/#PCRE =/g' ./configure/RELEASE
+	
 	echo "SSCAN=" >> ./configure/RELEASE
+	echo "STREAM=" >> ./configure/RELEASE
 	sed -i 's/#PROD_LIBS += sscan/PROD_LIBS += sscan/g' ./streamApp/Makefile
 	cd ..
 fi
