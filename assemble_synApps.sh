@@ -253,6 +253,13 @@ echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector' >> ./configure/RELEASE
 
 fi
 
+if [[ $STREAM ]]
+	cd StreamDevice-$STREAM
+	echo "SSCAN=" >> ./configure/RELEASE
+	sed -i 's/#PROD_LIBS += sscan/PROD_LIBS += sscan/g' ./streamApp/Makefile
+	cd ..
+fi
+
 
 if [[ $SNCSEQ ]]
 then
