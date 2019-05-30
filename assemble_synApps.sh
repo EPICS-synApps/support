@@ -196,8 +196,10 @@ echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.vxWorks
 echo 'WITH_HDF5 = NO' >> CONFIG_SITE.local.vxWorks
 echo 'WITH_BLOSC = NO' >> CONFIG_SITE.local.vxWorks
 echo 'WITH_NEXUS = NO' >> CONFIG_SITE.local.vxWorks
+echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.vxWorks
 
-# linux-arm doesn't have certain X11 files
+# linux-arm has X11 and other issues
+echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
 echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
 
 # We are still using Epics v3
@@ -207,6 +209,22 @@ echo 'WITH_PVA = NO' >> CONFIG_SITE.local.win32-x86
 echo 'WITH_PVA = NO' >> CONFIG_SITE.local.windows-x64
 echo 'WITH_PVA = NO' >> CONFIG_SITE.local.win32-x86-static
 echo 'WITH_PVA = NO' >> CONFIG_SITE.local.windows-x64-static
+
+# We are still using Epics v3
+echo 'WITH_QSRV = NO' >> CONFIG_SITE.local.linux-x86_64
+echo 'WITH_QSRV = NO' >> CONFIG_SITE.local.vxWorks
+echo 'WITH_QSRV = NO' >> CONFIG_SITE.local.win32-x86
+echo 'WITH_QSRV = NO' >> CONFIG_SITE.local.windows-x64
+echo 'WITH_QSRV = NO' >> CONFIG_SITE.local.win32-x86-static
+echo 'WITH_QSRV = NO' >> CONFIG_SITE.local.windows-x64-static
+
+# DBD files aren't separated between architectures, so there are issues building
+echo 'BUILD_IOCS = NO' >> CONFIG_SITE.local.linux-x86_64
+echo 'BUILD_IOCS = NO' >> CONFIG_SITE.local.vxWorks
+echo 'BUILD_IOCS = NO' >> CONFIG_SITE.local.win32-x86
+echo 'BUILD_IOCS = NO' >> CONFIG_SITE.local.windows-x64
+echo 'BUILD_IOCS = NO' >> CONFIG_SITE.local.win32-x86-static
+echo 'BUILD_IOCS = NO' >> CONFIG_SITE.local.windows-x64-static
 
 #HDF5 flag for windows
 echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)' >> CONFIG_SITE.local.win32-x86
