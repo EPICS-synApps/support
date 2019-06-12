@@ -327,6 +327,13 @@ echo "SNCSEQ=\$(SUPPORT)/seq-${SNCSEQ//./-}" >> ./configure/RELEASE
 
 fi
 
+if [[ $XXX ]]
+then
+	cd xxx-$XXX
+	echo "CROSS_COMPILER_TARGET_ARCHS = vxWorks-ppc32 vxWorks-ppc32-debug vxWorks-ppc32sf vxWorks-ppc32sf-debug" >> configure/CONFIG_SITE
+	cd ..
+fi
+
 if [[ $ALLENBRADLEY ]]
 then
 
