@@ -254,24 +254,28 @@ echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector' >> ./configure/RELEASE
 fi
 
 if [[ $DXP ]]
+then
 	cd dxp-$DXP
 	echo "LINUX_USB_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86_64.linux-arm
 	cd ..
 fi
 
 if [[ $DXPSITORO ]]
+then
 	cd dxpSITORO-$DXPSITORO
 	echo "CROSS_COMPILER_TARGET_ARCHS = vxWorks-ppc32 vxWorks-ppc32-debug vxWorks-ppc32sf vxWorks-ppc32sf-debug" >> configure/CONFIG_SITE
 	cd ..
 fi
 
 if [[ $MCA ]]
+then
 	cd mca-$MCA
 	echo "LINUX_LIBUSB-1.0_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86_64.linux-arm
 	cd ..
 fi
 
 if [[ $MOTOR ]]
+then
 	cd motor-$MOTOR
 	
 	git submodule init
@@ -281,12 +285,14 @@ if [[ $MOTOR ]]
 fi
 
 if [[ $QUADEM ]]
+then
 	cd quadEM-$QUADEM
 	echo "CROSS_COMPILER_TARGET_ARCHS = vxWorks-ppc32 vxWorks-ppc32-debug vxWorks-ppc32sf vxWorks-ppc32sf-debug" >> configure/CONFIG_SITE
 	cd ..
 fi
 
 if [[ $STREAM ]]
+then
 	cd StreamDevice-${STREAM//./-}
 	
 	# Use the EPICS makefile, rather than PSI's
