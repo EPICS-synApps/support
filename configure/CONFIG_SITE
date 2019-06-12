@@ -38,3 +38,4 @@ export LINUX_NET_INSTALLED
 # define INSTALL_LOCATION here
 #INSTALL_LOCATION=<fullpathname>
 -include $(SUPPORT)/configure/CONFIG_SITE.$(EPICS_HOST_ARCH)
+-include $(SUPPORT)/configure/CONFIG_SITE.$(EPICS_HOST_ARCH).$(T_A)
