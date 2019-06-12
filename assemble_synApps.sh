@@ -305,7 +305,7 @@ then
 	sed -i 's/INSTALL_LOCATION = $(TOP)/INSTALL_LOCATION = $(STREAM)/g' ./configure/CONFIG_APP
 	
 	# Comment out PCRE
-	sed -i 's/PCRE =/#PCRE =/g' ./configure/RELEASE
+	sed -i 's/PCRE=/#PCRE=/g' ./configure/RELEASE
 	
 	echo "SSCAN=" >> ./configure/RELEASE
 	echo "STREAM=" >> ./configure/RELEASE
