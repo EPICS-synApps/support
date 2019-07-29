@@ -188,14 +188,18 @@ git submodule update ADCore
 git submodule update ADSupport
 git submodule update ADSimDetector
 
+cd ADCore/iocBoot
+
+cp EXAMPLE_commonPlugins.cmd commonPlugins.cmd
+cp EXAMPLE_commonPlugin_settings.req commonPlugin_settings.req
+
+cd ../..
+
 cd configure
 cp EXAMPLE_CONFIG_SITE.local CONFIG_SITE.local
 
 # vxWorks has pthread and other issues
 echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.vxWorks
-echo 'WITH_HDF5 = NO' >> CONFIG_SITE.local.vxWorks
-echo 'WITH_BLOSC = NO' >> CONFIG_SITE.local.vxWorks
-echo 'WITH_NEXUS = NO' >> CONFIG_SITE.local.vxWorks
 echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.vxWorks
 
 # linux-arm has X11 and other issues
