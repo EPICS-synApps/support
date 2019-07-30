@@ -264,13 +264,6 @@ then
 	cd ..
 fi
 
-if [[ $DXPSITORO ]]
-then
-	cd dxpSITORO-$DXPSITORO
-	echo "CROSS_COMPILER_TARGET_ARCHS = vxWorks-ppc32 vxWorks-ppc32-debug vxWorks-ppc32sf vxWorks-ppc32sf-debug" >> configure/CONFIG_SITE
-	cd ..
-fi
-
 if [[ $MCA ]]
 then
 	cd mca-$MCA
@@ -285,13 +278,6 @@ then
 	git submodule init
 	git submodule update
 	
-	cd ..
-fi
-
-if [[ $QUADEM ]]
-then
-	cd quadEM-$QUADEM
-	echo "CROSS_COMPILER_TARGET_ARCHS = vxWorks-ppc32 vxWorks-ppc32-debug vxWorks-ppc32sf vxWorks-ppc32sf-debug" >> configure/CONFIG_SITE
 	cd ..
 fi
 
@@ -331,12 +317,6 @@ echo "SNCSEQ=\$(SUPPORT)/seq-${SNCSEQ//./-}" >> ./configure/RELEASE
 
 fi
 
-if [[ $XXX ]]
-then
-	cd xxx-$XXX
-	echo "CROSS_COMPILER_TARGET_ARCHS = vxWorks-ppc32 vxWorks-ppc32-debug vxWorks-ppc32sf vxWorks-ppc32sf-debug" >> configure/CONFIG_SITE
-	cd ..
-fi
 
 if [[ $ALLENBRADLEY ]]
 then
