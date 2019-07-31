@@ -200,7 +200,11 @@ cp EXAMPLE_CONFIG_SITE.local CONFIG_SITE.local
 
 # vxWorks has pthread and other issues
 echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.vxWorks
+echo 'WITH_HDF5 = NO' >> CONFIG_SITE.local.vxWorks
+echo 'WITH_BLOSC = NO' >> CONFIG_SITE.local.vxWorks
+echo 'WITH_NEXUS = NO' >> CONFIG_SITE.local.vxWorks
 echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.vxWorks
+
 
 # linux-arm has X11 and other issues
 echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
