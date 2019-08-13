@@ -22,6 +22,7 @@ DELAYGEN=R1-2-1
 DXP=R6-0
 DXPSITORO=R1-2
 DEVIOCSTATS=3.1.16
+#ETHERIP=ether_ip-3-1
 #GALIL=V3-6
 IP=R2-20-1
 IPAC=2.15
@@ -153,6 +154,7 @@ if [[ $DELAYGEN ]];      then   get_repo epics-modules          delaygen       D
 if [[ $DXP ]];           then   get_repo epics-modules          dxp            DXP            $DXP           ; fi
 if [[ $DXPSITORO ]];     then   get_repo epics-modules          dxpSITORO      DXPSITORO      $DXPSITORO     ; fi
 if [[ $DEVIOCSTATS ]];   then   get_repo epics-modules          iocStats       DEVIOCSTATS    $DEVIOCSTATS   ; fi
+if [[ $ETHERIP ]];       then   get_repo EPICSTools             ether_ip       ETHERIP        $ETHERIP       ; fi
 if [[ $GALIL ]];         then   get_repo motorapp               Galil-3-0      GALIL          $GALIL         ; fi
 if [[ $IP ]];            then   get_repo epics-modules          ip             IP             $IP            ; fi
 if [[ $IPAC ]];          then   get_repo epics-modules          ipac           IPAC           $IPAC          ; fi
@@ -329,20 +331,6 @@ tar xf allenBradley-$ALLENBRADLEY.tar.gz
 mv allenBradley-$ALLENBRADLEY allenBradley-${ALLENBRADLEY//./-}
 rm -f allenBradley-$ALLENBRADLEY.tar.gz
 echo "ALLEN_BRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY//./-}" >> ./configure/RELEASE
-
-fi
-
-
-if [[ $ETHERIP ]]
-then
-
-# etherIP
-wget https://github.com/EPICSTools/ether_ip/archive/ether_ip-2-26.tar.gz
-tar zxf ether_ip-2-26.tar.gz
-mv ether_ip-ether_ip-2-26 ether_ip-2-26
-rm -f ether_ip-2-26.tar.gz
-echo 'ETHERIP=$(SUPPORT)/ether_ip-2-26' >> ./configure/RELEASE
-
 
 fi
 
