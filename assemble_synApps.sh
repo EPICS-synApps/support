@@ -212,6 +212,7 @@ echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
 
 # We are still using Epics v3
 echo 'WITH_PVA = NO' >> CONFIG_SITE.local.linux-x86_64
+echo 'WITH_PVA = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
 echo 'WITH_PVA = NO' >> CONFIG_SITE.local.vxWorks
 echo 'WITH_PVA = NO' >> CONFIG_SITE.local.win32-x86
 echo 'WITH_PVA = NO' >> CONFIG_SITE.local.windows-x64
