@@ -11,7 +11,11 @@ content="text/html; charset=iso-8859-1">
 <ul>
 <P>StreamDevice is now included directly from the PSI repository, it is no longer a wrapper directory around PSI code.
 <P>Modules can now install their autosave req files to the top-level db folder by putting REQ += file.req in a makefile
-
+<P>Four new build options at top level; all_adl, all_ui, all_opi, and all_edl. Will search all support modules for files
+of the specified type and install them to a top level all_* folder.
+<P>Makefile also updated to use each module's RELEASE file to build dependencies. This means that adding a new module to
+an existing synApps directory is now as easy as dropping the module in and specifying it's name in the makefile's MODULE_LIST.
+<br>
 <li>
 <h2>Version changes from R6-0 to R6-1</h2>
 <table border>
