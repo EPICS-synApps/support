@@ -4,9 +4,9 @@ shopt -s expand_aliases
 EPICS_BASE=/APSshare/epics/base-3.15.6
 
 SUPPORT=master
-CONFIGURE=master
-UTILS=master
-DOCUMENTATION=master
+CONFIGURE=R6-1
+UTILS=R6-1
+DOCUMENTATION=R6-1
 
 ALLENBRADLEY=2.3
 ALIVE=R1-1-1
