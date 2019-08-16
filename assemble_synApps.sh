@@ -3,7 +3,7 @@ shopt -s expand_aliases
 
 EPICS_BASE=/APSshare/epics/base-3.15.6
 
-SUPPORT=master
+SUPPORT=R6-1
 CONFIGURE=R6-1
 UTILS=R6-1
 DOCUMENTATION=R6-1
@@ -45,7 +45,7 @@ STREAM=2.8.9
 VAC=R1-9
 VME=R2-9-2
 YOKOGAWA_DAS=R2-0-1
-XXX=master
+XXX=R6-1
 
 
 
