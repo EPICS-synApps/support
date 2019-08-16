@@ -134,6 +134,3 @@ all_ui:
 	
 all_opi:
 	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'opi'
-
-# Don't blow away cfg directory
-distclean:
