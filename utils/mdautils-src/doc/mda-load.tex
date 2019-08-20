@@ -1,0 +1,494 @@
+\documentclass[10pt,letterpaper]{article}
+%\usepackage{graphicx}
+
+\oddsidemargin=0in
+\evensidemargin=0in
+\topmargin=0in
+\headheight=0in
+\headsep=0in
+\marginparwidth=0in
+\marginparsep=0in
+\raggedbottom
+\textwidth=6.5in
+\textheight=8.5in
+
+\newcommand{\mdaload}{\texttt{mda-load}}
+\newcommand{\version}{{v1.4.2}}
+
+\title{ \vspace{-5ex} \texttt{mda-load} library \version\ manual}
+\author{Dohn Alexander Arms \\ \texttt{dohnarms@anl.gov}}
+
+\begin{document}
+\maketitle
+
+
+This library is used to load MDA files created by the
+\textbf{saveData} program that is part of \textbf{EPICS}.
+It will load files with MDA versions of 1.2, 1.3, and 1.4,
+which are the only versions used currently.
+
+
+\section{Compiling}
+
+Compiling requires that you specify the \textbf{mda-load} library.
+This can be done directly by specifying the filename
+\verb+libmda-load.a+ and its path. If the library is in a standard
+search location for libraries, you can use the ``\verb+-l mda-load+''
+option with \textbf{gcc} or \textbf{ld}.
+
+
+\section{Code}
+
+An MDA file structure has a defined structure that is mimicked by the
+data structures this library uses.  There first is a header describing
+the scan(s), followed by the highest dimensional scan, then all the
+lower dimensional scans, and finally by an optional section of extra
+PVs.
+
+
+\subsection{Functions}
+
+There are functions for loading the entire file or just parts of it.
+The function and structure definitions are in the include file
+\verb+mda-load.h+.
+
+In the following functions, \verb+fptr+ is a \verb+FILE+ pointer
+corresponding to an open MDA file, normally gotten from \verb+fopen()+
+and removed by \verb+fclose()+.  It doesn't matter what position the
+pointer is at in the file when calling these functions.
+
+\vspace{1.5ex}
+\noindent
+\verb+struct mda_file *mda_load( FILE *fptr)+ \linebreak
+This function loads the entire MDA file at once, returning a pointer
+to an \verb+mda_file+ structure.
+
+\vspace{1.5ex}
+\noindent
+\verb+void mda_unload( struct mda_file *mda)+ \linebreak 
+This will free the memory occupied by the \verb+mda_file+ to which
+\verb+mda+ points.
+
+\vspace{1.5ex}
+\noindent
+\verb+struct mda_header *mda_header_load( FILE *fptr)+ \linebreak
+This function loads the MDA file header, returning a pointer to a
+\verb+mda_header+ structure.
+
+\vspace{1.5ex}
+\noindent
+\verb+void mda_header_unload( struct mda_header *header)+ \linebreak
+This will free the memory occupied by the \verb+mda_header+ to which
+\verb+header+ points.
+
+\vspace{1.5ex}
+\noindent
+\verb+struct scan *mda_scan_load( FILE *fptr)+ \linebreak
+This function loads the entire scan structure (all dimensions) for an
+MDA file, returning a pointer to a \verb+mda_scan+ structure.  It is
+the same as \verb+mda_subscan_load()+, where \verb+depth+ is zero and
+\verb+recursive+ is one.
+
+%\newpage
+
+\vspace{1.5ex}
+\noindent
+\verb+struct mda_scan *mda_subscan_load( FILE *fptr, int depth, int *indices, int recursive)+ \linebreak
+This function loads only a part of an MDA file's scans, returning a
+pointer to the resulting \verb+mda_scan+ structure.  The \verb+depth+
+refers to how many dimensions down into the scan the subscan is
+located (it has to be less than the number of dimensions in the file),
+and to the number of members in \verb+indices+.  The \verb+indices+
+array contains the location of the subscan, starting with the highest
+dimensional index; if \verb+depth+ is zero, \verb+indices+ can be set
+to \verb+NULL+.  The \verb+recursive+ flag determines whether the
+lower dimensional scans will also be read (if any exist).
+
+\vspace{1.5ex}
+\noindent
+\verb+void mda_scan_unload( struct mda_scan *scan)+ \linebreak
+This will free the memory occupied by the \verb+mda_scan+ to which
+\verb+scan+ points.
+
+\vspace{1.5ex}
+\noindent
+\verb+struct mda_extra *mda_extra_load( FILE *fptr)+ \linebreak
+This function attempts to load the extra PVs for an MDA file. If they
+exist, it returns a pointer to an \verb+mda_extra+ structure,
+otherwise it returns \verb+NULL+.
+
+\vspace{1.5ex}
+\noindent
+\verb+void mda_extra_unload( struct mda_extra *extra)+ \linebreak
+This will free the memory occupied by the \verb+mda_extra+ to which
+\verb+extra+ points. It is safe to call this function if \verb+extra+
+is set to \verb+NULL+.
+
+\vspace{1.5ex}
+\noindent
+\verb+struct mda_file *mda_update( FILE *fptr, struct mda_file *previous_mda)+ \linebreak
+This function is the same as \verb+mda_load()+, except that it will
+attempt to use the data from a previous \verb+mda_load()+ or
+\verb+mda_update()+ to reduce the amount of data that needs to be
+read.  This is intended for use when an MDA file is being read while
+the scan is in progress, allowing only the newly written part of the
+file to be read, reducing the CPU load.  The \verb+previous_data+
+pointer that is passed needs to be either point to a valid
+\verb+struct mda_struct+ or is NULL.  If \verb+previous_data+ is not
+\verb+NULL+, its value after the function call is invalid, even if the
+function returned a \verb+NULL+ due to an error; the data to which it
+pointed was either taken by the newly returned
+\verb+struct mda_struct+ or was released from memory.
+
+\subsection{Example}
+
+The simplest way to use this library is to simply load the entire MDA
+file, using the template below.  Then there are only two functions
+needed, \verb+mda_load()+ and \verb+mda_unload()+, with the rest of
+the work coming from accessing the MDA data structure.
+
+\begin{verbatim}
+#include "mda-load.h"
+...
+FILE *fptr;
+struct mda_file *mda;
+...
+if( (fptr = fopen(filename, "r")) == NULL)
+    exit(1);
+if( (mda = mda_load(fptr)) == NULL)
+    exit(1);
+fclose(fptr);
+...
+/* Access the mda structure here. */
+...
+mda_unload(mda);
+...
+\end{verbatim}
+
+%\newpage
+
+\section{Data}
+
+Once you have a pointer to the allocated \verb+mda_file+, you can
+access its members directly.  The definition of the various data
+structures are in \verb+mda-load.h+.  Assuming that the data pointer
+is called \verb+mda+, here's how you access the data.
+
+The code takes advantage of the C99 integer data types in
+\verb+stdint.h+, which allows explicitly declaring the size of an
+integer.  Any of the \verb+int8_t+, \verb+int16_t+, or \verb+int32_t+
+types can simply be used as an \verb+int+ if it makes your code
+simpler (such as using \verb+%i+ with printf).
+
+
+\subsection{Header}
+\label{header}
+\begin{verbatim}
+(struct mda_header *) mda->header
+      (float)   header->version
+      (int32_t) header->scan_number
+      (int16_t) header->data_rank
+      (int32_t) header->dimensions[n] , [n] = [0] to [data_rank - 1]
+      (int16_t) header->regular
+      (int32_t) header->extra_pvs_offset
+\end{verbatim}
+
+This section contains the global data values for the MDA file.
+\verb+version+ signifies the MDA format version, normally 1.3.
+\verb+scan_number+ is the number assigned by \textbf{saveData} to the
+scan.  \verb+data_rank+ show the number of dimensions to the scan (for
+a 3-D scan, this is 3).  The \verb+dimensions+ array (with
+\verb+data_rank+ elements) contains the number of elements for each
+dimension of the scan, starting with the highest dimensional scan; for
+a 4-D scan, \verb+dimensions[1]+ is the number of elements to the 3-D
+scans.  \verb+regular+ signifies whether the dimensions of any of the
+scans were changed while the overall scan was running; a nonzero value
+signifies that the dimensions array is not totally correct, and the
+number of requested points needs to be checked in each
+scan. \verb+extra_pvs_offset+ gives, for the section of extra PV's,
+the offset in bytes from the beginning of the file; if that section
+does not exist, this will be \verb+0+.
+
+
+\subsection{Scans}
+
+\begin{verbatim}
+(struct mda_scan *) mda->scan
+      (int16_t)   scan->scan_rank
+      (int32_t)   scan->requested_points
+      (int32_t)   scan->last_point
+      (int32_t *) scan->offsets
+      (char *)    scan->name
+      (char *)    scan->time
+      (int16_t)   scan->number_positioners
+      (int16_t)   scan->number_detectors
+      (int16_t)   scan->number_triggers
+      (struct mda_positioner *) scan->positioners[n] , 
+                                [n] = [0] to [scan->number_positioners - 1]
+            (int16_t) positioners[n]->number
+            (char *)  positioners[n]->name
+            (char *)  positioners[n]->description
+            (char *)  positioners[n]->step_mode
+            (char *)  positioners[n]->unit
+            (char *)  positioners[n]->readback_name
+            (char *)  positioners[n]->readback_description
+            (char *)  positioners[n]->readback_unit
+      (struct mda_detector * scan->detectors[n] ,
+                                [n] = [0] to [scan->number_detectors - 1]
+            (int16_t) detectors[n]->number
+            (char *)  detectors[n]->name
+            (char *)  detectors[n]->description
+            (char *)  detectors[n]->unit
+      (struct mda_trigger *) scan->triggers[n] ,
+                                [n] = [0] to [scan->numbers_triggers - 1]
+            (int16_t) triggers[n]->number
+            (char *)  triggers[n]->name
+            (float)   triggers[n]->command
+      (double *) scan->positioners_data[n] , [n] = [0] to [scan->number_positioners - 1]
+            (double) scan->positioners_data[n][m] ,
+                                [m] = [0] to [scan->requested_points - 1]
+      (float *) scan->detectors_data[n] , [n] = [0] to [scan->number_detectors - 1]
+            (float) scan->detectors_data[n][m] , 
+                                [m] = [0] to [scan->requested_points - 1]
+      (struct mda_scan **) scan->sub_scans
+\end{verbatim}
+
+This section includes the scan data.  It is also recursive in nature
+due to it being able to handle arbitrary dimensions.  
+
+\subsubsection{Structure}
+\label{scanure}
+
+The overall structure for multidimensional files is dictated by
+\verb+scan_rank+ and \verb+sub_scans+.  As long as \verb+scan_rank+ is
+greater than one, \verb+sub_scans+ will not be \verb+NULL+ and will
+contain an array of the next lower dimensional scans (it will be
+\verb+NULL+ if \verb+mda_subscan_load()+ was used to retrieve the scan
+when the \verb+recursive+ parameter set to zero).  For a
+multidimensional scan, this takes the form of a tree, since each
+sub-scan can also have its own sub-scans.  For a higher dimensional
+scan, the values for the positioners and detectors apply to all scan
+with its \verb+sub_scans+.
+
+Suppose a 5$\times$8$\times$20 scan, where you want to access the
+$(3,7,x)$ 1-D scan, you would access it as
+\verb+mda->scan->sub_scans[2]->sub_scans[6]+.  However, if the scan
+was aborted, \verb+mda->scan->sub_scans[2]+ or
+\verb+mda->scan->sub_scans[2]->sub_scans[6]+ \textit{might} be
+\verb+NULL+, depending on where the scan was aborted.  Using
+\verb+last_point+ can let you know the last ``officially valid''
+sub-scan is \verb+sub_scans[last_point - 1]+.  The reason that I say
+``officially valid'' is that another scan \textit{might exist} at
+\verb+sub_scans[last_point]+, as it was the scan in progress that was
+aborted; one can use this data, but should take care.
+
+\subsubsection{Variables}
+\label{scan_variables}
+
+As described before, \verb+scan_rank+ is the dimensionality of this
+scan.  \verb+requested_points+ is how many points were wanted, while
+\verb+last_point+ tells how many actually were finished.
+\verb+offsets+ is an array of \verb+requested_points+ members, showing
+the distance from the beginning of the MDA file to the subscans; if
+the value is zero, then that scan does not exist.  \verb+name+ is the
+name of the scanner in \textbf{EPICS}, while \verb+time+ is when this
+particular scan was started.
+
+\verb+number_positioners+ tells how many positioners are moved as part
+of this scan.  The \verb+positioners+ array, holding
+\verb+number_positioners+ members, has a description of each
+positioner and its readback.  \verb+number+ is the internal number the
+\textbf{scanRecord} uses to identify this positioner, while
+\verb+name+ is what its called, and \verb+description+ describes it.
+\verb+step_mode+ is how the scan determined what step to use: it can
+be \textsl{linear}, where the spacing between steps is equal;
+\textsl{table}, where the step positions are read from an array; or
+\textsl{fly}, where the step positions are read back during an
+on-the-fly scan. \verb+unit+ is the associated unit of the positioner.
+Similarly, for the readback, there is \verb+readback_name+,
+\verb+readback_description+, and \verb+readback_unit+.
+
+The detector information is very similar to the positioners, as there
+is a \verb+detectors+ array with \verb+number_detectors+ elements.
+For each detectors, there is also a \verb+number+, \verb+name+,
+\verb+description+, and \verb+unit+.
+
+The trigger information is again similar to the positioners, with a
+\verb+triggers+ array with \verb+number_triggers+ elements.  Each
+trigger has a \verb+number+ and \verb+name+ associated to it, as well
+as a \verb+command+, which is a value sent to \verb+name+ to trigger.
+
+The positioner data values are held in an two dimensional array named
+\verb+positioners_data+.  Since one can't allocate a two dimensional
+array directly, it's actually an array of pointers (corresponding to
+each detector), pointing to arrays of more pointers (corresponding the
+the data).  To access the 8th data point of the 12th detector, one
+would type \verb+(scan->positioners_data[11])[7]+; the parentheses are
+not optional.
+
+The detector data values, in \verb+detectors_data+, is accessed
+similarly to the positioner data values.
+
+The \verb+sub_scans+ variable is used for accessing lower dimensional
+scans (if they exist).  It's described in Sec.~\ref{scanure}.
+
+
+\subsection{Extra PV's}
+
+\begin{verbatim}
+(struct mda_extra *) mda->extra
+      (int16_t) extra->number_pvs
+      (struct mda_pv *) extra->pvs[n] , [n] = [0] to [number_pvs - 1]
+            (char *)  pvs[n]->name
+            (char *)  pvs[n]->description
+            (int16_t) pvs[n]->type    
+            (int16_t) pvs[n]->count
+            (char *)  pvs[n]->unit
+            (void *)  pvs[n]->values
+\end{verbatim}
+
+This section, which doesn't always exist (signified by \verb+extra+
+being \verb+NULL+), contains extra PV's recorded during the scan.
+\verb+number_pvs+ is the number of PV's contained, with the PV's being
+held in an array \verb+pvs+.
+
+For each PV, there is the \verb+name+ string and \verb+description+
+string.  \verb+type+ lets you know what kind of data type it is, with
+the correspondence seen in Table~\ref{pv_type_table}.  If \verb+type+
+isn't \verb+EXTRA_STRING+, \verb+count+ gives the number of elements to
+the array and \verb+unit+ string gives the unit for the values.  The
+values themselves are held in an array \verb+values+.
+
+\begin{table}[h]
+  \caption{Extra PV data type}
+  \centerline{\begin{tabular}{|c|c||c|l|}
+      \hline
+      \texttt{type} name & \texttt{type} value & C type & Description\\
+      \hline\hline
+      \texttt{EXTRA\char95PV\char95STRING} & \texttt{0}  & \texttt{(char *)}          & zero-terminated string \\
+      \texttt{EXTRA\char95PV\char95INT8}   & \texttt{32} & \texttt{(int8\char95t *)}  & 8-bit integer array \\
+      \texttt{EXTRA\char95PV\char95INT16}  & \texttt{29} & \texttt{(int16\char95t *)} & 16-bit integer array \\
+      \texttt{EXTRA\char95PV\char95INT32}  & \texttt{33} & \texttt{(int32\char95t *)} & 32-bit integer array \\
+      \texttt{EXTRA\char95PV\char95FLOAT}  & \texttt{30} & \texttt{(float *)}         & floating-point array\\
+      \texttt{EXTRA\char95PV\char95DOUBLE} & \texttt{34} & \texttt{(double *)}        & double-precision floating-point array \\
+      \hline
+    \end{tabular}}
+  \label{pv_type_table}
+\end{table}
+
+Accessing the values is done by setting pointer \verb+values+ to the
+correct type, according to \verb+type+ and Table~\ref{pv_type_table}.
+Suppose the third extra PV was of type \verb+EXTRA_DOUBLE+, and you
+wanted to access its fifth member, this could be done using
+\verb+((double *) pvs[2]->values)[4]+.
+
+%\newpage
+
+\section{Basic Information Routines}
+
+It is possible to load only the basic information of an MDA file,
+saving load time and memory.  This information includes everything in
+the header, as well as the detector, positioner, and trigger
+descriptions for each scan dimension. As this information is taken
+from the first scan of each dimension, there is an assumption that
+every other scan is correctly represented by the first scan of its
+dimensionality. This also means that for a multidimensional file, not
+all of the file is checked for errors; this can be done with
+\verb+mda_test()+, which will cost some additional time.
+
+\subsection{Functions}
+
+\vspace{1.5ex}
+\noindent
+\verb+int mda_test( FILE *fptr)+ \linebreak
+This function will check a file's integrity by loading the entire file
+structure (but not keeping all the information in memory to keep
+memory usage minimal), using the same error checking as
+\verb+mda_load()+.  A returned value of \verb+0+ means that there was
+no error, while \verb+1+ means there was an error.
+
+\vspace{1.5ex}
+\noindent
+\verb+struct mda_fileinfo *mda_info_load( FILE *fptr)+ \linebreak This
+function loads a fileinfo of the MDA file, returning a pointer to an
+\verb+mda_fileinfo+ structure.  It does not check the validity of the
+entire file, which can be done with \verb+mda_test()+.
+
+\vspace{1.5ex}
+\noindent
+\verb+void mda_info_unload( struct mda_fileinfo *fileinfo)+ \linebreak 
+This will free the memory occupied by the \verb+mda_fileinfo+ to which
+\verb+fileinfo+ points.
+
+%\newpage
+
+\subsection{Structure}
+
+\begin{verbatim}
+(struct mda_fileinfo *) fileinfo
+      (float)   fileinfo->version
+      (int32_t) fileinfo->scan_number
+      (int16_t) fileinfo->data_rank
+      (int32_t) fileinfo->dimensions[n] , [n] = [0] to [data_rank - 1]
+      (int16_t) fileinfo->regular
+      (int32_t) fileinfo->last_topdim_point
+      (char *)  fileinfo->time
+      (struct mda_scaninfo *) fileinfo->scaninfos[n] , [n] = [0] to [data_rank - 1]
+            (int16_t) scaninfos[n]->scan_rank
+            (int32_t) scaninfos[n]->requested_points
+            (char *)  scaninfos[n]->name
+            (int16_t) scaninfos[n]->number_positioners
+            (int16_t) scaninfos[n]->number_detectors
+            (int16_t) scaninfos[n]->number_triggers
+            (struct mda_positioner *) scaninfos[n]->positioners[n] , 
+                                      [n] = [0] to [scan->number_positioners - 1]
+                  (int16_t) positioners[n]->number
+                  (char *)  positioners[n]->name
+                  (char *)  positioners[n]->description
+                  (char *)  positioners[n]->step_mode
+                  (char *)  positioners[n]->unit
+                  (char *)  positioners[n]->readback_name
+                  (char *)  positioners[n]->readback_description
+                  (char *)  positioners[n]->readback_unit
+            (struct mda_detector * scaninfos[n]->detectors[n] ,
+                                      [n] = [0] to [scan->number_detectors - 1]
+                  (int16_t) detectors[n]->number
+                  (char *)  detectors[n]->name
+                  (char *)  detectors[n]->description
+                  (char *)  detectors[n]->unit
+            (struct mda_trigger *) scaninfos[n]->triggers[n] ,
+                                      [n] = [0] to [scan->numbers_triggers - 1]
+                  (int16_t) triggers[n]->number
+                  (char *)  triggers[n]->name
+                  (float)   triggers[n]->command
+\end{verbatim}
+
+The structure of the \verb+mda_fileinfo+ structure is nonrecursive,
+and is thus easier to access. The variables \verb+version+,
+\verb+scan_number+, \verb+data_rank+, \verb+dimensions+, and
+\verb+regular+ are the same as described in Section~\ref{header}. The
+variable \verb+last_topdim_point+ is the number of completed scans in
+the highest dimensional scan, while \verb+time+ is the data and time
+of the start of the overall measurement. The information for each
+dimension's scans are in the \verb+scaninfos+ array.  The variables
+contained in each entry is a subset of those found in the earlier
+describes \verb+scan+, and all are described in in
+Section~\ref{scan_variables}.
+
+
+
+\section{Library Changes}
+
+From 1.1 to 1.2, integers use types that denote how many bits they
+use: \verb+char+ (as an 8-bit integer) $\rightarrow$ \verb+int8_t+,
+\verb+short+ $\rightarrow$ \verb+int16_t+, and \verb+long+
+$\rightarrow$ \verb+int32_t+.  The most likely change needed in user
+code for this is with \verb+printf()+, where one would use \verb+%d+
+instead of \verb+%ld+, etc.  The Extra PV data type names were also
+renamed, to have them start with \verb+EXTRA_PV_+ and have the integer
+length in the relevant names.
+
+
+\end{document}
+
+
