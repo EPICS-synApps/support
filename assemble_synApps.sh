@@ -297,7 +297,6 @@ then
 	sed -i 's/TOP = ../TOP = ./g' ./Makefile
 	sed -i 's/TOP = ..\/../TOP = ../g' ./streamApp/Makefile
 	sed -i 's/TOP = ..\/../TOP = ../g' ./src/Makefile
-	sed -i 's/INSTALL_LOCATION = $(TOP)/INSTALL_LOCATION = $(STREAM)/g' ./configure/CONFIG_APP
 	
 	# Comment out PCRE
 	sed -i 's/PCRE=/#PCRE=/g' ./configure/RELEASE
