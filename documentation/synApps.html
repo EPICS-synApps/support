@@ -9,7 +9,7 @@
 
 <body bgcolor="#FFFFFF">
 
-<h1>synApps 5.8</h1>
+<h1>synApps 6.1</h1>
 
 <h1>Table of Contents</h1>
 <ul>
@@ -114,7 +114,7 @@ running Linux, Windows, Cygwin, Solaris, RTEMS, Mac OS, and, no doubt, other
 operating systems.
 
 <li>The 
-<a href="http://www.aps.anl.gov/epics/base/R3-14/12-docs/AppDevGuide">
+<a href="https://epics.anl.gov/base/R3-15/6-docs/AppDevGuide/AppDevGuide.html">
 </i>EPICS Application Developer's Guide<i></a> is an essential reference for
 anyone planning to develop or deploy EPICS software.  While you won't need to
 read the guide to build or run synApps, you will need it to understand what
@@ -137,10 +137,10 @@ you've done, to diagnose problems, and to extend synApps in any significant way.
 <tr><td><b>alive</b><td>Support for collecting, maintaining, and displaying
 	status information about a collection of EPICS IOCs.
 
-<tr><td><b>areaDetector<br>ADcore<br>ADBinaries</b><td>Support for cameras and other 2D detectors.
+<tr><td><b>areaDetector<br>ADcore<br>ADSupport<br>ADSimDetector</br></b><td>Support for cameras and other 2D detectors.
 	areaDetector consists of some core modules, and many detector-specific
 	modules; synApps contains only the top-level directory, <i>areaDetector</i>,
-	and the modules <i>ADCore</i> and <i>ADBinaries</i>.  See
+	and the modules <i>ADCore</i>, <i>ADSupport</i>, and <i>ADSimDetector</i>.  See
 	<a href="https://github.com/areaDetector">areaDetector</a> for more information
 
 <tr><td><b>autosave</b><td>Support for saving software parameters at run time,
@@ -171,6 +171,8 @@ python function, and replaying the series.
 
 <tr><td><b>dxp</b><td>Support for X-Ray Instrumentation Associates's DXP digital
 signal processor
+	
+<tr><td><b>dxpSITORO</b><td>Support for XIA SITORO based FalconX spectrometers 
 
 <tr><td><b>ip</b><td>Support for various serial, and other message-based,
 devices.
@@ -180,6 +182,8 @@ devices.
 <tr><td><b>ipUnidig</b><td>Support for an IndustryPack digital I/O module
 
 <tr><td><b>love</b><td>Support for Love controllers
+	
+<tr><td><b>lua</b><td>Support for Lua scripting language features
 
 <tr><td><b>mca</b><td>Support for multichannel analyzers and multichannel
 	scalers.
@@ -198,6 +202,9 @@ devices.
 
 <tr><td><b>softGlue</b><td>Support for user-programmed "wiring" of custom FPGA
 	content loaded into an Acromag IP-EP201 module.
+	
+<tr><td><b>softGlueZynq</b><td>Support for user-programmed "wiring" of custom FPGA
+	content loaded into a Xilinx Zynq board.
 
 <tr><td><b>sscan</b><td>Support for scans (programmed control and data
 	acquisition).
@@ -219,15 +226,17 @@ devices.
 <tr><td><b>vme</b><td>Support for VME hardware
 
 <tr><td><b>xxx</b><td>Sample user-application directory
+	
+<tr><td><b>Yokogawa_DAS</b><td>Support for the Yokogawa MW100 Digital Acquisition Unit.
 
 </table>
 
 <P>See support/configure/RELEASE for a complete set of compatible module
-versions.  This release of synApps is compatible with EPICS releases 3.14.12.4
-and 3.15.1, vxWorks 5.5 and 6.9, and the following EPICS modules, which are
-produced and maintained by other members of the EPICS collaboration.  These
-modules are not part of synApps, but their maintainers have permitted us to
-distribute copies along with synApps:
+versions.  This release of synApps is compatible with EPICS 3.15 releases, 
+vxWorks 6.9, and the following EPICS modules, which are produced 
+and maintained by other members of the EPICS collaboration.  These modules 
+are not part of synApps, but their maintainers have permitted us to distribute 
+copies along with synApps:
 
 <P><table border>
 <tr><th>Module<th>description
@@ -237,7 +246,7 @@ distribute copies along with synApps:
 <tr><td><b>seq</b><td>for SNL programs in synApps (BESSY)<br>
 source: http://www-csr.bessy.de/control/SoftDist/sequencer
 <tr><td><b>stream</b><td>configurable device support for message-based devices (PSI)<br>
-source: http://epics.web.psi.ch/software/streamdevice.
+source: https://github.com/paulscherrerinstitute/StreamDevice
 
 <tr><td><b>devIocStats</b><td>IOC statistics, replaces vxStats (SLAC)<br>
 source: http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/
@@ -263,7 +272,7 @@ display files, etc.
 Services, and Accelerator Controls groups of the Advanced Photon Source (APS); by developers in
 APS Collaborative Access Teams &ndash; notably, Mark Rivers (CARS-CAT); and by developers in
 the EPICS collaboration outside of the APS &ndash; notably, those at the Diamond Light Source,
-the Berliner Elektronenspeicherring-Gesellschaft für Synchrotronstrahlung (BESSY), the Stanford
+the Berliner Elektronenspeicherring-Gesellschaft fÃ¼r Synchrotronstrahlung (BESSY), the Stanford
 Linear Accelerator Center (SLAC), the Swiss Light Source (SLS)/Paul Scherrer Institut (PSI),
 the National Synchrotron Light Source (NSLS), the Deutsches Elektronen Synchrotron (DESY), the
 Spallation Neutron Source (SNS), the Australian Light Source, and the Canadian Light Source.
@@ -291,6 +300,7 @@ like, synApps contains the following code:
 <tr><td><b>digitel</b><td>vac-module custom record
 <tr><td><b>epid</b><td>Extended version of the PID record, previously in EPICS base.
 	Intended for implementing feedback loops
+<tr><td><b>luarecord</b><td>Record with scriptable behavior
 <tr><td><b>mca</b><td>support for multichannel analyzers, and some other
 	array-valued detectors
 <tr><td><b>motor</b><td>stepper and servo motors, "soft" motor
@@ -338,6 +348,8 @@ like, synApps contains the following code:
 <dt>saveData
 	<dd>Saves scan data to files on an NFS-mounted disk (vxWorks), or to
 	a local disk (other operating systems).
+<dt>lua
+	<dd>Support for running scripts to control the value of standard records
 </dl>
 
 <P><li><h3>Documentation</h3>
@@ -563,7 +575,7 @@ and <code>make rebuild</code>, in the support directory.
 <dt><code>ioc/setup_epics_common</code><br>
 	<dd>set the value of Channel Access variables, such as
 		EPICS_CA_MAX_ARRAY_BYTES. 
-<dt><code>ioc/start_epics_xxx</code><br>
+<dt><code>ioc/start_***_xxx</code><br>
 	<dd>edit to specify the path to the application and display-file directories,
 		and the name of the top-level display file.
 <dt><code>ioc/start_putrecorder</code><br>
@@ -635,14 +647,11 @@ that they don't even remember configuring.
 
 <ul>
 <li>The EPICS extension, <a href="http://www.aps.anl.gov/epics/extensions/msi/index.php">msi</a>,
-    version 1-5 or higher.  This tool is needed to build some softGlue databases.
+    version 1-5 or higher.  If attempting to build with EPICS base 3.14, this tool is needed to 
+    build some softGlue databases, EPICS base 3.15 and above include this as part of base.
 
 <P><li>Linux:
 <dl>
-<dt>libtiff.a,libjpeg.a, libz.a, libsz.a, libNexus.a, libhdf5.a, libnetCDF.a,
-and associated header files<dd>needed for the
-<b>areaDetector</b> module.  Note that versions of these files are included in
-<b>areaDetector</b> for some architectures. 
 <dt>libusb.a, and associated header files<dd>needed for the <b>dxp</b> module
 </dl>
 
@@ -885,19 +894,19 @@ IP carrier and slot into which you've loaded those modules.
 following files will be touched:
 <blockquote>
 <dl>
-<dt><code>xxx/iocBoot/ioc*/st.cmd</code>
+<dt><code>xxx/iocBoot/ioc*/st.cmd.*</code>
 <dd>This is the ioc's startup script, and it loads the other .cmd files 
 
-<P><dt><code>xxx/iocBoot/ioc*/*.cmd</code><br>
-    <code>xxx/iocBoot/ioc*/*.substitutions</code>
-<dd>Other command files that may or may not be invoked by st.cmd
+<P><dt><code>xxx/iocBoot/ioc*/examples/*.iocsh</code><br>
+    <code>xxx/iocBoot/ioc*/substitutions/*.substitutions</code>
+<dd>Example command files that can be invoked by st.cmd
 	
 <P><dt><code>xxx/iocBoot/ioc*/auto_positions.req</code><br>
     <code>xxx/iocBoot/ioc*/auto_settings.req</code>
 <dd>specifies PV's to be saved periodically during operation, and restored
 	automatically when the ioc is rebooted.  (But note that you can have these
 	files constructed for you during the boot process.  See <a
-	href="http://www.aps.anl.gov/bcda/synApps/autosave/autoSaveRestore_R5-5.html#autosaveBuild">autosaveBuild</a>
+	href="https://htmlpreview.github.io/?https://github.com/epics-modules/autosave/blob/R5-10/documentation/autoSaveRestore.html#autosaveBuild">autosaveBuild</a>
 	in the autosave documentation.)
 
 <P><dt><code>xxx/iocBoot/ioc*/saveData.req</code>
@@ -914,13 +923,13 @@ following files will be touched:
 <P><h4>In more detail</h4>
 
 <P><ul>
-<li><code>xxx/iocBoot/ioc*/st.cmd</code>
+<li><code>xxx/iocBoot/ioc*/st.cmd.*</code>
 
 <P>This is the file run by the IOC at boot time.  It loads an executable built in
 the IOC directory (e.g., <code>xxx</code>, or <code>xxx.munch</code>), sets parameters to configure that
 software, makes calls to that software to configure it for a particular set of
-hardware, and loads databases from synApps modules.  Mostly, it sources other
-.cmd files that do these same things.
+hardware, and loads databases from synApps modules.  Mostly, it sources ioc shell
+files that do these same things.
 
 <P>This file, and the files it sources, are probably worth studying.  They are
 reasonably well commented, and contain <code>dbLoadRecords()</code> commands for most of
@@ -947,9 +956,9 @@ motors, and restore them when the crate reboots, add lines to the files
 <P><li>Slits
 
 <P>To use a pair of motors to control a slit, search for <code>2slit.db</code>
-in <code>xxx/iocBoot/ioc*/st.cmd</code>, and edit the
+in <code>xxx/iocBoot/ioc*/examples/optics.iocsh</code>, and edit the
 <code>dbLoadRecords()</code> command you'll find there.  The example in
-<code>st.cmd</code> loads two copies of <code>2slit.db</code> intended for use
+<code>optics.iocsh</code> loads two copies of <code>2slit.db</code> intended for use
 as the horizontal and vertical members of a four-jaw slit.  The MEDM displays
 <code>2slit*.adl</code> and <code>4slit*.adl</code> are involved in these
 applications.
@@ -1199,15 +1208,15 @@ include with the array.  On a Unix system, for example, you might say
 
 	<pre>setenv EPICS_CA_MAX_ARRAY_BYTES 64008</pre>
 
-in the IOC's st.cmd file, you'd say
+in the IOC's common.iocsh file, you'd say
 
-	<pre>putenv "EPICS_CA_MAX_ARRAY_BYTES=64008"</pre>
+	<pre>epicsEnvSet("EPICS_CA_MAX_ARRAY_BYTES", 64008)</pre>
 
 This will permit scans of up to 8000 points (8000 doubles * 8 bytes per double +
 8 bytes for channel-access overhead), and mca spectra of up to 16000 channels.
 
 <P>To bring up the top-level MEDM display for synApps software, cd to xxx and type
-"start_epics_xxx" (e.g., start_epics_1bma).  This script locates the
+"start_MEDM_xxx" (e.g., start_MEDM_1bma).  This script locates the
 directories that might have MEDM-display files and includes them in the
 environment variable EPICS_DISPLAY_PATH, cd's to xxxApp/op/adl, and runs MEDM
 with the default top-level display file.
@@ -1223,7 +1232,7 @@ in MEDM.)
 
 <P>caQtDM implements a search path list very much as in MEDM, so we can use the
 same technique to autogenerate that path from an application's configure/RELEASE
-file.  Edit the file <code>xxx/start_caQtDM</code> so it sets the environment
+file.  Edit the file <code>xxx/start_caQtDM_xxx</code> so it sets the environment
 variables <code>EPICS_APP</code> and <code>EPICS_APP_UI_DIR</code>.  Here's an
 example:
 
@@ -1258,7 +1267,9 @@ writes will be owned by the owner of the directory instead of by
     <pre>chmod a+w,g+s autosave</pre>
 
 <P>If you are using autosaveBuild, you must give a vxWorks IOC write permission
-to xxx/iocBoot/ioc*, so that it can write request files it builds.  Also, you
+to the directory where it builds the autosave files. The default IOC builds these
+files in the autosave directory, so there isn't any need to change further permissions,
+only if you change common.iocsh to change the build location. Also, you
 must use a version of vxWorks that can append to files via NFS.  vxWorks 6.9.4.1
 works.
 
@@ -1390,7 +1401,7 @@ can write software to automate that task using caputRecorder:
 <P>End users know better than anybody what they want in a graphical user
 interface.  One thing they've demonstrated that they want is the ability to have
 some control over the user interface without having to specify every little
-detail to a programmer. MEDM provides end users with the ability easily to
+detail to a programmer. MEDM/caQtDM/CSS-Boy provides end users with the ability easily to
 create custom displays, and  synApps provides over 800 user-interface files that
 can be copied from, called up from, or included as part of a user crafted
 display.
@@ -1881,6 +1892,8 @@ record types intended for end users to program at run time.
 <hr>
 <address> 
     Suggestions and Comments to: <br> 
+	<a href="mailto:klang@anl.gov">Keenan Lang</a>: 
+	(klang@anl.gov) or <br>
     <a href="mailto:mooney@aps.anl.gov">Tim Mooney </a>:
     (mooney@aps.anl.gov) <br> 
 	Beamline Controls & Data Acquisition Group<br>
