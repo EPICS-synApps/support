@@ -184,6 +184,9 @@ then
 
 get_repo  areaDetector  areaDetector  AREA_DETECTOR  $AREA_DETECTOR
 
+echo "ADCORE=\$(AREA_DETECTOR)/ADCore" >> configure/RELEASE
+echo "ADSUPPORT=\$(AREA_DETECTOR)/ADSupport" >> configure/RELEASE
+
 cd areaDetector-$AREA_DETECTOR
 git submodule init
 git submodule update ADCore
@@ -216,6 +219,8 @@ echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.vxWorks
 # linux-arm has X11 and other issues
 echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
 echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
+echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.linux-x86.linux-arm
+echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.linux-x86.linux-arm
 
 # We are still using Epics v3
 sed -i s:'WITH_PVA  = YES':'WITH_PVA = NO':g CONFIG_SITE.local
@@ -235,6 +240,16 @@ if [[ $DXP ]]
 then
 	cd dxp-$DXP
 	echo "LINUX_USB_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86_64.linux-arm
+	echo "LINUX_USB_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86.linux-arm
+	cd ..
+fi
+
+if [[ $IPAC ]]
+then
+	cd ipac-${IPAC//./-}
+  echo "-include \$(TOP)/../RELEASE.local" >> ./configure/RELEASE
+  echo "-include \$(TOP)/../RELEASE.\$(EPICS_HOST_ARCH).local" >> ./configure/RELEASE
+  echo "-include \$(TOP)/configure/RELEASE.local" >> ./configure/RELEASE
 	cd ..
 fi
 
@@ -242,6 +257,7 @@ if [[ $MCA ]]
 then
 	cd mca-$MCA
 	echo "LINUX_LIBUSB-1.0_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86_64.linux-arm
+	echo "LINUX_LIBUSB-1.0_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86.linux-arm
 	cd ..
 fi
 
@@ -272,6 +288,9 @@ then
 	
 	echo "SSCAN=" >> ./configure/RELEASE
 	echo "STREAM=" >> ./configure/RELEASE
+  echo "-include \$(TOP)/../RELEASE.local" >> ./configure/RELEASE
+  echo "-include \$(TOP)/../RELEASE.\$(EPICS_HOST_ARCH).local" >> ./configure/RELEASE
+  echo "-include \$(TOP)/configure/RELEASE.local" >> ./configure/RELEASE
 	sed -i 's/#PROD_LIBS += sscan/PROD_LIBS += sscan/g' ./streamApp/Makefile
 	cd ..
 fi
@@ -299,7 +318,13 @@ wget http://www.aps.anl.gov/epics/download/modules/allenBradley-$ALLENBRADLEY.ta
 tar xf allenBradley-$ALLENBRADLEY.tar.gz
 mv allenBradley-$ALLENBRADLEY allenBradley-${ALLENBRADLEY//./-}
 rm -f allenBradley-$ALLENBRADLEY.tar.gz
-echo "ALLEN_BRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY//./-}" >> ./configure/RELEASE
+ALLENBRADLEY=${ALLENBRADLEY//./-}
+echo "ALLEN_BRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY}" >> ./configure/RELEASE
+cd allenBradley-$ALLENBRADLEY
+echo "-include \$(TOP)/../RELEASE.local" >> ./configure/RELEASE
+echo "-include \$(TOP)/../RELEASE.\$(EPICS_HOST_ARCH).local" >> ./configure/RELEASE
+echo "-include \$(TOP)/configure/RELEASE.local" >> ./configure/RELEASE
+cd ..
 
 fi
 
