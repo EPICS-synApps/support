@@ -184,6 +184,9 @@ then
 
 get_repo  areaDetector  areaDetector  AREA_DETECTOR  $AREA_DETECTOR
 
+echo "ADCORE=\$(AREA_DETECTOR)/ADCore" >> configure/RELEASE
+echo "ADSUPPORT=\$(AREA_DETECTOR)/ADSupport" >> configure/RELEASE
+
 cd areaDetector-$AREA_DETECTOR
 git submodule init
 git submodule update ADCore
@@ -198,7 +201,14 @@ cp EXAMPLE_commonPlugin_settings.req commonPlugin_settings.req
 cd ../..
 
 cd configure
-cp EXAMPLE_CONFIG_SITE.local CONFIG_SITE.local
+cp EXAMPLE_CONFIG_SITE.local       CONFIG_SITE.local
+cp EXAMPLE_CONFIG_SITE.local.WIN32 CONFIG_SITE.local.WIN32
+# make release will give the correct paths for these files, so we just need to rename them
+cp EXAMPLE_RELEASE_PRODS.local     RELEASE_PRODS.local
+cp EXAMPLE_RELEASE_LIBS.local      RELEASE_LIBS.local
+cp EXAMPLE_RELEASE_SUPPORT.local   RELEASE_SUPPORT.local
+cp EXAMPLE_RELEASE_BASE.local      RELEASE_BASE.local
+cp EXAMPLE_RELEASE.local           RELEASE.local
 
 # vxWorks has pthread and other issues
 echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.vxWorks
@@ -209,56 +219,20 @@ echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.vxWorks
 # linux-arm has X11 and other issues
 echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
 echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
+echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.linux-x86.linux-arm
+echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.linux-x86.linux-arm
 
 # We are still using Epics v3
-echo 'WITH_PVA = NO' >> CONFIG_SITE.local.linux-x86_64
-echo 'WITH_PVA = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
-echo 'WITH_PVA = NO' >> CONFIG_SITE.local.vxWorks
-echo 'WITH_PVA = NO' >> CONFIG_SITE.local.win32-x86
-echo 'WITH_PVA = NO' >> CONFIG_SITE.local.windows-x64
-echo 'WITH_PVA = NO' >> CONFIG_SITE.local.win32-x86-static
-echo 'WITH_PVA = NO' >> CONFIG_SITE.local.windows-x64-static
+sed -i s:'WITH_PVA  = YES':'WITH_PVA = NO':g CONFIG_SITE.local
+sed -i s:'WITH_QSRV = YES':'WITH_QSRV = NO':g CONFIG_SITE.local
 
-# We are still using Epics v3
-echo 'WITH_QSRV = NO' >> CONFIG_SITE.local.linux-x86_64
-echo 'WITH_QSRV = NO' >> CONFIG_SITE.local.vxWorks
-echo 'WITH_QSRV = NO' >> CONFIG_SITE.local.win32-x86
-echo 'WITH_QSRV = NO' >> CONFIG_SITE.local.windows-x64
-echo 'WITH_QSRV = NO' >> CONFIG_SITE.local.win32-x86-static
-echo 'WITH_QSRV = NO' >> CONFIG_SITE.local.windows-x64-static
-
-# DBD files aren't separated between architectures, so there are issues building
-echo 'BUILD_IOCS = NO' >> CONFIG_SITE.local.linux-x86_64
-echo 'BUILD_IOCS = NO' >> CONFIG_SITE.local.vxWorks
-echo 'BUILD_IOCS = NO' >> CONFIG_SITE.local.win32-x86
-echo 'BUILD_IOCS = NO' >> CONFIG_SITE.local.windows-x64
-echo 'BUILD_IOCS = NO' >> CONFIG_SITE.local.win32-x86-static
-echo 'BUILD_IOCS = NO' >> CONFIG_SITE.local.windows-x64-static
-
-#HDF5 flag for windows
-echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)' >> CONFIG_SITE.local.win32-x86
-echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)' >> CONFIG_SITE.local.win32-x86-static
-echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)' >> CONFIG_SITE.local.windows-x64
-echo 'HDF5_STATIC_BUILD=$(STATIC_BUILD)' >> CONFIG_SITE.local.windows-x64-static
-
-#Can't just use default RELEASE.local because it has simDetector commented out
-echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector' >> RELEASE.local
-echo 'ADSUPPORT=$(AREA_DETECTOR)/ADSupport' >> RELEASE.local
-echo '-include $(TOP)/configure/RELEASE_PRODS.local' >> RELEASE.local
-echo '-include $(TOP)/configure/RELEASE.local.$(EPICS_HOST_ARCH)' >> RELEASE.local
+# Enable building ADSimDetector
+sed -i s:'#ADSIMDETECTOR':'ADSIMDETECTOR':g RELEASE.local
 
 echo "SUPPORT=$SUPPORT" >> RELEASE_SUPPORT.local
 echo "EPICS_BASE=$EPICS_BASE" >> RELEASE_BASE.local
 
-# make release will give the correct paths for these files, so we just need to rename them
-cp EXAMPLE_RELEASE_PRODS.local RELEASE_PRODS.local
-cp EXAMPLE_RELEASE_LIBS.local RELEASE_LIBS.local
-
 cd ../..
-
-echo 'ADCORE=$(AREA_DETECTOR)/ADCore' >> ./configure/RELEASE
-echo 'ADSUPPORT=$(AREA_DETECTOR)/ADSupport' >> ./configure/RELEASE
-echo 'ADSIMDETECTOR=$(AREA_DETECTOR)/ADSimDetector' >> ./configure/RELEASE
 
 fi
 
@@ -266,6 +240,16 @@ if [[ $DXP ]]
 then
 	cd dxp-$DXP
 	echo "LINUX_USB_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86_64.linux-arm
+	echo "LINUX_USB_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86.linux-arm
+	cd ..
+fi
+
+if [[ $IPAC ]]
+then
+	cd ipac-${IPAC//./-}
+  echo "-include \$(TOP)/../RELEASE.local" >> ./configure/RELEASE
+  echo "-include \$(TOP)/../RELEASE.\$(EPICS_HOST_ARCH).local" >> ./configure/RELEASE
+  echo "-include \$(TOP)/configure/RELEASE.local" >> ./configure/RELEASE
 	cd ..
 fi
 
@@ -273,6 +257,7 @@ if [[ $MCA ]]
 then
 	cd mca-$MCA
 	echo "LINUX_LIBUSB-1.0_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86_64.linux-arm
+	echo "LINUX_LIBUSB-1.0_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86.linux-arm
 	cd ..
 fi
 
@@ -303,6 +288,9 @@ then
 	
 	echo "SSCAN=" >> ./configure/RELEASE
 	echo "STREAM=" >> ./configure/RELEASE
+  echo "-include \$(TOP)/../RELEASE.local" >> ./configure/RELEASE
+  echo "-include \$(TOP)/../RELEASE.\$(EPICS_HOST_ARCH).local" >> ./configure/RELEASE
+  echo "-include \$(TOP)/configure/RELEASE.local" >> ./configure/RELEASE
 	sed -i 's/#PROD_LIBS += sscan/PROD_LIBS += sscan/g' ./streamApp/Makefile
 	cd ..
 fi
@@ -330,7 +318,13 @@ wget http://www.aps.anl.gov/epics/download/modules/allenBradley-$ALLENBRADLEY.ta
 tar xf allenBradley-$ALLENBRADLEY.tar.gz
 mv allenBradley-$ALLENBRADLEY allenBradley-${ALLENBRADLEY//./-}
 rm -f allenBradley-$ALLENBRADLEY.tar.gz
-echo "ALLEN_BRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY//./-}" >> ./configure/RELEASE
+ALLENBRADLEY=${ALLENBRADLEY//./-}
+echo "ALLEN_BRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY}" >> ./configure/RELEASE
+cd allenBradley-$ALLENBRADLEY
+echo "-include \$(TOP)/../RELEASE.local" >> ./configure/RELEASE
+echo "-include \$(TOP)/../RELEASE.\$(EPICS_HOST_ARCH).local" >> ./configure/RELEASE
+echo "-include \$(TOP)/configure/RELEASE.local" >> ./configure/RELEASE
+cd ..
 
 fi
 
