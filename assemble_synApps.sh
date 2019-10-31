@@ -228,6 +228,7 @@ sed -i s:'WITH_QSRV = YES':'WITH_QSRV = NO':g CONFIG_SITE.local
 
 # Enable building ADSimDetector
 sed -i s:'#ADSIMDETECTOR':'ADSIMDETECTOR':g RELEASE.local
+echo "-include \$(TOP)/configure/RELEASE_PRODS.local" >> RELEASE.local
 
 echo "SUPPORT=$SUPPORT" >> RELEASE_SUPPORT.local
 echo "EPICS_BASE=$EPICS_BASE" >> RELEASE_BASE.local
