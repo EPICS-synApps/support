@@ -8,49 +8,52 @@
 #       for the inter-dependencies of the different modules.
 
 SUPPORT=/home/oxygen/MOONEY/epics/synApps/support
--include $(TOP)/configure/SUPPORT.$(EPICS_HOST_ARCH)
 #EPICS_BASE=/home/oxygen/MOONEY/epics/bazaar/base-3.14
 #EPICS_BASE=/home/oxygen/MOONEY/epics/bazaar/base-3.15
 #EPICS_BASE=/APSshare/epics/base-3.14.12.4
 EPICS_BASE=/home/oxygen/MOONEY/epics/base-3.15.5
--include $(TOP)/configure/EPICS_BASE 
--include $(TOP)/configure/EPICS_BASE.$(EPICS_HOST_ARCH) 
 
 #/usr/local/iocapps/cvsroot/modules/bus/allenBradley
-ALIVE=$(SUPPORT)/alive-1-1-0
+ALIVE=$(SUPPORT)/alive-1-1-1
 # http://www.aps.anl.gov/epics/modules/bus/allenBradley
 ALLEN_BRADLEY=$(SUPPORT)/allenBradley-2-3
-AREA_DETECTOR=$(SUPPORT)/areaDetector-3-3-2
+AREA_DETECTOR=$(SUPPORT)/areaDetector-3-7
 ADCORE=$(AREA_DETECTOR)/ADCore
 ADSUPPORT=$(AREA_DETECTOR)/ADSupport
-ASYN=$(SUPPORT)/asyn-4-33
-AUTOSAVE=$(SUPPORT)/autosave-5-9
-BUSY=$(SUPPORT)/busy-1-7
-CALC=$(SUPPORT)/calc-3-7-1
+ASYN=$(SUPPORT)/asyn-4-37
+AUTOSAVE=$(SUPPORT)/autosave-5-10
+BUSY=$(SUPPORT)/busy-1-7-2
+CALC=$(SUPPORT)/calc-3-7-3
 CAMAC=$(SUPPORT)/camac-2-7-1
-CAPUTRECORDER=$(SUPPORT)/caputRecorder-1-7-1
+CAPUTRECORDER=$(SUPPORT)/caputRecorder-1-7-2
 DAC128V=$(SUPPORT)/dac128V-2-9
-DELAYGEN=$(SUPPORT)/delaygen-1-2-0
-DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-14
-DXP=$(SUPPORT)/dxp-5-0
-IP=$(SUPPORT)/ip-2-19-1
+DELAYGEN=$(SUPPORT)/delaygen-1-2-1
+DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-16
+DXP=$(SUPPORT)/dxp-6-0
+IP=$(SUPPORT)/ip-2-20-1
 IP330=$(SUPPORT)/ip330-2-9
 IPAC=$(SUPPORT)/ipac-2-15
 IPUNIDIG=$(SUPPORT)/ipUnidig-2-11
-LOVE=$(SUPPORT)/love-3-2-5
-MCA=$(SUPPORT)/mca-7-7
-MEASCOMP=$(SUPPORT)/measComp-2-1-1
-MODBUS=$(SUPPORT)/modbus-2-11
-MOTOR=$(SUPPORT)/motor-6-10-1
-OPTICS=$(SUPPORT)/optics-2-13-1
-QUADEM=$(SUPPORT)/quadEM-9-1
+LOVE=$(SUPPORT)/love-3-2-7
+MCA=$(SUPPORT)/mca-7-8
+MEASCOMP=$(SUPPORT)/measComp-2-3
+MODBUS=$(SUPPORT)/modbus-3-0
+MOTOR=$(SUPPORT)/motor-7-1
+OPTICS=$(SUPPORT)/optics-2-13-3
+QUADEM=$(SUPPORT)/quadEM-9-2-1
 #http://www-csr.bessy.de/control/SoftDist/sequencer
-SNCSEQ=$(SUPPORT)/seq-2-2-4
-SOFTGLUE=$(SUPPORT)/softGlue-2-8-1
-SSCAN=$(SUPPORT)/sscan-2-11-1
-STD=$(SUPPORT)/std-3-5
+SNCSEQ=$(SUPPORT)/seq-2-2-6
+SOFTGLUE=$(SUPPORT)/softGlue-2-8-2
+SSCAN=$(SUPPORT)/sscan-2-11-3
+STD=$(SUPPORT)/std-3-6
 #http://epics.web.psi.ch/software/streamdevice/
-STREAM=$(SUPPORT)/stream-2-7-7b
-VAC=$(SUPPORT)/vac-1-8
-VME=$(SUPPORT)/vme-2-9
-XXX=$(SUPPORT)/xxx-6-0
+STREAM=$(SUPPORT)/stream-2-8-9
+VAC=$(SUPPORT)/vac-1-9
+VME=$(SUPPORT)/vme-2-9-2
+XXX=$(SUPPORT)/xxx-6-1
+
+# These lines allow developers to override these RELEASE settings
+# without having to modify this file directly.
+-include $(TOP)/RELEASE.local
+-include $(TOP)/RELEASE.$(EPICS_HOST_ARCH).local
+-include $(TOP)/configure/RELEASE.local
