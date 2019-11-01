@@ -51,6 +51,6 @@ endif
 
 build install : $(UIs) $(EDLs) $(OPIs)
 
-realclean clean :
+realclean :
 	$(RM) $(UIs) $(EDLs) $(OPIs)
 
