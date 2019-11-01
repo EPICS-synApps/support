@@ -10,8 +10,8 @@ DOCUMENTATION=R6-1
 
 ALLENBRADLEY=2.3
 ALIVE=R1-1-1
-AREA_DETECTOR=R3-7
-ASYN=R4-36
+AREA_DETECTOR=master
+ASYN=R4-37
 AUTOSAVE=R5-10
 BUSY=R1-7-2
 CALC=R3-7-3
@@ -206,8 +206,6 @@ cp EXAMPLE_CONFIG_SITE.local.WIN32 CONFIG_SITE.local.WIN32
 # make release will give the correct paths for these files, so we just need to rename them
 cp EXAMPLE_RELEASE_PRODS.local     RELEASE_PRODS.local
 cp EXAMPLE_RELEASE_LIBS.local      RELEASE_LIBS.local
-cp EXAMPLE_RELEASE_SUPPORT.local   RELEASE_SUPPORT.local
-cp EXAMPLE_RELEASE_BASE.local      RELEASE_BASE.local
 cp EXAMPLE_RELEASE.local           RELEASE.local
 
 # vxWorks has pthread and other issues
