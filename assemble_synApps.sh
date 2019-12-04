@@ -1,10 +1,44 @@
 #!/bin/bash
 shopt -s expand_aliases
 
+# Command-line arguments
+args=$*
+# Flags set by command-line arguments
+FULL_CLONE=False
+CONFIG_SOURCED=False
+
+# Handle command-line arguments
+for arg in ${args}
+do
+  if [ ${arg} == "full" ]
+  then
+    FULL_CLONE=True
+  else
+    if [ -e ${arg} ]
+    then
+      echo "Sourcing ${arg}"
+      source ${arg}
+      CONFIG_SOURCED=True
+    else
+      echo "${arg} does not exist."
+    fi
+  fi
+done
+
+echo "FULL_CLONE = ${FULL_CLONE}"
+
+if [ ${CONFIG_SOURCED} == "False" ]
+then
+echo "Using default configuration"
+
 EPICS_BASE=/APSshare/epics/base-3.15.6
 
+# The name of the synApps directory can be customized
+#!SYNAPPS_DIR=synApps_X_X
+
 SUPPORT=R6-1
-CONFIGURE=R6-1
+#!CONFIGURE=R6-1
+CONFIGURE=master
 UTILS=R6-1
 DOCUMENTATION=R6-1
 
@@ -46,7 +80,7 @@ VAC=R1-9
 VME=R2-9-2
 YOKOGAWA_DAS=R2-0-1
 XXX=R6-1
-
+fi
 
 
 shallow_repo()
@@ -109,18 +143,26 @@ full_support()
 	cd ..
 }
 
-alias get_support='shallow_support'
-alias get_repo='shallow_repo'
 
-if [ "$1" == "full" ]; then
+if [ ${FULL_CLONE} == "True" ]
+then
 	alias get_support='full_support'
 	alias get_repo='full_repo'
+else
+	# A shallow clone is the default
+	alias get_support='shallow_support'
+	alias get_repo='shallow_repo'
+fi
+
+if [ -z "${SYNAPPS_DIR}" ]
+then
+SYNAPPS_DIR=synApps
 fi
 
 
 # Assume user has nothing but this file, just in case that's true.
-mkdir synApps
-cd synApps
+mkdir ${SYNAPPS_DIR}
+cd ${SYNAPPS_DIR}
 
 get_support support $SUPPORT
 cd support
