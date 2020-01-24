@@ -1,8 +1,7 @@
-# These are needed only to convert adl files to ui, edl, and opi
+# These are needed only to convert adl files to ui, edl, opi, and bob
 # Uncomment these definitions if you want to run make in the op/ directories.
 # Define these as the full paths to the executables if they are not in the PATH
 #ADL2UI = adl2ui
 #ADL2EDL = adl2edl
 #CSS = css -nosplash -application org.csstudio.opibuilder.adl2boy.application
-
-LINUX_NET_INSTALLED = NO
+#PHOEBUS = phoebus -main org.csstudio.display.converter.medm.Converter -output bob/autoconvert
