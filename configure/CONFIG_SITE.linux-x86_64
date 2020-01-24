@@ -4,4 +4,4 @@
 #ADL2UI = adl2ui
 #ADL2EDL = adl2edl
 #CSS = css -nosplash -application org.csstudio.opibuilder.adl2boy.application
-#PHOEBUS = phoebus -main org.csstudio.display.converter.medm.Converter -output bob/autoconvert
+#PHOEBUS = phoebus -main org.csstudio.display.converter.medm.Converter
