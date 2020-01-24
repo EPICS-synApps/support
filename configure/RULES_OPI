@@ -52,11 +52,11 @@ endif
 ifdef PHOEBUS
 BOBs := $(subst $(ADL_DIR),$(BOB_DIR),$(ADLs:.adl=.bob))
 $(BOB_DIR)%.bob: $(ADL_DIR)%.adl
-	$(PHOEBUS) $<
+	$(PHOEBUS) -output $(BOB_DIR) $<
 endif
 
 build install : $(UIs) $(EDLs) $(OPIs) $(BOBs)
 
 realclean :
-	$(RM) $(UIs) $(EDLs) $(OPIs) ($BOBs)
+	$(RM) $(UIs) $(EDLs) $(OPIs) $(BOBs)
 
