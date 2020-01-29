@@ -57,6 +57,18 @@ endif
 
 build install : $(UIs) $(EDLs) $(OPIs) $(BOBs)
 
-realclean :
+clean.ui :
+	$(RM) $(UIs)
+
+clean.edl :
+	$(RM) $(EDLs)
+
+clean.opi :
+	$(RM) $(OPIs)
+
+clean.bob :
+	$(RM) $(BOBs)
+	
+opiclean :
 	$(RM) $(UIs) $(EDLs) $(OPIs) $(BOBs)
 
