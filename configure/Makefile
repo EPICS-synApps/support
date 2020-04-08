@@ -30,6 +30,7 @@ ifdef T_A
 endif
 
 CFG += CONFIG_REQ
+CFG += CONFIG_IOCSH
 
 include $(TOP)/configure/RULES
 
