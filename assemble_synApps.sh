@@ -344,6 +344,16 @@ mv seq-$SNCSEQ seq-${SNCSEQ//./-}
 rm -f seq-$SNCSEQ.tar.gz
 echo "SNCSEQ=\$(SUPPORT)/seq-${SNCSEQ//./-}" >> ./configure/RELEASE
 
+if [[ $CALC ]]
+then
+
+# Uncomment sseq support in calc
+cd calc-$CALC
+sed -i s:'#SNCSEQ':'SNCSEQ':g configure/RELEASE
+cd ..
+
+fi
+
 fi
 
 
