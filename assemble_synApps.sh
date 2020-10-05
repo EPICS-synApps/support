@@ -33,6 +33,9 @@ echo "Using default configuration"
 
 EPICS_BASE=/APSshare/epics/base-3.15.6
 
+HAVE_HIDAPI=NO
+WITH_PVA=YES
+
 # The name of the synApps directory can be customized
 #!SYNAPPS_DIR=synApps_X_X
 
@@ -262,9 +265,11 @@ echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
 echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.linux-x86.linux-arm
 echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.linux-x86.linux-arm
 
-# We are still using Epics v3
-sed -i s:'WITH_PVA  = YES':'WITH_PVA = NO':g CONFIG_SITE.local
-sed -i s:'WITH_QSRV = YES':'WITH_QSRV = NO':g CONFIG_SITE.local
+if [ $(WITH_PVA) == "YES" ]
+then
+	sed -i s:'WITH_PVA  = YES':'WITH_PVA = NO':g CONFIG_SITE.local
+	sed -i s:'WITH_QSRV = YES':'WITH_QSRV = NO':g CONFIG_SITE.local
+fi
 
 # Enable building ADSimDetector
 sed -i s:'#ADSIMDETECTOR':'ADSIMDETECTOR':g RELEASE.local
@@ -296,6 +301,16 @@ then
 	echo "LINUX_LIBUSB-1.0_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86_64.linux-arm
 	echo "LINUX_LIBUSB-1.0_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86.linux-arm
 	cd ..
+fi
+
+if [[ $MEASCOMP ]]
+then
+	if [ $(HAVE_HIDAPI) == "NO" ]
+	then
+		cd measComp-$MEASCOMP
+		sed -i 's/HAVE_HIDAPI=YES/HAVE_HIDAPI=NO/g' ./CONFIG_SITE*
+		cd ..
+	fi
 fi
 
 if [[ $MOTOR ]]
