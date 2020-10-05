@@ -14,43 +14,45 @@ SUPPORT=/home/oxygen/MOONEY/epics/synApps/support
 EPICS_BASE=/home/oxygen/MOONEY/epics/base-3.15.5
 
 #/usr/local/iocapps/cvsroot/modules/bus/allenBradley
-ALIVE=$(SUPPORT)/alive-1-1-1
+ALIVE=$(SUPPORT)/alive-R1-3-1
 # http://www.aps.anl.gov/epics/modules/bus/allenBradley
 ALLEN_BRADLEY=$(SUPPORT)/allenBradley-2-3
-AREA_DETECTOR=$(SUPPORT)/areaDetector-3-7
+AREA_DETECTOR=$(SUPPORT)/areaDetector-R3-10
 ADCORE=$(AREA_DETECTOR)/ADCore
 ADSUPPORT=$(AREA_DETECTOR)/ADSupport
-ASYN=$(SUPPORT)/asyn-4-37
-AUTOSAVE=$(SUPPORT)/autosave-5-10
-BUSY=$(SUPPORT)/busy-1-7-2
-CALC=$(SUPPORT)/calc-3-7-3
+ASYN=$(SUPPORT)/asyn-R4-41
+AUTOSAVE=$(SUPPORT)/autosave-R5-10-2
+BUSY=$(SUPPORT)/busy-R1-7-3
+CALC=$(SUPPORT)/calc-R3-7-4
 CAMAC=$(SUPPORT)/camac-2-7-1
-CAPUTRECORDER=$(SUPPORT)/caputRecorder-1-7-2
+CAPUTRECORDER=$(SUPPORT)/caputRecorder-R1-7-3
 DAC128V=$(SUPPORT)/dac128V-2-9
-DELAYGEN=$(SUPPORT)/delaygen-1-2-1
+DELAYGEN=$(SUPPORT)/delaygen-R1-2-2
 DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-16
-DXP=$(SUPPORT)/dxp-6-0
-IP=$(SUPPORT)/ip-2-20-1
+DXP=$(SUPPORT)/dxp-R6-0
+IP=$(SUPPORT)/ip-R2-21
 IP330=$(SUPPORT)/ip330-2-9
 IPAC=$(SUPPORT)/ipac-2-15
 IPUNIDIG=$(SUPPORT)/ipUnidig-2-11
-LOVE=$(SUPPORT)/love-3-2-7
+LOVE=$(SUPPORT)/love-R3-2-8
+LUA=$(SUPPORT)/lua-R3-0-1
 MCA=$(SUPPORT)/mca-7-8
 MEASCOMP=$(SUPPORT)/measComp-2-3
 MODBUS=$(SUPPORT)/modbus-3-0
-MOTOR=$(SUPPORT)/motor-7-1
-OPTICS=$(SUPPORT)/optics-2-13-3
+MOTOR=$(SUPPORT)/motor-R7-2-1
+OPTICS=$(SUPPORT)/optics-R2-13-5
 QUADEM=$(SUPPORT)/quadEM-9-2-1
 #http://www-csr.bessy.de/control/SoftDist/sequencer
-SNCSEQ=$(SUPPORT)/seq-2-2-6
-SOFTGLUE=$(SUPPORT)/softGlue-2-8-2
-SSCAN=$(SUPPORT)/sscan-2-11-3
-STD=$(SUPPORT)/std-3-6
+SNCSEQ=$(SUPPORT)/seq-2-2-8
+SOFTGLUE=$(SUPPORT)/softGlue-R2-8-3
+SOFTGLUEZYNQ=($(SUPPORT)/softGlueZynq-R2-0-3
+SSCAN=$(SUPPORT)/sscan-R2-11-4
+STD=$(SUPPORT)/std-R3-6-2
 #http://epics.web.psi.ch/software/streamdevice/
-STREAM=$(SUPPORT)/stream-2-8-9
-VAC=$(SUPPORT)/vac-1-9
-VME=$(SUPPORT)/vme-2-9-2
-XXX=$(SUPPORT)/xxx-6-1
+STREAM=$(SUPPORT)/stream-2-8-16
+VAC=$(SUPPORT)/vac-R1-9-1
+VME=$(SUPPORT)/vme-R2-9-3
+XXX=$(SUPPORT)/xxx-6-2
 
 # These lines allow developers to override these RELEASE settings
 # without having to modify this file directly.
