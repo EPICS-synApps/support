@@ -85,6 +85,7 @@ MODULE_LIST += VAC
 MODULE_LIST += VME 
 MODULE_LIST += XXX
 MODULE_LIST += YOKOGAWA_DAS 
+MODULE_LIST += XSPRESS3
 
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
