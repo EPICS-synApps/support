@@ -224,6 +224,8 @@ devices.
 <tr><td><b>vac</b><td>Support for vacuum controllers
 
 <tr><td><b>vme</b><td>Support for VME hardware
+	
+<tr><td><b>xspress3</b><td>Support for Quantum Detectors Xpress3 Hardware
 
 <tr><td><b>xxx</b><td>Sample user-application directory
 	
@@ -232,7 +234,7 @@ devices.
 </table>
 
 <P>See support/configure/RELEASE for a complete set of compatible module
-versions.  This release of synApps is compatible with EPICS 3.15 releases, 
+versions.  This release of synApps is compatible with EPICS 3.15 (and above) releases, 
 vxWorks 6.9, and the following EPICS modules, which are produced 
 and maintained by other members of the EPICS collaboration.  These modules 
 are not part of synApps, but their maintainers have permitted us to distribute 
@@ -348,7 +350,7 @@ like, synApps contains the following code:
 <dt>saveData
 	<dd>Saves scan data to files on an NFS-mounted disk (vxWorks), or to
 	a local disk (other operating systems).
-<dt>lua
+<dt>luascript
 	<dd>Support for running scripts to control the value of standard records
 </dl>
 
@@ -470,10 +472,10 @@ synApps_X_X/ioc/
                 &lt;much like ioc1bma&gt;
         release.pl
         setup_epics_common              <&mdash; EDIT to run user interface
-        start_epics_1bma                <&mdash; EDIT to run user interface
-        start_epics_1bmb                <&mdash; EDIT to run user interface
-        start_epics_1bmc                <&mdash; EDIT to run user interface
-        start_epics_1bmd                <&mdash; EDIT to run user interface
+        start_MEDM_1bma                 <&mdash; EDIT to run user interface
+        start_MEDM_1bmb                 <&mdash; EDIT to run user interface
+	start_MEDM_1bmc                 <&mdash; EDIT to run user interface
+	start_MEDM_1bmd                 <&mdash; EDIT to run user interface
         start_putrecorder               <&mdash; EDIT to use caputRecorder
         1bmaApp/
         1bmbApp/
