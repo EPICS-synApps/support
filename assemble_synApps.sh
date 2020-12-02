@@ -81,6 +81,7 @@ STREAM=2.8.16
 VAC=R1-9-1
 VME=R2-9-3
 YOKOGAWA_DAS=R2-0-1
+XSPRESS3=R2-5
 XXX=master
 fi
 
@@ -219,6 +220,7 @@ if [[ $STD ]];           then   get_repo epics-modules          std            S
 if [[ $STREAM ]];        then   get_repo paulscherrerinstitute  StreamDevice   STREAM         $STREAM        ; fi
 if [[ $VAC ]];           then   get_repo epics-modules          vac            VAC            $VAC           ; fi
 if [[ $VME ]];           then   get_repo epics-modules          vme            VME            $VME           ; fi
+if [[ $XSPRESS3 ]];      then   get_repo epics-modules          xspress3       XSPRESS3       $XSPRESS3      ; fi
 if [[ $YOKOGAWA_DAS ]];  then   get_repo epics-modules          Yokogawa_DAS   YOKOGAWA_DAS   $YOKOGAWA_DAS  ; fi
 if [[ $XXX ]];           then   get_repo epics-modules          xxx            XXX            $XXX           ; fi
 
