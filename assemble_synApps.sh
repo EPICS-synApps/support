@@ -313,7 +313,7 @@ fi
 
 if [[ $MEASCOMP ]]
 then
-	if [ $(HAVE_HIDAPI) == "NO" ]
+	if [ ${HAVE_HIDAPI} == "NO" ]
 	then
 		cd measComp-$MEASCOMP
 		cd configure
