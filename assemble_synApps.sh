@@ -58,7 +58,7 @@ DELAYGEN=R1-2-2
 DXP=R6-0
 DXPSITORO=R1-2
 DEVIOCSTATS=3.1.16
-#ETHERIP=ether_ip-3-1
+ETHERIP=ether_ip-3-2
 #GALIL=V3-6
 IP=R2-21
 IPAC=2.16
@@ -284,6 +284,13 @@ then
 	cd dxp-$DXP
 	echo "LINUX_USB_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86_64.linux-arm
 	echo "LINUX_USB_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86.linux-arm
+	cd ..
+fi
+
+if [[ $ETHERIP ]]
+then
+	cd ether_ip-$ETHERIP
+	echo "EPICS_BASE=" >> ./configure/RELEASE
 	cd ..
 fi
 
