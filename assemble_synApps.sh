@@ -59,7 +59,7 @@ DXP=R6-0
 DXPSITORO=R1-2
 DEVIOCSTATS=3.1.16
 ETHERIP=ether_ip-3-2
-#GALIL=V3-6
+GALIL=V3-6
 IP=R2-21
 IPAC=2.16
 IP330=R2-10
@@ -402,12 +402,15 @@ fi
 if [[ $GALIL ]]
 then
 
-mv Galil-3-0-$GALIL/3-6 galil-3-6
-rm -Rf Galil-3-0-$GALIL
-cp galil-3-6/config/GALILRELEASE galil-3-6/configure/RELEASE
-echo 'GALIL=$(SUPPORT)/galil-3-6' >> ./configure/RELEASE
-sed -i 's/MODULE_LIST[ ]*=[ ]*MEASCOMP/MODULE_LIST = MEASCOMP GALIL/g' Makefile
-sed -i '/\$(MEASCOMP)_DEPEND_DIRS/a \$(GALIL)_DEPEND_DIRS = \$(AUTOSAVE) \$(SNCSEQ) \$(SSCAN) \$(CALC) \$(ASYN) \$(BUSY) \$(MOTOR) \$(IPAC)' Makefile
+cd Galil-3-0-$GALIL
+cp -r ${GALIL//V}/. ./
+rm -rf ${GALIL//V}
+
+cp ./config/GALILRELEASE ./configure/RELEASE.local
+
+sed -i s:'#CROSS_COMPILER_TARGET_ARCHS*':'CROSS_COMPILER_TARGET_ARCHS = ':g configure/CONFIG_SITE
+
+cd ..
 
 fi
 
