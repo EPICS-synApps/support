@@ -408,7 +408,7 @@ rm -rf ${GALIL//V}
 
 cp ./config/GALILRELEASE ./configure/RELEASE.local
 
-sed -i s:'#CROSS_COMPILER_TARGET_ARCHS*':'CROSS_COMPILER_TARGET_ARCHS = ':g configure/CONFIG_SITE
+sed -i s:'#CROSS_COMPILER_TARGET_ARCHS.*':'CROSS_COMPILER_TARGET_ARCHS = ':g configure/CONFIG_SITE
 
 cd ..
 
