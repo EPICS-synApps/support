@@ -1,0 +1,10 @@
+These scripts are used to in the Cygwin bash shell.
+
+setup_epics_cygin32 is used to configure Cygwin to build for the cygwin-x86 architecture using the GNU compiler.
+
+setup_epics_win32 is used to configure Cygwin to build for the win32-x86 architecture using the MS VC++ compiler.
+
+Both scripts may need editing for your site, but they make it simple to switch back and forth between building for these two architectures.
+
+Mark Rivers
+

@@ -1,0 +1,65 @@
+#FILENAME:      RELEASE
+#USAGE:         Specify directory paths to synApps support modules
+
+#NOTES
+#     - To remove modules from the build, delete or comment out the
+#       module name.
+#     - Refer to the "MODULE_LIST" in <synApps>/configure/Makefile 
+#       for the inter-dependencies of the different modules.
+
+SUPPORT=/home/oxygen/MOONEY/epics/synApps/support
+#EPICS_BASE=/home/oxygen/MOONEY/epics/bazaar/base-3.14
+#EPICS_BASE=/home/oxygen/MOONEY/epics/bazaar/base-3.15
+#EPICS_BASE=/APSshare/epics/base-3.14.12.4
+EPICS_BASE=/home/oxygen/MOONEY/epics/base-3.15.5
+
+#/usr/local/iocapps/cvsroot/modules/bus/allenBradley
+ALIVE=$(SUPPORT)/alive-R1-3-1
+# http://www.aps.anl.gov/epics/modules/bus/allenBradley
+ALLEN_BRADLEY=$(SUPPORT)/allenBradley-2-3
+AREA_DETECTOR=$(SUPPORT)/areaDetector-R3-10
+ADCORE=$(AREA_DETECTOR)/ADCore
+ADSUPPORT=$(AREA_DETECTOR)/ADSupport
+ASYN=$(SUPPORT)/asyn-R4-41
+AUTOSAVE=$(SUPPORT)/autosave-R5-10-2
+BUSY=$(SUPPORT)/busy-R1-7-3
+CALC=$(SUPPORT)/calc-R3-7-4
+CAMAC=$(SUPPORT)/camac-R2-7-3
+CAPUTRECORDER=$(SUPPORT)/caputRecorder-R1-7-3
+DAC128V=$(SUPPORT)/dac128V-R2-10-1
+DELAYGEN=$(SUPPORT)/delaygen-R1-2-2
+DEVIOCSTATS=$(SUPPORT)/devIocStats-3-1-16
+DXP=$(SUPPORT)/dxp-R6-0
+ETHERIP=$(SUPPORT)/ether_ip-ether_ip-3-2
+GALIL=$(SUPPORT/Galil-3-0-V3-6
+IP=$(SUPPORT)/ip-R2-21
+IP330=$(SUPPORT)/ip330-2-10
+IPAC=$(SUPPORT)/ipac-2-16
+IPUNIDIG=$(SUPPORT)/ipUnidig-R2-12
+LOVE=$(SUPPORT)/love-R3-2-8
+LUA=$(SUPPORT)/lua-R3-0-1
+MCA=$(SUPPORT)/mca-R7-9
+MEASCOMP=$(SUPPORT)/measComp-R2-5-1
+MODBUS=$(SUPPORT)/modbus-R3-2
+MOTOR=$(SUPPORT)/motor-R7-2-1
+OPTICS=$(SUPPORT)/optics-R2-13-5
+QUADEM=$(SUPPORT)/quadEM-R9-4
+#http://www-csr.bessy.de/control/SoftDist/sequencer
+SNCSEQ=$(SUPPORT)/seq-2-2-8
+SOFTGLUE=$(SUPPORT)/softGlue-R2-8-3
+SOFTGLUEZYNQ=($(SUPPORT)/softGlueZynq-R2-0-3
+SSCAN=$(SUPPORT)/sscan-R2-11-4
+STD=$(SUPPORT)/std-R3-6-2
+#http://epics.web.psi.ch/software/streamdevice/
+STREAM=$(SUPPORT)/stream-2-8-16
+VAC=$(SUPPORT)/vac-R1-9-1
+VME=$(SUPPORT)/vme-R2-9-3
+XSPRESS3=$(SUPPORT)/xspress3-2-5
+YOKOGAWA_DAS=$(SUPPORT)/Yokogawa_DAS-R2-0-1
+XXX=$(SUPPORT)/xxx-R6-2
+
+# These lines allow developers to override these RELEASE settings
+# without having to modify this file directly.
+-include $(TOP)/RELEASE.local
+-include $(TOP)/RELEASE.$(EPICS_HOST_ARCH).local
+-include $(TOP)/configure/RELEASE.local

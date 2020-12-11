@@ -1,0 +1,21 @@
+export EPICS_HOST_ARCH=win32-x86
+
+export VSINSTALLDIR="C:\Program Files\Microsoft Visual Studio 8\Common7\IDE"
+export VSINSTALLDIR_sh="/cygdrive/c/Program Files/Microsoft Visual Studio 8/Common7/IDE"
+export VCINSTALLDIR="C:\Program Files\Microsoft Visual Studio 8"
+export VCINSTALLDIR_sh="/cygdrive/c/Program Files/Microsoft Visual Studio 8"
+export FrameworkDir=C:\WINDOWS\Microsoft.NET\Framework
+export FrameworkDir_sh=/cygdrive/c/WINDOWS/Microsoft.NET/Framework
+export FrameworkVersion=v2.0.50727
+export FrameworkSDKDir="c:\Program Files\Microsoft Visual Studio 8\SDK\v2.0"
+export FrameworkSDKDir_sh="/cygdrive/c/Program Files/Microsoft Visual Studio 8/SDK/v2.0"
+
+export DevEnvDir=$VSINSTALLDIR
+export DevEnvDir_sh=$VSINSTALLDIR_sh
+
+export MSVCDir=$VCINSTALLDIR\\VC
+export MSVCDir_sh=$VCINSTALLDIR_sh/VC
+
+export PATH="$DevEnvDir_sh:$MSVCDir_sh/BIN:$VCINSTALLDIR/Common7/Tools:$VCINSTALLDIR_sh/Common7/Tools/bin/winnt:$VCINSTALLDIR_sh/Common7/Tools/bin:$FrameworkSDKDir_sh/bin:$FrameworkDir_sh/$FrameworkVersion:/usr/bin/:/usr/local/bin:/usr/X11R6/bin/:/cygdrive/c/EPICS/base-3.14.8.2/bin/win32-x86:/corvette/usr/local/epics/extensions_devel/bin/win32-x86"
+export INCLUDE="$MSVCDir\atlmfc\include;$MSVCDir\include;$MSVCDir\PlatformSDK\Include\gl;$MSVCDir\PlatformSDK\include;$FrameworkSDKDir\include"
+export LIB="$MSVCDir/atlmfc/lib;$MSVCDir/lib;$MSVCDir/PlatformSDK/lib;$FrameworkSDKDir/Lib"
