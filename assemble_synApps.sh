@@ -39,10 +39,10 @@ WITH_PVA=YES
 # The name of the synApps directory can be customized
 #!SYNAPPS_DIR=synApps_X_X
 
-SUPPORT=master
-CONFIGURE=master
-UTILS=master
-DOCUMENTATION=master
+SUPPORT=R6-2
+CONFIGURE=R6-2
+UTILS=R6-2
+DOCUMENTATION=R6-2
 
 ALLENBRADLEY=2.3
 ALIVE=R1-3-1
@@ -82,7 +82,7 @@ VAC=R1-9-1
 VME=R2-9-3
 YOKOGAWA_DAS=R2-0-1
 XSPRESS3=2-5
-XXX=master
+XXX=R6-2
 fi
 
 
