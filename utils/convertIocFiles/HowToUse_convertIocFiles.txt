@@ -1,0 +1,88 @@
+convertIocFiles.py looks at ioc-configuration files in two directories, an old
+directory (presumed correctly configured for an application) and a new directory
+(presumed intended as templates to be customized to an application), and writes
+new files (it doesn't modify any pre-existing files) intended to pull
+configuration specifics from the old directory to the new directory.
+
+Here's the blurb from the code:
+
+	This software is intended to help convert an ioc directory from one version
+	of synApps to another.  Invoked as a program, it takes two arguments, the
+	old directory and the new directory, both of which are assumed to be ioc
+	directories (i.e., they contain st.cmd, or other .cmd files).  The program
+	parses .cmd files, .substitutions files, and autosave-request files, in the
+	old directory, and accumulates information from them.  Then it parses .cmd
+	files, .substitution files, and autosave-request files in the new directory.
+	For each .cmd file in the new directory, the program writes a .cmd.CVT file,
+	which is the .cmd file modified to agree as closely as seems reasonable with
+	information collected from the old directory. Substitutions files are also
+	treated in this way.
+
+
+You must have an old ioc directory and a new ioc directory.
+
+The old ioc directory is assumed to be a correctly configured working directory,
+containing no unused files.  Nothing in the old directory will be modified or
+overwritten.
+
+The new directory is assumed to be a syntactically correct example of how to use
+everything that is available to an ioc, in the new software version.  Nothing in
+the new directory will be modified or overwritten.  If there are files in the
+new directory that you know will not be needed for the ioc you are converting,
+you should get them out of the new directory.  If the new directory is correct
+except for the prefix, you can use synApps/support/utils/changePrefix on (an
+unbuilt copy of) it.
+
+Both ioc directories must have a correctly configured cdCommands (or envPaths)
+files, and convertIocFiles.py will use the directory names therein to search for
+autosave-request files.  In practice, this means you should get the
+configure/RELEASE file right, and run make in the ioc directory.
+
+'cd' to the new directory.
+type
+	convertIocFiles.py <old_directory> <new_directory>
+e.g.
+	convertIocFiles.py /home/xorApps/epics/synApps/ioc/7ic/iocBoot/ioc7idd .
+
+For each configuration file (.cmd, .substitutions, .req) in the new directory,
+convertIocFiles.py will write a new copy, named <config-file>.CVT, with it's
+best guess at what the file should contain.  If a configuration file has no .CVT
+version, convertIocFiles.py either thinks it's fine as is, or simply doesn't
+know what to do with it.  If a command in <config file> has no analog in the old
+directory, it will have the text "#NEW" prepended to it.  It's probably best to
+delete auto*.req.CVT and auto*.req.STD at this point, because they are unlikely
+to contain useful information.
+
+You can either use the .CVT files for reference, or edit them until they really
+are correctly configured, and use them in place of the existing configuration
+files.  convertIocFiles.out contains lists of all the commands in the old
+directory that have no analog in the new directory.  You probably need to find a
+place for at least some of these commands.
+
+In the unlikely event that convertIocFiles has done a perfect job on a
+configuration file, I just replace the configuration file by the .CVT version.
+In the next best case, I usually use
+
+	tkdiff <configuration file> <configuration file>.CVT
+
+to make a merge file, and overwrite <configuration file> with the merge result.
+For some files, however, I find the .CVT version useless and simply delete it.
+convertIocFiles.py does a lousy job of converting MPF commands to asyn commands,
+for example, and I normally do files that contain such commands by hand.  In the
+end, I'm left with no .CVT files.
+
+At this point, I normally run convertIocFiles.py again, and this time look at
+convertIocFiles.out, which contains all the commands from the old directory that
+weren't written to any .CVT file.  Also, I look at the autosave files this time.
+Normally, auto*.CVT are useless, because the new directory's autosave files are
+not matched to the software actually loaded.  auto*.STD are usually pretty close
+to correct, though.  auto*.STD contain a "file <include-file" line for each
+dbLoadRecords() command in the new directory, if convertIocFiles.py was able to
+find a matching autosave-include file on the request-file path.  (The
+request-file path is accumulated from the set_requestfile_path() commands found
+in the new directory.  If <name>.db occurs in a dbLoadRecords() command, and
+<name>.req occurs in the request-file path, convertIocFiles.py will add a line
+to auto_settings.req.STD, with macro arguments pulled from the dbLoadRecords()
+command.)
+
+ 

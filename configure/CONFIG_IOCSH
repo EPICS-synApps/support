@@ -1,0 +1,4 @@
+FILE_TYPE += IOCSH
+INSTALL_IOCSH = $(INSTALL_LOCATION)/iocsh
+
+IOCSH += $(patsubst ../%, %, $(wildcard ../*.iocsh))

@@ -1,0 +1,9 @@
+#!/bin/csh
+# tkdiffCVT - find all matched pairs of files: <filename> <filename>.CVT;
+# run tkdiff on each pair.
+foreach i (*)
+if (-f $i.CVT) then
+echo $i.CVT "exists"
+tkdiff $i $i.CVT
+endif
+end
