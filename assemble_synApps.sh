@@ -167,10 +167,6 @@ cd ${SYNAPPS_DIR}
 get_support support $SUPPORT
 cd support
 
-get_support configure      $CONFIGURE
-get_support utils          $UTILS
-get_support documentation  $DOCUMENTATION
-
 SUPPORT=$(pwd)
 
 echo "SUPPORT=$SUPPORT" > configure/RELEASE
