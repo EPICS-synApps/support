@@ -30,8 +30,17 @@ DIRS := $(DIRS) $(filter-out $(DIRS), configure)
 
 GET_DEPENDS := $(SUPPORT)/utils/depends.pl $(call FIND_TOOL,convertRelease.pl)
 
+define FILTER_TOP_LEVEL
+  
+  # Add module to build list if the directory it lives in is the same as
+  # the support folder.
+    
+  ifeq ($(abspath $(SUPPORT)), $(abspath $(dir $(abspath $($(1))))))
+  MODULE_LIST += $(1)
+  endif
+endef
+
 define  MODULE_defined
-  ifdef $(1)
   SUPPORT_DIRS  += $($(1))
   RELEASE_FILES += $($(1))/configure/RELEASE
   # areaDetector has differently named RELEASE files
@@ -42,54 +51,25 @@ define  MODULE_defined
   RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE.local)
   RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE.local.$(EPICS_HOST_ARCH))
   $(eval $$($(1))_DEPEND_DIRS := $(shell $(GET_DEPENDS) $($(1)) $(1) "$(MODULE_LIST)"))
-  endif  
 endef
 
-###### Support Modules ######
 
-MODULE_LIST =  ALLEN_BRADLEY 
-MODULE_LIST += ALIVE 
-MODULE_LIST += AREA_DETECTOR
-MODULE_LIST += ASYN 
-MODULE_LIST += AUTOSAVE 
-MODULE_LIST += BUSY
-MODULE_LIST += CALC 
-MODULE_LIST += CAMAC
-MODULE_LIST += CAPUTRECORDER
-MODULE_LIST += DAC128V 
-MODULE_LIST += DELAYGEN
-MODULE_LIST += DEVIOCSTATS
-MODULE_LIST += DXP 
-MODULE_LIST += DXPSITORO 
-MODULE_LIST += ETHERIP 
-MODULE_LIST += GALIL
-MODULE_LIST += IPAC 
-MODULE_LIST += IP 
-MODULE_LIST += IP330 
-MODULE_LIST += IPUNIDIG 
-MODULE_LIST += LOVE 
-MODULE_LIST += LUA 
-MODULE_LIST += MCA 
-MODULE_LIST += MEASCOMP 
-MODULE_LIST += MODBUS 
-MODULE_LIST += MOTOR
-MODULE_LIST += OPTICS 
-MODULE_LIST += QUADEM 
-MODULE_LIST += SNCSEQ
-MODULE_LIST += SOFTGLUE 
-MODULE_LIST += SOFTGLUEZYNQ 
-MODULE_LIST += SSCAN 
-MODULE_LIST += STD 
-MODULE_LIST += STREAM 
-MODULE_LIST += VAC 
-MODULE_LIST += VME 
-MODULE_LIST += XXX
-MODULE_LIST += YOKOGAWA_DAS 
-MODULE_LIST += XSPRESS3
 
+############## DEPENDENCY GRAPH GENERATION ##############
+
+
+# Get all defined values in configure/RELEASE
+RELEASE_LIST = $(shell $(call FIND_TOOL,convertRelease.pl) releaseTops )
+
+# Filter out the module definitions that point to submodules
+$(foreach mod, $(RELEASE_LIST), $(eval $(call FILTER_TOP_LEVEL,$(mod)) ))
+
+# Build the list of directories, RELEASE files, and dependencies
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
 
-################### End of Support-Modules #####################
+
+
+################### BUILD DIRECTIONS #####################
 
 DIRS := $(DIRS) $(SUPPORT_DIRS)
 
@@ -109,7 +89,7 @@ release:
 	echo RELEASE_FILES=$(RELEASE_FILES)
 	echo ' '
 	$(PERL) $(TOP)/configure/makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
-
+	
 
 .PHONY: all_adl all_edl all_ui all_opi
 	
