@@ -290,9 +290,15 @@ fi
 if [[ $IPAC ]]
 then
 	cd ipac-${IPAC//./-}
-  echo "-include \$(TOP)/../RELEASE.local" >> ./configure/RELEASE
-  echo "-include \$(TOP)/../RELEASE.\$(EPICS_HOST_ARCH).local" >> ./configure/RELEASE
-  echo "-include \$(TOP)/configure/RELEASE.local" >> ./configure/RELEASE
+	echo "-include \$(TOP)/../RELEASE.local" >> ./configure/RELEASE
+	echo "-include \$(TOP)/../RELEASE.\$(EPICS_HOST_ARCH).local" >> ./configure/RELEASE
+	echo "-include \$(TOP)/configure/RELEASE.local" >> ./configure/RELEASE
+	sed -i s:'#registrar(vipc310Registrar)':'registrar(vipc310Registrar)':g drvIpac/drvIpac.dbd
+	sed -i s:'#registrar(vipc610Registrar)':'registrar(vipc610Registrar)':g drvIpac/drvIpac.dbd
+	sed -i s:'#registrar(vipc616Registrar)':'registrar(vipc616Registrar)':g drvIpac/drvIpac.dbd
+	sed -i s:'#registrar(tvme200Registrar)':'registrar(tvme200Registrar)':g drvIpac/drvIpac.dbd
+	sed -i s:'#registrar(xy9660Registrar)':'registrar(xy9660Registrar)':g drvIpac/drvIpac.dbd
+
 	cd ..
 fi
 
