@@ -73,6 +73,7 @@ SNCSEQ=2.2.8
 SOFTGLUE=R2-8-3
 SOFTGLUEZYNQ=R2-0-3
 SSCAN=R2-11-4
+SCALER=4.0
 STD=R3-6-2
 STREAM=2.8.16
 VAC=R1-9-1
@@ -206,6 +207,7 @@ if [[ $MODBUS ]];        then   get_repo epics-modules          modbus         M
 if [[ $MOTOR ]];         then   get_repo epics-modules          motor          MOTOR          $MOTOR         ; fi
 if [[ $OPTICS ]];        then   get_repo epics-modules          optics         OPTICS         $OPTICS        ; fi
 if [[ $QUADEM ]];        then   get_repo epics-modules          quadEM         QUADEM         $QUADEM        ; fi
+if [[ $SCALER ]];        then   get_repo epics-modules          scaler         SCALER         $SCALER        ; fi
 if [[ $SOFTGLUE ]];      then   get_repo epics-modules          softGlue       SOFTGLUE       $SOFTGLUE      ; fi
 if [[ $SOFTGLUEZYNQ ]];  then   get_repo epics-modules          softGlueZynq   SOFTGLUEZYNQ   $SOFTGLUEZYNQ  ; fi
 if [[ $SSCAN ]];         then   get_repo epics-modules          sscan          SSCAN          $SSCAN         ; fi
