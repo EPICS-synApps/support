@@ -308,6 +308,9 @@ fi
 if [[ $MCA ]]
 then
 	cd mca-$MCA
+	
+	git cherry-pick aab74a53403f3c5654cddd9e6d6322f2bad3ede8
+	
 	echo "LINUX_LIBUSB-1.0_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86_64.linux-arm
 	echo "LINUX_LIBUSB-1.0_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86.linux-arm
 	cd ..
