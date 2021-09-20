@@ -48,8 +48,8 @@ ASYN=R4-42
 AUTOSAVE=R5-10-2
 BUSY=R1-7-3
 CALC=R3-7-4
-CAMAC=R2-7-3
-CAPUTRECORDER=R1-7-3
+CAMAC=R2-7-4
+CAPUTRECORDER=R1-7-4
 DAC128V=R2-10-1
 DELAYGEN=R1-2-2
 DXP=R6-0
@@ -274,6 +274,14 @@ sed -i s:'#ADSIMDETECTOR':'ADSIMDETECTOR':g RELEASE.local
 cd ../..
 
 fi
+
+if [[ $ASYN ]]
+then
+	cd asyn-$ASYN
+	echo "TIRPC = YES" >> ./configure/CONFIG_SITE.Common.linux-x86_64
+	cd ..
+fi
+
 
 if [[ $DXP ]]
 then
