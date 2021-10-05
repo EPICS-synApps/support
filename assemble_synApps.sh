@@ -405,7 +405,8 @@ if [[ $OPCUA ]]
 then
 	cd opcua-${OPCUA//./-}
 	
-	sed -i s:'GTEST =':'#GTEST =':g
+	sed -i s:'GTEST =':'#GTEST =':g ./configure/RELEASE
+	sed -i s:'#USR_CXXFLAGS_Linux':'USR_CXXFLAGS_Linux':g ./configure/CONFIG_SITE
 	
 	cd ..
 fi
