@@ -42,6 +42,7 @@ MCA=$(SUPPORT)/mca-R7-9
 MEASCOMP=$(SUPPORT)/measComp-R2-5-1
 MODBUS=$(SUPPORT)/modbus-R3-2
 MOTOR=$(SUPPORT)/motor-R7-2-1
+OPCUA=$(SUPPORT)/opcua-v0-9-3
 OPTICS=$(SUPPORT)/optics-R2-13-5
 QUADEM=$(SUPPORT)/quadEM-R9-4
 #http://www-csr.bessy.de/control/SoftDist/sequencer
