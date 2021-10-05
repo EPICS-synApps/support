@@ -317,8 +317,6 @@ cd ..
 
 fi
 
-fi
-
 
 if [[ $DXP ]]
 then
@@ -449,5 +447,6 @@ mv seq-$SNCSEQ seq-${SNCSEQ//./-}
 rm -f seq-$SNCSEQ.tar.gz
 echo "SNCSEQ=\$(SUPPORT)/seq-${SNCSEQ//./-}" >> ./configure/RELEASE
 
+fi
 
 make release
