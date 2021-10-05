@@ -67,6 +67,7 @@ MCA=R7-9
 MEASCOMP=R2-5-1
 MODBUS=R3-2
 MOTOR=R7-2-2
+OPCUA=v0.9.3
 OPTICS=R2-13-5
 QUADEM=R9-4
 SNCSEQ=2.2.9
@@ -206,6 +207,7 @@ if [[ $MEASCOMP ]];      then   get_repo epics-modules          measComp       M
 if [[ $MODBUS ]];        then   get_repo epics-modules          modbus         MODBUS         $MODBUS        ; fi
 if [[ $MOTOR ]];         then   get_repo epics-modules          motor          MOTOR          $MOTOR         ; fi
 if [[ $OPTICS ]];        then   get_repo epics-modules          optics         OPTICS         $OPTICS        ; fi
+if [[ $OPCUA  ]];        then   get_repo epics-modules          opcua          OPCUA          $OPCUA         ; fi
 if [[ $QUADEM ]];        then   get_repo epics-modules          quadEM         QUADEM         $QUADEM        ; fi
 if [[ $SCALER ]];        then   get_repo epics-modules          scaler         SCALER         $SCALER        ; fi
 if [[ $SOFTGLUE ]];      then   get_repo epics-modules          softGlue       SOFTGLUE       $SOFTGLUE      ; fi
@@ -218,6 +220,27 @@ if [[ $VME ]];           then   get_repo epics-modules          vme            V
 if [[ $XSPRESS3 ]];      then   get_repo epics-modules          xspress3       XSPRESS3       $XSPRESS3      ; fi
 if [[ $YOKOGAWA_DAS ]];  then   get_repo epics-modules          Yokogawa_DAS   YOKOGAWA_DAS   $YOKOGAWA_DAS  ; fi
 if [[ $XXX ]];           then   get_repo epics-modules          xxx            XXX            $XXX           ; fi
+
+
+
+
+if [[ $ALLENBRADLEY ]]
+then
+
+# get allenBradley-2-3
+wget http://www.aps.anl.gov/epics/download/modules/allenBradley-$ALLENBRADLEY.tar.gz
+tar xf allenBradley-$ALLENBRADLEY.tar.gz
+mv allenBradley-$ALLENBRADLEY allenBradley-${ALLENBRADLEY//./-}
+rm -f allenBradley-$ALLENBRADLEY.tar.gz
+ALLENBRADLEY=${ALLENBRADLEY//./-}
+echo "ALLEN_BRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY}" >> ./configure/RELEASE
+cd allenBradley-$ALLENBRADLEY
+echo "-include \$(TOP)/../RELEASE.local" >> ./configure/RELEASE
+echo "-include \$(TOP)/../RELEASE.\$(EPICS_HOST_ARCH).local" >> ./configure/RELEASE
+echo "-include \$(TOP)/configure/RELEASE.local" >> ./configure/RELEASE
+cd ..
+
+fi
 
 
 if [[ $AREA_DETECTOR ]]
@@ -275,11 +298,25 @@ cd ../..
 
 fi
 
+
 if [[ $ASYN ]]
 then
 	cd asyn-$ASYN
 	echo "TIRPC = YES" >> ./configure/CONFIG_SITE.Common.linux-x86_64
 	cd ..
+fi
+
+
+if [[ $CALC ]]
+then
+
+# Uncomment sseq support in calc
+cd calc-$CALC
+sed -i s:'#SNCSEQ':'SNCSEQ':g configure/RELEASE
+cd ..
+
+fi
+
 fi
 
 
@@ -298,6 +335,23 @@ then
 	cd ..
 fi
 
+
+if [[ $GALIL ]]
+then
+
+cd Galil-3-0-$GALIL
+cp -r ${GALIL//V}/. ./
+rm -rf ${GALIL//V}
+
+cp ./config/GALILRELEASE ./configure/RELEASE.local
+
+sed -i s:'#CROSS_COMPILER_TARGET_ARCHS.*':'CROSS_COMPILER_TARGET_ARCHS = ':g configure/CONFIG_SITE
+
+cd ..
+
+fi
+
+
 if [[ $IPAC ]]
 then
 	cd ipac-${IPAC//./-}
@@ -313,6 +367,7 @@ then
 	cd ..
 fi
 
+
 if [[ $MCA ]]
 then
 	cd mca-$MCA
@@ -323,6 +378,7 @@ then
 	echo "LINUX_LIBUSB-1.0_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86.linux-arm
 	cd ..
 fi
+
 
 if [[ $MEASCOMP ]]
 then
@@ -335,6 +391,7 @@ then
 	fi
 fi
 
+
 if [[ $MOTOR ]]
 then
 	cd motor-$MOTOR
@@ -344,6 +401,17 @@ then
 	
 	cd ..
 fi
+
+
+if [[ $OPCUA ]]
+then
+	cd opcua-${OPCUA//./-}
+	
+	sed -i s:'GTEST =':'#GTEST =':g
+	
+	cd ..
+fi
+
 
 if [[ $STREAM ]]
 then
@@ -381,50 +449,5 @@ mv seq-$SNCSEQ seq-${SNCSEQ//./-}
 rm -f seq-$SNCSEQ.tar.gz
 echo "SNCSEQ=\$(SUPPORT)/seq-${SNCSEQ//./-}" >> ./configure/RELEASE
 
-if [[ $CALC ]]
-then
-
-# Uncomment sseq support in calc
-cd calc-$CALC
-sed -i s:'#SNCSEQ':'SNCSEQ':g configure/RELEASE
-cd ..
-
-fi
-
-fi
-
-
-if [[ $ALLENBRADLEY ]]
-then
-
-# get allenBradley-2-3
-wget http://www.aps.anl.gov/epics/download/modules/allenBradley-$ALLENBRADLEY.tar.gz
-tar xf allenBradley-$ALLENBRADLEY.tar.gz
-mv allenBradley-$ALLENBRADLEY allenBradley-${ALLENBRADLEY//./-}
-rm -f allenBradley-$ALLENBRADLEY.tar.gz
-ALLENBRADLEY=${ALLENBRADLEY//./-}
-echo "ALLEN_BRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY}" >> ./configure/RELEASE
-cd allenBradley-$ALLENBRADLEY
-echo "-include \$(TOP)/../RELEASE.local" >> ./configure/RELEASE
-echo "-include \$(TOP)/../RELEASE.\$(EPICS_HOST_ARCH).local" >> ./configure/RELEASE
-echo "-include \$(TOP)/configure/RELEASE.local" >> ./configure/RELEASE
-cd ..
-
-fi
-
-if [[ $GALIL ]]
-then
-
-cd Galil-3-0-$GALIL
-cp -r ${GALIL//V}/. ./
-rm -rf ${GALIL//V}
-
-cp ./config/GALILRELEASE ./configure/RELEASE.local
-
-sed -i s:'#CROSS_COMPILER_TARGET_ARCHS.*':'CROSS_COMPILER_TARGET_ARCHS = ':g configure/CONFIG_SITE
-
-cd ..
-
-fi
 
 make release
