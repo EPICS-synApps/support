@@ -302,7 +302,16 @@ fi
 if [[ $ASYN ]]
 then
 	cd asyn-$ASYN
-	echo "TIRPC = YES" >> ./configure/CONFIG_SITE.Common.linux-x86_64
+	
+	#RHEL 8 and Centos change library names
+	if [[ -f /etc/redhat-release ]]
+	then
+		if grep -q -i "release 8" /etc/redhat-release
+		then
+			echo "TIRPC = YES" >> ./configure/CONFIG_SITE.Common.linux-x86_64
+		fi
+	fi
+	
 	cd ..
 fi
 
