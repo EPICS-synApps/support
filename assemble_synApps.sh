@@ -76,7 +76,7 @@ SOFTGLUEZYNQ=R2-0-4
 SSCAN=R2-11-5
 SCALER=4.0
 STD=R3-6-3
-STREAM=2.8.16
+STREAM=2.8.22
 VAC=R1-9-1
 VME=R2-9-4
 YOKOGAWA_DAS=R2-0-1
@@ -428,20 +428,13 @@ then
 	# Use the EPICS makefile, rather than PSI's
 	rm GNUmakefile
 	
-	# Don't install to synApps/support
-	sed -i 's/TOP = ../TOP = ./g' ./Makefile
-	sed -i 's/TOP = ..\/../TOP = ../g' ./streamApp/Makefile
-	sed -i 's/TOP = ..\/../TOP = ../g' ./src/Makefile
-	
 	# Comment out PCRE
 	sed -i 's/PCRE=/#PCRE=/g' ./configure/RELEASE
 	
+	echo "SNCSEQ=" >> ./configure/RELEASE
 	echo "SSCAN=" >> ./configure/RELEASE
 	echo "STREAM=" >> ./configure/RELEASE
-  echo "-include \$(TOP)/../RELEASE.local" >> ./configure/RELEASE
-  echo "-include \$(TOP)/../RELEASE.\$(EPICS_HOST_ARCH).local" >> ./configure/RELEASE
-  echo "-include \$(TOP)/configure/RELEASE.local" >> ./configure/RELEASE
-	sed -i 's/#PROD_LIBS += sscan/PROD_LIBS += sscan/g' ./streamApp/Makefile
+
 	cd ..
 fi
 
