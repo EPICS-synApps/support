@@ -310,6 +310,7 @@ then
 		if grep -q -i "release 8" /etc/redhat-release
 		then
 			echo "TIRPC = YES" >> ./configure/CONFIG_SITE.Common.linux-x86_64
+			cp ./configure/CONFIG_SITE.Common.linux-x86_64 ./configure/CONFIG_SITE.Common.linux-x86_64-debug
 		fi
 	fi
 	
