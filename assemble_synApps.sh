@@ -382,6 +382,8 @@ if [[ $MCA ]]
 then
 	cd mca-$MCA
 	
+	echo "SCALER=" >> ./configure/RELEASE
+	
 	echo "LINUX_LIBUSB-1.0_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86_64.linux-arm
 	echo "LINUX_LIBUSB-1.0_INSTALLED = NO" >> ./configure/CONFIG_SITE.linux-x86.linux-arm
 	cd ..
