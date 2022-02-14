@@ -276,6 +276,7 @@ cp EXAMPLE_RELEASE.local           RELEASE.local
 echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.vxWorks
 echo 'WITH_BLOSC = NO' >> CONFIG_SITE.local.vxWorks
 echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.vxWorks
+echo 'WITH_JSON = NO' >> CONFIG_SITE.local.vxWorks
 
 sed -i s:'WITH_JSON = YES':'WITH_JSON = NO':g CONFIG_SITE.local
 
