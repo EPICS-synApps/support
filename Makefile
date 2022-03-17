@@ -28,7 +28,7 @@ include $(TOP)/configure/CONFIG
 
 DIRS := $(DIRS) $(filter-out $(DIRS), configure)
 
-GET_DEPENDS := $(SUPPORT)/utils/depends.pl $(call FIND_TOOL,convertRelease.pl)
+GET_DEPENDS := $(SUPPORT)/utils/depends.pl $(CONVERTRELEASE)
 
 define FILTER_TOP_LEVEL
   
@@ -57,12 +57,8 @@ endef
 
 ############## DEPENDENCY GRAPH GENERATION ##############
 
-
-# Get all defined values in configure/RELEASE
-RELEASE_LIST = $(shell $(call FIND_TOOL,convertRelease.pl) releaseTops )
-
 # Filter out the module definitions that point to submodules
-$(foreach mod, $(RELEASE_LIST), $(eval $(call FILTER_TOP_LEVEL,$(mod)) ))
+$(foreach mod, $(RELEASE_TOPS), $(eval $(call FILTER_TOP_LEVEL,$(mod)) ))
 
 # Build the list of directories, RELEASE files, and dependencies
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
