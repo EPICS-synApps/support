@@ -436,7 +436,11 @@ then
 	# Comment out PCRE
 	sed -i 's/PCRE=/#PCRE=/g' ./configure/RELEASE
 	
-	echo "SNCSEQ=" >> ./configure/RELEASE
+	if [[ $SNCSEQ ]]
+	then
+		echo "SNCSEQ=" >> ./configure/RELEASE
+	fi
+	
 	echo "SSCAN=" >> ./configure/RELEASE
 	echo "STREAM=" >> ./configure/RELEASE
 
@@ -447,13 +451,14 @@ fi
 if [[ $SNCSEQ ]]
 then
 
-# seq
-wget http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-$SNCSEQ.tar.gz
-tar zxf seq-$SNCSEQ.tar.gz
-# The synApps build can't handle '.'
-mv seq-$SNCSEQ seq-${SNCSEQ//./-}
-rm -f seq-$SNCSEQ.tar.gz
-echo "SNCSEQ=\$(SUPPORT)/seq-${SNCSEQ//./-}" >> ./configure/RELEASE
+	# seq
+	wget http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-$SNCSEQ.tar.gz
+	tar zxf seq-$SNCSEQ.tar.gz
+	
+	# The synApps build can't handle '.'
+	mv seq-$SNCSEQ seq-${SNCSEQ//./-}
+	rm -f seq-$SNCSEQ.tar.gz
+	echo "SNCSEQ=\$(SUPPORT)/seq-${SNCSEQ//./-}" >> ./configure/RELEASE
 
 fi
 
