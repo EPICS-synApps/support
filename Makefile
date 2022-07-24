@@ -28,7 +28,7 @@ include $(TOP)/configure/CONFIG
 
 DIRS := $(DIRS) $(filter-out $(DIRS), configure)
 
-GET_DEPENDS := $(SUPPORT)/utils/depends.pl $(CONVERTRELEASE)
+GET_DEPENDS := $(SUPPORT)/utils/depends.pl $(call FIND_TOOL,convertRelease.pl)
 
 define FILTER_TOP_LEVEL
   
