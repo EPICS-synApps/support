@@ -65,6 +65,7 @@ LOVE=R3-2-8
 LUA=R3-0-2
 MCA=R7-9
 MEASCOMP=R2-5-1
+ULDAQ=1.2.1
 MODBUS=R3-2
 MOTOR=R7-2-2
 OPCUA=v0.9.3
@@ -394,13 +395,35 @@ fi
 
 if [[ $MEASCOMP ]]
 then
+	cd measComp-$MEASCOMP
+	
+	if [[ $ULDAQ ]]
+	then
+		wget https://github.com/mccdaq/uldaq/releases/download/v${ULDAQ}/libuldaq-${ULDAQ}.tar.bz2
+		tar -xvjf libuldaq-${ULDAQ}.tar.bz2
+		rm -f libuldaq-${ULDAQ}.tar.bz2
+
+		cd libuldaq-${ULDAQ}
+
+		./configure --prefix=${pwd}
+		make
+		make install || true
+
+		echo "USR_LDFLAGS+=-L${pwd}/lib" >> ../configure/CONFIG_SITE.local
+		echo "USR_CPPFLAGS+=-I${pwd}/include" >> ../configure/CONFIG_SITE.local
+
+		cd ..
+	fi
+
+
 	if [ ${HAVE_HIDAPI} == "NO" ]
 	then
-		cd measComp-$MEASCOMP
 		cd configure
 		sed -i 's/HAVE_HIDAPI=YES/HAVE_HIDAPI=NO/g' ./CONFIG_SITE*
-		cd ../..
+		cd ..
 	fi
+	
+	cd ..
 fi
 
 
