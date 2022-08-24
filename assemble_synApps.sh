@@ -10,79 +10,79 @@ CONFIG_SOURCED=False
 # Handle command-line arguments
 for arg in ${args}
 do
-  if [ ${arg} == "full" ]
-  then
-    FULL_CLONE=True
-  else
-    if [ -e ${arg} ]
-    then
-      echo "Sourcing ${arg}"
-      source ${arg}
-      CONFIG_SOURCED=True
-    else
-      echo "${arg} does not exist."
-    fi
-  fi
+	if [ ${arg} == "full" ]
+	then
+		FULL_CLONE=True
+	else
+		if [ -e ${arg} ]
+		then
+			echo "Sourcing ${arg}"
+			source ${arg}
+			CONFIG_SOURCED=True
+		else
+			echo "${arg} does not exist."
+		fi
+	fi
 done
 
 echo "FULL_CLONE = ${FULL_CLONE}"
 
 if [ ${CONFIG_SOURCED} == "False" ]
 then
-echo "Using default configuration"
+	echo "Using default configuration"
 
-EPICS_BASE=/APSshare/epics/base-7.0.4.1
+	EPICS_BASE=/APSshare/epics/base-7.0.4.1
 
-HAVE_HIDAPI=NO
-WITH_PVA=YES
+	HAVE_HIDAPI=NO
+	WITH_PVA=YES
 
-# The name of the synApps directory can be customized
-#!SYNAPPS_DIR=synApps_X_X
+	# The name of the synApps directory can be customized
+	#!SYNAPPS_DIR=synApps_X_X
 
-SUPPORT=R6-2-1
+	SUPPORT=R6-2-1
 
-ALLENBRADLEY=2.3
-ALIVE=R1-3-1
-AREA_DETECTOR=R3-11
-ASYN=R4-42
-AUTOSAVE=R5-10-2
-BUSY=R1-7-3
-CALC=R3-7-4
-CAMAC=R2-7-4
-CAPUTRECORDER=R1-7-4
-DAC128V=R2-10-1
-DELAYGEN=R1-2-3
-DXP=R6-0
-DXPSITORO=R1-2
-DEVIOCSTATS=3.1.16
-ETHERIP=ether_ip-3-2
-GALIL=V3-6
-IP=R2-21-1
-IPAC=2.16
-IP330=R2-10
-IPUNIDIG=R2-12
-LOVE=R3-2-8
-LUA=R3-0-2
-MCA=R7-9
-MEASCOMP=R2-5-1
-ULDAQ=1.2.1
-MODBUS=R3-2
-MOTOR=R7-2-2
-OPCUA=v0.9.3
-OPTICS=R2-13-5
-QUADEM=R9-4
-SNCSEQ=2.2.9
-SOFTGLUE=R2-8-3
-SOFTGLUEZYNQ=R2-0-4
-SSCAN=R2-11-5
-SCALER=4.0
-STD=R3-6-3
-STREAM=2.8.22
-VAC=R1-9-1
-VME=R2-9-4
-YOKOGAWA_DAS=R2-0-1
-XSPRESS3=2-5
-XXX=R6-2-1
+	ALLENBRADLEY=2.3
+	ALIVE=R1-3-1
+	AREA_DETECTOR=R3-11
+	ASYN=R4-42
+	AUTOSAVE=R5-10-2
+	BUSY=R1-7-3
+	CALC=R3-7-4
+	CAMAC=R2-7-4
+	CAPUTRECORDER=R1-7-4
+	DAC128V=R2-10-1
+	DELAYGEN=R1-2-3
+	DXP=R6-0
+	DXPSITORO=R1-2
+	DEVIOCSTATS=3.1.16
+	ETHERIP=ether_ip-3-2
+	GALIL=V3-6
+	IP=R2-21-1
+	IPAC=2.16
+	IP330=R2-10
+	IPUNIDIG=R2-12
+	LOVE=R3-2-8
+	LUA=R3-0-2
+	MCA=R7-9
+	MEASCOMP=R2-5-1
+	ULDAQ=1.2.1
+	MODBUS=R3-2
+	MOTOR=R7-2-2
+	OPCUA=v0.9.3
+	OPTICS=R2-13-5
+	QUADEM=R9-4
+	SNCSEQ=2.2.9
+	SOFTGLUE=R2-8-3
+	SOFTGLUEZYNQ=R2-0-4
+	SSCAN=R2-11-5
+	SCALER=4.0
+	STD=R3-6-3
+	STREAM=2.8.22
+	VAC=R1-9-1
+	VME=R2-9-4
+	YOKOGAWA_DAS=R2-0-1
+	XSPRESS3=2-5
+	XXX=R6-2-1
 fi
 
 
@@ -159,7 +159,7 @@ fi
 
 if [ -z "${SYNAPPS_DIR}" ]
 then
-SYNAPPS_DIR=synApps
+	SYNAPPS_DIR=synApps
 fi
 
 
@@ -228,18 +228,18 @@ if [[ $XXX ]];           then   get_repo epics-modules          xxx            X
 if [[ $ALLENBRADLEY ]]
 then
 
-# get allenBradley-2-3
-wget http://www.aps.anl.gov/epics/download/modules/allenBradley-$ALLENBRADLEY.tar.gz
-tar xf allenBradley-$ALLENBRADLEY.tar.gz
-mv allenBradley-$ALLENBRADLEY allenBradley-${ALLENBRADLEY//./-}
-rm -f allenBradley-$ALLENBRADLEY.tar.gz
-ALLENBRADLEY=${ALLENBRADLEY//./-}
-echo "ALLEN_BRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY}" >> ./configure/RELEASE
-cd allenBradley-$ALLENBRADLEY
-echo "-include \$(TOP)/../RELEASE.local" >> ./configure/RELEASE
-echo "-include \$(TOP)/../RELEASE.\$(EPICS_HOST_ARCH).local" >> ./configure/RELEASE
-echo "-include \$(TOP)/configure/RELEASE.local" >> ./configure/RELEASE
-cd ..
+	# get allenBradley-2-3
+	wget http://www.aps.anl.gov/epics/download/modules/allenBradley-$ALLENBRADLEY.tar.gz
+	tar xf allenBradley-$ALLENBRADLEY.tar.gz
+	mv allenBradley-$ALLENBRADLEY allenBradley-${ALLENBRADLEY//./-}
+	rm -f allenBradley-$ALLENBRADLEY.tar.gz
+	ALLENBRADLEY=${ALLENBRADLEY//./-}
+	echo "ALLEN_BRADLEY=\$(SUPPORT)/allenBradley-${ALLENBRADLEY}" >> ./configure/RELEASE
+	cd allenBradley-$ALLENBRADLEY
+	echo "-include \$(TOP)/../RELEASE.local" >> ./configure/RELEASE
+	echo "-include \$(TOP)/../RELEASE.\$(EPICS_HOST_ARCH).local" >> ./configure/RELEASE
+	echo "-include \$(TOP)/configure/RELEASE.local" >> ./configure/RELEASE
+	cd ..
 
 fi
 
@@ -247,57 +247,57 @@ fi
 if [[ $AREA_DETECTOR ]]
 then 
 
-get_repo  areaDetector  areaDetector  AREA_DETECTOR  $AREA_DETECTOR
+	get_repo  areaDetector  areaDetector  AREA_DETECTOR  $AREA_DETECTOR
 
-echo "ADCORE=\$(AREA_DETECTOR)/ADCore" >> configure/RELEASE
-echo "ADSUPPORT=\$(AREA_DETECTOR)/ADSupport" >> configure/RELEASE
+	echo "ADCORE=\$(AREA_DETECTOR)/ADCore" >> configure/RELEASE
+	echo "ADSUPPORT=\$(AREA_DETECTOR)/ADSupport" >> configure/RELEASE
 
-cd areaDetector-$AREA_DETECTOR
-git submodule init
-git submodule update ADCore
-git submodule update ADSupport
-git submodule update ADSimDetector
+	cd areaDetector-$AREA_DETECTOR
+	git submodule init
+	git submodule update ADCore
+	git submodule update ADSupport
+	git submodule update ADSimDetector
 
-cd ADCore/iocBoot
+	cd ADCore/iocBoot
 
-cp EXAMPLE_commonPlugins.cmd commonPlugins.cmd
-cp EXAMPLE_commonPlugin_settings.req commonPlugin_settings.req
+	cp EXAMPLE_commonPlugins.cmd commonPlugins.cmd
+	cp EXAMPLE_commonPlugin_settings.req commonPlugin_settings.req
 
-cd ../..
+	cd ../..
 
-cd configure
-cp EXAMPLE_CONFIG_SITE.local       CONFIG_SITE.local
-cp EXAMPLE_CONFIG_SITE.local.WIN32 CONFIG_SITE.local.WIN32
-# make release will give the correct paths for these files, so we just need to rename them
-cp EXAMPLE_RELEASE_PRODS.local     RELEASE_PRODS.local
-cp EXAMPLE_RELEASE_LIBS.local      RELEASE_LIBS.local
-cp EXAMPLE_RELEASE.local           RELEASE.local
+	cd configure
+	cp EXAMPLE_CONFIG_SITE.local       CONFIG_SITE.local
+	cp EXAMPLE_CONFIG_SITE.local.WIN32 CONFIG_SITE.local.WIN32
+	# make release will give the correct paths for these files, so we just need to rename them
+	cp EXAMPLE_RELEASE_PRODS.local     RELEASE_PRODS.local
+	cp EXAMPLE_RELEASE_LIBS.local      RELEASE_LIBS.local
+	cp EXAMPLE_RELEASE.local           RELEASE.local
 
-# vxWorks has pthread and other issues
-echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.vxWorks
-echo 'WITH_BLOSC = NO' >> CONFIG_SITE.local.vxWorks
-echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.vxWorks
-echo 'WITH_JSON = NO' >> CONFIG_SITE.local.vxWorks
+	# vxWorks has pthread and other issues
+	echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.vxWorks
+	echo 'WITH_BLOSC = NO' >> CONFIG_SITE.local.vxWorks
+	echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.vxWorks
+	echo 'WITH_JSON = NO' >> CONFIG_SITE.local.vxWorks
 
-sed -i s:'WITH_JSON = YES':'WITH_JSON = NO':g CONFIG_SITE.local
+	sed -i s:'WITH_JSON = YES':'WITH_JSON = NO':g CONFIG_SITE.local
 
 
-# linux-arm has X11 and other issues
-echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
-echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
-echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.linux-x86.linux-arm
-echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.linux-x86.linux-arm
+	# linux-arm has X11 and other issues
+	echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
+	echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.linux-x86_64.linux-arm
+	echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.linux-x86.linux-arm
+	echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.linux-x86.linux-arm
 
-if [ ${WITH_PVA} == "YES" ]
-then
-	sed -i s:'WITH_PVA  = YES':'WITH_PVA = NO':g CONFIG_SITE.local
-	sed -i s:'WITH_QSRV = YES':'WITH_QSRV = NO':g CONFIG_SITE.local
-fi
+	if [ ${WITH_PVA} == "YES" ]
+	then
+		sed -i s:'WITH_PVA  = YES':'WITH_PVA = NO':g CONFIG_SITE.local
+		sed -i s:'WITH_QSRV = YES':'WITH_QSRV = NO':g CONFIG_SITE.local
+	fi
 
-# Enable building ADSimDetector
-sed -i s:'#ADSIMDETECTOR':'ADSIMDETECTOR':g RELEASE.local
+	# Enable building ADSimDetector
+	sed -i s:'#ADSIMDETECTOR':'ADSIMDETECTOR':g RELEASE.local
 
-cd ../..
+	cd ../..
 
 fi
 
@@ -352,15 +352,15 @@ fi
 if [[ $GALIL ]]
 then
 
-cd Galil-3-0-$GALIL
-cp -r ${GALIL//V}/. ./
-rm -rf ${GALIL//V}
+	cd Galil-3-0-$GALIL
+	cp -r ${GALIL//V}/. ./
+	rm -rf ${GALIL//V}
 
-cp ./config/GALILRELEASE ./configure/RELEASE.local
+	cp ./config/GALILRELEASE ./configure/RELEASE.local
 
-sed -i s:'#CROSS_COMPILER_TARGET_ARCHS.*':'CROSS_COMPILER_TARGET_ARCHS = ':g configure/CONFIG_SITE
+	sed -i s:'#CROSS_COMPILER_TARGET_ARCHS.*':'CROSS_COMPILER_TARGET_ARCHS = ':g configure/CONFIG_SITE
 
-cd ..
+	cd ..
 
 fi
 
