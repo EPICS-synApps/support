@@ -409,8 +409,8 @@ then
 		make
 		make install || true
 
-		echo "USR_LDFLAGS+=-L${pwd}/lib" >> ../configure/CONFIG_SITE.local
-		echo "USR_CPPFLAGS+=-I${pwd}/include" >> ../configure/CONFIG_SITE.local
+		echo "USR_LDFLAGS+=-L${PWD}/lib" >> ../configure/CONFIG_SITE.local
+		echo "USR_CPPFLAGS+=-I${PWD}/include" >> ../configure/CONFIG_SITE.local
 
 		cd ..
 	fi
