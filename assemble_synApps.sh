@@ -405,7 +405,7 @@ then
 
 		cd libuldaq-${ULDAQ}
 
-		./configure --prefix=${pwd}
+		./configure --prefix=${PWD}
 		make
 		make install || true
 
