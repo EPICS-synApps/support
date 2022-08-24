@@ -444,6 +444,7 @@ then
 	
 	sed -i s:'GTEST =':'#GTEST =':g ./configure/RELEASE
 	sed -i s:'#USR_CXXFLAGS_Linux':'USR_CXXFLAGS_Linux':g ./configure/CONFIG_SITE
+	sed -i s:'#CROSS_COMPILER_TARGET_ARCHS.*':'CROSS_COMPILER_TARGET_ARCHS = ':g ./configure/CONFIG_SITE
 	
 	cd ..
 fi
