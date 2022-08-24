@@ -69,6 +69,7 @@ then
 	MODBUS=R3-2
 	MOTOR=R7-2-2
 	OPCUA=v0.9.3
+	#UASDK=/path/to/sdk
 	OPTICS=R2-13-5
 	QUADEM=R9-4
 	SNCSEQ=2.2.9
@@ -208,7 +209,6 @@ if [[ $MEASCOMP ]];      then   get_repo epics-modules          measComp       M
 if [[ $MODBUS ]];        then   get_repo epics-modules          modbus         MODBUS         $MODBUS        ; fi
 if [[ $MOTOR ]];         then   get_repo epics-modules          motor          MOTOR          $MOTOR         ; fi
 if [[ $OPTICS ]];        then   get_repo epics-modules          optics         OPTICS         $OPTICS        ; fi
-if [[ $OPCUA  ]];        then   get_repo epics-modules          opcua          OPCUA          $OPCUA         ; fi
 if [[ $QUADEM ]];        then   get_repo epics-modules          quadEM         QUADEM         $QUADEM        ; fi
 if [[ $SCALER ]];        then   get_repo epics-modules          scaler         SCALER         $SCALER        ; fi
 if [[ $SOFTGLUE ]];      then   get_repo epics-modules          softGlue       SOFTGLUE       $SOFTGLUE      ; fi
@@ -440,13 +440,21 @@ fi
 
 if [[ $OPCUA ]]
 then
-	cd opcua-${OPCUA//./-}
+	if [[ UASDK ]]
+	then
+		get_repo epics-modules          opcua          OPCUA          $OPCUA 
 	
-	sed -i s:'GTEST =':'#GTEST =':g ./configure/RELEASE
-	sed -i s:'#USR_CXXFLAGS_Linux':'USR_CXXFLAGS_Linux':g ./configure/CONFIG_SITE
-	sed -i s:'#CROSS_COMPILER_TARGET_ARCHS.*':'CROSS_COMPILER_TARGET_ARCHS = ':g ./configure/CONFIG_SITE
-	
-	cd ..
+		cd opcua-${OPCUA//./-}
+
+		sed -i s:'GTEST =':'#GTEST =':g ./configure/RELEASE
+		sed -i s:'#USR_CXXFLAGS_Linux':'USR_CXXFLAGS_Linux':g ./configure/CONFIG_SITE
+		sed -i s:'#CROSS_COMPILER_TARGET_ARCHS.*':'CROSS_COMPILER_TARGET_ARCHS = ':g ./configure/CONFIG_SITE
+
+		echo "EPICS_BASE=${EPICS_BASE}" >> RELEASE.local
+		echo "UASDK=${UASDK}" >> CONFIG_SITE.local
+
+		cd ..
+	fi
 fi
 
 
