@@ -288,7 +288,7 @@ then
 	echo 'WITH_BITSHUFFLE = NO' >> CONFIG_SITE.local.linux-x86.linux-arm
 	echo 'WITH_GRAPHICSMAGICK = NO' >> CONFIG_SITE.local.linux-x86.linux-arm
 
-	if [ ${WITH_PVA} == "YES" ]
+	if [ ${WITH_PVA} == "NO" ]
 	then
 		sed -i s:'WITH_PVA  = YES':'WITH_PVA = NO':g CONFIG_SITE.local
 		sed -i s:'WITH_QSRV = YES':'WITH_QSRV = NO':g CONFIG_SITE.local
