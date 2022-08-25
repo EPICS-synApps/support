@@ -262,6 +262,13 @@ then
 
 	cp EXAMPLE_commonPlugins.cmd commonPlugins.cmd
 	cp EXAMPLE_commonPlugin_settings.req commonPlugin_settings.req
+	
+	if [ WITH_PVA == "YES" ]
+	then
+		sed -i s:'#NDPvaConfigure':'NDPvaConfigure':g commonPlugins.cmd
+		sed -i s:'#dbLoadRecords("NDPva':'dbLoadRecords("NDPva':g commonPlugins.cmd
+		sed -i s:'#startPVAServer':'startPVAServer':g commonPlugins.cmd
+	fi
 
 	cd ../..
 
