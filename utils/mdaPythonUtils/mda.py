@@ -216,7 +216,10 @@ def verboseData(data, out=sys.stdout, asHex=False):
 				else:
 					out.write(" %d" % datum)
 			else:
-				out.write(" %.5f" % datum)
+				try:
+					out.write(" %.5f" % float(datum))
+				except ValueError:
+					out.write(datum)
 		out.write(" ]\n")
 
 def readScan(scanFile, verbose=0, out=sys.stdout, unpacker=None):
