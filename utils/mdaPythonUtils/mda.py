@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
+# version 2.1.1 Pete Jemian 2022-09-02
+#   fix errors encountered with Python 3.10.6
 # version 2.1 Tim Mooney 2/15/2012
 # merge of mda.py and mda_f.py
 # - supports reading, writing, and arithmetic operations for
 #   up to 4-dimensional MDA files.
 
-__version__ = '2.1'
+__version__ = '2.1.1'
 
 import sys
 import os

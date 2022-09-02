@@ -20,7 +20,7 @@ from setuptools import setup
 
 setup(
     name='mdalib',
-    version='2013-02',
+    version='2022-09',
     author='Tim Mooney',
     author_email = 'mooney@aps.anl.gov',
     description = 'MDA support library',
