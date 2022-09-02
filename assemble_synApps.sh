@@ -196,7 +196,7 @@ if [[ $DELAYGEN ]];      then   get_repo epics-modules          delaygen       D
 if [[ $DXP ]];           then   get_repo epics-modules          dxp            DXP            $DXP           ; fi
 if [[ $DXPSITORO ]];     then   get_repo epics-modules          dxpSITORO      DXPSITORO      $DXPSITORO     ; fi
 if [[ $DEVIOCSTATS ]];   then   get_repo epics-modules          iocStats       DEVIOCSTATS    $DEVIOCSTATS   ; fi
-if [[ $ETHERIP ]];       then   get_repo EPICSTools             ether_ip       ETHERIP        $ETHERIP       ; fi
+if [[ $ETHERIP ]];       then   get_repo epics-modules          ether_ip       ETHERIP        $ETHERIP       ; fi
 if [[ $GALIL ]];         then   get_repo motorapp               Galil-3-0      GALIL          $GALIL         ; fi
 if [[ $IP ]];            then   get_repo epics-modules          ip             IP             $IP            ; fi
 if [[ $IPAC ]];          then   get_repo epics-modules          ipac           IPAC           $IPAC          ; fi
