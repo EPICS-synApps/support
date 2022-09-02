@@ -87,6 +87,13 @@ if ( -f "setup_epics_common" )
 	doSed("s/${old}App/${new}App/g", "setup_epics_common");
 }
 
+if ( -f "example_start_putrecorder")
+{
+	printf "\r%-50s", "example_start_putrecorder";
+	doSed("s!/${old}!/${new}!g", "example_start_putrecorder");
+	doSed("s/${old}App/${new}App/g", "example_start_putrecorder");
+}
+
 printf "\r%-50s", "${new}App/src";
 move "${old}App", "${new}App";
 chdir "${new}App/src";
