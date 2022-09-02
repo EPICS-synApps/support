@@ -505,10 +505,7 @@ EPICS_types_dict = {
 }
 
 def EPICS_types(n):
-	if EPICS_types_dict.has_key(n):
-		return EPICS_types_dict[n]
-	else:
-		return ("Unexpected type %d" % n)
+	return EPICS_types_dict.get(n, "Unexpected type %d" % n)
 
 def readMDA(fname=None, maxdim=4, verbose=0, showHelp=0, outFile=None, useNumpy=None, readQuick=False):
 	"""usage readMDA(fname=None, maxdim=4, verbose=0, showHelp=0, outFile=None, useNumpy=None, readQuick=False)"""
