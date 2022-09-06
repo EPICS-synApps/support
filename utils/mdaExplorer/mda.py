@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
+# version 2.1.1 Pete Jemian 2022-09-02
+#   fix errors encountered with Python 3.10.6
 # version 2.1 Tim Mooney 2/15/2012
 # merge of mda.py and mda_f.py
 # - supports reading, writing, and arithmetic operations for
 #   up to 4-dimensional MDA files.
 
-__version__ = '2.1'
+__version__ = '2.1.1'
 
 import sys
 import os
@@ -216,7 +218,10 @@ def verboseData(data, out=sys.stdout, asHex=False):
 				else:
 					out.write(" %d" % datum)
 			else:
-				out.write(" %.5f" % datum)
+				try:
+					out.write(" %.5f" % float(datum))
+				except ValueError:
+					out.write(datum)
 		out.write(" ]\n")
 
 def readScan(scanFile, verbose=0, out=sys.stdout, unpacker=None):
@@ -505,10 +510,7 @@ EPICS_types_dict = {
 }
 
 def EPICS_types(n):
-	if EPICS_types_dict.has_key(n):
-		return EPICS_types_dict[n]
-	else:
-		return ("Unexpected type %d" % n)
+	return EPICS_types_dict.get(n, "Unexpected type %d" % n)
 
 def readMDA(fname=None, maxdim=4, verbose=0, showHelp=0, outFile=None, useNumpy=None, readQuick=False):
 	"""usage readMDA(fname=None, maxdim=4, verbose=0, showHelp=0, outFile=None, useNumpy=None, readQuick=False)"""
