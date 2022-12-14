@@ -156,16 +156,24 @@ foreach my $dir (glob("ioc*"))
 		if ( -f $file )
 		{
 			printf "\r%-50s", "$file";
-			doSed("s!/${old}/!/${new}/!g", $file);
-			doSed("s/${old}:/${new}:/g", $file);
-			doSed("s/${old}\\./${new}./g", $file);
-			doSed("s/ioc${old}/ioc${new}/g", $file);
-			doSed("s/${old}Lib/${new}Lib/g", $file);
-			doSed("s/${old}App/${new}App/g", $file);
-			doSed("s/=${old}/=${new}/g", $file);
-			#doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
-			#doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
-			#doSed("/shellPromptSet/s/${old}/${new}/g", $file);
+
+			given ($file) {
+				when ('st.cmd.vxWorks') {
+					doSed("s/ioc${old}>/ioc${new}>/g", $file);
+				}
+				default {
+					doSed("s!/${old}/!/${new}/!g", $file);
+					doSed("s/${old}:/${new}:/g", $file);
+					doSed("s/${old}\\./${new}./g", $file);
+					doSed("s/ioc${old}/ioc${new}/g", $file);
+					doSed("s/${old}Lib/${new}Lib/g", $file);
+					doSed("s/${old}App/${new}App/g", $file);
+					doSed("s/=${old}/=${new}/g", $file);
+					#doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
+					#doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
+					#doSed("/shellPromptSet/s/${old}/${new}/g", $file);
+				}
+			}
 		}
 	}
 	
