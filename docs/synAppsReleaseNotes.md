@@ -4,8 +4,7 @@ synApps 6.2.1 Release Notes
 Scaler module added
 
 - Version changes from R6-2 to R6-2-1
-    -----------------------------------
-    
+   
     | module | old version | newversion | notes |
     |---|---|---|---|
     | ALIVE | 1-3-1 | 1-4-0 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/alive/blob/R1-4-0/documentation/aliveReleaseNotes.html) |
@@ -55,7 +54,6 @@ Xspress3 and Galil modules added
 IOC Shell files now installed to top level directory, rather than residing there.
 
 - Version changes from R6-1 to R6-2
-    ---------------------------------
     
     | module | old version | newversion | notes |
     |---|---|---|---|
@@ -110,7 +108,6 @@ Four new build options at top level; all\_adl, all\_ui, all\_opi, and all\_edl. 
 Makefile also updated to use each module's RELEASE file to build dependencies. This means that adding a new module to an existing synApps directory is now as easy as dropping the module in and specifying it's name in the makefile's MODULE\_LIST.
 
 - Version changes from R6-0 to R6-1
-    ---------------------------------
     
     | module | old version | new version | notes |
     |---|---|---|---|
@@ -159,7 +156,6 @@ This version of synApps is specifically targeted against epics base 3.15. While 
 Modules now can contain an iocsh folder which provide ioc shell scripts to individually load a device onto an IOC. These are designed for use with the iocshLoad function in base and the scripts have comments describing the macros that should be set to use them.
 
 - Version changes from R5-8 to R6-0
-    ---------------------------------
     
     | module | old version | new version | notes |
     |---|---|---|---|
@@ -207,7 +203,6 @@ synApps 5.8 Release Notes
 This version of synApps is compatible with both base 3.14.12 and 3.15.1. In the default build, none of the modules take advantage of features in 3.15 that are not backward compatible with 3.14. Beginning with synApps 6.0, modules will no longer be required to work with base 3.14.
 
 - Version changes from R5-7 to R5-8
-    ---------------------------------
     
     | module | old version | new version | notes |
     |---|---|---|---|
@@ -251,8 +246,7 @@ synApps 5.7 Release Notes
 - The build was modified so it's possible to to things like "make uninstall" from the support directory, and still build configure (so CHECK\_RELEASE is done).
 - Added caQtDM displays
 
-Version changes from R5-6 to R5-7
----------------------------------
+- Version changes from R5-6 to R5-7
 
 | module | old version | new version | highlights, comments |
 |---|---|---|---|
@@ -288,11 +282,11 @@ Version changes from R5-6 to R5-7
 | VME | 2-8 | 2-8-1 | [release notes](http://www.aps.anl.gov/bcda/synApps/vme/vmeReleaseNotes.html) |
 | XXX | 5-6 | 5-7-1 | [release notes](http://www.aps.anl.gov/bcda/synApps/xxx/xxxReleaseNotes.html) |
 
+
 synApps 5.6 Release Notes
 =========================
 
-Version changes from R5-5 to R5-6
----------------------------------
+- Version changes from R5-5 to R5-6
 
 | module | old version | new version | highlights, comments |
 |---|---|---|---|
@@ -331,23 +325,53 @@ Version changes from R5-5 to R5-6
 synApps 5.5.1 Release Notes
 ===========================
 
-Version changes from R5-5 to R5-5-1
------------------------------------
+- Version changes from R5-5 to R5-5-1
 
-| module | old version | new version\| EPICS\_BASE \| 3.14.11 \| 3.14.11 \|  \| \|---\|---\|---\|---\|---\|---\| \| ALLEN\_BRADLEY \| 09092009 \| 09092009 \|  \| \| AREA\_DETECTOR \| synApps\_5\_5 \| 1-6 \| PerkinElmer, EPICS\_AD\_Viewer, marCCD (manual,TwoTheta, baseline stabilization), NDPluginStats, Bruker APEX2, FastSweep, new plugins, FindingAreaComponents \| \| ASYN \| 4-13 \| 4-14 \| asynPortDriver, testIPServerApp, vxi11, asynDriver(SyncIO, connection management) \| \| AUTOSAVE \| 4-6 \| 4-7 \| bug fix for array valued PV's \| \| BUSY \| 1-3 \| 1-3 \|  \| \| CALC \| 2-8 \| 2-8 \|  \| \| CAMAC \| 2-6 \| 2-6 \|  \| \| DAC128V \| 2-6 \| 2-6 \|  \| \| DELAYGEN \| 1-0-5 \| 1-0-5 \|  \| \| DXP \| synApps\_5\_5 \| 3-0 \|  \| \| IP \| 2-10 \| 2-10 \|  \| \| IP330 \| 2-6 \| 2-7 \|  \| \| IPAC \| 2-11 \| 2-11 \|  \| \| IPUNIDIG \| 2-7 \| 2-7 \|  \| \| LOVE \| 3-2-4 \| 3-2-4 \|  \| \| MCA \| synApps\_5\_5 \| 6-12-1 \| mcaSISSupport.dbd changed to mcaSTR7201Support.dbd, docs, drvFastSweep \| \| MODBUS \| 2-0 \| 2-0 \|  \| \| MOTOR \| 6-5 \| 6-5-1 \| Aerotech Ensemble, OMS MAXv, OMS MAXnet \| \| OPTICS \| 2-7 \| 2-7 \|  \| \| QUADEM \| 2-4-1 \| 2-4-1 \|  \| \| SNCSEQ \| 2-0-12 \| 2-0-12 \|  \| \| SOFTGLUE \| 1-0 \| 2-0 \| load FPGA; Drag-And-Drop signal connect; name\*, 0!, 1! syntax; interrupts; docs \| \| SSCAN \| 2-6-6 \| 2-6-7 \| bug fix: fly scans with no det triggers; \| \| STD \| 2-8 \| 2-9 \|  \| \| STREAM \| 2-4-1 \| 20100615 \|  \| \| VAC \| 1-3 \| 1-3 \|  \| \| VME \| 2-7 \| 2-7 \|  \| \| VXSTATS \| 1-7-2h \| 1-7-2h \|  \| \| XXX \| 5-5 \| 5-5-1 \|  \| |
+| module | old version | new version | 
+| EPICS_BASE | 3.14.11 | 3.14.11 |  
+| --- |---|---|
+| ALLEN_BRADLEY | 09092009 | 09092009 |
+| AREA_DETECTOR PerkinElmer, EPICS\_AD\_Viewer, marCCD (manual,TwoTheta, baseline stabilization), NDPluginStats, Bruker APEX2, FastSweep, new plugins, FindingAreaComponents | synApps_5_5 | 1-6 | 
+| ASYN asynPortDriver, testIPServerApp, vxi11, asynDriver(SyncIO, connection management) | 4-13 | 4-14 | 
+| AUTOSAVE | 4-6 | 4-7 | 
+| BUSY | 1-3 | 1-3 | 
+| CALC | 2-8 | 2-8 |  
+| CAMAC | 2-6 | 2-6 | 
+| DAC128V | 2-6 | 2-6 | 
+| DELAYGEN | 1-0-5 | 1-0-5 |  
+| DXP | synApps_5_5 | 3-0 | 
+| IP | 2-10 | 2-10 |  
+| IP330 | 2-6 | 2-7 |  
+| IPAC | 2-11 | 2-11 |  
+| IPUNIDIG | 2-7 | 2-7 |  
+| LOVE | 3-2-4 | 3-2-4 |  
+| MCA | synApps_5_5 | 6-12-1 | 
+| MODBUS | 2-0 | 2-0 |  
+| MOTOR Aerotech Ensemble, OMS MAXv, OMS MAXnet | 6-5 | 6-5-1 |  
+| OPTICS | 2-7 | 2-7 |  
+| QUADEM | 2-4-1 | 2-4-1 |  
+| SNCSEQ | 2-0-12 | 2-0-12 |  
+| SOFTGLUE | 1-0 | 2-0 | 
+| SSCAN | 2-6-6 | 2-6-7 | 
+| STD | 2-8 | 2-9 |  
+| STREAM | 2-4-1 | 20100615 |  
+| VAC | 1-3 | 1-3 |  
+| VME | 2-7 | 2-7 |  
+| VXSTATS | 1-7-2h | 1-7-2h | 
+| XXX | 5-5 | 5-5-1 |
 
 Build notes
 
 - softGlue 1.1+ doesn't always build correctly when make is run with the "-j" option (parallel make). The problem is in base/configure/RULES.Db, which uses the same temporary file name, msi.tmp, for every invocation of msi. Replacing "msi.tmp" with "$\*.tmp" in RULES.Db fixes the problem.
-- On my solaris machine, apex2Src/Makefile needed the following lines added: ```
-    
+- On my solaris machine, apex2Src/Makefile needed the following lines added: 
+    ```    
     # solaris
     apex2DetectorApp_LIBS_solaris += NeXus hdf5_cpp hdf5
     apex2DetectorApp_SYS_LIBS_solaris   += tiff
     apex2DetectorApp_LIBS_solaris   += jpeg sz z
     ```
-- On my linux-x86\_64 machine, apex2Src didn't build until I added the following lines to configure/CONFIG: ```
-    
+- On my linux-x86\_64 machine, apex2Src didn't build until I added the following lines to configure/CONFIG: 
+    ```
     ifeq (Linux, $(OS_CLASS))
       SHARED_LIBRARIES=NO
     endif
@@ -356,8 +380,8 @@ Build notes
 synApps 5.5 Release Notes
 =========================
 
-Version changes from R5-4-2 to R5-5
------------------------------------
+- Version changes from R5-4-2 to R5-5
+
 
 | module | old version | new version |
 |---|---|---|
@@ -395,22 +419,22 @@ Version changes from R5-4-2 to R5-5
 synApps 5.4.2 Release Notes
 ===========================
 
-Module changes from R5-4-1 to R5-4-2
-------------------------------------
+- Module changes from R5-4-1 to R5-4-2
 
-| SSCAN | 2-6-4 | 2-6-5 |
+| module | old version | new version |
 |---|---|---|
+| SSCAN | 2-6-4 | 2-6-5 |
 
 Minor improvements in utils/convertIocFiles, and utils/mdaExplorer
 
 synApps 5.4.1 Release Notes
 ===========================
 
-Module changes from R5-4 to R5-4-1
-----------------------------------
+- Module changes from R5-4 to R5-4-1
 
-| DELAYGEN | 1-0-2 | 1-0-3 |
+| module | old version | new version |
 |---|---|---|
+| DELAYGEN | 1-0-2 | 1-0-3 |
 | MOTOR | 6-4-2 | 6-4-3 |
 | OPTICS | 2-6 | 2-6-1 |
 | SSCAN | 2-6-3 | 2-6-4 |
@@ -473,13 +497,13 @@ The most obvious change is that the directory in which you build synApps has cha
 
 ### autosave
 
-> #### 4.5
+> __4.5__
 > 
 > - Previously, autosave restored auto\_positions.sav and auto\_settings.sav if no save file had been specified in a call to set\_pass*n*\_restoreFile(). Now, autosave does not restore anything you don't tell it to restore.
 > - Can now build with tornado 2.2.2.
 > - save\_restore.c:write\_it() was calling open(), fdopen(), fclose(), and close(), in that order, and this worked routinely. However, some doc suggests close() should not be called, and we found a task suspended in the close() call, so the call has been deleted.
 > 
-> #### 4.4
+> __4.4__
 > 
 > - If file close fails, retry once. (Previously, would retry up to 100 times.)
 > - If file write (including close) fails, retry after save\_restoreRetrySeconds (default value is 60 seconds). Previously, would retry only after the file system was remounted, or the next time the set was triggered.
@@ -490,13 +514,13 @@ The most obvious change is that the directory in which you build synApps has cha
 
 ### busy
 
-> #### 1.2
+> __1.2__
 > 
 > New module
 
 ### calc
 
-> #### 2.7
+> __2.7__
 > 
 > - Instead of the genSub record, the calc module now uses the aSub record in EPICS base (3.14.10 and higher). Thanks to Eric Norum for detailing the required changes.
 > - transform record exports transformRecordDebug, and calcSupport.dbd names it.
@@ -509,13 +533,14 @@ The most obvious change is that the directory in which you build synApps has cha
 
 ### ccd
 
-> NOTE: This module is __now obsolete__ and has been replaced by the [ areaDetector module.](https://cars.uchicago.edu/software/epics/areaDetector.html/)#### 1.10
+> NOTE: This module is __now obsolete__ and has been replaced by the [ areaDetector module.](https://cars.uchicago.edu/software/epics/areaDetector.html/)
+> __1.10__
 > 
 > - Added code to support parallel make.
 > - Use new "busy" module for busy record support, not in sscan module any longer.
 > - NOTE: The new version of roperServer in R1-9 and R1-10 may not work on some Windows systems. The older server from R1-8 and before can still be used in this case.
 >  
-> #### 1.9
+> __1.9__
 > 
 > - Converted roperServer from Visual Basic 6 to Visual Basic .NET 2003.
 > - Fixed bug in roperServer that caused it to treat 16-bit data as signed rather than unsigned.
@@ -530,7 +555,7 @@ The most obvious change is that the directory in which you build synApps has cha
 
 ### dxp
 
-> #### 2.9
+> __2.9__
 > 
 > - Fixed problems with DXP4C2X. It was not correctly downloading FiPPI files when peaking time was changed.
 > - Fixed problems with logging errors and warnings on vxWorks. Previously the output from XIA routines was lost after the startup script completed, because vxWorks closes and reopens stdout.
@@ -544,7 +569,7 @@ The most obvious change is that the directory in which you build synApps has cha
 
 ### ip
 
-> #### 2.9
+> __2.9__
 > 
 > - pico\_small.adl - use asyn record instead of serial
 > - devMPC.c - increased timeout, and defend against timeout; fixed bug when reading volts and return string length &lt; 4
@@ -555,13 +580,13 @@ The most obvious change is that the directory in which you build synApps has cha
 
 ### ipUnidig
 
-> #### 2.6
+> __2.6__
 > 
 > - drvIpUnidig.c - fixed bug in report function; fixed bug that led to records being processed on every poll until first interrupt.
 
 ### love
 
-> #### 3.2.4
+> __3.2.4__
 > 
 > - Corrected a problem when communication would timeout.
 > - Modified MEDM screen field colors.
@@ -573,75 +598,75 @@ The most obvious change is that the directory in which you build synApps has cha
 
 ### modbus
 
-> #### 1.3
+> __1.3__
 > 
 > - Changed modbusInterpose.c to replace pasynOctet-&gt;writeRaw() and pasynOctet-&gt;readRaw() with pasynOctet-&gt;write() and pasynOctet-&gt;read(), because the raw routines have been removed in asyn R4-10.
 > - Changed the driver to use the asynStandardInterfaces interfaces added to asyn in R4-10.
 
 ### motor
 
-> #### 6.4.3
+> __6.4.3__
 > 
->  __Backlash after a new target position__
+>  - Backlash after a new target position
 > 
 >  A change in R6-4 prevented the motor from doing its' backlash move when a motor move was interrupted by a new target position. The user would see a "tdir" message in the iocsh and the motor would move to the target position minus the backlash distance.
 > 
 > 
 > 
->  __Multiple STOP commands__
+>  - Multiple STOP commands
 > 
 >  A modification was made to prevent multiple STOP commands from occurring while the motor was decelerating to a stop.
 > 
 > 
 > 
-> #### 6.4.2
+> __6.4.2__
 > 
->  __OMS MAXv home switch status__
+>  - OMS MAXv home switch status
 > 
 >  Dirk Zimoch (PSI) fixed a bug in the OMS MAXv driver that caused the home switch status in the response string to be overwritten.
 > 
 > 
 > 
->  __asyn motor__
+>  - asyn motor
 > 
 >  Matthew Pearson (Diamond) discovered a bug in the Newport XPS asyn motor port drive that was causing idle polling to interfere with setting positions and preventing auto save/restore from working. This fix was copied to the other asyn motor port drives in the motor record distribution; i.e., attocube ANC 150 (drvANC150Asyn.cc) and the motor simulator (drvMotorSim.c).
 > 
 > 
 > 
->  __old device drive architecture__
+>  - old device drive architecture
 > 
 >  A problem was introduced in R6-4 (fixed in R6-4-2) of the old motor record device drive architecture. If during the move of one or more motors the motor task did not issue an OS delay during status updates, it could potentially not respond to any further motor commands.
 > 
 > 
 > 
 >   
-> #### 6.4.2
+> __6.4.2__
 > 
->  __64-bit compatiablity__
-> 
->  Fixed 64 bit compile problems with the PI E816 and Aerotech Ensemble device drivers.
-> 
-> 
-> 
-> #### 6.4.1
-> 
->  __64-bit compatiablity__
+>  - 64-bit compatiablity
 > 
 >  Fixed 64 bit compile problems with the PI E816 and Aerotech Ensemble device drivers.
 > 
 > 
 > 
-> #### 6.4
+> __6.4.1__
 > 
-> #### Modifications to Existing Features
+>  - 64-bit compatiablity
 > 
->  __Stale SET position data from OMS VME58 controllers.__
+>  Fixed 64 bit compile problems with the PI E816 and Aerotech Ensemble device drivers.
+> 
+> 
+> 
+> __6.4__
+> 
+> __Modifications to Existing Features__
+> 
+>  - Stale SET position data from OMS VME58 controllers.
 > 
 >  A problem with certain OMS VME58 firmware versions (2.24-8S and all 2.35 versions) has arisen since modifications made under R6-3. When the user sets the motor record's position, the previous target and readback positions are read from the controller on the next update. This occurs with the previous release (R6-3) because the "stale data delay" was changed from 10ms to zero for the drvOms58 driver.
 > 
 >  With this release the driver searches all VME58 board ID's for either 2.24-8S or any 2.35 version. If any board is found with these versions, the "stale data delay" is set to a non-zero value for all VME58 boards in the system.
 > 
->  __"tdir=" error messages__
+>  - "tdir=" error messages
 > 
 >  A problem was reported by Emma Shepherd (Diamond) with the previous release if the "Use RDBL Link" field (URIP) was set to "Yes". The NTM logic was sending stop commands and issuing the "tdir=.." message to the console if the RDBL link was used. This error was the result of changes to the NTM logic in R6-3.
 > 
@@ -651,7 +676,7 @@ The most obvious change is that the directory in which you build synApps has cha
 > 
 >  NTMF must be &gt;= 2. If properly configured, the NTM deadband prevents NTM logic from issuing a STOP command at the end of a DC motor move that overshoots its' target position.
 > 
->  __Access Security Level changes__
+>  - Access Security Level changes
 > 
 >  Major changes have been made to the Access Security Level (ASL) attribute of the motor record fields. With previous releases, the following fields were set to ASL=0; FOF, VOF, SSET, SUSE, VBAS, VMAX, SBAS, SMAX, UREV and MRES. All other fields were set to ASL=1 by default.
 > 
@@ -669,19 +694,19 @@ The most obvious change is that the directory in which you build synApps has cha
 > 
 >  This means that out of the list of fields that were previously set to ASL=0; VBAS, VMAX, SBAS, SMAX, UREV and MRES are now set to ASL=1.
 > 
->  __OMS MAXv A24/A32 VMEbus addressing bug fix__
+>  - OMS MAXv A24/A32 VMEbus addressing bug fix
 > 
 >  Previous releases had a problem with the OMS MAXv device driver when it was configured for more than one board, and, either A24 or A32 addressing was specified. The driver was not sizing the address space occupied by each MAXv correctly.
 > 
->  __asyn motor archtecture updates__
+>  - asyn motor archtecture updates
 > 
 > 18. Motor record GET\_INFO commands were not supported by the asyn motor archtecture in previous releases.
 > 19. A motor record bug was fixed that caused unscheduled retries to occur with asyn motor.
 >  
 > 
-> #### New Features
+> __New Features__
 > 
->  __Deferred moves for asyn motors__
+>  - Deferred moves for asyn motors
 > 
 >  The asyn motor framework now supports a flag to indicate that moves should be deferred. When at zero, moves proceed as normal. When set to one, moves should be deferred and remembered by the controller driver, but not executed immediately. When set back to zero, the controller driver should then start all the moves (or at least moves to the last requested demand positions) that have been deferred, as near to simultaneously as is possible for the particular model of controller. The flag is implemented per-controller, so all axes on a particular controller instance are affected, but axes on other controllers via the same driver are unaffected.
 > 
@@ -689,26 +714,29 @@ The most obvious change is that the directory in which you build synApps has cha
 > 
 >  To use the flag, connect to any asyn port/addr combination on the controller, using the parameter "DEFER". e.g. for a bo record, use DTYP=asynUInt32Digital, OUT=@asynMask(port,1,1)DEFER, ZNAM="Go", ONAM="Defer"
 > 
->  __64-bit compatiablity__
+>  - 64-bit compatiablity
 > 
 >  Previous releases of the motor record distribution would not compile for 64-bit platforms. Numerous minor modifications were made for this release to attain 64-bit compatibility. Note that at the time of writing (03/14/08), this release was successfully compiled on a Linux Fedora Core 6 x86\_64 host using gcc version 4.1.2, but there are bugs. Since EPICS base (R3.14.9) has not had all the bugs wrung out (Mantis ID's #309, #310), there are no immediate plans to debug 64-bit related problems.
 > 
->  __attocube systems AG ANC150__ Ron Sluiter added support for the attocube systems AG ANC150 Piezo Step Controller.
+>  - attocube systems AG ANC150 
+>  Ron Sluiter added support for the attocube systems AG ANC150 Piezo Step Controller.
 > 
->  __Aerotech's Ensemble__ Chad Weimer (Aerotech) added support for Aerotech's Ensemble family of digital servo controllers.
+>  - Aerotech's Ensemble
+>  Chad Weimer (Aerotech) added support for Aerotech's Ensemble family of digital servo controllers.
 > 
->  __Physik Instrumente GmbH &amp; Co. Model E-816__ John Hammonds added support of the Physik Instrumente (PI) GmbH &amp; Co. E-816 motor controller.
+>  - Physik Instrumente GmbH &amp; Co. Model E-816 
+>  John Hammonds added support of the Physik Instrumente (PI) GmbH &amp; Co. E-816 motor controller.
 
 ### optics
 
-> #### 2.6.1
+> __2.6.1__
 > 
 > - Added support for a multilayer monochromator
 > - XIA\_shutter.db - user command was sometimes overwritten by a poll and dropped
 
 ### pilatus
 
-> #### 1.6
+> __1.6__
 > 
 > - Notice that this module __will no longer be supported__, users should convert to the [areaDetector](https://cars.uchicago.edu/software/epics/areaDetector.html) module.
 > - Use the busy record from the new "busy" module, moved from the sscan module.
@@ -720,35 +748,35 @@ The most obvious change is that the directory in which you build synApps has cha
 
 ### sscan
 
-> #### 2.6.5
+> __2.6.5__
 > 
 > - Check all chid's before using them.
 > - Modified saveData so that, when it finds the filename it would like to use (e.g., base\_0001.mda) already in use, it writes, e.g., base\_0001\_01.mda, instead of base\_0001.mda\_01, as it used to do.
 > 
-> #### 2.6.4
+> __2.6.4__
 > 
 > - In 2.6.3, saveData crashed under tornado 2.2, because a vxWorks XDR structure changed. Now we define an old and a new structure, and identify the correct structure by its size.
 > 
-> #### 2.6.3
+> __2.6.3__
 > 
 > - scanDetPlot.adl - added count
 > - don't build busy record (split out into separate module) but retain a copy here for a while, since the busy module has new different version
 > - saveData.c - don't include nfsDrv.h (which is renamed in tornado 2.2.2); instead, define nfsMount, nfsUnmount by hand.
 > - sscanRecord.c - handle DBRprecision definition in EPICS 3.14.10; scanOnce() arg cast
 > 
-> #### 2.6.2
+> __2.6.2__
 > 
 > - Removed race conditions affecting callback counters, and added mutex to protect them. Changed timing of when to renew positioner links from now-last\_scan\_start to now-last\_scan\_end.
 > - display\_fields.adl uses new link-help displays from std R2.6
 > 
-> #### 2.6.1
+> __2.6.1__
 > 
 > - The sscan record didn't correctly handle reads or writes to PnPA, for n&gt;1. As a result, table scans did not work with positioners 2-4.
 > - saveData didn't fail correctly when it could not find the \[basename\] section in its initialization file, and when it failed to connect to the basename PV. Instead, it aborted its initialization, and failed to connect to sscan records.
 
 ### std
 
-> #### 2.7
+> __2.7__
 > 
 > - yySeq.adl, yySeq\_full.adl - new files
 > - genSub-record dependency replaced by aSub record in base 3.14.10
@@ -766,14 +794,14 @@ The most obvious change is that the directory in which you build synApps has cha
 
 ### vac
 
-> #### 1.2
+> __1.2__
 > 
 > - new files: vacApp/op/adl/Pump.adl, .../Pump\_sp.adl, .../VacSen.adl
 > - Db/vs.db, Db/digitelPump.db - added SCAN field
 
 ### vme
 
-> #### 2.6
+> __2.6__
 > 
 > - removed iocBoot example, and associated build in src
 > - use devScaler\_debug.c for VSC-series scalers, because many of the new series have hardware trouble.
@@ -785,8 +813,8 @@ The most obvious change is that the directory in which you build synApps has cha
 synApps 5.3 Release Notes
 =========================
 
-Module changes from R5-2 to R5-3
---------------------------------
+- Module changes from R5-2 to R5-3
+
 
 | Module | R5-2 | R5-3 |
 |---|---|---|
@@ -845,6 +873,7 @@ See autosave/documentation/autoSaveRestore.html for more information on these ch
 
 - - - - - -
 
+
 calc
 ----
 
@@ -862,6 +891,7 @@ If an sCalcoutRecord link connects to a link field, or if the WAIT field is true
 
 - - - - - -
 
+
 camac
 -----
 
@@ -870,6 +900,7 @@ camac
 
 
 - - - - - -
+
 
 ccd
 ---
@@ -929,1352 +960,1355 @@ dxp
 136. Removed architecture specific DBD files and Makefile rules, requires asyn R4-9.
 137. Enhancements and additions to 4 element detector ADL files.
 138. dxp4c2x\_psl.c (CAMAC module). Added support for all of the same parameters that the Saturn (x10p\_psl.c) supports. With this enhancement the DXP2X now has the same EPICS interface as the Saturn.
-139. dxpMED.st. Increased number of detectors to 32, bug fixes thanks to Dave Madden from SLS. - - - - - -
-    
-    ebrick
-    ------
-    
-    
-    - ebrick/LICENSE
-    
-    - Added Copyright information.
-    
-    - ebrick/start\_epics\_ebrick\_ioc
-    
-    - Modified for new target.
-    
-    - ebrick/start\_epics\_ebrick\_medm
-    
-    - Modified given new directory structure.
-    - Modified given new .adl location.
-    - Modified for next release.
-    
-    - ebrick/configure/RELEASE
-    
-    - Added CCD shutter timing support.
-    - Modified to compile under multiple platforms.
-    - Update with new paths.
-    - Moved to veclinuxdev machine
-    - Modified to upgrade to STD 2.5.4.
-    - Need to upgrade scaler record to STD 2.5.4.
-    - Modified for synApps R5-2.
-    
-    - ebrick/docs/BC059\_SCALER
-    
-    - Added documentation and serial link support.
-    - Updated Scaler documentation
-    - Updated documentation for both V1.4 and V2.0
-    - Added more documentation.
-    - Modified for next release.
-    - Modified/added for new supported hardware.
-    
-    - ebrick/docs/BC059\_SCALER\_V20LC
-    
-    - Updated Scaler documentation
-    
-    - ebrick/docs/BOARDTYPES
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Modified/added for new supported hardware.
-    - Modified for Opal-MM support.
-    - Modified for BC059, Generic DIO/w interrupt Scaler.
-    - Modified for new Scaler type (BC057).
-    
-    - ebrick/docs/GDIO\_SCALER
-    
-    - Updated Scaler documentation
-    - Updated documentation for both V1.4 and V2.0
-    - Added more documentation.
-    - Modified for next release.
-    - Modified/added for new supported hardware.
-    - Added / removed Scaler documentation.
-    
-    - ebrick/docs/GDIO\_SCALER.TXT
-    
-    - Added / removed Scaler documentation.
-    - Modified for BC059, Generic DIO/w interrupt Scaler.
-    
-    - ebrick/docs/IOMAP
-    
-    - Removed unnecessary document.
-    
-    - ebrick/docs/README
-    
-    - Added documentation and serial link support.
-    - Modified for next release.
-    
-    - ebrick/docs/README\_SCALER
-    
-    - Added documentation and serial link support.
-    - Added further details.
-    - Modified for next release.
-    - Modified/added for new supported hardware.
-    - Added / removed Scaler documentation.
-    
-    - ebrick/docs/SMARTAD518
-    
-    - Added documentation.
-    - Modified for EBRICK-II.
-    - Added support for the Acromag 851T signal conditioner.
-    
-    - ebrick/docs/autoshut.tar.gz
-    
-    - Removed from distribution since they can be downloaded from the website.
-    
-    - ebrick/docs/ccdtiming\_images.doc
-    
-    - Add CCD Timing images (documentation).
-    
-    - ebrick/docs/ebrick\_bit1.sh
-    
-    - Minor enhancements.
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/docs/ebrick\_dio1.sh
-    
-    - Minor enhancements.
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/docs/omspcx8.tar.gz
-    
-    - Removed from distribution since they can be downloaded from the website.
-    
-    - ebrick/docs/scalertest2.csh
-    
-    - Added another Scaler test script.
-    
-    - ebrick/docs/scalertest3.csh
-    
-    - Added Scaler test #3
-    
-    - ebrick/docs/yyy.tar.gz
-    
-    - Removed from distribution since they can be downloaded from the website.
-    - Made adjusts before release.
-    - Updating for upcoming release.
-    - Added Televac and SR570 support.
-    - Modified for synApps 5.2
-    - Modified for new release.
-    
-    - ebrick/drivers/README
-    
-    - Added driver files.
-    
-    - ebrick/drivers/autoshut/Makefile
-    
-    - Added driver files.
-    
-    - ebrick/drivers/autoshut/README
-    
-    - Added driver files.
-    
-    - ebrick/drivers/autoshut/asmon.c
-    
-    - Added driver files.
-    
-    - ebrick/drivers/autoshut/astest.c
-    
-    - Added driver files.
-    
-    - ebrick/drivers/autoshut/autoshut.c
-    
-    - Added driver files.
-    
-    - ebrick/drivers/autoshut/autoshut.h
-    
-    - Added driver files.
-    
-    - ebrick/drivers/autoshut/autoshut.old.c
-    
-    - Added driver files.
-    
-    - ebrick/drivers/autoshut/rc.autoshut
-    
-    - Added driver files.
-    
-    - ebrick/drivers/omm/Makefile
-    
-    - Added driver files.
-    
-    - ebrick/drivers/omm/README
-    
-    - Added driver files.
-    
-    - ebrick/drivers/omm/omm.c
-    
-    - Added driver files.
-    
-    - ebrick/drivers/omm/omm.h
-    
-    - Added driver files.
-    
-    - ebrick/drivers/omm/ommmon.c
-    
-    - Added driver files.
-    
-    - ebrick/drivers/omm/ommtest.c
-    
-    - Added driver files.
-    
-    - ebrick/drivers/omm/rc.omm
-    
-    - Added driver files.
-    
-    - ebrick/drivers/oms/Makefile
-    
-    - Added driver files.
-    
-    - ebrick/drivers/oms/README
-    
-    - Added driver files.
-    
-    - ebrick/drivers/oms/oms.c
-    
-    - Added driver files.
-    
-    - ebrick/drivers/oms/oms.h
-    
-    - Added driver files.
-    
-    - ebrick/drivers/oms/omsmon.c
-    
-    - Added driver files.
-    
-    - ebrick/drivers/oms/omstest.c
-    
-    - Added driver files.
-    
-    - ebrick/drivers/oms/rc.oms
-    
-    - Added driver files.
-    
-    - ebrick/drivers/utils/Makefile
-    
-    - Added driver files.
-    
-    - ebrick/drivers/utils/README
-    
-    - Added driver files.
-    
-    - ebrick/drivers/utils/ebrick\_reg1.sh
-    
-    - Added driver files.
-    
-    - ebrick/drivers/utils/read.c
-    
-    - Added driver files.
-    
-    - ebrick/drivers/utils/serialink.c
-    
-    - Added serial-protocl version 1.4,2.0 formats.
-    - Added documentation.
-    - Use correct io port calls.
-    - Modified with current FPGA version 2.0.
-    - Added driver files.
-    
-    - ebrick/drivers/utils/write.c
-    
-    - Added driver files.
-    
-    - ebrick/drivers/utils/writeread.c
-    
-    - Added driver files.
-    
-    - ebrick/drivers/utils/writeread2.c
-    
-    - Added driver files.
-    
-    - ebrick/ebrickApp/Db/Makefile
-    
-    - Modified for CCD shutter timing support.
-    - Added CCD shutter timing support.
-    - Added documentation and serial link support.
-    - Modified for EBRICK-II.
-    - Modified for EBRICK/EBRICK-II.
-    - Remove unsupported hardware.
-    - Add Sensoray voltage support.
-    - Added support for the Acromag 851T signal conditioner.
-    - Added system monitoring support.
-    - Modified for strain gage functionality.
-    
-    - ebrick/ebrickApp/Db/ccdFunc.db
-    
-    - Added units to MBBO.
-    - Modified for CCD shutter timing support.
-    
-    - ebrick/ebrickApp/Db/ccdParam.db
-    
-    - Modified for CCD shutter timing support.
-    - Added CCD shutter timing support.
-    
-    - ebrick/ebrickApp/Db/ccdTiming.db
-    
-    - Modified for CCD shutter timing support.
-    - Added CCD shutter timing support.
-    
-    - ebrick/ebrickApp/Db/ebrickADC.db
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Modified to support asynFloat64
-    
-    - ebrick/ebrickApp/Db/ebrickATHADC.db
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/ebrickApp/Db/ebrickBIbit.db
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/ebrickApp/Db/ebrickBImux.db
-    
-    - Minor enhancements.
-    
-    - ebrick/ebrickApp/Db/ebrickBObit.db
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/ebrickApp/Db/ebrickBOmux.db
-    
-    - Minor enhancements.
-    
-    - ebrick/ebrickApp/Db/ebrickDAC.db
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Modified to support asynFloat64
-    - Modified to process during initialization.
-    
-    - ebrick/ebrickApp/Db/ebrickDIOinp.db
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/ebrickApp/Db/ebrickDIOout.db
-    
-    - Modified for strain gage support.
-    - Modified to process at initializion.
-    
-    - ebrick/ebrickApp/Db/ebrickPOSADC.db
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/ebrickApp/Db/ebrickSCLctl.db
-    
-    - Remove databases of unsupported hardware.
-    
-    - ebrick/ebrickApp/Db/ebrickSCLctr.db
-    
-    - Remove databases of unsupported hardware.
-    
-    - ebrick/ebrickApp/Db/ebrickSEN.db
-    
-    - Modified for EBRICK-II.
-    - Modified for strain gage functionality.
-    
-    - ebrick/ebrickApp/Db/ebrickSENacromag851T.db
-    
-    - Modified for EBRICK-II.
-    - Added support for the Acromag 851T signal conditioner.
-    
-    - ebrick/ebrickApp/Db/ebrickSENstraingage.db
-    
-    - Modified for EBRICK-II.
-    - Added support for the Acromag 851T signal conditioner.
-    - Modified for strain gage support.
-    - Modified for strain gage functionality.
-    
-    - ebrick/ebrickApp/Db/ebrickSENthermocouple.db
-    
-    - Modified for EBRICK-II.
-    - Added support for the Acromag 851T signal conditioner.
-    - Modified for strain gage support.
-    - Modified for strain gage functionality.
-    
-    - ebrick/ebrickApp/Db/ebrickSENvoltage.db
-    
-    - Modified for EBRICK-II.
-    - Add Sensoray voltage support.
-    
-    - ebrick/ebrickApp/Db/ebrickSysMon.db
-    
-    - Added IOC uptime.
-    - Added nodename PV.
-    - Added system monitoring support.
-    
-    - ebrick/ebrickApp/Db/ebrickWDT.db
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/ebrickApp/Db/ebrickWTBIbit.db
-    
-    - Remove databases of unsupported hardware.
-    
-    - ebrick/ebrickApp/Db/ebrickWTBObit.db
-    
-    - Remove databases of unsupported hardware.
-    
-    - ebrick/ebrickApp/Db/ebrickWTTCI.db
-    
-    - Remove databases of unsupported hardware.
-    
-    - ebrick/ebrickApp/Db/serialLink.db
-    
-    - Added control/data format PVs.
-    - Added documentation and serial link support.
-    
-    - ebrick/ebrickApp/Db/serialLinkBC059.db
-    
-    - Added documentation and serial link support.
-    
-    - ebrick/ebrickApp/op/adl/ccdTiming.adl
-    
-    - Modified for CCD shutter timing support.
-    - Added CCD shutter timing support.
-    
-    - ebrick/ebrickApp/op/adl/ccdTiming\_help.adl
-    
-    - Added \*NOTES\* section.
-    - Tweaked.
-    - Added CCD shutter timing support.
-    
-    - ebrick/ebrickApp/op/adl/ccdTiming\_more.adl
-    
-    - Modified for CCD shutter timing support.
-    - Added CCD shutter timing support.
-    
-    - ebrick/ebrickApp/op/adl/ebrick.adl
-    
-    - Modified for CCD shutter timing support.
-    - Added CCD shutter timing support.
-    - Added documentation and serial link support.
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickADC.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickADC17-32.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickAcromag851T-8.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickAcromag851T.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickAiedit.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickBitinp1.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickBitinp16.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickBitinp20.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickBitinp24.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickBitinp8.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickBitinpedit.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickBitout1.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickBitout16.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickBitout20.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickBitout24.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickBitout5.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickBitout8.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickDAC.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickDIF.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickDIGinp.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickDIGout.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickDIO.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickProcessors.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickSEN.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickSENconfig.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickSysMon.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickTemperature.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickTemperature4.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickTemperature8.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickVoltage.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/ebrickVoltage8.adl
-    
-    - Added new directory structure.
-    
-    - ebrick/ebrickApp/op/adl/serialLink.adl
-    
-    - Added control/data format PVs.
-    - Added documentation and serial link support.
-    
-    - ebrick/ebrickApp/op/adl/serialLinkBC059.adl
-    
-    - Added documentation and serial link support.
-    
-    - ebrick/ebrickApp/src/Makefile
-    
-    - Added support for an RTEMS library.
-    - Added CCD shutter timing support.
-    - Added documentation and serial link support.
-    - Minor enhancements.
-    - Removed unnecessary support.
-    - Modified for EBRICK/EBRICK-II.
-    - Remove unsupported hardware.
-    - Support only BC059 &amp; BC063 scalers.
-    - Modified to compile under multiple platforms.
-    - Added system monitoring support.
-    - Modified for interrupt support.
-    - Modified for BC057/BC059 support.
-    - - Modified include files paths for bc057 &amp; bc059 compilations - Added launchr application build.
-    - Modified for BC059, Generic DIO/w interrupt Scaler.
-    - Modified for new Scaler type (BC057).
-    
-    - ebrick/ebrickApp/src/boardtypes.h
-    
-    - Minor enhancements.
-    - Modified for EBRICK/EBRICK-II.
-    - Remove unsupported hardware.
-    - Remove old scaler support.
-    - Modified for Opal-MM support.
-    - Modified for BC059, Generic DIO/w interrupt Scaler.
-    - Modified for new Scaler type (BC057).
-    
-    - ebrick/ebrickApp/src/devAsynScaler.cpp
-    
-    - Remove old scaler support.
-    - Upgrade to new Scaler record device support.
-    - Modified for BC057/BC059 support.
-    - Modified for BC059, Generic DIO/w interrupt Scaler.
-    - Modified for new Scaler type (BC057).
-    
-    - ebrick/ebrickApp/src/devAsynScaler059.cpp
-    
-    - Modified for serial-protocol version 2.1.
-    - Added serial-link protocol information.
-    - Minor enhancements.
-    - Added further details.
-    - Minor tweaks.
-    - Some tweaks when during interrupt processing.
-    - Added interrupt support.
-    - Minor typos...
-    - Minor modifications.
-    - Added BC059 scaler support.
-    
-    - ebrick/ebrickApp/src/devAsynScaler063.cpp
-    
-    - Minor enhancements.
-    - Minor typos...
-    - Make all symbols local.
-    - Minor modifications.
-    - Added/Modified for BC063 SCALER (16ch)
-    
-    - ebrick/ebrickApp/src/devAsynScaler063.h
-    
-    - Remove unnecessary file
-    - Added/Modified for BC063 SCALER (16ch)
-    
-    - ebrick/ebrickApp/src/devSysMon.c
-    
-    - Added Copyright information.
-    - - Added nodename. - Modified IP and Netmask to return text on failure.
-    - Modified method for obtaining the IP address because of timing issues between Athena processor speeds.
-    - Added system monitoring support.
-    
-    - ebrick/ebrickApp/src/drvAdc.cpp
-    
-    - Minor enhancements.
-    - Removed usleep() symbol.
-    - Added further details.
-    - Modified for EBRICK-II.
-    - Modified for EBRICK/EBRICK-II.
-    - Added support for Fast EPID record.
-    - Modified to support asynFloat64
-    - Correct a problem when 10.00 volts was entered.
-    
-    - ebrick/ebrickApp/src/drvAsynSerialLink.cpp
-    
-    - Modified timing in method serialLink().
-    - Minor text modifications.
-    - Added documentation and serial link support.
-    
-    - ebrick/ebrickApp/src/drvAthena.cpp
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/ebrickApp/src/drvBoardInit.cpp
-    
-    - Minor enhancements.
-    - Removed usleep() symbol.
-    - Added further details.
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/ebrickApp/src/drvDac.cpp
-    
-    - Minor enhancements.
-    - Removed usleep() symbol.
-    - Added further details.
-    - Modified for EBRICK/EBRICK-II.
-    - Added support for Fast EPID record.
-    - Modified to support asynFloat64
-    - Correct a problem when 10.00 volts was entered.
-    - Removed some unnecessary code.
-    - Modified so that asyn device support will not convert returned value, allowing autosave to restore value.
-    
-    - ebrick/ebrickApp/src/drvDio.cpp
-    
-    - Minor enhancements.
-    - Removed usleep() symbol.
-    - Added further details.
-    - Modified for EBRICK-II.
-    - Modified for EBRICK/EBRICK-II.
-    - Remove unsupported hardware.
-    - Remove old scaler support.
-    - Modified for Opal-MM support.
-    - Modified for new Scaler type (BC057).
-    
-    - ebrick/ebrickApp/src/drvGpib.cpp
-    
-    - Remove unsupported hardware.
-    
-    - ebrick/ebrickApp/src/drvOmsPcx8.cpp
-    
-    - Remove dependency on include file.
-    - Added documents reference.
-    - Modified for EBRICK/EBRICK-II.
-    - Modified to compile under multiple platforms.
-    - Added asyn interrupt support.
-    - Corrected problem with the output asyn output string.
-    - Modified for interrupt support.
-    - Modified for interrupt support.
-    
-    - ebrick/ebrickApp/src/drvScaler.cpp
-    
-    - Remove old scaler support.
-    - Modified for BC059, Generic DIO/w interrupt Scaler.
-    - Modified for new Scaler type (BC057).
-    
-    - ebrick/ebrickApp/src/drvScaler.h
-    
-    - Remove old scaler support.
-    
-    - ebrick/ebrickApp/src/drvSen.cpp
-    
-    - Increased/tuned senReset() timeout value for Athena.
-    - Minor enhancements.
-    - Added further details.
-    - Added ICMS number.
-    - Modified for EBRICK-II.
-    - Add Sensoray voltage support.
-    - Added support for the Acromag 851T signal conditioner.
-    - Modified for strain gage support.
-    - Modified for strain gage functionality.
-    
-    - ebrick/ebrickApp/src/drvWdt.cpp
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/ebrickApp/src/drvWeed.cpp
-    
-    - Remove unsupported hardware.
-    
-    - ebrick/ebrickApp/src/dscsup.c
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Modified to support asynFloat64
-    - Correct a problem when 10.00 volts was entered.
-    
-    - ebrick/ebrickApp/src/dscsup.h
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Modified to support asynFloat64
-    - Correct a problem when 10.00 volts was entered.
-    - Modified for BC059, Generic DIO/w interrupt Scaler.
-    - Modified for new Scaler type (BC057).
-    
-    - ebrick/ebrickApp/src/ebrickMain.cpp
-    
-    - Added Copyright information.
-    
-    - ebrick/ebrickApp/src/ebrickSupport.dbd
-    
-    - Uncomment supported functionality.
-    - Added CCD shutter timing support.
-    - Added documentation and serial link support.
-    - Setup default support.
-    - Minor enhancements.
-    - Rearranged support files.
-    - Added documents reference.
-    - Added further details.
-    - Modified for EBRICK-II.
-    - Modified for EBRICK/EBRICK-II.
-    - Remove unsupported hardware.
-    - Remove old scaler support.
-    - Added BC059 support, removed bus-based GPIB support.
-    - Added/Modified for BC063 SCALER (16ch)
-    - Added system monitoring support.
-    - Modified from VME\_IO to INST\_IO device support.
-    
-    - ebrick/ebrickApp/src/launchr.c
-    
-    - Added Copyright information.
-    - - Added launchr application.
-    
-    - ebrick/ebrickApp/src/rw.c
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/ebrickApp/src/sensup.c
-    
-    - Modified for EBRICK-II.
-    - Added support for the Acromag 851T signal conditioner.
-    - Modified for strain gage functionality.
-    
-    - ebrick/ebrickApp/src/sensup.h
-    
-    - Modified for EBRICK-II.
-    - Modified for EBRICK/EBRICK-II.
-    - Modified for strain gage functionality.
-    
-    - ebrick/ebrickApp/src/setemm.c
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/ebrickApp/src/sncExample.dbd
-    
-    - Minor enhancements.
-    
-    - ebrick/ebrickApp/src/sncExample.stt
-    
-    - Minor enhancements.
-    
-    - ebrick/ebrickApp/src/sncProgram.st
-    
-    - Minor enhancements.
-    
-    - ebrick/iocBoot/iocebrick/asyn.cmd
-    
-    - Modified for next release.
-    - Remove unsupported hardware.
-    
-    - ebrick/iocBoot/iocebrick/asyn\_emm8.cmd
-    
-    - Remove unsupported hardware.
-    
-    - ebrick/iocBoot/iocebrick/ccdTiming.substitutions
-    
-    - Modified for CCD shutter timing support.
-    - Added CCD shutter timing support.
-    
-    - ebrick/iocBoot/iocebrick/ebrick.cmd
-    
-    - Modify ADC/DAC to support biploar by default.
-    - Minor enhancements.
-    - Added further details.
-    - Modified drvSenInit() interrupt rate.
-    - Modified for EBRICK-II.
-    - Modified for EBRICK/EBRICK-II.
-    - Added interrupt support.
-    - Disable scaler support.
-    - Remove unsupported hardware.
-    - Added system monitoring support.
-    - Upgrade to new Scaler record device support.
-    - Modified for Opal-MM support.
-    - Modified for strain gage functionality.
-    - Modified for V1.4.
-    - Modified for BC059, Generic DIO/w interrupt Scaler.
-    - Modified for new Scaler type (BC057).
-    
-    - ebrick/iocBoot/iocebrick/ebrickADC.substitutions
-    
-    - Added PREC macro substituion.
-    
-    - ebrick/iocBoot/iocebrick/ebrickATHADC.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/ebrickATHDAC.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/ebrickATHDIG.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/ebrickDAC.substitutions
-    
-    - Added PREC macro substituion.
-    
-    - ebrick/iocBoot/iocebrick/ebrickGMM1FIX.substitutions
-    
-    - Remove unsupported hardware.
-    
-    - ebrick/iocBoot/iocebrick/ebrickGMM1PIO.substitutions
-    
-    - Remove unsupported hardware.
-    
-    - ebrick/iocBoot/iocebrick/ebrickGMM2FIX.substitutions
-    
-    - Remove unsupported hardware.
-    
-    - ebrick/iocBoot/iocebrick/ebrickGMM2PIO.substitutions
-    
-    - Remove unsupported hardware.
-    
-    - ebrick/iocBoot/iocebrick/ebrickGMMFIX.substitutions
-    
-    - Remove unsupported hardware.
-    - Modified for Opal-MM support.
-    
-    - ebrick/iocBoot/iocebrick/ebrickGMMPIO.substitutions
-    
-    - Remove unsupported hardware.
-    - Modified for Opal-MM support.
-    
-    - ebrick/iocBoot/iocebrick/ebrickIR41DIG.substitutions
-    
-    - Remove unsupported hardware.
-    
-    - ebrick/iocBoot/iocebrick/ebrickIR42DIG.substitutions
-    
-    - Remove unsupported hardware.
-    
-    - ebrick/iocBoot/iocebrick/ebrickIR4DIG.substitutions
-    
-    - Remove unsupported hardware.
-    - Modified for Opal-MM support.
-    
-    - ebrick/iocBoot/iocebrick/ebrickOMM1DIG.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/ebrickOMM2DIG.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/ebrickOMMDIG.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Modified for Opal-MM support.
-    
-    - ebrick/iocBoot/iocebrick/ebrickOPMM.substitutions
-    
-    - Remove unsupported hardware.
-    - Modified for Opal-MM support.
-    
-    - ebrick/iocBoot/iocebrick/ebrickPMM.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Modified for Opal-MM support.
-    
-    - ebrick/iocBoot/iocebrick/ebrickPMM1.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/ebrickPMM2.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/ebrickPOSADC.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/ebrickPOSDAC.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/ebrickPOSDIG.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/ebrickRMM1DAC.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Added PREC macro substituion.
-    
-    - ebrick/iocBoot/iocebrick/ebrickRMM1DIF.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Added PREC macro substituion.
-    
-    - ebrick/iocBoot/iocebrick/ebrickRMM1DIG.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/ebrickRMM2DAC.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Added PREC macro substituion.
-    
-    - ebrick/iocBoot/iocebrick/ebrickRMM2DIF.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Added PREC macro substituion.
-    
-    - ebrick/iocBoot/iocebrick/ebrickRMM2DIG.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/ebrickRMMDAC.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Added PREC macro substituion.
-    - Modified for Opal-MM support.
-    
-    - ebrick/iocBoot/iocebrick/ebrickRMMDIF.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Added PREC macro substituion.
-    - Modified for Opal-MM support.
-    
-    - ebrick/iocBoot/iocebrick/ebrickRMMDIG.substitutions
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Modified for Opal-MM support.
-    
-    - ebrick/iocBoot/iocebrick/ebrickSCAL.substitutions
-    
-    - Duplicate file removed from repository.
-    - Modified for new Scaler type (BC057).
-    
-    - ebrick/iocBoot/iocebrick/ebrickSCAL16.substitutions
-    
-    - Remove unsupported hardware.
-    - Modified for new Scaler type (BC057).
-    
-    - ebrick/iocBoot/iocebrick/ebrickSCAL32.substitutions
-    
-    - Remove unsupported hardware.
-    - Modified for new Scaler type (BC057).
-    
-    - ebrick/iocBoot/iocebrick/ebrickSCAL8.substitutions
-    
-    - Minor enhancements.
-    - Modified for BC059, Generic DIO/w interrupt Scaler.
-    
-    - ebrick/iocBoot/iocebrick/ebrickSEN.substitutions
-    
-    - Modified for EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/ebrickSEN1.substitutions
-    
-    - Modified for strain gage functionality.
-    
-    - ebrick/iocBoot/iocebrick/ebrickSEN1acromag851T.substitutions
-    
-    - Modified for EBRICK-II.
-    - Added support for the Acromag 851T signal conditioner.
-    
-    - ebrick/iocBoot/iocebrick/ebrickSEN1mix.substitutions
-    
-    - Modified for EBRICK-II.
-    - Added support for the Acromag 851T signal conditioner.
-    - Modified for strain gage functionality.
-    
-    - ebrick/iocBoot/iocebrick/ebrickSEN1straingage.substitutions
-    
-    - Modified for EBRICK-II.
-    - Added support for the Acromag 851T signal conditioner.
-    - Modified for strain gage functionality.
-    
-    - ebrick/iocBoot/iocebrick/ebrickSEN1thermocouple.substitutions
-    
-    - Modified for EBRICK-II.
-    - Added support for the Acromag 851T signal conditioner.
-    - Modified for strain gage functionality.
-    
-    - ebrick/iocBoot/iocebrick/ebrickSEN2.substitutions
-    
-    - Modified for EBRICK-II.
-    - Added support for the Acromag 851T signal conditioner.
-    
-    - ebrick/iocBoot/iocebrick/ebrickSEN3.substitutions
-    
-    - Modified for EBRICK-II.
-    - Added support for the Acromag 851T signal conditioner.
-    
-    - ebrick/iocBoot/iocebrick/ebrickSENthermocouple.substitutions
-    
-    - Modified for EBRICK-II.
-    - Modified for Opal-MM support.
-    
-    - ebrick/iocBoot/iocebrick/ebrickSENvoltage.substitutions
-    
-    - Modified for EBRICK-II.
-    - Add Sensoray voltage support. Modified location of autosave files
-    
-    - ebrick/iocBoot/iocebrick/ebrickWDT.substitutions
-    
-    - Modified for EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/ebrickWTDIO1.substitutions
-    
-    - Remove unsupported hardware.
-    
-    - ebrick/iocBoot/iocebrick/ebrickWTSSR1.substitutions
-    
-    - Remove unsupported hardware.
-    
-    - ebrick/iocBoot/iocebrick/ebrickWTTCI1.substitutions
-    
-    - Remove unsupported hardware.
-    
-    - ebrick/iocBoot/iocebrick/save\_restore.cmd
-    
-    - Add Sensoray voltage support. Modified location of autosave files
-    
-    - ebrick/iocBoot/iocebrick/serialLink.cmd
-    
-    - Added CCD shutter timing support.
-    - Minor text modifications.
-    - Added documentation and serial link support.
-    
-    - ebrick/iocBoot/iocebrick/serialLink.substitutions
-    
-    - Added CCD shutter timing support.
-    - Added documentation and serial link support.
-    
-    - ebrick/iocBoot/iocebrick/st.cmd
-    
-    - Added documentation and serial link support.
-    - Remove unsupported hardware.
-    - Add Sensoray voltage support. Modified location of autosave files
-    
-    - ebrick/iocBoot/iocebrick/autosave/auto\_positions.req
-    
-    - Add Sensoray voltage support. Modified location of autosave files
-    
-    - ebrick/iocBoot/iocebrick/autosave/auto\_settings.req
-    
-    - Add Sensoray voltage support. Modified location of autosave files
-    
-    - ebrick/iocBoot/iocebrick/autosave/ccdFunc\_settings.req
-    
-    - Modified for CCD shutter timing support.
-    
-    - ebrick/iocBoot/iocebrick/autosave/ccdParam\_settings.req
-    
-    - Modified for CCD shutter timing support.
-    
-    - ebrick/iocBoot/iocebrick/autosave/ebrickADC.req
-    
-    - Modified for EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/autosave/ebrickBRDADC.req
-    
-    - Modified for EBRICK/EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/autosave/ebrickSCAL.req
-    
-    - Remove unsupported hardware.
-    
-    - ebrick/iocBoot/iocebrick/autosave/ebrickSEN.req
-    
-    - Modified for EBRICK-II.
-    
-    - ebrick/iocBoot/iocebrick/autosave/ebrickSENacromag851T.req
-    
-    - Added further details.
-    - Added support for the Acromag 851T signal conditioner.
-    
-    - ebrick/iocBoot/iocebrick/autosave/ebrickSENstraingage.req
-    
-    - Added further details.
-    - Modified for strain gage support.
-    - Save calibration span value.
-    - Modified for strain gage functionality.
-    
-    - ebrick/iocBoot/iocebrick/autosave/ebrickSENvoltage.req
-    
-    - Added further details.
-    - Add Sensoray voltage support. Modified location of autosave files
-    
-    - ebrick/iocBoot/iocebrick/autosave/ebrickWTTCI.req
-    
-    - Remove unsupported hardware.
-    
-    - ebrick/iocBoot/iocebrick/autosave/ebrick\_positions.req
-    
-    - Modified for EBRICK/EBRICK-II.
-    - Add Sensoray voltage support. Modified location of autosave files
-    
-    - ebrick/iocBoot/iocebrick/autosave/ebrick\_settings.req
-    
-    - Modified for CCD shutter timing support.
-    - Added documentation and serial link support.
-    - Modified for EBRICK-II.
-    - Modified for EBRICK/EBRICK-II.
-    - Remove unsupported hardware.
-    - Add Sensoray voltage support. Modified location of autosave files
-    - Modified for Opal-MM support.
-    - Modified for strain gage functionality.
-    - Modified for BC059, Generic DIO/w interrupt Scaler.
-    - Modified for new Scaler type (BC057). This includes the registers that are used to communicate and configure between the EBRICK and BC-57.
-    
-    - ebrick/iocBoot/iocebrick/autosave/scaler\_16ch\_settings.req
-    
-    - Add Sensoray voltage support. Modified location of autosave files
-    
-    - ebrick/iocBoot/iocebrick/autosave/scaler\_8ch\_settings.req
-    
-    - Add Sensoray voltage support. Modified location of autosave files
-    
-    - ebrick/iocBoot/iocebrick/autosave/serialLink.req
-    
-    - Added control/data format PVs.
-    - Added documentation and serial link support.
-    
-    
-    ip
-    --
-    
-     Support for new devices:
-    
-    
-    - US Digital Serial Encoder
-    - Keithley 8517 Electrometer
-    - LakeShore 340 Temperature controller
-    - Omega DP41 Digital Panel Meter
-    - Pfeiffer TPG261 RS232 Vacuum Controller.
-    
-    - - - - - -
-    
-    ip330
-    -----
-    
-    
-    - ip330/configure/RELEASE
-    
-    - New versions
-    
-    - ip330/configure/RELEASE.win32-x86
-    
-    - New versions
-    
-    - ip330/documentation/ip330.html
-    
-    - Fixed link
-    - Added R2-5
-    
-    - ip330/documentation/ip330ReleaseNotes.html
-    
-    - Changes for R2-5
-    - Update for R2-5
-    
-    - ip330/ip330App/Db/ip330ScanMode.template
-    
-    - New database to support scan mode
-    
-    - ip330/ip330App/src/Makefile
-    
-    - Added RTEMS
-    - Added Linux support
-    
-    - ip330/ip330App/src/drvIp330.c
-    
-    - Added cast to avoid warnings
-    - Addition of scanMode from Pete Leicester at Diamond
-    - Removed vxWorks dependencies, converted to OSI/devLib
-    - Added epicsAtExit to disable interrupts for soft reboots
-    - Fixes from Peter Denison at Diamond to make single-ended mode work
-    - Removed status argument from interrupt callbacks
-    - Added status argument to callbacks for asyn R4-8
-    
-    - ip330/ip330App/src/drvIp330.h
-    
-    - Addition of scanMode from Pete Leicester at Diamond
-    
-    
-    ipUnidig
-    --------
-    
-     Now builds for RTEMS and Linux.
-    
-    Now supports SBS IPOPTOIO8
-    
-    - - - - - -
-    
-    love
-    ----
-    
-    
-    - love/loveApp/src/Makefile
-    
-    - Removed WIN32 specific code
-    
-    - love/loveApp/src/loveAppWin32Include.dbd
-    
-    - No longer needed with asyn R4-9
-    
-    
-    mca
-    ---
-    
-    SIS3820 now supported on Linux.
-    
-    Build option to use LLC sockets to communicate with Canberra AIM module. Currently, this works on vxWorks only.
-    
-    MCA record forces ACQG=&gt;1 when acquisition is turned on. Without this, a short dwell time resulted in data never being read.
-    
-    Can read compressed or uncompressed data from Canberra.
-    
-    - - - - - -
-    
-    modbus
-    ------
-    
-    New module.
-    
-    modbus supports EPICS communication with Programmable Logic Controllers (PLCs) via the Modbus protocol over TCP, serial RTU, and serial ASCII links. The modbus software provides a layer between standard EPICS asyn device support, and the EPICS asyn TCP/IP or serial port driver.
-    
-    - - - - - -
-    
-    optics
-    ------
-    
-    New support for XIA PF4 filter/shutter
-    
-    Oxford 4-channel x-ray beam position monitor
-    
-    New support for an ASRP optical table
-    
-    - - - - - -
-    
-    pilatus
-    -------
-    
-    New module: an enhanced EPICS interface to the Dectris *Pilatus*pixel-array detector.
-    
-    - - - - - -
-    
-    quadEM
-    ------
-    
-    
-    - quadEM/documentation/quadEMReleaseNotes.html
-    
-    - Added comments for R2-4
-    
-    - quadEM/quadEMApp/Db/quadEM\_settings.req
-    
-    - Changed Average to Read, bug fix
-    
-    - quadEM/quadEMApp/op/adl/quadEM\_less.adl
-    
-    - Like quadEM.adl but with fewer controls
-    
-    - quadEM/quadEMApp/src/drvQuadEM.c
-    
-    - Removed status argument from interrupt callbacks
-    - Added status on callbacks for asyn R4-8; remove unused functions
-    
-    
-    sscan
-    -----
-    
-    Removed race conditions affecting callback counters, and added a mutex to protect them. Changed timing of when to renew positioner links from now-last\_scan\_start to now-last\_scan\_end.
-    
-    display\_fields.adl uses new link-help displays from std R2.6
-    
-    The base name for files written by saveData can now be selected at run time by the user.
-    
-    The sscan record can now post array data to clients during a scan. By default, this capability is disabled, because it may confuse existing clients of the sscan record.
-    
-    If saveData fails to write or update a data file, it can now retry, as controlled by PV's.
-    
-    Previously, the standard scan and saveData records were combined into a single database, scan.db. Now, the preferred databases to load are standardScans.db (one or more copies), and saveData.db (one copy only).
-    
-    - - - - - -
-    
-    std
-    ---
-    
-    The gpibRecord has been replaced by the asynRecord, which is loaded from the asyn module.
-    
-    New databases: alarmClock, autoShutter, countDownTimer, ramp\_tweak, scaler16m
-    
-    The sseqRecord (string Sequence, a variant of the seq record in EPICS base) can now be told to abort the sequence it's executing.
-    
-    - - - - - -
-    
-    cvs log:
-    
-    
-    - std/documentation/gpibRecord.html
-    
-    - replaced by asyn record
-    
-    - std/documentation/scalerRecord.html
-    
-    - COUTP field
+139. dxpMED.st. Increased number of detectors to 32, bug fixes thanks to Dave Madden from SLS. 
+
+- - - - - -
+    
+ebrick
+------
+    
+    
+- ebrick/LICENSE
+
+- Added Copyright information.
+
+- ebrick/start\_epics\_ebrick\_ioc
+
+- Modified for new target.
+
+- ebrick/start\_epics\_ebrick\_medm
+
+- Modified given new directory structure.
+- Modified given new .adl location.
+- Modified for next release.
+
+- ebrick/configure/RELEASE
+
+- Added CCD shutter timing support.
+- Modified to compile under multiple platforms.
+- Update with new paths.
+- Moved to veclinuxdev machine
+- Modified to upgrade to STD 2.5.4.
+- Need to upgrade scaler record to STD 2.5.4.
+- Modified for synApps R5-2.
+
+- ebrick/docs/BC059\_SCALER
+
+- Added documentation and serial link support.
+- Updated Scaler documentation
+- Updated documentation for both V1.4 and V2.0
+- Added more documentation.
+- Modified for next release.
+- Modified/added for new supported hardware.
+
+- ebrick/docs/BC059\_SCALER\_V20LC
+
+- Updated Scaler documentation
+
+- ebrick/docs/BOARDTYPES
+
+- Modified for EBRICK/EBRICK-II.
+- Modified/added for new supported hardware.
+- Modified for Opal-MM support.
+- Modified for BC059, Generic DIO/w interrupt Scaler.
+- Modified for new Scaler type (BC057).
+
+- ebrick/docs/GDIO\_SCALER
+
+- Updated Scaler documentation
+- Updated documentation for both V1.4 and V2.0
+- Added more documentation.
+- Modified for next release.
+- Modified/added for new supported hardware.
+- Added / removed Scaler documentation.
+
+- ebrick/docs/GDIO\_SCALER.TXT
+
+- Added / removed Scaler documentation.
+- Modified for BC059, Generic DIO/w interrupt Scaler.
+
+- ebrick/docs/IOMAP
+
+- Removed unnecessary document.
+
+- ebrick/docs/README
+
+- Added documentation and serial link support.
+- Modified for next release.
+
+- ebrick/docs/README\_SCALER
+
+- Added documentation and serial link support.
+- Added further details.
+- Modified for next release.
+- Modified/added for new supported hardware.
+- Added / removed Scaler documentation.
+
+- ebrick/docs/SMARTAD518
+
+- Added documentation.
+- Modified for EBRICK-II.
+- Added support for the Acromag 851T signal conditioner.
+
+- ebrick/docs/autoshut.tar.gz
+
+- Removed from distribution since they can be downloaded from the website.
+
+- ebrick/docs/ccdtiming\_images.doc
+
+- Add CCD Timing images (documentation).
+
+- ebrick/docs/ebrick\_bit1.sh
+
+- Minor enhancements.
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/docs/ebrick\_dio1.sh
+
+- Minor enhancements.
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/docs/omspcx8.tar.gz
+
+- Removed from distribution since they can be downloaded from the website.
+
+- ebrick/docs/scalertest2.csh
+
+- Added another Scaler test script.
+
+- ebrick/docs/scalertest3.csh
+
+- Added Scaler test #3
+
+- ebrick/docs/yyy.tar.gz
+
+- Removed from distribution since they can be downloaded from the website.
+- Made adjusts before release.
+- Updating for upcoming release.
+- Added Televac and SR570 support.
+- Modified for synApps 5.2
+- Modified for new release.
+
+- ebrick/drivers/README
+
+- Added driver files.
+
+- ebrick/drivers/autoshut/Makefile
+
+- Added driver files.
+
+- ebrick/drivers/autoshut/README
+
+- Added driver files.
+
+- ebrick/drivers/autoshut/asmon.c
+
+- Added driver files.
+
+- ebrick/drivers/autoshut/astest.c
+
+- Added driver files.
+
+- ebrick/drivers/autoshut/autoshut.c
+
+- Added driver files.
+
+- ebrick/drivers/autoshut/autoshut.h
+
+- Added driver files.
+
+- ebrick/drivers/autoshut/autoshut.old.c
+
+- Added driver files.
+
+- ebrick/drivers/autoshut/rc.autoshut
+
+- Added driver files.
+
+- ebrick/drivers/omm/Makefile
+
+- Added driver files.
+
+- ebrick/drivers/omm/README
+
+- Added driver files.
+
+- ebrick/drivers/omm/omm.c
+
+- Added driver files.
+
+- ebrick/drivers/omm/omm.h
+
+- Added driver files.
+
+- ebrick/drivers/omm/ommmon.c
+
+- Added driver files.
+
+- ebrick/drivers/omm/ommtest.c
+
+- Added driver files.
+
+- ebrick/drivers/omm/rc.omm
+
+- Added driver files.
+
+- ebrick/drivers/oms/Makefile
+
+- Added driver files.
+
+- ebrick/drivers/oms/README
+
+- Added driver files.
+
+- ebrick/drivers/oms/oms.c
+
+- Added driver files.
+
+- ebrick/drivers/oms/oms.h
+
+- Added driver files.
+
+- ebrick/drivers/oms/omsmon.c
+
+- Added driver files.
+
+- ebrick/drivers/oms/omstest.c
+
+- Added driver files.
+
+- ebrick/drivers/oms/rc.oms
+
+- Added driver files.
+
+- ebrick/drivers/utils/Makefile
+
+- Added driver files.
+
+- ebrick/drivers/utils/README
+
+- Added driver files.
+
+- ebrick/drivers/utils/ebrick\_reg1.sh
+
+- Added driver files.
+
+- ebrick/drivers/utils/read.c
+
+- Added driver files.
+
+- ebrick/drivers/utils/serialink.c
+
+- Added serial-protocl version 1.4,2.0 formats.
+- Added documentation.
+- Use correct io port calls.
+- Modified with current FPGA version 2.0.
+- Added driver files.
+
+- ebrick/drivers/utils/write.c
+
+- Added driver files.
+
+- ebrick/drivers/utils/writeread.c
+
+- Added driver files.
+
+- ebrick/drivers/utils/writeread2.c
+
+- Added driver files.
+
+- ebrick/ebrickApp/Db/Makefile
+
+- Modified for CCD shutter timing support.
+- Added CCD shutter timing support.
+- Added documentation and serial link support.
+- Modified for EBRICK-II.
+- Modified for EBRICK/EBRICK-II.
+- Remove unsupported hardware.
+- Add Sensoray voltage support.
+- Added support for the Acromag 851T signal conditioner.
+- Added system monitoring support.
+- Modified for strain gage functionality.
+
+- ebrick/ebrickApp/Db/ccdFunc.db
+
+- Added units to MBBO.
+- Modified for CCD shutter timing support.
+
+- ebrick/ebrickApp/Db/ccdParam.db
+
+- Modified for CCD shutter timing support.
+- Added CCD shutter timing support.
+
+- ebrick/ebrickApp/Db/ccdTiming.db
+
+- Modified for CCD shutter timing support.
+- Added CCD shutter timing support.
+
+- ebrick/ebrickApp/Db/ebrickADC.db
+
+- Modified for EBRICK/EBRICK-II.
+- Modified to support asynFloat64
+
+- ebrick/ebrickApp/Db/ebrickATHADC.db
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/ebrickApp/Db/ebrickBIbit.db
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/ebrickApp/Db/ebrickBImux.db
+
+- Minor enhancements.
+
+- ebrick/ebrickApp/Db/ebrickBObit.db
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/ebrickApp/Db/ebrickBOmux.db
+
+- Minor enhancements.
+
+- ebrick/ebrickApp/Db/ebrickDAC.db
+
+- Modified for EBRICK/EBRICK-II.
+- Modified to support asynFloat64
+- Modified to process during initialization.
+
+- ebrick/ebrickApp/Db/ebrickDIOinp.db
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/ebrickApp/Db/ebrickDIOout.db
+
+- Modified for strain gage support.
+- Modified to process at initializion.
+
+- ebrick/ebrickApp/Db/ebrickPOSADC.db
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/ebrickApp/Db/ebrickSCLctl.db
+
+- Remove databases of unsupported hardware.
+
+- ebrick/ebrickApp/Db/ebrickSCLctr.db
+
+- Remove databases of unsupported hardware.
+
+- ebrick/ebrickApp/Db/ebrickSEN.db
+
+- Modified for EBRICK-II.
+- Modified for strain gage functionality.
+
+- ebrick/ebrickApp/Db/ebrickSENacromag851T.db
+
+- Modified for EBRICK-II.
+- Added support for the Acromag 851T signal conditioner.
+
+- ebrick/ebrickApp/Db/ebrickSENstraingage.db
+
+- Modified for EBRICK-II.
+- Added support for the Acromag 851T signal conditioner.
+- Modified for strain gage support.
+- Modified for strain gage functionality.
+
+- ebrick/ebrickApp/Db/ebrickSENthermocouple.db
+
+- Modified for EBRICK-II.
+- Added support for the Acromag 851T signal conditioner.
+- Modified for strain gage support.
+- Modified for strain gage functionality.
+
+- ebrick/ebrickApp/Db/ebrickSENvoltage.db
+
+- Modified for EBRICK-II.
+- Add Sensoray voltage support.
+
+- ebrick/ebrickApp/Db/ebrickSysMon.db
+
+- Added IOC uptime.
+- Added nodename PV.
+- Added system monitoring support.
+
+- ebrick/ebrickApp/Db/ebrickWDT.db
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/ebrickApp/Db/ebrickWTBIbit.db
+
+- Remove databases of unsupported hardware.
+
+- ebrick/ebrickApp/Db/ebrickWTBObit.db
+
+- Remove databases of unsupported hardware.
+
+- ebrick/ebrickApp/Db/ebrickWTTCI.db
+
+- Remove databases of unsupported hardware.
+
+- ebrick/ebrickApp/Db/serialLink.db
+
+- Added control/data format PVs.
+- Added documentation and serial link support.
+
+- ebrick/ebrickApp/Db/serialLinkBC059.db
+
+- Added documentation and serial link support.
+
+- ebrick/ebrickApp/op/adl/ccdTiming.adl
+
+- Modified for CCD shutter timing support.
+- Added CCD shutter timing support.
+
+- ebrick/ebrickApp/op/adl/ccdTiming\_help.adl
+
+- Added \*NOTES\* section.
+- Tweaked.
+- Added CCD shutter timing support.
+
+- ebrick/ebrickApp/op/adl/ccdTiming\_more.adl
+
+- Modified for CCD shutter timing support.
+- Added CCD shutter timing support.
+
+- ebrick/ebrickApp/op/adl/ebrick.adl
+
+- Modified for CCD shutter timing support.
+- Added CCD shutter timing support.
+- Added documentation and serial link support.
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickADC.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickADC17-32.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickAcromag851T-8.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickAcromag851T.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickAiedit.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickBitinp1.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickBitinp16.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickBitinp20.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickBitinp24.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickBitinp8.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickBitinpedit.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickBitout1.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickBitout16.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickBitout20.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickBitout24.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickBitout5.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickBitout8.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickDAC.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickDIF.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickDIGinp.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickDIGout.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickDIO.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickProcessors.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickSEN.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickSENconfig.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickSysMon.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickTemperature.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickTemperature4.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickTemperature8.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickVoltage.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/ebrickVoltage8.adl
+
+- Added new directory structure.
+
+- ebrick/ebrickApp/op/adl/serialLink.adl
+
+- Added control/data format PVs.
+- Added documentation and serial link support.
+
+- ebrick/ebrickApp/op/adl/serialLinkBC059.adl
+
+- Added documentation and serial link support.
+
+- ebrick/ebrickApp/src/Makefile
+
+- Added support for an RTEMS library.
+- Added CCD shutter timing support.
+- Added documentation and serial link support.
+- Minor enhancements.
+- Removed unnecessary support.
+- Modified for EBRICK/EBRICK-II.
+- Remove unsupported hardware.
+- Support only BC059 &amp; BC063 scalers.
+- Modified to compile under multiple platforms.
+- Added system monitoring support.
+- Modified for interrupt support.
+- Modified for BC057/BC059 support.
+- - Modified include files paths for bc057 &amp; bc059 compilations - Added launchr application build.
+- Modified for BC059, Generic DIO/w interrupt Scaler.
+- Modified for new Scaler type (BC057).
+
+- ebrick/ebrickApp/src/boardtypes.h
+
+- Minor enhancements.
+- Modified for EBRICK/EBRICK-II.
+- Remove unsupported hardware.
+- Remove old scaler support.
+- Modified for Opal-MM support.
+- Modified for BC059, Generic DIO/w interrupt Scaler.
+- Modified for new Scaler type (BC057).
+
+- ebrick/ebrickApp/src/devAsynScaler.cpp
+
+- Remove old scaler support.
+- Upgrade to new Scaler record device support.
+- Modified for BC057/BC059 support.
+- Modified for BC059, Generic DIO/w interrupt Scaler.
+- Modified for new Scaler type (BC057).
+
+- ebrick/ebrickApp/src/devAsynScaler059.cpp
+
+- Modified for serial-protocol version 2.1.
+- Added serial-link protocol information.
+- Minor enhancements.
+- Added further details.
+- Minor tweaks.
+- Some tweaks when during interrupt processing.
+- Added interrupt support.
+- Minor typos...
+- Minor modifications.
+- Added BC059 scaler support.
+
+- ebrick/ebrickApp/src/devAsynScaler063.cpp
+
+- Minor enhancements.
+- Minor typos...
+- Make all symbols local.
+- Minor modifications.
+- Added/Modified for BC063 SCALER (16ch)
+
+- ebrick/ebrickApp/src/devAsynScaler063.h
+
+- Remove unnecessary file
+- Added/Modified for BC063 SCALER (16ch)
+
+- ebrick/ebrickApp/src/devSysMon.c
+
+- Added Copyright information.
+- - Added nodename. - Modified IP and Netmask to return text on failure.
+- Modified method for obtaining the IP address because of timing issues between Athena processor speeds.
+- Added system monitoring support.
+
+- ebrick/ebrickApp/src/drvAdc.cpp
+
+- Minor enhancements.
+- Removed usleep() symbol.
+- Added further details.
+- Modified for EBRICK-II.
+- Modified for EBRICK/EBRICK-II.
+- Added support for Fast EPID record.
+- Modified to support asynFloat64
+- Correct a problem when 10.00 volts was entered.
+
+- ebrick/ebrickApp/src/drvAsynSerialLink.cpp
+
+- Modified timing in method serialLink().
+- Minor text modifications.
+- Added documentation and serial link support.
+
+- ebrick/ebrickApp/src/drvAthena.cpp
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/ebrickApp/src/drvBoardInit.cpp
+
+- Minor enhancements.
+- Removed usleep() symbol.
+- Added further details.
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/ebrickApp/src/drvDac.cpp
+
+- Minor enhancements.
+- Removed usleep() symbol.
+- Added further details.
+- Modified for EBRICK/EBRICK-II.
+- Added support for Fast EPID record.
+- Modified to support asynFloat64
+- Correct a problem when 10.00 volts was entered.
+- Removed some unnecessary code.
+- Modified so that asyn device support will not convert returned value, allowing autosave to restore value.
+
+- ebrick/ebrickApp/src/drvDio.cpp
+
+- Minor enhancements.
+- Removed usleep() symbol.
+- Added further details.
+- Modified for EBRICK-II.
+- Modified for EBRICK/EBRICK-II.
+- Remove unsupported hardware.
+- Remove old scaler support.
+- Modified for Opal-MM support.
+- Modified for new Scaler type (BC057).
+
+- ebrick/ebrickApp/src/drvGpib.cpp
+
+- Remove unsupported hardware.
+
+- ebrick/ebrickApp/src/drvOmsPcx8.cpp
+
+- Remove dependency on include file.
+- Added documents reference.
+- Modified for EBRICK/EBRICK-II.
+- Modified to compile under multiple platforms.
+- Added asyn interrupt support.
+- Corrected problem with the output asyn output string.
+- Modified for interrupt support.
+- Modified for interrupt support.
+
+- ebrick/ebrickApp/src/drvScaler.cpp
+
+- Remove old scaler support.
+- Modified for BC059, Generic DIO/w interrupt Scaler.
+- Modified for new Scaler type (BC057).
+
+- ebrick/ebrickApp/src/drvScaler.h
+
+- Remove old scaler support.
+
+- ebrick/ebrickApp/src/drvSen.cpp
+
+- Increased/tuned senReset() timeout value for Athena.
+- Minor enhancements.
+- Added further details.
+- Added ICMS number.
+- Modified for EBRICK-II.
+- Add Sensoray voltage support.
+- Added support for the Acromag 851T signal conditioner.
+- Modified for strain gage support.
+- Modified for strain gage functionality.
+
+- ebrick/ebrickApp/src/drvWdt.cpp
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/ebrickApp/src/drvWeed.cpp
+
+- Remove unsupported hardware.
+
+- ebrick/ebrickApp/src/dscsup.c
+
+- Modified for EBRICK/EBRICK-II.
+- Modified to support asynFloat64
+- Correct a problem when 10.00 volts was entered.
+
+- ebrick/ebrickApp/src/dscsup.h
+
+- Modified for EBRICK/EBRICK-II.
+- Modified to support asynFloat64
+- Correct a problem when 10.00 volts was entered.
+- Modified for BC059, Generic DIO/w interrupt Scaler.
+- Modified for new Scaler type (BC057).
+
+- ebrick/ebrickApp/src/ebrickMain.cpp
+
+- Added Copyright information.
+
+- ebrick/ebrickApp/src/ebrickSupport.dbd
+
+- Uncomment supported functionality.
+- Added CCD shutter timing support.
+- Added documentation and serial link support.
+- Setup default support.
+- Minor enhancements.
+- Rearranged support files.
+- Added documents reference.
+- Added further details.
+- Modified for EBRICK-II.
+- Modified for EBRICK/EBRICK-II.
+- Remove unsupported hardware.
+- Remove old scaler support.
+- Added BC059 support, removed bus-based GPIB support.
+- Added/Modified for BC063 SCALER (16ch)
+- Added system monitoring support.
+- Modified from VME\_IO to INST\_IO device support.
+
+- ebrick/ebrickApp/src/launchr.c
+
+- Added Copyright information.
+- - Added launchr application.
+
+- ebrick/ebrickApp/src/rw.c
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/ebrickApp/src/sensup.c
+
+- Modified for EBRICK-II.
+- Added support for the Acromag 851T signal conditioner.
+- Modified for strain gage functionality.
+
+- ebrick/ebrickApp/src/sensup.h
+
+- Modified for EBRICK-II.
+- Modified for EBRICK/EBRICK-II.
+- Modified for strain gage functionality.
+
+- ebrick/ebrickApp/src/setemm.c
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/ebrickApp/src/sncExample.dbd
+
+- Minor enhancements.
+
+- ebrick/ebrickApp/src/sncExample.stt
+
+- Minor enhancements.
+
+- ebrick/ebrickApp/src/sncProgram.st
+
+- Minor enhancements.
+
+- ebrick/iocBoot/iocebrick/asyn.cmd
+
+- Modified for next release.
+- Remove unsupported hardware.
+
+- ebrick/iocBoot/iocebrick/asyn\_emm8.cmd
+
+- Remove unsupported hardware.
+
+- ebrick/iocBoot/iocebrick/ccdTiming.substitutions
+
+- Modified for CCD shutter timing support.
+- Added CCD shutter timing support.
+
+- ebrick/iocBoot/iocebrick/ebrick.cmd
+
+- Modify ADC/DAC to support biploar by default.
+- Minor enhancements.
+- Added further details.
+- Modified drvSenInit() interrupt rate.
+- Modified for EBRICK-II.
+- Modified for EBRICK/EBRICK-II.
+- Added interrupt support.
+- Disable scaler support.
+- Remove unsupported hardware.
+- Added system monitoring support.
+- Upgrade to new Scaler record device support.
+- Modified for Opal-MM support.
+- Modified for strain gage functionality.
+- Modified for V1.4.
+- Modified for BC059, Generic DIO/w interrupt Scaler.
+- Modified for new Scaler type (BC057).
+
+- ebrick/iocBoot/iocebrick/ebrickADC.substitutions
+
+- Added PREC macro substituion.
+
+- ebrick/iocBoot/iocebrick/ebrickATHADC.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/ebrickATHDAC.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/ebrickATHDIG.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/ebrickDAC.substitutions
+
+- Added PREC macro substituion.
+
+- ebrick/iocBoot/iocebrick/ebrickGMM1FIX.substitutions
+
+- Remove unsupported hardware.
+
+- ebrick/iocBoot/iocebrick/ebrickGMM1PIO.substitutions
+
+- Remove unsupported hardware.
+
+- ebrick/iocBoot/iocebrick/ebrickGMM2FIX.substitutions
+
+- Remove unsupported hardware.
+
+- ebrick/iocBoot/iocebrick/ebrickGMM2PIO.substitutions
+
+- Remove unsupported hardware.
+
+- ebrick/iocBoot/iocebrick/ebrickGMMFIX.substitutions
+
+- Remove unsupported hardware.
+- Modified for Opal-MM support.
+
+- ebrick/iocBoot/iocebrick/ebrickGMMPIO.substitutions
+
+- Remove unsupported hardware.
+- Modified for Opal-MM support.
+
+- ebrick/iocBoot/iocebrick/ebrickIR41DIG.substitutions
+
+- Remove unsupported hardware.
+
+- ebrick/iocBoot/iocebrick/ebrickIR42DIG.substitutions
+
+- Remove unsupported hardware.
+
+- ebrick/iocBoot/iocebrick/ebrickIR4DIG.substitutions
+
+- Remove unsupported hardware.
+- Modified for Opal-MM support.
+
+- ebrick/iocBoot/iocebrick/ebrickOMM1DIG.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/ebrickOMM2DIG.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/ebrickOMMDIG.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+- Modified for Opal-MM support.
+
+- ebrick/iocBoot/iocebrick/ebrickOPMM.substitutions
+
+- Remove unsupported hardware.
+- Modified for Opal-MM support.
+
+- ebrick/iocBoot/iocebrick/ebrickPMM.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+- Modified for Opal-MM support.
+
+- ebrick/iocBoot/iocebrick/ebrickPMM1.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/ebrickPMM2.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/ebrickPOSADC.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/ebrickPOSDAC.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/ebrickPOSDIG.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/ebrickRMM1DAC.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+- Added PREC macro substituion.
+
+- ebrick/iocBoot/iocebrick/ebrickRMM1DIF.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+- Added PREC macro substituion.
+
+- ebrick/iocBoot/iocebrick/ebrickRMM1DIG.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/ebrickRMM2DAC.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+- Added PREC macro substituion.
+
+- ebrick/iocBoot/iocebrick/ebrickRMM2DIF.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+- Added PREC macro substituion.
+
+- ebrick/iocBoot/iocebrick/ebrickRMM2DIG.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/ebrickRMMDAC.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+- Added PREC macro substituion.
+- Modified for Opal-MM support.
+
+- ebrick/iocBoot/iocebrick/ebrickRMMDIF.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+- Added PREC macro substituion.
+- Modified for Opal-MM support.
+
+- ebrick/iocBoot/iocebrick/ebrickRMMDIG.substitutions
+
+- Modified for EBRICK/EBRICK-II.
+- Modified for Opal-MM support.
+
+- ebrick/iocBoot/iocebrick/ebrickSCAL.substitutions
+
+- Duplicate file removed from repository.
+- Modified for new Scaler type (BC057).
+
+- ebrick/iocBoot/iocebrick/ebrickSCAL16.substitutions
+
+- Remove unsupported hardware.
+- Modified for new Scaler type (BC057).
+
+- ebrick/iocBoot/iocebrick/ebrickSCAL32.substitutions
+
+- Remove unsupported hardware.
+- Modified for new Scaler type (BC057).
+
+- ebrick/iocBoot/iocebrick/ebrickSCAL8.substitutions
+
+- Minor enhancements.
+- Modified for BC059, Generic DIO/w interrupt Scaler.
+
+- ebrick/iocBoot/iocebrick/ebrickSEN.substitutions
+
+- Modified for EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/ebrickSEN1.substitutions
+
+- Modified for strain gage functionality.
+
+- ebrick/iocBoot/iocebrick/ebrickSEN1acromag851T.substitutions
+
+- Modified for EBRICK-II.
+- Added support for the Acromag 851T signal conditioner.
+
+- ebrick/iocBoot/iocebrick/ebrickSEN1mix.substitutions
+
+- Modified for EBRICK-II.
+- Added support for the Acromag 851T signal conditioner.
+- Modified for strain gage functionality.
+
+- ebrick/iocBoot/iocebrick/ebrickSEN1straingage.substitutions
+
+- Modified for EBRICK-II.
+- Added support for the Acromag 851T signal conditioner.
+- Modified for strain gage functionality.
+
+- ebrick/iocBoot/iocebrick/ebrickSEN1thermocouple.substitutions
+
+- Modified for EBRICK-II.
+- Added support for the Acromag 851T signal conditioner.
+- Modified for strain gage functionality.
+
+- ebrick/iocBoot/iocebrick/ebrickSEN2.substitutions
+
+- Modified for EBRICK-II.
+- Added support for the Acromag 851T signal conditioner.
+
+- ebrick/iocBoot/iocebrick/ebrickSEN3.substitutions
+
+- Modified for EBRICK-II.
+- Added support for the Acromag 851T signal conditioner.
+
+- ebrick/iocBoot/iocebrick/ebrickSENthermocouple.substitutions
+
+- Modified for EBRICK-II.
+- Modified for Opal-MM support.
+
+- ebrick/iocBoot/iocebrick/ebrickSENvoltage.substitutions
+
+- Modified for EBRICK-II.
+- Add Sensoray voltage support. Modified location of autosave files
+
+- ebrick/iocBoot/iocebrick/ebrickWDT.substitutions
+
+- Modified for EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/ebrickWTDIO1.substitutions
+
+- Remove unsupported hardware.
+
+- ebrick/iocBoot/iocebrick/ebrickWTSSR1.substitutions
+
+- Remove unsupported hardware.
+
+- ebrick/iocBoot/iocebrick/ebrickWTTCI1.substitutions
+
+- Remove unsupported hardware.
+
+- ebrick/iocBoot/iocebrick/save\_restore.cmd
+
+- Add Sensoray voltage support. Modified location of autosave files
+
+- ebrick/iocBoot/iocebrick/serialLink.cmd
+
+- Added CCD shutter timing support.
+- Minor text modifications.
+- Added documentation and serial link support.
+
+- ebrick/iocBoot/iocebrick/serialLink.substitutions
+
+- Added CCD shutter timing support.
+- Added documentation and serial link support.
+
+- ebrick/iocBoot/iocebrick/st.cmd
+
+- Added documentation and serial link support.
+- Remove unsupported hardware.
+- Add Sensoray voltage support. Modified location of autosave files
+
+- ebrick/iocBoot/iocebrick/autosave/auto\_positions.req
+
+- Add Sensoray voltage support. Modified location of autosave files
+
+- ebrick/iocBoot/iocebrick/autosave/auto\_settings.req
+
+- Add Sensoray voltage support. Modified location of autosave files
+
+- ebrick/iocBoot/iocebrick/autosave/ccdFunc\_settings.req
+
+- Modified for CCD shutter timing support.
+
+- ebrick/iocBoot/iocebrick/autosave/ccdParam\_settings.req
+
+- Modified for CCD shutter timing support.
+
+- ebrick/iocBoot/iocebrick/autosave/ebrickADC.req
+
+- Modified for EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/autosave/ebrickBRDADC.req
+
+- Modified for EBRICK/EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/autosave/ebrickSCAL.req
+
+- Remove unsupported hardware.
+
+- ebrick/iocBoot/iocebrick/autosave/ebrickSEN.req
+
+- Modified for EBRICK-II.
+
+- ebrick/iocBoot/iocebrick/autosave/ebrickSENacromag851T.req
+
+- Added further details.
+- Added support for the Acromag 851T signal conditioner.
+
+- ebrick/iocBoot/iocebrick/autosave/ebrickSENstraingage.req
+
+- Added further details.
+- Modified for strain gage support.
+- Save calibration span value.
+- Modified for strain gage functionality.
+
+- ebrick/iocBoot/iocebrick/autosave/ebrickSENvoltage.req
+
+- Added further details.
+- Add Sensoray voltage support. Modified location of autosave files
+
+- ebrick/iocBoot/iocebrick/autosave/ebrickWTTCI.req
+
+- Remove unsupported hardware.
+
+- ebrick/iocBoot/iocebrick/autosave/ebrick\_positions.req
+
+- Modified for EBRICK/EBRICK-II.
+- Add Sensoray voltage support. Modified location of autosave files
+
+- ebrick/iocBoot/iocebrick/autosave/ebrick\_settings.req
+
+- Modified for CCD shutter timing support.
+- Added documentation and serial link support.
+- Modified for EBRICK-II.
+- Modified for EBRICK/EBRICK-II.
+- Remove unsupported hardware.
+- Add Sensoray voltage support. Modified location of autosave files
+- Modified for Opal-MM support.
+- Modified for strain gage functionality.
+- Modified for BC059, Generic DIO/w interrupt Scaler.
+- Modified for new Scaler type (BC057). This includes the registers that are used to communicate and configure between the EBRICK and BC-57.
+
+- ebrick/iocBoot/iocebrick/autosave/scaler\_16ch\_settings.req
+
+- Add Sensoray voltage support. Modified location of autosave files
+
+- ebrick/iocBoot/iocebrick/autosave/scaler\_8ch\_settings.req
+
+- Add Sensoray voltage support. Modified location of autosave files
+
+- ebrick/iocBoot/iocebrick/autosave/serialLink.req
+
+- Added control/data format PVs.
+- Added documentation and serial link support.
+    
+    
+ip
+--
+
+- Support for new devices:
+
+
+- US Digital Serial Encoder
+- Keithley 8517 Electrometer
+- LakeShore 340 Temperature controller
+- Omega DP41 Digital Panel Meter
+- Pfeiffer TPG261 RS232 Vacuum Controller.
+
+- - - - - -
+
+ip330
+-----
+
+
+- ip330/configure/RELEASE
+
+- New versions
+
+- ip330/configure/RELEASE.win32-x86
+
+- New versions
+
+- ip330/documentation/ip330.html
+
+- Fixed link
+- Added R2-5
+
+- ip330/documentation/ip330ReleaseNotes.html
+
+- Changes for R2-5
+- Update for R2-5
+
+- ip330/ip330App/Db/ip330ScanMode.template
+
+- New database to support scan mode
+
+- ip330/ip330App/src/Makefile
+
+- Added RTEMS
+- Added Linux support
+
+- ip330/ip330App/src/drvIp330.c
+
+- Added cast to avoid warnings
+- Addition of scanMode from Pete Leicester at Diamond
+- Removed vxWorks dependencies, converted to OSI/devLib
+- Added epicsAtExit to disable interrupts for soft reboots
+- Fixes from Peter Denison at Diamond to make single-ended mode work
+- Removed status argument from interrupt callbacks
+- Added status argument to callbacks for asyn R4-8
+
+- ip330/ip330App/src/drvIp330.h
+
+- Addition of scanMode from Pete Leicester at Diamond
+
+
+ipUnidig
+--------
+
+- Now builds for RTEMS and Linux.
+
+Now supports SBS IPOPTOIO8
+
+- - - - - -
+
+love
+----
+
+
+- love/loveApp/src/Makefile
+
+- Removed WIN32 specific code
+
+- love/loveApp/src/loveAppWin32Include.dbd
+
+- No longer needed with asyn R4-9
+
+
+mca
+---
+
+SIS3820 now supported on Linux.
+
+Build option to use LLC sockets to communicate with Canberra AIM module. Currently, this works on vxWorks only.
+
+MCA record forces ACQG=&gt;1 when acquisition is turned on. Without this, a short dwell time resulted in data never being read.
+
+Can read compressed or uncompressed data from Canberra.
+
+- - - - - -
+
+modbus
+------
+
+New module.
+
+modbus supports EPICS communication with Programmable Logic Controllers (PLCs) via the Modbus protocol over TCP, serial RTU, and serial ASCII links. The modbus software provides a layer between standard EPICS asyn device support, and the EPICS asyn TCP/IP or serial port driver.
+
+- - - - - -
+
+optics
+------
+
+New support for XIA PF4 filter/shutter
+
+Oxford 4-channel x-ray beam position monitor
+
+New support for an ASRP optical table
+
+- - - - - -
+
+pilatus
+-------
+
+New module: an enhanced EPICS interface to the Dectris *Pilatus*pixel-array detector.
+
+- - - - - -
+
+quadEM
+------
+
+
+- quadEM/documentation/quadEMReleaseNotes.html
+
+- Added comments for R2-4
+
+- quadEM/quadEMApp/Db/quadEM\_settings.req
+
+- Changed Average to Read, bug fix
+
+- quadEM/quadEMApp/op/adl/quadEM\_less.adl
+
+- Like quadEM.adl but with fewer controls
+
+- quadEM/quadEMApp/src/drvQuadEM.c
+
+- Removed status argument from interrupt callbacks
+- Added status on callbacks for asyn R4-8; remove unused functions
+
+
+sscan
+-----
+
+Removed race conditions affecting callback counters, and added a mutex to protect them. Changed timing of when to renew positioner links from now-last\_scan\_start to now-last\_scan\_end.
+
+display\_fields.adl uses new link-help displays from std R2.6
+
+The base name for files written by saveData can now be selected at run time by the user.
+
+The sscan record can now post array data to clients during a scan. By default, this capability is disabled, because it may confuse existing clients of the sscan record.
+
+If saveData fails to write or update a data file, it can now retry, as controlled by PV's.
+
+Previously, the standard scan and saveData records were combined into a single database, scan.db. Now, the preferred databases to load are standardScans.db (one or more copies), and saveData.db (one copy only).
+
+- - - - - -
+
+std
+---
+
+The gpibRecord has been replaced by the asynRecord, which is loaded from the asyn module.
+
+New databases: alarmClock, autoShutter, countDownTimer, ramp\_tweak, scaler16m
+
+The sseqRecord (string Sequence, a variant of the seq record in EPICS base) can now be told to abort the sequence it's executing.
+
+- - - - - -
+
+
+cvs log
+-------
+
+- std/documentation/gpibRecord.html
+
+- replaced by asyn record
+
+- std/documentation/scalerRecord.html
+
+- COUTP field
     
     - std/documentation/sseqRecord.html 
         - abort; lots of edits
