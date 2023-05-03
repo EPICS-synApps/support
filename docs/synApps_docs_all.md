@@ -1,151 +1,129 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-<meta name="generator" content=
-"HTML Tidy for Solaris (vers 1st September 2003), see www.w3.org">
-<meta http-equiv="content-type" content=
-"text/html; charset=us-ascii">
-<title>synApps collected documentation</title>
-<meta name="author" content="Tim Mooney">
-</head>
-<body>
-<img src="http://www.aps.anl.gov/epics/icons/logo101.gif" alt=
-"EPICS" hspace="5" height="101" width="101" align="right">
-<h1>synApps: collected documentation links</h1>
-<p>This page is an attempt to collect recent versions of all synApps
-documentation and release notes in one place.</p>
-<p>Please email any comments and bug reports to <a href=
-"mailto:mooney@aps.anl.hob">Tim Mooney</a>.</p>
+synApps: collected documentation links
+======================================
 
-<h2>Overiew</h2>
-<ul>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/synApps.html">synApps.html</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/intro_to_synApps.ppt">Introduction To synApps (old powerpoint)</a>
-</ul>
+This page is an attempt to collect recent versions of all synApps documentation and release notes in one place.
 
-<h2>Records</h2>
-Records in synApps:
-<ul>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/alive/aliveRecord.html">aliveRecord</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/calc/aCalcoutRecord.html">aCalcoutRecord</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/sscan/busyRecord.html">busyRecord</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/camacRecord.html">camacRecord</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/dxpRecord.html">dxpRecord</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/std/epidRecord.html">epidRecord</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/mcaRecord.html">mcaRecord</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/motor/R6-8/motorRecord.html">motorRecord</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/calc/sCalcoutRecord.html">sCalcoutRecord</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/std/scalerRecord.html">scalerRecord</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/sscan/sscanRecord.html">sscanRecord</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/sscan/scanparmRecord.html">scanparmRecord</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/std/sseqRecord.html">sseqRecord</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/calc/swaitRecord.html">swaitRecord</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/optics/tableRecord.html">tableRecord.html</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/calc/transformRecord.html">transformRecord</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/vmeRecord.html">vmeRecord</a>
+Please email any comments and bug reports to [Tim Mooney](mailto:mooney@aps.anl.hob).
 
-<li><a href="http://www.aps.anl.gov/bcda/synApps/vac/README.txt">vsRecord</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/vac/README.txt">digitelRecord</a>
+Overiew
+-------
 
-</ul>
+- [synApps.html](http://www.aps.anl.gov/bcda/synApps/synApps.html)
+- [Introduction To synApps (old powerpoint)](http://www.aps.anl.gov/bcda/synApps/intro_to_synApps.ppt)
 
-<p>non-synApps records used by synApps (and not part of EPICS base)
-<ul>
-<li><a href="http://www.aps.anl.gov/epics/modules/soft/asyn/R4-24/asynRecord.html">asynRecord</a>
-<li><a href="ftp://ftp.slac.stanford.edu/groups/controls/soft/epics/timestampRecord.tar.gz">timestampRecord (tar file)</a>
-</ul>
-<h2>Module documentation links:</h2>
-<ul>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/alive/aliveDoc.html">alive</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/areaDetector.html">areaDetector</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/autosave/autoSaveRestore_R5-5.html">autosave</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/calc/calcDocs.html">calc</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/camacDoc.html">camac</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/caputRecorder/caputRecorder.html">caputRecorder</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/ccdDoc.html">ccd</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/dac128VDoc.html">dac128V</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/dxpDoc.html">dxp</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/delaygen/delaygen.html">delaygen</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/ebrick/ebrick_doc.html">ebrick</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/ip/ipDoc.html">ip</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/ip330Doc.html">ip330</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/ipUnidigDoc.html">ipUnidig</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/love/loveDriver.html">love</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/mcaDoc.html">mca</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/modbusDoc.html">modbus</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/measCompDoc.html">measComp</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/motor/R6-8/motorRecord.html">motor</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/optics/opticsDocs.html">optics</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/pilatusROIDoc.html">pilatus</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/quadEMDoc.html">quadEM</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/sscan/sscanDoc.html">sscan</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/softGlue/softGlue.html">softGlue</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/std/stdDoc.html">std</a>
-<li><a href="http://www.aps.anl.gov/aod/bcda/synApps/std/vacDoc.html">vac</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/vme/vme.html">vme</a>
-</ul>
+Records
+-------
 
-<p>non-synApps modules used by synApps
-<ul>
-<li><a href="http://www.aps.anl.gov/epics/modules/bus/allenBradley/R2-1/allenBradley.html">allenBradley</a>
-<li><a href="http://www.aps.anl.gov/epics/modules/soft/asyn/">asyn</a>
-<li><a href="http://www.slac.stanford.edu/comp/unix/package/epics/site/devIocStats">devIocStats</a>
-<li><a href="http://www.aps.anl.gov/asd/people/anj/ipac/">ipac</a>
-<li><a href="http://www-csr.bessy.de/control/SoftDist/sequencer">State Notation Language</a>
-<li><a href="http://epics.web.psi.ch/software/streamdevice/doc/">stream</a>
-</ul>
+Records in synApps: - [aliveRecord](http://www.aps.anl.gov/bcda/synApps/alive/aliveRecord.html)
+- [aCalcoutRecord](http://www.aps.anl.gov/bcda/synApps/calc/aCalcoutRecord.html)
+- [busyRecord](http://www.aps.anl.gov/bcda/synApps/sscan/busyRecord.html)
+- [camacRecord](http://cars9.uchicago.edu/software/epics/camacRecord.html)
+- [dxpRecord](http://cars9.uchicago.edu/software/epics/dxpRecord.html)
+- [epidRecord](http://www.aps.anl.gov/bcda/synApps/std/epidRecord.html)
+- [mcaRecord](http://cars9.uchicago.edu/software/epics/mcaRecord.html)
+- [motorRecord](http://www.aps.anl.gov/bcda/synApps/motor/R6-8/motorRecord.html)
+- [sCalcoutRecord](http://www.aps.anl.gov/bcda/synApps/calc/sCalcoutRecord.html)
+- [scalerRecord](http://www.aps.anl.gov/bcda/synApps/std/scalerRecord.html)
+- [sscanRecord](http://www.aps.anl.gov/bcda/synApps/sscan/sscanRecord.html)
+- [scanparmRecord](http://www.aps.anl.gov/bcda/synApps/sscan/scanparmRecord.html)
+- [sseqRecord](http://www.aps.anl.gov/bcda/synApps/std/sseqRecord.html)
+- [swaitRecord](http://www.aps.anl.gov/bcda/synApps/calc/swaitRecord.html)
+- [tableRecord.html](http://www.aps.anl.gov/bcda/synApps/optics/tableRecord.html)
+- [transformRecord](http://www.aps.anl.gov/bcda/synApps/calc/transformRecord.html)
+- [vmeRecord](http://cars9.uchicago.edu/software/epics/vmeRecord.html)
+- [vsRecord](http://www.aps.anl.gov/bcda/synApps/vac/README.txt)
+- [digitelRecord](http://www.aps.anl.gov/bcda/synApps/vac/README.txt)
 
+non-synApps records used by synApps (and not part of EPICS base)
 
+- [asynRecord](http://www.aps.anl.gov/epics/modules/soft/asyn/R4-24/asynRecord.html)
+- [timestampRecord (tar file)](ftp://ftp.slac.stanford.edu/groups/controls/soft/epics/timestampRecord.tar.gz)
 
-<hr>
-<h2>Release Notes</h2>
+Module documentation links:
+---------------------------
 
-<h2>synApps</h2>
-<ul>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/synAppsReleaseNotes.html">synAppsReleaseNotes</a>
-</ul>
+- [alive](http://www.aps.anl.gov/bcda/synApps/alive/aliveDoc.html)
+- [areaDetector](http://cars9.uchicago.edu/software/epics/areaDetector.html)
+- [autosave](http://www.aps.anl.gov/bcda/synApps/autosave/autoSaveRestore_R5-5.html)
+- [calc](http://www.aps.anl.gov/bcda/synApps/calc/calcDocs.html)
+- [camac](http://cars9.uchicago.edu/software/epics/camacDoc.html)
+- [caputRecorder](http://www.aps.anl.gov/bcda/synApps/caputRecorder/caputRecorder.html)
+- [ccd](http://cars9.uchicago.edu/software/epics/ccdDoc.html)
+- [dac128V](http://cars9.uchicago.edu/software/epics/dac128VDoc.html)
+- [dxp](http://cars9.uchicago.edu/software/epics/dxpDoc.html)
+- [delaygen](http://www.aps.anl.gov/bcda/synApps/delaygen/delaygen.html)
+- [ebrick](http://www.aps.anl.gov/bcda/synApps/ebrick/ebrick_doc.html)
+- [ip](http://www.aps.anl.gov/bcda/synApps/ip/ipDoc.html)
+- [ip330](http://cars9.uchicago.edu/software/epics/ip330Doc.html)
+- [ipUnidig](http://cars9.uchicago.edu/software/epics/ipUnidigDoc.html)
+- [love](http://www.aps.anl.gov/bcda/synApps/love/loveDriver.html)
+- [mca](http://cars9.uchicago.edu/software/epics/mcaDoc.html)
+- [modbus](http://cars9.uchicago.edu/software/epics/modbusDoc.html)
+- [measComp](http://cars9.uchicago.edu/software/epics/measCompDoc.html)
+- [motor](http://www.aps.anl.gov/bcda/synApps/motor/R6-8/motorRecord.html)
+- [optics](http://www.aps.anl.gov/bcda/synApps/optics/opticsDocs.html)
+- [pilatus](http://cars9.uchicago.edu/software/epics/pilatusROIDoc.html)
+- [quadEM](http://cars9.uchicago.edu/software/epics/quadEMDoc.html)
+- [sscan](http://www.aps.anl.gov/bcda/synApps/sscan/sscanDoc.html)
+- [softGlue](http://www.aps.anl.gov/bcda/synApps/softGlue/softGlue.html)
+- [std](http://www.aps.anl.gov/bcda/synApps/std/stdDoc.html)
+- [vac](http://www.aps.anl.gov/aod/bcda/synApps/std/vacDoc.html)
+- [vme](http://www.aps.anl.gov/bcda/synApps/vme/vme.html)
 
+non-synApps modules used by synApps
 
-<h2>synApps modules</h2>
-<ul>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/alive/aliveReleaseNotes.html">alive</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/areaDetectorReleaseNotes.html">areaDetector</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/autosave/autosaveReleaseNotes.html">autosave</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/busy/busyReleaseNotes.html">busy</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/calc/calcReleaseNotes.html">calc</a>
-<li><a href="https://cars.uchicago.edu/software/epics/camacReleaseNotes.html">camac</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/caputRecorder/caputRecorderReleaseNotes.html">caputRecorder</a>
-<li><a href="https://cars.uchicago.edu/software/epics/dac128VReleaseNotes.html">dac128V</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/delaygen/delaygen_notes.html">delaygen</a>
-<li><a href="https://cars.uchicago.edu/software/epics/dxpReleaseNotes.html">dxp</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/ip/ipReleaseNotes.html">ip</a>
-<li><a href="https://cars.uchicago.edu/software/epics/ip330ReleaseNotes.html">ip330</a>
-<li><a href="http://cars9.uchicago.edu/software/epics/ipUnidigReleaseNotes.html">ipUnidig</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/love/loveReleaseNotes.html">love</a>
-<li><a href="https://cars.uchicago.edu/software/epics/mcaReleaseNotes.html">mca</a>
-<li><a href="https://cars.uchicago.edu/software/epics/measCompReleaseNotes.html">measComp</a>
-<li><a href="https://cars.uchicago.edu/software/epics/modbusReleaseNotes.html">modbus</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/motor/R6-8/motor_release.html">motor</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/optics/opticsReleaseNotes.html">optics</a>
-<li><a href="https://cars.uchicago.edu/software/epics/quadEMReleaseNotes.html">quadEM</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/sscan/sscanReleaseNotes.html">sscan</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/softGlue/softGlueReleaseNotes.html">softGlue</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/std/stdReleaseNotes.html">std</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/vac/vacReleaseNotes.html">vac</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/vme/vmeReleaseNotes.html">vme</a>
-<li><a href="http://www.aps.anl.gov/bcda/synApps/xxx/xxxReleaseNotes.html">xxx</a>
-</ul>
+- [allenBradley](http://www.aps.anl.gov/epics/modules/bus/allenBradley/R2-1/allenBradley.html)
+- [asyn](http://www.aps.anl.gov/epics/modules/soft/asyn/)
+- [devIocStats](http://www.slac.stanford.edu/comp/unix/package/epics/site/devIocStats)
+- [ipac](http://www.aps.anl.gov/asd/people/anj/ipac/)
+- [State Notation Language](http://www-csr.bessy.de/control/SoftDist/sequencer)
+- [stream](http://epics.web.psi.ch/software/streamdevice/doc/)
 
-<p>non-synApps modules used by synApps
-<ul>
-<li><a href="http://www.aps.anl.gov/epics/modules/bus/allenBradley/R2-1/releaseNotes.html">allenBradley</a>
-<li><a href="http://www.aps.anl.gov/epics/modules/soft/asyn/R4-21/RELEASE_NOTES.html">asyn</a>
-<li><a href="https://svn.aps.anl.gov/trac/epics/ipac/wiki/V2.12">ipac</a>
-<li><a href="http://www-csr.bessy.de/control/SoftDist/sequencer/">sequencer</a>
-<li><a href="http://epics.web.psi.ch/software/streamdevice/">streamdevice</a>
-<li><a href="http://www.slac.stanford.edu/comp/unix/package/epics/site/devIocStats/">devIocStats</a>
-</ul>
+- - - - - -
 
+Release Notes
+-------------
 
-</body>
-</html>
+synApps
+-------
+
+- [synAppsReleaseNotes](http://www.aps.anl.gov/bcda/synApps/synAppsReleaseNotes.html)
+
+synApps modules
+---------------
+
+- [alive](http://www.aps.anl.gov/bcda/synApps/alive/aliveReleaseNotes.html)
+- [areaDetector](http://cars9.uchicago.edu/software/epics/areaDetectorReleaseNotes.html)
+- [autosave](http://www.aps.anl.gov/bcda/synApps/autosave/autosaveReleaseNotes.html)
+- [busy](http://www.aps.anl.gov/bcda/synApps/busy/busyReleaseNotes.html)
+- [calc](http://www.aps.anl.gov/bcda/synApps/calc/calcReleaseNotes.html)
+- [camac](https://cars.uchicago.edu/software/epics/camacReleaseNotes.html)
+- [caputRecorder](http://www.aps.anl.gov/bcda/synApps/caputRecorder/caputRecorderReleaseNotes.html)
+- [dac128V](https://cars.uchicago.edu/software/epics/dac128VReleaseNotes.html)
+- [delaygen](http://www.aps.anl.gov/bcda/synApps/delaygen/delaygen_notes.html)
+- [dxp](https://cars.uchicago.edu/software/epics/dxpReleaseNotes.html)
+- [ip](http://www.aps.anl.gov/bcda/synApps/ip/ipReleaseNotes.html)
+- [ip330](https://cars.uchicago.edu/software/epics/ip330ReleaseNotes.html)
+- [ipUnidig](http://cars9.uchicago.edu/software/epics/ipUnidigReleaseNotes.html)
+- [love](http://www.aps.anl.gov/bcda/synApps/love/loveReleaseNotes.html)
+- [mca](https://cars.uchicago.edu/software/epics/mcaReleaseNotes.html)
+- [measComp](https://cars.uchicago.edu/software/epics/measCompReleaseNotes.html)
+- [modbus](https://cars.uchicago.edu/software/epics/modbusReleaseNotes.html)
+- [motor](http://www.aps.anl.gov/bcda/synApps/motor/R6-8/motor_release.html)
+- [optics](http://www.aps.anl.gov/bcda/synApps/optics/opticsReleaseNotes.html)
+- [quadEM](https://cars.uchicago.edu/software/epics/quadEMReleaseNotes.html)
+- [sscan](http://www.aps.anl.gov/bcda/synApps/sscan/sscanReleaseNotes.html)
+- [softGlue](http://www.aps.anl.gov/bcda/synApps/softGlue/softGlueReleaseNotes.html)
+- [std](http://www.aps.anl.gov/bcda/synApps/std/stdReleaseNotes.html)
+- [vac](http://www.aps.anl.gov/bcda/synApps/vac/vacReleaseNotes.html)
+- [vme](http://www.aps.anl.gov/bcda/synApps/vme/vmeReleaseNotes.html)
+- [xxx](http://www.aps.anl.gov/bcda/synApps/xxx/xxxReleaseNotes.html)
+
+non-synApps modules used by synApps
+
+- [allenBradley](http://www.aps.anl.gov/epics/modules/bus/allenBradley/R2-1/releaseNotes.html)
+- [asyn](http://www.aps.anl.gov/epics/modules/soft/asyn/R4-21/RELEASE_NOTES.html)
+- [ipac](https://svn.aps.anl.gov/trac/epics/ipac/wiki/V2.12)
+- [sequencer](http://www-csr.bessy.de/control/SoftDist/sequencer/)
+- [streamdevice](http://epics.web.psi.ch/software/streamdevice/)
+- [devIocStats](http://www.slac.stanford.edu/comp/unix/package/epics/site/devIocStats/)

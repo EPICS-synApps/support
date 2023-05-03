@@ -1,59 +1,33 @@
-<html>
+Building synApps on Cygwin
+==========================
 
-<head>
-<meta http-equiv="Content-Type"
-content="text/html; charset=iso-8859-1">
-<title>Building synApps on Cygwin</title>
-</head>
+The following components from the Cygwin distribution package are required in order to build synApps for the cygwin-x86 architecture: - base 
+    - All default components
+- devel 
+    - gcc-core
+    - gcc-g++
+    - libncurses-devel
+    - make
+    - readline
+- interpreters 
+    - perl
+- libs 
+    - ncurses
+    - sunrpc
 
-<h1 align="center">Building synApps on Cygwin</h1>
-The following components from the Cygwin distribution package are required in order to build synApps
-for the cygwin-x86 architecture:
-<ul>
-  <li>base
-    <ul>
-        <li>All default components
-    </ul>
-  <li>devel
-    <ul> 
-      <li>gcc-core
-      <li>gcc-g++
-      <li>libncurses-devel
-      <li>make
-      <li>readline
-    </ul>
-  <li>interpreters
-    <ul>
-      <li>perl
-    </ul>
-  <li>libs
-    <ul>
-      <li>ncurses
-      <li>sunrpc
-    </ul>
-</ul>
+To set up the PATH and EPICS\_HOST\_ARCH environment variables create a script file called /usr/local/bin/setup\_epics containing lines like the following: ```
 
-To set up the PATH and EPICS_HOST_ARCH environment variables create a script file called 
-/usr/local/bin/setup_epics containing lines like the following:
-<pre>
 export PATH="/usr/bin:/usr/local/bin:/corvette/usr/local/epics/base/bin/cygwin-x86"
 export EPICS_HOST_ARCH=cygwin-x86
-</pre>
+```
 
-The last element in the PATH definition must be the path to the bin/cygwin-x86 subdirectory in your 
-local installation of EPICS base.
-<p>
-When logging in to the bash shell on cygwin type the command
-<pre>
+The last element in the PATH definition must be the path to the bin/cygwin-x86 subdirectory in your local installation of EPICS base. When logging in to the bash shell on cygwin type the command
+
+```
+
 source setup_epics
-</pre>
-to execute that script.  
-<P>
-<address>
-    Suggestions and Comments to: <br>
-    <a href="mailto:rivers@cars.uchicago.edu">Mark Rivers</a>:
-    (rivers@cars.uchicago.edu) <br>
-    Last modified: November 28, 2005 
-</address>
-</body>
-</html>
+```
+
+to execute that script.  Suggestions and Comments to:   
+ [Mark Rivers](mailto:rivers@cars.uchicago.edu): (rivers@cars.uchicago.edu)   
+ Last modified: November 28, 2005
