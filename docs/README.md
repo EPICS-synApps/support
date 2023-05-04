@@ -1,3 +1,10 @@
+---
+layout: default
+title: Index
+nav_order: 1
+---
+
+
 # documentation
 APS BCDA synApps module: documentation
 

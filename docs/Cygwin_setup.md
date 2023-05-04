@@ -1,3 +1,10 @@
+---
+layout: default
+title: Cygwin Notes
+nav_order: 5
+---
+
+
 Building synApps on Cygwin
 ==========================
 

@@ -1,3 +1,10 @@
+---
+layout: default
+title: Documentation Links
+nav_order: 4
+---
+
+
 synApps: collected documentation links
 ======================================
 

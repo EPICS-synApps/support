@@ -1,3 +1,10 @@
+---
+layout: default
+title: Release Notes
+nav_order: 3
+---
+
+
 synApps 6.2.1 Release Notes
 ===========================
 
