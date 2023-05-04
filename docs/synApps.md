@@ -26,7 +26,7 @@ Introduction
 
 - - - - - -
 
-synApps is a collection of [EPICS](http://www.aps.anl.gov/epics) software intended to support most of the common requirements of an x-ray laboratory or synchrotron-radiation beamline. Because it is EPICS software, synApps is extensible by developers and end users, to support new devices and experimental techniques. This extensibility frees synApps to focus mostly on general-purpose capabilities and infrastructure, from which application-specific software can be built or assembled.
+synApps is a collection of [EPICS](https://epics.anl.gov/) software intended to support most of the common requirements of an x-ray laboratory or synchrotron-radiation beamline. Because it is EPICS software, synApps is extensible by developers and end users, to support new devices and experimental techniques. This extensibility frees synApps to focus mostly on general-purpose capabilities and infrastructure, from which application-specific software can be built or assembled.
 
 > Thus, for example, synApps provides support for motors, scalers, and scans, but it does not tie those items together into an immediately executable scan (of specific motors, to acquire specific scaler channels, for a specific dwell time, etc.). The user does this at run time (or a knowledgeable user can provide a fully specified scan, and give the novice user a button to start it).
 > 
@@ -152,7 +152,17 @@ Aside from EPICS databases, SNL (State Notation Language) programs, and the like
     List appended to this document.
 - ### Other C code
     
-    aCalcPostfix, aCalcPerform sCalcPostfix, sCalcPerform Support for run-time expression evaluation recDynLink Backward compatible extension of the dynamic-link software previously in EPICS base. (New code should probably use dbCaPutlinkCallback(), instead of recDynLink.) autosave (save\_restore, dbrestore, configMenu, asVerify, autosaveBuild) Automatic parameter save and boot-time restore. Run-time management of collections of PV values. saveData Saves scan data to files on an NFS-mounted disk (vxWorks), or to a local disk (other operating systems). luascript Support for running scripts to control the value of standard records
+    aCalcPostfix, aCalcPerform sCalcPostfix, sCalcPerform 
+    * Support for run-time expression evaluation 
+    recDynLink 
+    * Backward compatible extension of the dynamic-link software previously in EPICS base. (New code should probably use dbCaPutlinkCallback(), instead of recDynLink.) 
+    autosave (save\_restore, dbrestore, configMenu, asVerify, autosaveBuild) 
+    * Automatic parameter save and boot-time restore. Run-time management of collections of PV values. 
+    saveData 
+    * Saves scan data to files on an NFS-mounted disk (vxWorks), or to a local disk (other operating systems). 
+    luascript 
+    * Support for running scripts to control the value of standard records
+    
 - ### Documentation
     
     In addition to this top-level documentation, synApps modules have their own documentation directories, and the __xxx__ module contains examples of how much of the software is imported, built, loaded, and run. Some modules have their own example iocBoot directories.
@@ -445,7 +455,6 @@ How to make synApps work
     - Turn the crate on. The crate processor says "Press any key to stop auto-boot..." and a number counting down from 7. Pressing a key gets the prompt "\[VxWorks Boot\]:"
     - Type "p" to see the current boot parameters, type "c" to change them. Here are sample boot parameters 
     ```
-        
             boot device          : dc 
             processor number     : 0 
             host name            : <server> 
@@ -470,9 +479,13 @@ How to make synApps work
     
     In a complete job of fitting synApps to an IOC's hardware, all of the following files will be touched:
     
-    > `xxx/iocBoot/ioc*/st.cmd.*`This is the ioc's startup script, and it loads the other .cmd files `xxx/iocBoot/ioc*/examples/*.iocsh`  
-    > `xxx/iocBoot/ioc*/substitutions/*.substitutions`Example command files that can be invoked by st.cmd `xxx/iocBoot/ioc*/auto_positions.req`  
-    > `xxx/iocBoot/ioc*/auto_settings.req`specifies PV's to be saved periodically during operation, and restored automatically when the ioc is rebooted. (But note that you can have these files constructed for you during the boot process. See [autosaveBuild](https://htmlpreview.github.io/?https://github.com/epics-modules/autosave/blob/R5-10/documentation/autoSaveRestore.html#autosaveBuild) in the autosave documentation.) `xxx/iocBoot/ioc*/saveData.req`identifies PV's used by the saveData software, sscan records to be monitored for data, and PV's whose values are to be included in all scan-data files. `xxx/iocBoot/ioc*/bootParms`a copy of the boot parameters (in case the IOC processor crashes in a way that erases nonvolatile memory)
+    > `xxx/iocBoot/ioc*/st.cmd.*`
+    * This is the ioc's startup script, and it loads the other .cmd files 
+    > `xxx/iocBoot/ioc*/examples/*.iocsh`  
+    * Example command files that can be invoked by st.cmd
+    > `xxx/iocBoot/ioc*/substitutions/*.substitutions`
+    > 'xxx/iocBoot/ioc*/auto_positions.req`  
+    * `xxx/iocBoot/ioc*/auto_settings.req`specifies PV's to be saved periodically during operation, and restored automatically when the ioc is rebooted. (But note that you can have these files constructed for you during the boot process. See [autosaveBuild](https://htmlpreview.github.io/?https://github.com/epics-modules/autosave/blob/R5-10/documentation/autoSaveRestore.html#autosaveBuild) in the autosave documentation.) `xxx/iocBoot/ioc*/saveData.req`identifies PV's used by the saveData software, sscan records to be monitored for data, and PV's whose values are to be included in all scan-data files. `xxx/iocBoot/ioc*/bootParms`a copy of the boot parameters (in case the IOC processor crashes in a way that erases nonvolatile memory)
     
     __In more detail__
     
@@ -636,7 +649,7 @@ Here is a list of techniques by which synApps has already been extended by users
         `interpNew.db, interpNew_settings.req, interpNew.adl`
     
     In addition to "userCalcs", many synApps records and databases contain sections intended primarily for run-time programming by end users. Examples include end-of-acquisition calculations for scalers and digital multimeters; region-of-interest summing, and background-subtraction for mca records.
-- [caputRecorder](http://www.aps.anl.gov/bcda/synApps/caputRecorder/caputRecorder_releases.html) macro recording Users who know how to accomplish a task by executing or modifying EPICS records can write software to automate that task using caputRecorder:
+- [caputRecorder](https://github.com/epics-modules/caputRecorder/releases) macro recording Users who know how to accomplish a task by executing or modifying EPICS records can write software to automate that task using caputRecorder:
     
     
     1. Enter a macro name to identify the task.
@@ -678,8 +691,7 @@ The synApps support/utils directory contains a variety of executables that may b
  
 > copyAdl 
 * Look through synApps for .adl files, and copy them all to a specified directory Example of use:
-> ```
-> 
+> ``` 
 >     copyAdl $SYNAPPS/support adl_files
 > ```
 
