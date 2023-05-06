@@ -2,8 +2,8 @@
 APS BCDA synApps module: support
 
 For more information, see
-   http://www.aps.anl.gov/bcda/synApps
-
+    http://epics-synapps.github.io/support/
+    
 converted from APS SVN repository: Fri Nov 20 18:28:17 CST 2015
 
 Regarding the license of tagged versions prior to synApps 4-5,
