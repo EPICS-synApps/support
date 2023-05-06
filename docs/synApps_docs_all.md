@@ -12,8 +12,8 @@ This page is an attempt to collect recent versions of all synApps documentation 
 
 Please email any comments and bug reports to [Keenan Lang](mailto:klang@anl.gov) or [Tim Mooney](mailto:mooney@aps.anl.hob).
 
-Overiew
--------
+Overview
+--------
 
 - [synApps.html](http://epics-synapps.github.io/support/synApps.html)
 - [Introduction To synApps](http://epics-synapps.github.io/support/IntroToSynApps.ppt)
