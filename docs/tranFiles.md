@@ -1,5 +1,11 @@
-utilsReleaseNotes
-=================
+---
+layout: default
+title: tranFiles.py
+nav_order: 6
+---
+
+tranFiles.py
+============
 
 tranFiles.py finds data files, translates them, and writes the translated files to disk. The program finds data files either in a caller-specified directory, or by reading EPICS PVs (using a caller-specified prefix string) and converting that information to a directory name. Files in the data-file directory whose names end with a caller-specified file extension (default: '.mda') are considered data files.
 
