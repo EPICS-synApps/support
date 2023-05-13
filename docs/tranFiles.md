@@ -20,10 +20,10 @@ names. For example, the data file 'abc\_1234.mda' will result in the translated 
 If the translated file corresponding to a data file already exists, and has a 'modified' time more 
 recent than that of the data file, then the data file will be ignored.
 
-\<dest\> may contain the directives '@<element>' or '@N' or both, as described in the usage message:
+\<dest\> may contain the directives '@\<element\>' or '@N' or both, as described in the usage message:
 
 ```
-usage: python tranFiles.py source dest tran\_command \[extension\]
+usage: python tranFiles.py source dest tran_command [extension]
 where:
     source       the directory containing files to be translated.  If
                  <source> begins with '@', the rest of <source> is
@@ -41,7 +41,7 @@ where:
 
 ```
                     
-If <source> begins with '@', the python executable that runs this
+If \<source\> begins with '@', the python executable that runs this
 program should be capable of importing the ca\_util module, which uses
 caPython to read EPICS PVs.  If ca\_util can't be imported, this
 program will try to execute the command-line program, caget, instead.
@@ -77,8 +77,8 @@ files.
 Examples:
     python tranFiles.py @4idc1: ascii/tran mda2ascii mda
         The source directory will be gotten from the EPICS PVs
-        4idc1:saveData_fileSystem and 4idc1:saveData\_subDir; translated
-        files will be written to <source dir>/ascii/tran\_0123.txt.
+        4idc1:saveData_fileSystem and 4idc1:saveData_subDir; translated
+        files will be written to <source dir>/ascii/tran_0123.txt.
 
     python tranFiles.py @4idc1: /home/@vxDir/tran.@N mda2ascii mda
         Same as above, but translated files will be written to
