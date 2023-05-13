@@ -117,9 +117,9 @@ Four new build options at top level; all\_adl, all\_ui, all\_opi, and all\_edl. 
 Makefile also updated to use each module's RELEASE file to build dependencies. This means that adding a new module to an existing synApps directory is now as easy as dropping the module in and specifying it's name in the makefile's MODULE\_LIST.
 
 copyScreens.pl:
-    *   replaces copyAdl, copyUi, and copyOpi
-    *   top level synapps makefile now has a set of targets to replicate those scripts
-    *   use 'make all\_adl', 'make all\_ui', or 'make all\_opi', respectively
+- replaces copyAdl, copyUi, and copyOpi
+- top level synapps makefile now has a set of targets to replicate those scripts
+- use 'make all\_adl', 'make all\_ui', or 'make all\_opi', respectively
 
 - Version changes from R6-0 to R6-1
     
@@ -170,8 +170,8 @@ This version of synApps is specifically targeted against epics base 3.15. While 
 Modules now can contain an iocsh folder which provide ioc shell scripts to individually load a device onto an IOC. These are designed for use with the iocshLoad function in base and the scripts have comments describing the macros that should be set to use them.
 
 changePrefix:
-    *   Rewritten in perl to allow cross-platform usage
-    *   Updated for synApps 6-0 reorganization of xxx
+- Rewritten in perl to allow cross-platform usage
+- Updated for synApps 6-0 reorganization of xxx
 
 - Version changes from R5-8 to R6-0
     
@@ -225,9 +225,9 @@ addTag.py - For a module that already has a module tag, tag that same revision w
 adlDir2uiDir - Rewritten to change only .ui files in ui directory  
 adl2uiAll - translate all .adl files in synApps to .ui  
 changePrefix:  
-    *   Better handle testing for existence of files
-    *   Made changePrefix smarter about changing prefix in src/Makefile
-    *   Modified changePrefix to handle xxx.sh, as well as new versions of run and in-screen.sh
+- Better handle testing for existence of files
+- Made changePrefix smarter about changing prefix in src/Makefile
+- Modified changePrefix to handle xxx.sh, as well as new versions of run and in-screen.sh
 snapDb.py - Maintain default paths for medm displays, databases, and displayinfo files; specify display files for aSub, compress, mbbo, mca, scaler, sub, and vme record types.  
 
 - Version changes from R5-7 to R5-8
@@ -276,10 +276,10 @@ synApps 5.7 Release Notes
 
 snapDb.py - converted to use pyepics  
 mdaExplorer:  
-    *   added distutils config to simplify installation
-    *   merged mda.py and mda\_f.py into mda.py
-    *   Made mda.py conditional on availability of wxmpl and axes3d
-    *   check for unreasonable scan rank
+- added distutils config to simplify installation
+- merged mda.py and mda\_f.py into mda.py
+- Made mda.py conditional on availability of wxmpl and axes3d
+- check for unreasonable scan rank
 mdaPythonUtils - make mda and f\_xdrlib support installable as a Python package  
 mdautils-src - new version  
 changePrefix - fix for devIocStats, treat op/ui/\*.ui files  
@@ -379,18 +379,18 @@ Added utils/documentation
 Added burt.py, python support for writing the content of a burt snapshot file to a running IOC. burt.py cannot write a snapshot file.  
     
 mdaExplorer:  
-    *   Survey MDA files checks directory periodically for new files.
-    *   Add file description to directory list.
-    *   Can scale 2D plots for square image.
-    *   Color bar was displayed on top of image.
+- Survey MDA files checks directory periodically for new files.
+- Add file description to directory list.
+- Can scale 2D plots for square image.
+- Color bar was displayed on top of image.
 snapDb
-    *   Handle sub-record fields A-L, which have no promptgroup property, but are permitted to be written in .db files.
-    *   Don't crash if caget fails to get a value.
-    *   Get value as number, for comparison with default value, and as string, for writing to file.
+- Handle sub-record fields A-L, which have no promptgroup property, but are permitted to be written in .db files.
+- Don't crash if caget fails to get a value.
+- Get value as number, for comparison with default value, and as string, for writing to file.
 mdautils-src  
-    *   Nov 2009 distribution from Dohn Arms
+- Nov 2009 distribution from Dohn Arms
 convertIocFiles  
-    *   New directory in which all convertIocFiles related support is collected.
+- New directory in which all convertIocFiles related support is collected.
 
 - Version changes from R5-5 to R5-5-1
 
