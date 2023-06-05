@@ -1,26 +1,17 @@
 #!/usr/bin/perl
-# changePrefix for synApps 6.0
+# changePrefix for synApps
 
 use Cwd;
 use File::Copy;
 
+use strict;
+
 sub doSed
-{
-	if ( @_ < 2 )
-	{
-		print "usage: doSed <sed script> filename\n";
-		print 'example: doSed "s/tmm:/1bma:/g" stdApp.adl\n';
-		exit;
-	}
-	
+{	
 	my $sed_script = $_[0];
 	my $filename = $_[1];
 	
-	if ( -f $filename )
-	{
-		`perl -pi.bak -e '${sed_script}' ${filename}`;
-		unlink("${filename}.bak");
-	}
+	if ( -f $filename )    { `perl -pi -e "${sed_script}" ${filename}`; }
 }
 
 my $argc = @ARGV;
@@ -125,12 +116,7 @@ foreach my $file (glob("*${old}*Include.dbd"))
 	}
 }
 
-`perl -pi.bak -e "s/${old}(?!\\.dbd)/${new}/g" Makefile`;
-
-if (-f "Makefile.bak" )
-{
-	unlink("Makefile.bak");
-}
+`perl -pi -e "s/${old}(?!\\.dbd)/${new}/g" Makefile`;
 
 printf "\r%-50s", "${new}App/Db";
 chdir "${top}/${new}App/Db";
@@ -157,66 +143,32 @@ foreach my $dir (glob("ioc*"))
 		{
 			printf "\r%-50s", "$file";
 
-			given ($file) {
-				when ('st.cmd.vxWorks') {
-					doSed("s/ioc${old}>/ioc${new}>/g", $file);
-				}
-				default {
-					doSed("s!/${old}/!/${new}/!g", $file);
-					doSed("s/${old}:/${new}:/g", $file);
-					doSed("s/${old}\\./${new}./g", $file);
-					doSed("s/ioc${old}/ioc${new}/g", $file);
-					doSed("s/${old}Lib/${new}Lib/g", $file);
-					doSed("s/${old}App/${new}App/g", $file);
-					doSed("s/=${old}/=${new}/g", $file);
-					#doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
-					#doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
-					#doSed("/shellPromptSet/s/${old}/${new}/g", $file);
-				}
+			if ($file == "st.cmd.vxWorks")
+			{
+				doSed("s/ioc${old}>/ioc${new}>/g", $file);
+			}
+			else
+			{
+				doSed("s!/${old}/!/${new}/!g", $file);
+				doSed("s/${old}:/${new}:/g", $file);
+				doSed("s/${old}\\./${new}./g", $file);
+				doSed("s/ioc${old}/ioc${new}/g", $file);
+				doSed("s/${old}Lib/${new}Lib/g", $file);
+				doSed("s/${old}App/${new}App/g", $file);
+				doSed("s/=${old}/=${new}/g", $file);
+				#doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
+				#doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
+				#doSed("/shellPromptSet/s/${old}/${new}/g", $file);
 			}
 		}
 	}
 	
-	foreach my $file (glob("examples/*.cmd*"))
+	foreach my $file (glob("*.iocsh*"))
 	{
 		if ( -f $file )
 		{
 			printf "\r%-50s", "$file";
 			doSed("s!/${old}/!/${new}/!g", $file);
-			doSed("s/${old}:/${new}:/g", $file);
-			doSed("s/${old}\\./${new}./g", $file);
-			doSed("s/ioc${old}/ioc${new}/g", $file);
-			doSed("s/${old}Lib/${new}Lib/g", $file);
-			doSed("s/${old}App/${new}App/g", $file);
-			doSed("s/=${old}/=${new}/g", $file);
-			#doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
-			#doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
-			#doSed("/shellPromptSet/s/${old}/${new}/g", $file);
-		}
-	}
-	
-	foreach my $file (glob("*.iocsh"))
-	{
-		if ( -f $file )
-		{
-			printf "\r%-50s", $file;
-			doSed("s/${old}:/${new}:/g", $file);
-			doSed("s/${old}\\./${new}./g", $file);
-			doSed("s/ioc${old}/ioc${new}/g", $file);
-			doSed("s/${old}Lib/${new}Lib/g", $file);
-			doSed("s/${old}App/${new}App/g", $file);
-			doSed("s/=${old}/=${new}/g", $file);
-			#doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
-			#doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
-			#doSed("/shellPromptSet/s/${old}/${new}/g", $file);
-		}
-	}
-	
-	foreach my $file (glob("examples/*.iocsh"))
-	{
-		if ( -f $file )
-		{
-			printf "\r%-50s", $file;
 			doSed("s/${old}:/${new}:/g", $file);
 			doSed("s/${old}\\./${new}./g", $file);
 			doSed("s/ioc${old}/ioc${new}/g", $file);
@@ -299,10 +251,10 @@ foreach my $dir (glob("ioc*"))
 		doSed("s/${old}/${new}/g", "softioc/in-screen.sh");
 	}
 	
-	if ( -f "softioc/${old}.sh" )
+	if ( -f "softioc/${old}.pl" )
 	{
-		doSed("s/${old}/${new}/g", "softioc/${old}.sh");
-		move "softioc/${old}.sh", "softioc/${new}.sh";
+		doSed("s/${old}/${new}/g", "softioc/${old}.pl");
+		move "softioc/${old}.pl", "softioc/${new}.pl";
 	}
 	
 	chdir ".."
