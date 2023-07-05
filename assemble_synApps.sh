@@ -491,7 +491,11 @@ if [[ $SNCSEQ ]]
 then
 
 	# seq
-	wget http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-$SNCSEQ.tar.gz
+
+	# www-csr.bessy.de is dead :-(
+	# get the seq package from web.archive.org until there is a working host again
+	# wget http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-$SNCSEQ.tar.gz
+	wget http://web.archive.org/web/20230128080042/http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-$SNCSEQ.tar.gz
 	tar zxf seq-$SNCSEQ.tar.gz
 	
 	# The synApps build can't handle '.'
