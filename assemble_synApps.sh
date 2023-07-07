@@ -72,7 +72,7 @@ then
 	#UASDK=/path/to/sdk
 	OPTICS=R2-13-5
 	QUADEM=R9-4
-	SNCSEQ=2.2.9
+	SNCSEQ=R2-2-9
 	SOFTGLUE=R2-8-3
 	SOFTGLUEZYNQ=R2-0-4
 	SSCAN=R2-11-5
@@ -211,6 +211,7 @@ if [[ $MOTOR ]];         then   get_repo epics-modules          motor          M
 if [[ $OPTICS ]];        then   get_repo epics-modules          optics         OPTICS         $OPTICS        ; fi
 if [[ $QUADEM ]];        then   get_repo epics-modules          quadEM         QUADEM         $QUADEM        ; fi
 if [[ $SCALER ]];        then   get_repo epics-modules          scaler         SCALER         $SCALER        ; fi
+if [[ $SNCSEQ ]];        then   get_repo mdavidsaver            sequencer-mirror SNCSEQ       $SNCSEQ        ; fi
 if [[ $SOFTGLUE ]];      then   get_repo epics-modules          softGlue       SOFTGLUE       $SOFTGLUE      ; fi
 if [[ $SOFTGLUEZYNQ ]];  then   get_repo epics-modules          softGlueZynq   SOFTGLUEZYNQ   $SOFTGLUEZYNQ  ; fi
 if [[ $SSCAN ]];         then   get_repo epics-modules          sscan          SSCAN          $SSCAN         ; fi
@@ -486,19 +487,19 @@ then
 	cd ..
 fi
 
-
-if [[ $SNCSEQ ]]
-then
-
+# Using mdavidsaver's mirror
+#if [[ $SNCSEQ ]]
+#then
+#
 	# seq
-	wget http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-$SNCSEQ.tar.gz
-	tar zxf seq-$SNCSEQ.tar.gz
-	
+#	wget http://www-csr.bessy.de/control/SoftDist/sequencer/releases/seq-$SNCSEQ.tar.gz
+#	tar zxf seq-$SNCSEQ.tar.gz
+#	
 	# The synApps build can't handle '.'
-	mv seq-$SNCSEQ seq-${SNCSEQ//./-}
-	rm -f seq-$SNCSEQ.tar.gz
-	echo "SNCSEQ=\$(SUPPORT)/seq-${SNCSEQ//./-}" >> ./configure/RELEASE
+#	mv seq-$SNCSEQ seq-${SNCSEQ//./-}
+#	rm -f seq-$SNCSEQ.tar.gz
+#	echo "SNCSEQ=\$(SUPPORT)/seq-${SNCSEQ//./-}" >> ./configure/RELEASE
 
-fi
+#fi
 
 make release
