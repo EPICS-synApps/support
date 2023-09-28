@@ -79,9 +79,11 @@ Here's a list of the __modules__ and *directories* in synApps:
 | *documentation* | Um... documentation |
 | __dxp__ | Support for X-Ray Instrumentation Associates's DXP digital signal processor |
 | __dxpSITORO__ | Support for XIA SITORO based FalconX spectrometers |
+| __galil-3__ | Support for Galil motor controllers |
 | __ip__ | Support for various serial, and other message-based, devices. |
 | __ip330__ | Support for an IndustryPack ADC module |
 | __ipUnidig__ | Support for an IndustryPack digital I/O module |
+| __labjack__ | Support for LabJack I/O modules |
 | __love__ | Support for Love controllers |
 | __lua__ | Support for Lua scripting language features |
 | __mca__ | Support for multichannel analyzers and multichannel scalers. |
