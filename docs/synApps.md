@@ -337,7 +337,7 @@ in `ioc/configure/CONFIG_SITE`.*
 
 For completeness, the format of a RELEASE-file path definition is "`<name>=<path>`", where &lt;name&gt; is an arbitrary string, and &lt;path&gt; is an absolute directory name (starts with '/' on a unix host, or with a drive name such as 'C:' on Windows). Although &lt;name&gt; is arbitrary, you should be consistent. Generally, the EPICS build doesn't care what paths are named, because it's just going to collect them all into a list, and use the list to search for libraries, .dbd files, etc. But, in the module consistency check mentioned above, the name does matter, because EPICS can't check that all modules in a build are using the same version of, say, the asyn module, unless they all use the same &lt;name&gt; for it. Also, in the xxx module, &lt;name&gt; is used extensively to find display files (that is, to set the EPICS\_DISPLAY\_PATH environment variable), and to specify databases, autosave request files, etc., when an ioc is booting.
 
-The synApps build imposes an additional constraing on module names. Because synApps uses EPICS build rules to descend from `support` into the modules, module names may not include the character '.'. (The EPICS build rules expect '.' to be followed by a host or target architecture.) <a name="How to build synApps"></a>
+The synApps build imposes an additional constraint on module names. Because synApps uses EPICS build rules to descend from `support` into the modules, module names may not include the character '.'. (The EPICS build rules expect '.' to be followed by a host or target architecture.) <a name="How to build synApps"></a>
 
 
 
