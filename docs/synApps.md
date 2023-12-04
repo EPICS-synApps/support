@@ -38,7 +38,7 @@ Most synApps modules are intended primarily to export support to other modules. 
 
 > a database-definition file, in calc/dbd
 * `calcSupport.dbd`  
-> a linked library, in calc/lib/&lt;arch&gt 
+> a linked library, in calc/lib/&lt;arch&gt;
 * 'libcalc`
 > header files, in calc/include 
 * `transformRecord.h`  
@@ -376,7 +376,7 @@ How to build synApps
     
     
     1. Edit support/configure/RELEASE, and support/configure/CONFIG\_SITE, as noted above.
-    2. Edit support/configure/EPICS\_BASE.&lt;arch&gt;, support/configure/SUPPORT.&lt;arch&amp;gt, as noted above, for the architectures you want to build.
+    2. Edit support/configure/EPICS\_BASE.&lt;arch&gt;, support/configure/SUPPORT.&lt;arch&gt;, as noted above, for the architectures you want to build.
     3. Edit ipac/&lt;version&gt;/drvIpac/drvIpac.dbd, and motor/&lt;version&gt;/motorApp/Makefile, as noted above.
     4. Set the environment variable `EPICS_HOST_ARCH` to the architecture (and compiler, if there is a choice) on which you are building. synApps is tested with the architectures `linux-x86_64`, `win32-x86`, and `win64-x86`.
     5. In support, run '`make release`'. (See note below.)
