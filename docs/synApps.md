@@ -445,7 +445,7 @@ How to make synApps work
     Setup your host system to work with the EPICS processor. See the *VxWorks Programmer's Guide* if you have a copy. Here's what we do (on a Sun workstation):
     
     
-    - Add a user named `<vx_username>` with the password `<vx_password>`. The user has nothing in its home directory, and very few priviledges.
+    - Add a user named `<vx_username>` with the password `<vx_password>`. The user has nothing in its home directory, and very few privileges.
     - Connect an ethernet cable to the processor.
     - Setup the workstation to use a serial port at 9600 baud. Connect a serial cable from the workstation to the VME processor's "Console" port.
     - Start up an "xterm" on the workstation and type 
