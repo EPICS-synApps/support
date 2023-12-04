@@ -351,7 +351,7 @@ How to build synApps
     
     
     - The EPICS extension, [msi](http://www.aps.anl.gov/epics/extensions/msi/index.php), version 1-5 or higher. If attempting to build with EPICS base 3.14, this tool is needed to build some softGlue databases, EPICS base 3.15 and above include this as part of base.
-    - Linux: libusb.a, and associated header filesneeded for the __dxp__ module
+    - Linux: libusb.a, and associated header files needed for the __dxp__ module
     - Cygwin: Cygwin is configured from a menu of choices organized by function. You will need the following components from the following menu headings:
         
         
