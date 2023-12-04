@@ -386,7 +386,7 @@ How to build synApps
     
     When executed in the support directory, '`make release`' will go to all of the modules `support/Makefile` is configured to build, and edit the `configure/RELEASE` files in those modules so that they all build from the same versions of EPICS base and other known modules.
     
-    Typically, the build will not succeed the first time, because you will not have all of the required system support. If you find that you cannot build some synApps module, you can disable its build by commentng it out of `support/configure/RELEASE`.
+    Typically, the build will not succeed the first time, because you will not have all of the required system support. If you find that you cannot build some synApps module, you can disable its build by commenting it out of `support/configure/RELEASE`.
 3. Building and configuring a user directory Once synApps' support directory has built without errors, the __xxx__module will have been configured (`xxx/configure/RELEASE` will have correct, absolute paths to base and support) and built, so you can use it as an example – or, better, a template – for constructing user directories to support your IOCs. To make a template of xxx, clean and uninstall it, and tar a copy of the directory. To use the template, untar it, cd to its top-level directory and run `support/utils/changePrefix` to change the PV-name prefix from xxx to whatever you want. (Note you must have `support/utils` in your command path, or you could copy `support/utils/changePrefix` and `support/utils/doSed` to a directory that is in your command path. Note that `changePrefix` is synApps-version specific.)
     
     Here's what I do:
