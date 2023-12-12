@@ -90,16 +90,16 @@ release:
 .PHONY: all_adl all_edl all_ui all_opi all_bob
 	
 all_adl:
-	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'adl'
+	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'adl,gif'
 	
 all_edl:
 	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'edl'
 	
 all_ui:
-	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'ui,qss'
+	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'ui,qss,gif'
 	
 all_opi:
-	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'opi'
+	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'opi,gif'
 
 all_bob:
-	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'bob'
+	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'bob,gif'
