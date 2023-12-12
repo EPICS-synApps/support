@@ -87,7 +87,7 @@ release:
 	$(PERL) $(TOP)/configure/makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
 	
 
-.PHONY: all_adl all_edl all_ui all_opi
+.PHONY: all_adl all_edl all_ui all_opi all_bob
 	
 all_adl:
 	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'adl'
@@ -100,3 +100,6 @@ all_ui:
 	
 all_opi:
 	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'opi'
+
+all_bob:
+	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'bob'
