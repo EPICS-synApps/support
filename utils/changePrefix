@@ -6,12 +6,25 @@ use File::Copy;
 
 use strict;
 
-sub doSed
-{	
-	my $sed_script = $_[0];
-	my $filename = $_[1];
+#
+# Used because perl backtick usage seems to be significantly different 
+# between Linux and Windows
+sub do_substitution {
+	my @parms = @_;
 	
-	if ( -f $filename )    { `perl -pi -e "${sed_script}" ${filename}`; }
+	my $search = $parms[0];
+	my $replace = $parms[1];
+	my $file = $parms[2];
+	
+	rename ($file, $file . '.bak');
+	open (IN, '<' . $file . '.bak') or return 0;
+	open (OUT, '>' . $file) or return 0;
+	while (<IN>)  {
+		$_ =~ s/$search/$replace/gi;
+		print OUT $_;
+	}
+	close (IN);
+	close (OUT);
 }
 
 my $argc = @ARGV;
@@ -44,12 +57,12 @@ if ( -f "start_caQtDM_${old}" )
 {
 	printf "\r%-50s", "start_caQtDM_${new}";
 	move "start_caQtDM_${old}", "start_caQtDM_${new}";
-	doSed("s!/${old}!/${new}!g", "start_caQtDM_${new}");
-	doSed("s/${old}.adl/${new}.adl/g", "start_caQtDM_${new}");
-	doSed("s/${old}.ui/${new}.ui/g", "start_caQtDM_${new}");
-	doSed("s/=${old}:/=${new}:/g", "start_caQtDM_${new}");
-	doSed("s/ioc${old}/ioc${new}/g", "start_caQtDM_${new}");
-	doSed("s/${old}App/${new}App/g", "start_caQtDM_${new}");
+	do_substitution("/${old}", "/${new}", "start_caQtDM_${new}");
+	do_substitution("${old}.adl", "${new}.adl", "start_caQtDM_${new}");
+	do_substitution("${old}.ui", "${new}.ui", "start_caQtDM_${new}");
+	do_substitution("=${old}:", "=${new}:", "start_caQtDM_${new}");
+	do_substitution("ioc${old}", "ioc${new}", "start_caQtDM_${new}");
+	do_substitution("${old}App", "${new}App", "start_caQtDM_${new}");
 	
 	#chmod a+x
 	my $permissions = ((stat("start_caQtDM_${new}"))[2] | oct("111"));
@@ -60,29 +73,44 @@ if ( -f "start_MEDM_${old}" )
 {
 	printf "\r%-50s", "start_MEDM_${new}";
 	move "start_MEDM_${old}", "start_MEDM_${new}";
-	doSed("s!/${old}!/${new}!g", "start_MEDM_${new}");
-	doSed("s/${old}.adl/${new}.adl/g", "start_MEDM_${new}");
-	doSed("s/=${old}:/=${new}:/g", "start_MEDM_${new}");
-	doSed("s/ioc${old}/ioc${new}/g", "start_MEDM_${new}");
-	doSed("s/${old}App/${new}App/g", "start_MEDM_${new}");
+	do_substitution("/${old}", "/${new}", "start_MEDM_${new}");
+	do_substitution("${old}.adl", "${new}.adl", "start_MEDM_${new}");
+	do_substitution("=${old}:", "=${new}:", "start_MEDM_${new}");
+	do_substitution("ioc${old}", "ioc${new}", "start_MEDM_${new}");
+	do_substitution("${old}App", "${new}App", "start_MEDM_${new}");
 	
 	#chmod a+x
 	my $permissions = ((stat("start_MEDM_${new}"))[2] | oct("111"));
 	chmod $permissions, "start_MEDM_${new}";
 }
 
+if ( -f "start_phoebus_${old}" )
+{
+	printf "\r%-50s", "start_phoebus_${new}";
+	move "start_phoebus_${old}", "start_phoebus_${new}";
+	do_substitution("/${old}", "/${new}", "start_phoebus_${new}");
+	do_substitution("${old}.adl", "${new}.adl", "start_phoebus_${new}");
+	do_substitution("=${old}:", "=${new}:", "start_phoebus_${new}");
+	do_substitution("ioc${old}", "ioc${new}", "start_phoebus_${new}");
+	do_substitution("${old}App", "${new}App", "start_phoebus_${new}");
+	
+	#chmod a+x
+	my $permissions = ((stat("start_phoebus_${new}"))[2] | oct("111"));
+	chmod $permissions, "start_phoebus_${new}";
+}
+
 if ( -f "setup_epics_common" )
 {
 	printf "\r%-50s", "setup_epics_common";
-	doSed("s!/${old}!/${new}!g", "setup_epics_common");
-	doSed("s/${old}App/${new}App/g", "setup_epics_common");
+	do_substitution("/${old}", "/${new}", "setup_epics_common");
+	do_substitution("${old}App", "${new}App", "setup_epics_common");
 }
 
 if ( -f "example_start_putrecorder")
 {
 	printf "\r%-50s", "example_start_putrecorder";
-	doSed("s!/${old}!/${new}!g", "example_start_putrecorder");
-	doSed("s/${old}App/${new}App/g", "example_start_putrecorder");
+	do_substitution("/${old}", "/${new}", "example_start_putrecorder");
+	do_substitution("${old}App", "${new}App", "example_start_putrecorder");
 }
 
 printf "\r%-50s", "${new}App/src";
@@ -92,13 +120,13 @@ chdir "${new}App/src";
 if ( -f "${old}Main.c" )
 {
 	move "${old}Main.c", "${new}Main.c";
-	doSed("s/${old}/${new}/g", "${new}Main.c");
+	do_substitution("${old}", "${new}", "${new}Main.c");
 }
 
 if ( -f "${old}Main.cpp" )
 {
 	move "${old}Main.cpp", "${new}Main.cpp";
-	doSed("s/${old}/${new}/g", "${new}Main.cpp");
+	do_substitution("${old}", "${new}", "${new}Main.cpp");
 }
 
 if ( -f "${old}Support.dbd" )
@@ -110,20 +138,21 @@ foreach my $file (glob("*${old}*Include.dbd"))
 {
 	if ( -f $file )
 	{
-		doSed("/Include\\.dbd/s/${old}/${new}/g", $file);
+		do_substitution("/Include\\.dbd/${old}", "${new}", $file);
 		my $newfile=~s/$old/$new/g;
 		move $file, $newfile;
 	}
 }
 
-`perl -pi -e "s/${old}(?!\\.dbd)/${new}/g" Makefile`;
+do_substitution("ioc${old}", "ioc${new}", "Makefile");
+do_substitution("PROD_NAME = ${old}", "PROD_NAME = ${new}", "Makefile");
 
 printf "\r%-50s", "${new}App/Db";
 chdir "${top}/${new}App/Db";
-doSed("s/${old}.dbd/${new}.dbd/g", "Makefile");
-doSed("s/${old}.template/${new}.template/g", "Makefile");
-doSed("s/${old}Include/${new}Include/g", "Makefile");
-doSed("s/${old}/${new}/g", "Makefile");
+do_substitution("${old}.dbd", "${new}.dbd", "Makefile");
+do_substitution("${old}.template", "${new}.template", "Makefile");
+do_substitution("${old}Include", "${new}Include", "Makefile");
+do_substitution("${old}", "${new}", "Makefile");
 
 printf "\r%-50s", "iocBoot/";
 chdir "${top}/iocBoot";
@@ -145,20 +174,17 @@ foreach my $dir (glob("ioc*"))
 
 			if ("$file" eq "st.cmd.vxWorks")
 			{
-				doSed("s/ioc${old}>/ioc${new}>/g", $file);
+				do_substitution("ioc${old}>", "ioc${new}>", $file);
 			}
 			else
 			{
-				doSed("s!/${old}/!/${new}/!g", $file);
-				doSed("s/${old}:/${new}:/g", $file);
-				doSed("s/${old}\\./${new}./g", $file);
-				doSed("s/ioc${old}/ioc${new}/g", $file);
-				doSed("s/${old}Lib/${new}Lib/g", $file);
-				doSed("s/${old}App/${new}App/g", $file);
-				doSed("s/=${old}/=${new}/g", $file);
-				#doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
-				#doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
-				#doSed("/shellPromptSet/s/${old}/${new}/g", $file);
+				do_substitution("/${old}", "/${new}", $file);
+				do_substitution("${old}:", "${new}:", $file);
+				do_substitution("${old}\\.", "${new}.", $file);
+				do_substitution("ioc${old}", "ioc${new}", $file);
+				do_substitution("${old}Lib", "${new}Lib", $file);
+				do_substitution("${old}App", "${new}App", $file);
+				do_substitution("=${old}", "=${new}", $file);
 			}
 		}
 	}
@@ -168,16 +194,13 @@ foreach my $dir (glob("ioc*"))
 		if ( -f $file )
 		{
 			printf "\r%-50s", "$file";
-			doSed("s!/${old}/!/${new}/!g", $file);
-			doSed("s/${old}:/${new}:/g", $file);
-			doSed("s/${old}\\./${new}./g", $file);
-			doSed("s/ioc${old}/ioc${new}/g", $file);
-			doSed("s/${old}Lib/${new}Lib/g", $file);
-			doSed("s/${old}App/${new}App/g", $file);
-			doSed("s/=${old}/=${new}/g", $file);
-			#doSed("/dbLoadDatabase/s/${old}/${new}/g", $file);
-			#doSed("/registerRecordDeviceDriver/s/${old}/${new}/g", $file);
-			#doSed("/shellPromptSet/s/${old}/${new}/g", $file);
+			do_substitution("/${old}", "/${new}", $file);
+			do_substitution("${old}:", "${new}:", $file);
+			do_substitution("${old}\\.", "${new}.", $file);
+			do_substitution("ioc${old}", "ioc${new}", $file);
+			do_substitution("${old}Lib", "${new}Lib", $file);
+			do_substitution("${old}App", "${new}App", $file);
+			do_substitution("=${old}", "=${new}", $file);
 		}
 	}
 	
@@ -186,7 +209,7 @@ foreach my $dir (glob("ioc*"))
 		if ( -f $file )
 		{
 			printf "\r%-50s", $file;
-			doSed("s/${old}:/${new}:/g", $file);
+			do_substitution("${old}:", "${new}:", $file);
 		}
 	}
 	
@@ -195,7 +218,7 @@ foreach my $dir (glob("ioc*"))
 		if ( -f $file )
 		{
 			printf "\r%-50s", $file;
-			doSed("s/${old}:/${new}:/g", $file);
+			do_substitution("${old}:", "${new}:", $file);
 		}
 	}
 	
@@ -204,9 +227,9 @@ foreach my $dir (glob("ioc*"))
 		if ( -f $file )
 		{
 			printf "\r%-50s", $file;
-			doSed("s/${old}/${new}/g", $file);
-			doSed("s/${old}:/${new}:/g", $file);
-			doSed("s/${old}App/${new}App/g", $file);
+			do_substitution("${old}", "${new}", $file);
+			do_substitution("${old}:", "${new}:", $file);
+			do_substitution("${old}App", "${new}App", $file);
 		}
 	}
 	
@@ -215,9 +238,9 @@ foreach my $dir (glob("ioc*"))
 		if ( -f $file )
 		{
 			printf "\r%-50s", $file;
-			doSed("s/${old}/${new}/g", $file);
-			doSed("s/${old}:/${new}:/g", $file);
-			doSed("s/${old}App/${new}App/g", $file);
+			do_substitution("${old}", "${new}", $file);
+			do_substitution("${old}:", "${new}:", $file);
+			do_substitution("${old}App", "${new}App", $file);
 		}
 	}
 	
@@ -226,34 +249,34 @@ foreach my $dir (glob("ioc*"))
 		if ( -f $file )
 		{
 			printf "\r%-50s", $file;
-			doSed("s/${old}:/${new}:/g", $file);
+			do_substitution("${old}:", "${new}:", $file);
 		}
 	}
 	
 	if ( -f "interp.sav" )
 	{
-		doSed("s/${old}/${new}/g", "interp.sav");
+		do_substitution("${old}", "${new}", "interp.sav");
 	}
 	
 	if ( -f "bootParms" )
 	{
-		doSed("s!/${old}/!/${new}/!g", "bootParms");
-		doSed("s/ioc${old}/ioc${new}/g", "bootParms");
+		do_substitution("/${old}", "/${new}", "bootParms");
+		do_substitution("ioc${old}", "ioc${new}", "bootParms");
 	}
 	
 	if ( -f "softioc/run" )
 	{
-		doSed("s/${old}/${new}/g", "softioc/run");
+		do_substitution("${old}", "${new}", "softioc/run");
 	}
 	
 	if ( -f "softioc/in-screen.sh" )
 	{
-		doSed("s/${old}/${new}/g", "softioc/in-screen.sh");
+		do_substitution("${old}", "${new}", "softioc/in-screen.sh");
 	}
 	
 	if ( -f "softioc/${old}.pl" )
 	{
-		doSed("s/${old}/${new}/g", "softioc/${old}.pl");
+		do_substitution("${old}", "${new}", "softioc/${old}.pl");
 		move "softioc/${old}.pl", "softioc/${new}.pl";
 	}
 	
@@ -267,10 +290,10 @@ move "${old}.adl", "${new}.adl";
 foreach my $file (glob("*.adl"))
 {
 	printf "\r%-50s", $file;
-	doSed("s/${old}:/${new}:/g", $file);
-	doSed("s/=${old}/=${new}/g", $file);
-	doSed("s/${old}App/${new}App/g", $file);
-	doSed("s/${old}\\.adl/${new}.adl/g", $file);
+	do_substitution("${old}:", "${new}:", $file);
+	do_substitution("=${old}", "=${new}", $file);
+	do_substitution("${old}App", "${new}App", $file);
+	do_substitution("${old}\\.adl", "${new}.adl", $file);
 }
 
 chdir "${top}/${new}App/op";
@@ -287,7 +310,7 @@ if ( -d "./opi" )
 		if ( -f $file )
 		{
 			printf "\r%-50s", $file;
-			doSed("s/${old}/${new}/g", $file);
+			do_substitution("${old}", "${new}", $file);
 		}
 	}
 	
@@ -296,7 +319,7 @@ if ( -d "./opi" )
 		if ( -f $file )
 		{
 			printf "\r%-50s", $file;
-			doSed("s/${old}/${new}/g", $file);
+			do_substitution("${old}", "${new}", $file);
 		}
 	}
 }
@@ -315,7 +338,7 @@ if ( -d "./ui" )
 		if ( -f $file )
 		{
 			printf "\r%-50s", $file;
-			doSed("s/${old}/${new}/gi", $file);
+			do_substitution("${old}", "${new}", $file);
 		}
 	}
 	
@@ -324,7 +347,7 @@ if ( -d "./ui" )
 		if ( -f $file )
 		{
 			printf "\r%-50s", $file;
-			doSed("s/${old}/${new}/gi", $file);
+			do_substitution("${old}", "${new}", $file);
 		}
 	}
 }
@@ -337,7 +360,7 @@ if ( -d "./burt" )
 	foreach my $file (glob("*"))
 	{
 		printf "\r%-50s", $file;
-		doSed("s/${old}/${new}/g", $file);
+		do_substitution("${old}", "${new}", $file);
 	}
 }
 
@@ -356,7 +379,7 @@ if ( -d "./python" )
 	foreach my $file (glob("*"))
 	{
 		printf "\r%-50s", $file;
-		doSed("s/${old}:/${new}:/g", $file);
+		do_substitution("${old}:", "${new}:", $file);
 	}
 }
 
