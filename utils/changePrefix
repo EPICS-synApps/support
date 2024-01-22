@@ -25,6 +25,8 @@ sub do_substitution {
 	}
 	close (IN);
 	close (OUT);
+	
+	unlink($file . '.bak');
 }
 
 my $argc = @ARGV;
