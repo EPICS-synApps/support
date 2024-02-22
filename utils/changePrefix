@@ -26,6 +26,9 @@ sub do_substitution {
 	close (IN);
 	close (OUT);
 	
+	my $permissions = (stat ($file . '.bak'))[2];
+	chmod $permissions, $file;
+	
 	unlink($file . '.bak');
 }
 
