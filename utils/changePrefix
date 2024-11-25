@@ -180,6 +180,7 @@ foreach my $dir (glob("ioc*"))
 			if ("$file" eq "st.cmd.vxWorks")
 			{
 				do_substitution("ioc${old}>", "ioc${new}>", $file);
+				do_substitution("local_startup = .*", "local_startup = " . cwd(), $file);
 			}
 			else
 			{
