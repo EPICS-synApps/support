@@ -285,6 +285,11 @@ foreach my $dir (glob("ioc*"))
 		do_substitution("${old}", "${new}", "softioc/${old}.pl");
 		move "softioc/${old}.pl", "softioc/${new}.pl";
 	}
+
+	if ( -f "softioc/ioc.pl" )
+	{
+		do_substitution("${old}", "${new}", "softioc/ioc.pl");
+	}
 	
 	chdir ".."
 }
