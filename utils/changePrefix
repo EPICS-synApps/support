@@ -10,26 +10,27 @@ use strict;
 # Used because perl backtick usage seems to be significantly different 
 # between Linux and Windows
 sub do_substitution {
-	my @parms = @_;
+	my ($search, $replace, $file) = @_;
 	
-	my $search = $parms[0];
-	my $replace = $parms[1];
-	my $file = $parms[2];
+	my $bakfile = $file . '.bak';
 	
-	rename ($file, $file . '.bak');
-	open (IN, '<' . $file . '.bak') or return 0;
-	open (OUT, '>' . $file) or return 0;
-	while (<IN>)  {
-		$_ =~ s/$search/$replace/gi;
-		print OUT $_;
+	rename ($file, $bakfile);
+	
+	{
+		open (my $in_fh,  '<', $bakfile) or return 0;
+		open (my $out_fh, '>', $file)    or return 0;
+		while (<$in_fh>)  {
+			s/$search/$replace/gi;
+			print $out_fh $_;
+		}
+		# lexical filehandles auto-close at end of block,
+		# ensuring Windows releases its file locks before unlink
 	}
-	close (IN);
-	close (OUT);
 	
-	my $permissions = (stat ($file . '.bak'))[2];
+	my $permissions = (stat ($bakfile))[2];
 	chmod $permissions, $file;
 	
-	unlink($file . '.bak');
+	unlink($bakfile) or warn "Could not remove $bakfile: $!\n";
 }
 
 my $argc = @ARGV;
