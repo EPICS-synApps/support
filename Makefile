@@ -28,8 +28,6 @@ include $(TOP)/configure/CONFIG
 
 DIRS := $(DIRS) $(filter-out $(DIRS), configure)
 
-GET_DEPENDS := $(SUPPORT)/utils/depends.pl $(call FIND_TOOL,convertRelease.pl)
-
 define FILTER_TOP_LEVEL
   
   # Add module to build list if the directory it lives in is the same as
@@ -39,6 +37,13 @@ define FILTER_TOP_LEVEL
   MODULE_LIST += $(1)
   endif
 endef
+
+# Filter out the module definitions that point to submodules
+$(foreach mod, $(RELEASE_TOPS), $(eval $(call FILTER_TOP_LEVEL,$(mod)) ))
+
+ifneq ($(MAKECMDGOALS),release)
+
+GET_DEPENDS := $(SUPPORT)/utils/depends.pl $(call FIND_TOOL,convertRelease.pl)
 
 define  MODULE_defined
   SUPPORT_DIRS  += $($(1))
@@ -54,11 +59,7 @@ define  MODULE_defined
 endef
 
 
-
 ############## DEPENDENCY GRAPH GENERATION ##############
-
-# Filter out the module definitions that point to submodules
-$(foreach mod, $(RELEASE_TOPS), $(eval $(call FILTER_TOP_LEVEL,$(mod)) ))
 
 # Build the list of directories, RELEASE files, and dependencies
 $(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_defined,$(mod)) ))
@@ -73,6 +74,28 @@ ACTIONS += uninstall realuninstall distclean cvsclean
 
 include $(TOP)/configure/RULES_TOP
 
+else
+
+########### RELEASE TARGET (no dependency graph) ###########
+# When the goal is 'release', skip dependency graph generation and the
+# depends.pl/convertRelease.pl calls that trigger "Undefined variable
+# $(EPICS_BASE)" warnings on a fresh checkout.  Build RELEASE_FILES
+# with a lightweight macro instead.
+
+define  MODULE_release_files
+  RELEASE_FILES += $($(1))/configure/RELEASE
+  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_LIBS.local)
+  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_LIBS.local.$(EPICS_HOST_ARCH))
+  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_PRODS.local)
+  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE_PRODS.local.$(EPICS_HOST_ARCH))
+  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE.local)
+  RELEASE_FILES += $(wildcard $($(1))/configure/RELEASE.local.$(EPICS_HOST_ARCH))
+endef
+
+$(foreach mod, $(MODULE_LIST), $(eval $(call MODULE_release_files,$(mod)) ))
+
+endif
+
 release:
 	echo SUPPORT=$(SUPPORT)
 	echo ' '
@@ -80,14 +103,12 @@ release:
 	echo ' '
 	echo MASTER_FILE=$(MASTER_FILE)
 	echo ' '
-	echo DIRS=$(DIRS)
-	echo ' '
 	echo RELEASE_FILES=$(RELEASE_FILES)
 	echo ' '
 	$(PERL) $(TOP)/configure/makeReleaseConsistent.pl $(SUPPORT) $(EPICS_BASE) $(MASTER_FILE) $(RELEASE_FILES)
 	
 
-.PHONY: all_adl all_edl all_ui all_opi all_bob
+.PHONY: release all_adl all_edl all_ui all_opi all_bob
 	
 all_adl:
 	$(PERL) $(TOP)/utils/copyScreens.pl $(SUPPORT) 'adl,gif'
