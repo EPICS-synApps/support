@@ -10,13 +10,13 @@ synApps: collected documentation links
 
 This page is an attempt to collect recent versions of all synApps documentation and release notes in one place.
 
-Please email any comments and bug reports to [Keenan Lang](mailto:klang@anl.gov) or [Tim Mooney](mailto:mooney@aps.anl.hob).
+Please email any comments and bug reports to [Keenan Lang](mailto:klang@anl.gov).
 
 Overview
 --------
 
-- [synApps.html](http://epics-synapps.github.io/support/synApps.html)
-- [Introduction To synApps](http://epics-synapps.github.io/support/IntroToSynApps.ppt)
+- [synApps.html](https://epics-synapps.github.io/support/synApps.html)
+- [Introduction To synApps](https://epics-synapps.github.io/support/IntroToSynApps.ppt)
 
 Records
 -------
@@ -26,7 +26,7 @@ Records in synApps:
 - [aCalcoutRecord](https://epics-modules.github.io/calc/aCalcoutRecord.html)
 - [busyRecord](https://epics-modules.github.io/busy/busyRecord.html)
 - [camacRecord](https://epics-modules.github.io/camac/camacRecord.html)
-- [epidRecord](http://epics-modules.github.io/std/epidRecord.html)
+- [epidRecord](https://epics-modules.github.io/std/epidRecord.html)
 - [mcaRecord](https://epics-modules.github.io/mca/mcaRecord.html)
 - [motorRecord](https://epics-modules.github.io/motor/motorRecord.html)
 - [sCalcoutRecord](https://epics-modules.github.io/calc/sCalcoutRecord.html)
@@ -37,7 +37,7 @@ Records in synApps:
 - [swaitRecord](https://epics-modules.github.io/calc/swaitRecord.html)
 - [tableRecord.html](https://epics-modules.github.io/optics/tableRecord.html)
 - [transformRecord](https://epics-modules.github.io/calc/transformRecord.html)
-- [vmeRecord](http://cars9.uchicago.edu/software/epics/vmeRecord.html)
+- [vmeRecord](https://epics-modules.github.io/vme/vmeRecord.html)
 - [vsRecord](https://epics-modules.github.io/vac/vacDoc.html)
 - [digitelRecord](https://epics-modules.github.io/vac/vacDoc.html)
 
@@ -84,12 +84,12 @@ Module documentation links:
 non-synApps modules used by synApps
 
 - [allenBradley](https://epics.anl.gov/modules/bus/allenBradley/)
-- [devIocStats](https://www.slac.stanford.edu/grp/ssrl/spear/epics/site/devIocStats/)
-- [ether_ip](https://controlssoftware.sns.ornl.gov/etherip/)
+- [devIocStats](https://github.com/epics-modules/iocStats)
+- [ether_ip](https://github.com/epics-modules/ether_ip)
 - [galil](https://motorapp.github.io/Galil-3-0/)
 - [ipac](https://github.com/epics-modules/ipac/wiki)
-- [State Notation Language](http://www-csr.bessy.de/control/SoftDist/sequencer)
-- [stream](http://epics.web.psi.ch/software/streamdevice/doc/)
+- [State Notation Language](https://github.com/epics-modules/sequencer)
+- [stream](https://github.com/paulscherrerinstitute/StreamDevice)
 
 
 Release Notes
@@ -98,7 +98,7 @@ Release Notes
 synApps
 -------
 
-- [synAppsReleaseNotes](http://epics-synapps.github.io/support/synAppsReleaseNotes.html)
+- [synAppsReleaseNotes](https://epics-synapps.github.io/support/synAppsReleaseNotes.html)
 
 synApps modules
 ---------------
@@ -127,9 +127,9 @@ synApps modules
 - [optics](https://epics-modules.github.io/optics/opticsReleaseNotes.html)
 - [quadEM](https://epics-modules.github.io/quadEM/quadEMReleaseNotes.html)
 - [sscan](https://epics-modules.github.io/sscan/sscanReleaseNotes.html)
-- [softGlue](http://www.aps.anl.gov/bcda/synApps/softGlue/softGlueReleaseNotes.html)
+- [softGlue](https://epics-modules.github.io/softGlue/softGlueReleaseNotes.html)
 - [softGlueZynq](https://epics-modules.github.io/softGlueZynq/softGlueZynqReleaseNotes.html)
-- [std](http://www.aps.anl.gov/bcda/synApps/std/stdReleaseNotes.html)
+- [std](https://epics-modules.github.io/std/stdReleaseNotes.html)
 - [vac](https://epics-modules.github.io/vac/vacReleaseNotes.html)
 - [vme](https://epics-modules.github.io/vme/vmeReleaseNotes.html)
 - [xxx](https://epics-modules.github.io/xxx/xxxReleaseNotes.html)
@@ -139,9 +139,9 @@ non-synApps modules used by synApps
 
 - [allenBradley](https://epics.anl.gov/modules/bus/allenBradley/R2-3/releaseNotes.html)
 - [asyn](https://github.com/epics-modules/asyn/blob/master/RELEASE.md)
-- [devIocStats](https://www.slac.stanford.edu/grp/ssrl/spear/epics/site/devIocStats/RELEASE_NOTES)
+- [devIocStats](https://github.com/epics-modules/iocStats)
 - [galil](https://github.com/motorapp/Galil-3-0/releases)
 - [ipac](https://github.com/epics-modules/ipac/releases)
-- [sequencer](http://www-csr.bessy.de/control/SoftDist/sequencer/)
-- [streamdevice](http://epics.web.psi.ch/software/streamdevice/)
+- [sequencer](https://github.com/epics-modules/sequencer)
+- [streamdevice](https://github.com/paulscherrerinstitute/StreamDevice)
 

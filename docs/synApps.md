@@ -5,8 +5,8 @@ nav_order: 2
 ---
 
 
-synApps 6.2.1
-=============
+synApps 6.4
+===========
 
 Table of Contents
 =================
@@ -54,7 +54,7 @@ Most synApps modules are intended primarily to export support to other modules. 
 One synApps module, the __xxx__ module, is different: it doesn't export anything. It imports support from other modules, and produces bootable software to support an EPICS *IOC*. The __xxx__ module is documentation in runnable form, and also a template from which a synApps application can be constructed. __xxx__ is not comprehensive: it doesn't apply all of synApps; it's usually a little behind the rest of synApps; it focuses more on VME crates than on other kinds of IOCs; and it's a compromise between what is most widely used and what is most likely to build and run out of the box. 
 > *If you haven't run into the term 'IOC' yet, two things: 
 > 1. IOC stands for Input/Output Controller. Initially, this was a VME crate with a processor running EPICS under the VxWorks operating system, but beginning with EPICS 3.14, an EPICS IOC can also be a set of tasks on a workstation running Linux, Windows, Cygwin, Solaris, RTEMS, Mac OS, and, no doubt, other operating systems.
-> 2. The [](https://epics.anl.gov/base/R3-15/6-docs/AppDevGuide/AppDevGuide.html)* EPICS Application Developer's Guide *is an essential reference for anyone planning to develop or deploy EPICS software. While you won't need to read the guide to build or run synApps, you will need it to understand what you've done, to diagnose problems, and to extend synApps in any significant way.*
+> 2. The [EPICS Application Developer's Guide](https://epics.anl.gov/base/R7-0/8-docs/AppDevGuide/AppDevGuide-1.html) is an essential reference for anyone planning to develop or deploy EPICS software. While you won't need to read the guide to build or run synApps, you will need it to understand what you've done, to diagnose problems, and to extend synApps in any significant way.
 
 
 Contents
@@ -76,9 +76,10 @@ Here's a list of the __modules__ and *directories* in synApps:
 | *configure* | Build files |
 | __dac128V__ | Support for an IndustryPack DAC module. |
 | __delaygen__ | Support for delay generators, including the SRS DG645, Colby Instruments PDL100A, and Gigabaudics PADL3. |
-| *documentation* | Um... documentation |
+| *docs* | Documentation |
 | __dxp__ | Support for X-Ray Instrumentation Associates's DXP digital signal processor |
 | __dxpSITORO__ | Support for XIA SITORO based FalconX spectrometers |
+| __ether_ip__ | Support for communication with Allen Bradley PLCs via EtherNet/IP |
 | __galil-3__ | Support for Galil motor controllers |
 | __ip__ | Support for various serial, and other message-based, devices. |
 | __ip330__ | Support for an IndustryPack ADC module |
@@ -92,11 +93,12 @@ Here's a list of the __modules__ and *directories* in synApps:
 | __motor__ | Support for motors |
 | __optics__ | Support for optical tables, monochromators, slits, etc. |
 | __quadEM__ | Support for an APS-developed 4-channel electrometer |
+| __scaler__ | Support for scaler bank hardware. |
 | __softGlue__ | Support for user-programmed "wiring" of custom FPGA content loaded into an Acromag IP-EP201 module. |
 | __softGlueZynq__ | Support for user-programmed "wiring" of custom FPGA content loaded into a Xilinx Zynq board. |
 | __sscan__ | Support for scans (programmed control and data acquisition). |
-| __std__ | Miscellaneous EPICS support, including the epid (extended PID), scaler, sseq (string sequence), and timestamp records; and pvHistory support. |
-| __stream__ | Dirk Zimoch's streamDevice, in a module-flavored wrapper. |
+| __std__ | Miscellaneous EPICS support, including the epid (extended PID), sseq (string sequence), and timestamp records; and pvHistory support. |
+| __stream__ | Dirk Zimoch's StreamDevice for byte-stream based device communication (serial, TCP/IP, GPIB). |
 | *utils* | Miscellaneous tools, including support for converting an application from one version of synApps to another; support for the MDA file format, written by the __sscan__ module; and support for EPICS-application prototyping. |
 | __vac__ | Support for vacuum controllers |
 | __vme__ | Support for VME hardware |
@@ -104,22 +106,22 @@ Here's a list of the __modules__ and *directories* in synApps:
 | __xxx__ | Sample user-application directory |
 | __Yokogawa\_DAS__ | Support for the Yokogawa MW100 Digital Acquisition Unit. |
 
-See support/configure/RELEASE for a complete set of compatible module versions. This release of synApps is compatible with EPICS 3.15 (and above) releases, vxWorks 6.9, and the following EPICS modules, which are produced and maintained by other members of the EPICS collaboration. These modules are not part of synApps, but their maintainers have permitted us to distribute copies along with synApps:
+See [the assemble_synApps configuration](https://github.com/EPICS-synApps/assemble_synApps) for a complete set of compatible module versions. This release of synApps is compatible with EPICS base 3.15 and 7.0, and the following EPICS modules, which are produced and maintained by other members of the EPICS collaboration. These modules are not part of synApps, but their maintainers have permitted us to distribute copies along with synApps:
 
 | Module | description |
 |---|---|
 | __allenBradley__ | for communicating with Allen Bradley PLC's (ANL) |
 | __ipac__ | required for IndustryPack support (ANL) |
 | __asyn__ | required by many modules (ANL) |
-| __seq__ | for SNL programs in synApps (BESSY)   source: http://www-csr.bessy.de/control/SoftDist/sequencer |
+| __seq__ | for SNL programs in synApps   source: https://github.com/epics-modules/sequencer |
 | __stream__ | configurable device support for message-based devices (PSI)   source: https://github.com/paulscherrerinstitute/StreamDevice |
-| __devIocStats__ | IOC statistics, replaces vxStats (SLAC)   source: http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/ |
+| __devIocStats__ | IOC statistics, replaces vxStats (SLAC)   source: https://github.com/epics-modules/iocStats |
 
 > Previous versions of synApps included and relied on the __genSub__, __ccd__, and __pilatus__ modules. Beginning with EPICS 3.14.10, a replacement for the genSub record, called the aSub record, is included in base, and synApps has been modified to use it instead of the genSub record. The __ccd__ and __pilatus__ modules have been replaced by the __areaDetector__ module.
 
 For convenience, this distribution includes the modules listed above, in place and ready to build, with minor modifications to build files. A few of the modules have suffered more substantial modifications to fix problems, add display files, etc.
 
-synApps includes software developed by the Beamline Controls &amp; Data Acquisition, Software Services, and Accelerator Controls groups of the Advanced Photon Source (APS); by developers in APS Collaborative Access Teams – notably, Mark Rivers (CARS-CAT); and by developers in the EPICS collaboration outside of the APS – notably, those at the Diamond Light Source, the Berliner Elektronenspeicherring-Gesellschaft fÃ¼r Synchrotronstrahlung (BESSY), the Stanford Linear Accelerator Center (SLAC), the Swiss Light Source (SLS)/Paul Scherrer Institut (PSI), the National Synchrotron Light Source (NSLS), the Deutsches Elektronen Synchrotron (DESY), the Spallation Neutron Source (SNS), the Australian Light Source, and the Canadian Light Source.
+synApps includes software developed by the Beamline Controls &amp; Data Acquisition, Software Services, and Accelerator Controls groups of the Advanced Photon Source (APS); by developers in APS Collaborative Access Teams – notably, Mark Rivers (CARS-CAT); and by developers in the EPICS collaboration outside of the APS – notably, those at the Diamond Light Source, the Berliner Elektronenspeicherring-Gesellschaft für Synchrotronstrahlung (BESSY), the Stanford Linear Accelerator Center (SLAC), the Swiss Light Source (SLS)/Paul Scherrer Institut (PSI), the National Synchrotron Light Source (NSLS), the Deutsches Elektronen Synchrotron (DESY), the Spallation Neutron Source (SNS), the Australian Light Source, and the Canadian Light Source.
 
 Aside from EPICS databases, SNL (State Notation Language) programs, and the like, synApps contains the following code:
 
@@ -176,166 +178,97 @@ Aside from EPICS databases, SNL (State Notation Language) programs, and the like
 How to deploy synApps
 ---------------------
 
-Although synApps is distributed as a single 'support' directory, it's normally deployed as a two-part system: a 'support' directory, and one or more 'user' directories. The support directory can be installed on a read-only file system, along with EPICS base and other modules, and used from there by user directories, each of which typically begins as a copy (or a collection of copies) of the __xxx__ module, and is customized/extended to suit a particular application and set of hardware.
+synApps is normally deployed as a two-part system: a 'support' directory, and one or more 'user' directories. The support directory can be installed on a read-only file system, along with EPICS base and other modules, and used from there by user directories. Each user directory typically begins as a copy of the __xxx__ module, customized and extended to suit a particular application and set of hardware.
 
-I'm not being very precise about what is meant by a user directory, because there are a number of reasonable variations. At the simplest, a single copy of the __xxx__ module, which supports a single IOC, is a user directory. If several IOC's cooperate to serve a single application (such as a synchrotron beamline), one might make several independent copies of __xxx__, or one might extend a single __xxx__ copy to contain multiple xxxApp directories, and multiple iocBoot/iocxxx directories. At APS, the BCDA group maintains around 100 top-level user directories (for each version of synApps) each of which contains a number of copies of __xxx__, and most of which, in turn, contain multiple xxxApp and iocBoot/iocxxx directories.
+There are two ways to obtain the synApps support directory:
 
-Here's what a complete installation might look like (much detail omitted) with all the files you will have to edit before you can build or boot an IOC:
+#### Option 1: Download a prebuilt tarball
 
-####  The support directory
+Download a release tarball from the [synApps releases page](https://github.com/EPICS-synApps/support/releases). This provides a pre-assembled support directory with all modules at tested, compatible versions.
+
+#### Option 2: Use the assemble_synApps script
+
+The [assemble_synApps](https://github.com/EPICS-synApps/assemble_synApps) perl script will clone all synApps modules from GitHub at compatible versions and configure them to build together. This is the recommended approach for users who want to customize which modules are included or track specific module versions.
+
+The script can be configured to select module versions, enable or disable specific modules, and set the path to EPICS base. See the [assemble_synApps documentation](https://github.com/EPICS-synApps/assemble_synApps) for details.
+
+#### The support directory
+
+Once deployed by either method, the support directory will contain:
 
 ```
-
-synApps_X_X/support/
+synApps/support/
     Makefile
+    configure/
+        CONFIG
+        CONFIG_SITE
+        RELEASE                         <-- EDIT SUPPORT and EPICS_BASE paths
+        ...
     alive/
-    allenBradley/
     areaDetector/
     asyn/
+    autosave/
     busy/
     calc/
     camac/
     caputRecorder/
-    configure/
-        CONFIG
-        CONFIG_SITE                     <— EDIT to build
-        RELEASE                         <— EDIT to build
-        EPICS_BASE.<arch>               <— EDIT to build for <arch>
-        Makefile
-        RELEASE
-        SUPPORT.<arch>                  <— EDIT to build for <arch>
-        ...
     dac128V/
     delaygen/
     devIocStats/
-    documentation/
+    docs/
     dxp/
+    ether_ip/
     ip/
     ip330/
-    ipUnidig/
     ipac/
-        drvIpac/drvIpac.dbd             <— EDIT to build
+    ipUnidig/
+    labjack/
     love/
+    lua/
     mca/
     measComp/
     modbus/
     motor/
-        motorApp/
-            Makefile                    <— EDIT to build
     optics/
     quadEM/
+    scaler/
     seq/
     softGlue/
     sscan/
     std/
-    stream/
+    StreamDevice/
     utils/
     vac/
     vme/
     xxx/
-
 ```
 
-####  The user-directory tree
+#### The user directory
+
+A user directory is typically constructed from the __xxx__ module, which serves as a template. At its simplest, a single copy of __xxx__ supports a single IOC. If several IOCs cooperate to serve a single application (such as a synchrotron beamline), one might make several independent copies of __xxx__, or extend a single copy to contain multiple xxxApp directories and multiple iocBoot/iocxxx directories.
+
+To create a user directory from the __xxx__ template, copy the __xxx__ module directory, then run `changePrefix` to rename all PV prefixes:
 
 ```
-
-synApps_X_X/ioc/
-    1bm/
-        Makefile
-        bin/
-        configure/
-            CONFIG_SITE                 <— EDIT to build
-            RELEASE                     <— EDIT to build
-        dbd/
-        iocBoot/
-            Makefile
-            nfsCommands                 <— EDIT to run
-            accessSecurity.acf          <— EDIT to run
-            ioc1bma/
-                Makefile                <— EDIT to build
-                *.cmd
-                *.req
-                *.substitutions
-                autosave/
-                cdCommands or envPaths
-            ioc1bmb/
-            ioc1bmc/
-            ioc1bmd/
-                <much like ioc1bma>
-        release.pl
-        setup_epics_common              <— EDIT to run user interface
-        start_MEDM_1bma                 <— EDIT to run user interface
-        start_MEDM_1bmb                 <— EDIT to run user interface
-	start_MEDM_1bmc                 <— EDIT to run user interface
-	start_MEDM_1bmd                 <— EDIT to run user interface
-        start_putrecorder               <— EDIT to use caputRecorder
-        1bmaApp/
-        1bmbApp/
-        1bmcApp/
-        1bmdApp/
-
-    1id/
-    2bm/
-    2id/
-    ...
-        <much like 1bm>
+    cp -r $(SYNAPPS)/support/xxx /path/to/ioc/1bm
+    cd /path/to/ioc/1bm
+    $(SYNAPPS)/support/utils/changePrefix xxx 1bma
 ```
 
-As shown above, the following files can or must be edited to modify the way the synApps support directory is built. After modifying files in the support, or support/configure directories, you should run `make release`, and `make rebuild`, in the support directory.
+Then edit the following files to configure the user directory:
 
-> `support/configure/RELEASE` 
-* Edit the definitions of `EPICS_BASE` and `SUPPORT` with the correct paths to these directories on your system. Comment out any modules you don't want to build. 
-> `support/configure/EPICS_BASE.<arch>` 
-* If you plan to build on more than one host architecture from a single synApps directory, and the hosts use different paths to refer to the same file (for example, Windows and Linux using a shared file system) then you can override the definition of `EPICS_BASE` in the `RELEASE` file by specifying host-specific paths to base in separate `EPICS_BASE.<arch>` files. If you don't have such plans, then you can delete these files, but if they exist, they must be correct. 
-> `support/configure/SUPPORT.<arch>` 
-* Similar to `EPICS_BASE.<arch>`, but for the synApps `support` directory 
-> `support/configure/CONFIG_SITE` 
-* Edit to set the following variables, which control what will be built: The supported values for these variables are `YES` and `NO`.  
-> `LINUX_USB_INSTALLED` 
-* This controls the build of the __dxp__ module. If usb is not installed for developers, then parts of dxp/dxpApp/handelSrc will not be built, and the example application executable, dxpApp, will not be built, so dxp/iocBoot cannot be used. 
-> `LINUX_NET_INSTALLED` 
-* This controls the build of the __mca__ module, specifically, support for the Canberra AIM hardware. 
-> `IOCS_APPL_TOP` 
-* Path to application top as seen by IOC. Set this when your IOC and host use different paths to access the application directory. This will be needed to boot from a Microsoft FTP server or with some NFS mounts. You must rebuild in the iocBoot directory for this to take effect. 
-> `support/ipac/<version>/drvIpac/drvIpac.dbd` 
-* uncomment `registrar()` commands for IndustryPack carriers you plan to use. 
-> `support/motor/<version>/motorApp/Makefile` 
-* comment or uncomment to select the motor support you want to build.
+> `1bm/configure/RELEASE`
+* Edit the definition of `SUPPORT` with the correct path to the support directory.
+> `1bm/iocBoot/ioc1bma/*.cmd`, `1bm/iocBoot/ioc1bma/*.iocsh`
+* Configure hardware, load databases, and set IOC parameters.
+> `1bm/setup_epics_common`
+* Set the value of Channel Access environment variables.
+> `1bm/start_caQtDM_1bma` or `1bm/start_phoebus_1bma`
+* Edit to specify the path to the application and display-file directories.
 
-The following files must be edited before building a user directory:
+The association between a user directory and the support directory on which it depends is made entirely by the file `configure/RELEASE` in the user directory.
 
-> `ioc/<appname>/configure/RELEASE`  
-* edit the definition of `SUPPORT` with the correct path to the support directory 
-> `ioc/<appname>/iocBoot/<iocname>/Makefile`  
-* edit to specify the architecture that is to be built
-
-The following files must be edited before running the user interface:
-
-> `ioc/setup_epics_common`  
-* set the value of Channel Access variables, such as EPICS\_CA\_MAX\_ARRAY\_BYTES. 
-> `ioc/start_***_xxx`  
-* edit to specify the path to the application and display-file directories, and the name of the top-level display file. 
-> `ioc/start_putrecorder`  
-* edit to specify the path to the application and its python directory, and to specify the ioc prefixe(s) to monitor.
-
-The association between a user directory, and the support directory on which it depends, is made entirely by the file, configure/RELEASE, in the user directory. Typically, this file simply includes the configure/RELEASE file from the support directory, but it may differ: it may specify EPICS modules not included in synApps, for example. Or, if the support directory contains more than one built version of a module (the original and a bug fix, for example) the user directory can choose which version it will use.
-
-> *Note, however, that the modules in synApps are interdependent. Many of the modules depend on the __asyn__ module, for example, and there are many other dependencies, both direct and implied. (If module __a__ depends on module __b__, and module __b__ depends on module __c__, then __a__also depends on __c__, and it must specify the same version of __c__ that __b__ specifies.) The complete set of modules selected by a user directory must be self consistent, and the EPICS build will ensure this, unless you tell it not to, by defining 
-
-```
-CHECK_RELEASE=NO
-```
-
-or 
-
-```
-CHECK_RELEASE=WARN
-```
- 
-in `ioc/configure/CONFIG_SITE`.*
-
-For completeness, the format of a RELEASE-file path definition is "`<name>=<path>`", where &lt;name&gt; is an arbitrary string, and &lt;path&gt; is an absolute directory name (starts with '/' on a unix host, or with a drive name such as 'C:' on Windows). Although &lt;name&gt; is arbitrary, you should be consistent. Generally, the EPICS build doesn't care what paths are named, because it's just going to collect them all into a list, and use the list to search for libraries, .dbd files, etc. But, in the module consistency check mentioned above, the name does matter, because EPICS can't check that all modules in a build are using the same version of, say, the asyn module, unless they all use the same &lt;name&gt; for it. Also, in the xxx module, &lt;name&gt; is used extensively to find display files (that is, to set the EPICS\_DISPLAY\_PATH environment variable), and to specify databases, autosave request files, etc., when an ioc is booting.
+> *Note that the modules in synApps are interdependent. Many of the modules depend on the __asyn__ module, for example, and there are many other dependencies, both direct and implied. The complete set of modules selected by a user directory must be self consistent, and the EPICS build will ensure this, unless you tell it not to, by defining `CHECK_RELEASE=NO` or `CHECK_RELEASE=WARN` in `configure/CONFIG_SITE`.*
 
 The synApps build imposes an additional constraint on module names. Because synApps uses EPICS build rules to descend from `support` into the modules, module names may not include the character '.'. (The EPICS build rules expect '.' to be followed by a host or target architecture.) <a name="How to build synApps"></a>
 
@@ -345,93 +278,28 @@ How to build synApps
 --------------------
 
 
-1. System configuration Before building synApps, you should ensure that your system has the tools, libraries, header files, etc. required to build the modules you want to build. Here's a list of dependencies we've documented so far.
-    
-    > *Please help: new users are particularly well placed to help us complete this list. Long-time developers typically have lots of things correctly configured that they don't even remember configuring.*
-    
-    
-    - The EPICS extension, [msi](http://www.aps.anl.gov/epics/extensions/msi/index.php), version 1-5 or higher. If attempting to build with EPICS base 3.14, this tool is needed to build some softGlue databases, EPICS base 3.15 and above include this as part of base.
-    - Linux: libusb.a, and associated header files needed for the __dxp__ module
-    - Cygwin: Cygwin is configured from a menu of choices organized by function. You will need the following components from the following menu headings:
-        
-        
-        - base 
-            - All default components
-        - devel 
-            - gcc-core
-            - gcc-g++
-            - libncurses-devel
-            - make
-            - readline
-        - interpreters 
-            - perl
-        - libs 
-            - ncurses
-            - sunrpc (needed for the __asyn__ and __sscan__ modules). In cygwin 1.7, rpc was replaced by libtirpc: instead of linking with librpc, you link with libtirpc. EPICS base 3.14.12.1 defines CYGWIN\_RPC\_LIB (configure/os/CONFIG.Common.cygwin-x86) to handle this.
-        - misc 
-            - DLPORTIO (needed for the __dxp__ module)
-            - the sequencer (version 2.1) uses re2c, which is not a standard part of cygwin. You must install re2c version 0.13.3 or higher. This is available from http://re2c.org/.
-    - Windows: DLPORTIOneeded for the __dxp__ module
-2. Building and configuring the support directory If you have a built copy of EPICS base 3.14.12.4 or later, then building the synApps support directory should be very simple:
-    
-    
-    1. Edit support/configure/RELEASE, and support/configure/CONFIG\_SITE, as noted above.
-    2. Edit support/configure/EPICS\_BASE.&lt;arch&gt;, support/configure/SUPPORT.&lt;arch&gt;, as noted above, for the architectures you want to build.
-    3. Edit ipac/&lt;version&gt;/drvIpac/drvIpac.dbd, and motor/&lt;version&gt;/motorApp/Makefile, as noted above.
-    4. Set the environment variable `EPICS_HOST_ARCH` to the architecture (and compiler, if there is a choice) on which you are building. synApps is tested with the architectures `linux-x86_64`, `win32-x86`, and `win64-x86`.
-    5. In support, run '`make release`'. (See note below.)
-    6. In support, run '`make`'. (You should be able to use '`make -j`' to build synApps more quickly.)
-    
-    You should use the same GNU Make executable that was used to build EPICS base. You may need `$(EPICS_BASE)/bin/<arch>` in your path, and you may need `$(EPICS_BASE)/lib/<arch>` in `LD_LIBRARY_PATH`.
-    
-    When executed in the support directory, '`make release`' will go to all of the modules `support/Makefile` is configured to build, and edit the `configure/RELEASE` files in those modules so that they all build from the same versions of EPICS base and other known modules.
-    
-    Typically, the build will not succeed the first time, because you will not have all of the required system support. If you find that you cannot build some synApps module, you can disable its build by commenting it out of `support/configure/RELEASE`.
-3. Building and configuring a user directory Once synApps' support directory has built without errors, the __xxx__module will have been configured (`xxx/configure/RELEASE` will have correct, absolute paths to base and support) and built, so you can use it as an example – or, better, a template – for constructing user directories to support your IOCs. To make a template of xxx, clean and uninstall it, and tar a copy of the directory. To use the template, untar it, cd to its top-level directory and run `support/utils/changePrefix` to change the PV-name prefix from xxx to whatever you want. (Note you must have `support/utils` in your command path, or you could copy `support/utils/changePrefix` and `support/utils/doSed` to a directory that is in your command path. Note that `changePrefix` is synApps-version specific.)
-    
-    Here's what I do:
-    
-    ```
-    
-    	# Do once when synApps is built:
-    	cd $(SYNAPPS)/support/xxx
-    	setenv EPICS_HOST_ARCH <host architecture>
-    	make clean uninstall
-    	(repeat as needed for any other architectures)
-    	tar cvf ../xxx.tar *
-    
-    	# Do whenever a new user directory ('1bm', in this example) is needed:
-    	cd $(SYNAPPS)/ioc
-    	mkdir 1bm
-    	cd 1bm
-    	tar xf $(SYNAPPS)/support/xxx.tar
-    	changePrefix xxx 1bma
-    	mv iocBoot/iocvxWorks iocBoot/ioc1bma
-    	edit iocBoot/ioc1bma/Makefile to specify the IOC processor type
-    	make
-    ```
-    
-    To put a second application, 1bmb, into 1bm, I run the following commands:
-    
-    ```
-    
-    	cd $(SYNAPPS)/ioc
-    	mkdir temp
-    	cd temp
-    	tar xf $(SYNAPPS)/support/xxx.tar
-    	changePrefix xxx 1bmb
-    	mv iocBoot/iocvxWorks iocBoot/ioc1bmb
-    	edit iocBoot/ioc1bmb/Makefile to specify the ioc processor type
-    	cd $(SYNAPPS)/ioc
-    	mv temp/1bmbApp/start_epics_1bmb 1bm
-    	mv temp/1bmbApp 1bm
-    	mv temp/iocBoot/ioc1bmb 1bm/iocBoot
-    	rm -rf temp
-    	cd 1bm
-    	make
-    ```
-    
-    Edit the files above to agree with your hardware, to load the databases you want, etc., set up the IOC processor's parameters to load from the software just configured, and boot the crate. If you don't know how to do this, read on.
+1. **System configuration.** Before building synApps, you should ensure that your system has the tools, libraries, header files, etc. required to build the modules you want to build. Key dependencies include:
+
+    - A built copy of EPICS base 3.15 or 7.0.
+    - A C/C++ compiler (gcc/g++ on Linux, MSVC on Windows).
+    - GNU Make (the same version used to build EPICS base).
+    - Perl (required by the EPICS build system).
+    - Linux: libusb development files if building the __dxp__ module.
+    - See the [Cygwin Notes](Cygwin_setup.html) page for Cygwin-specific requirements.
+
+2. **Building the support directory.** If you have deployed synApps using assemble_synApps or a release tarball, building is straightforward:
+
+    1. Edit `support/configure/RELEASE` to set the correct paths for `SUPPORT` and `EPICS_BASE`. Comment out any modules you don't want to build.
+    2. If building for multiple host architectures from a single directory, create `EPICS_BASE.<arch>` and/or `SUPPORT.<arch>` files in `support/configure/` to override paths per architecture.
+    3. Set the environment variable `EPICS_HOST_ARCH` to the architecture on which you are building (e.g., `linux-x86_64`, `windows-x64`).
+    4. In the support directory, run '`make release`'. This propagates the paths from `support/configure/RELEASE` into each module's `configure/RELEASE` file.
+    5. In the support directory, run '`make`'. (You can use '`make -j`' to build in parallel.)
+
+    You may need `$(EPICS_BASE)/bin/<arch>` in your `PATH` and `$(EPICS_BASE)/lib/<arch>` in `LD_LIBRARY_PATH`.
+
+    If the build fails because of missing system dependencies, you can disable individual modules by commenting them out of `support/configure/RELEASE` and re-running `make release`.
+
+3. **Building a user directory.** Once the support directory has built, the __xxx__ module will have been configured and built. Copy it, run `changePrefix`, edit the configuration files as described in [How to deploy synApps](<#How to deploy synApps>), and run `make`.
 
 
 
@@ -440,42 +308,27 @@ How to make synApps work
 
 
 
-1. Setting up the IOC (vxWorks) Ensure that `$(EPICS_BASE)/bin/<arch>/caRepeater` gets run when your workstation boots. If you have no way of doing this, you can run it manually or put the command in your .login file.
-    
-    Setup your host system to work with the EPICS processor. See the *VxWorks Programmer's Guide* if you have a copy. Here's what we do (on a Sun workstation):
-    
-    
-    - Add a user named `<vx_username>` with the password `<vx_password>`. The user has nothing in its home directory, and very few privileges.
-    - Connect an ethernet cable to the processor.
-    - Setup the workstation to use a serial port at 9600 baud. Connect a serial cable from the workstation to the VME processor's "Console" port.
-    - Start up an "xterm" on the workstation and type 
+1. Setting up the IOC
+
+    **Linux soft IOC (typical deployment):**
+
+    Most synApps IOCs are deployed as Linux soft IOCs. The __xxx__ module includes a `softioc/` directory with scripts for running the IOC under `procServ` or `screen`. To start the IOC:
+
     ```
-    cu -lttya
+    cd xxx/iocBoot/iocxxx
+    ../../bin/linux-x86_64/xxx st.cmd.Linux
     ```
-        
-        (On some workstations we must type "`cu -lcua/a`".) This gets the xterm communicating with the crate processor.
-    - Turn the crate on. The crate processor says "Press any key to stop auto-boot..." and a number counting down from 7. Pressing a key gets the prompt "\[VxWorks Boot\]:"
-    - Type "p" to see the current boot parameters, type "c" to change them. Here are sample boot parameters 
-    ```
-            boot device          : dc 
-            processor number     : 0 
-            host name            : <server> 
-            file name            : /usr/local/vxWorks/T222/mv2700-asd1
-            inet on ethernet (e) : xxx.xxx.xxx.xxx:fffffe00 
-            inet on backplane (b): 
-            host inet (h)        : xxx.xxx.xxx.xxx
-            gateway inet (g)     : 
-            user (u)             : <vx_username> 
-            ftp password (pw) (blank = use rsh): <vx_password>  
-            flags (f)            : 0x0
-            target name (tn)     : iocxxx
-            startup script (s)   : /home/server/USER/epics/xxx/iocBoot/iocxxx/st.cmd
-            other (o)            : 
-        ```
-    
-    See `support/xxx/iocBoot/ioc*/bootParms` for other processor types. If your VME processor has mount access to an 'APSshare' NFS file server, you can specify the 'file name', above, as "/APSshare/vw/T222/mv2700-asd1".
-2. Display files synApps includes hundreds of display files intended for use with the EPICS display manager, MEDM, and translations of those files that work with CSS-BOY and caQtDM. Other EPICS display managers exist, and I once did a mass automated translation of MEDM display files to the EDM display manager's file format, using software developed by others. This translation was only partially satisfactory, but we don't have the resources to do the job better or more generically. In this documentation, I'll limit attention to MEDM display files.
-3. Fitting synApps to an application This happens in the user directory. Generally, you must tell "EPICS" what hardware is in your crate, and what addresses, interrupt vectors, etc. you have set your hardware to use. (See support/xxx/documentation/vme\_address.html for a list of suggested values.) You also must specify which motors any slit, table, monochromator, etc., control software is to use. If you use serial or GPIB, you must match port names to hardware devices, set serial-port parameters, and specify GPIB addresses. For any IndustryPack modules, you must specify the IP carrier and slot into which you've loaded those modules.
+
+    The `softioc/` directory provides additional scripts for managing the IOC as a service. Ensure that `caRepeater` is running on the host (it is started automatically by most Channel Access clients).
+
+    **vxWorks IOC:**
+
+    For vxWorks-based VME IOCs, see [vxWorks Configuration](vxWorks.html) for boot parameter setup, serial console configuration, and NFS file system requirements.
+
+2. Display files
+
+    synApps includes display files in several formats: `.ui` files for caQtDM, `.bob` files for Phoebus, `.adl` files for MEDM, and `.opi` files for CSS-BOY. The caQtDM `.ui` files are the primary, actively tested display files. Phoebus `.bob` files are also well-supported. The MEDM `.adl` files are the original display files from which the others were translated, but MEDM itself is now a legacy tool.
+3. Fitting synApps to an application This happens in the user directory. Generally, you must tell the IOC what hardware it will control and how to communicate with it. You must specify which motors any slit, table, monochromator, etc., control software is to use. If you use serial or GPIB, you must match port names to hardware devices, set serial-port parameters, and specify GPIB addresses.
     
     __Overview__
     
@@ -497,10 +350,10 @@ How to make synApps work
         This file, and the files it sources, are probably worth studying. They are reasonably well commented, and contain `dbLoadRecords()` commands for most of the EPICS databases in synApps.
     - Motors To load more motors, add lines to the file `xxx/iocBoot/ioc*/motor.substitutions`. For motors controlled by a VME board, edit `vme.cmd` to specify the hardware address, etc. For motors controlled through a serial connection, edit `serial.cmd`.
         
-        If you want the new motors to work with the 'AllStop' button (`xxx:allstop.VAL`– see the top-level MEDM display `xxx.adl`), load the database `$(MOTOR)/db/motorUtil.db`, and run the command `motorUtilInit("xxx:")`.
+        If you want the new motors to work with the 'AllStop' button (`xxx:allstop.VAL`-- see the top-level display `xxx.ui`), load the database `$(MOTOR)/db/motorUtil.db`, and run the command `motorUtilInit("xxx:")`.
         
         If you want the IOC automatically to save positions and settings of the new motors, and restore them when the crate reboots, add lines to the files `xxx/iocBoot/ioc*/auto_settings.req` and `xxx/iocBoot/ioc*/auto_positions.req`.
-    - Slits To use a pair of motors to control a slit, search for `2slit.db`in `xxx/iocBoot/ioc*/examples/optics.iocsh`, and edit the `dbLoadRecords()` command you'll find there. The example in `optics.iocsh` loads two copies of `2slit.db` intended for use as the horizontal and vertical members of a four-jaw slit. The MEDM displays `2slit*.adl` and `4slit*.adl` are involved in these applications.
+    - Slits To use a pair of motors to control a slit, search for `2slit.db`in `xxx/iocBoot/ioc*/examples/optics.iocsh`, and edit the `dbLoadRecords()` command you'll find there. The example in `optics.iocsh` loads two copies of `2slit.db` intended for use as the horizontal and vertical members of a four-jaw slit. The display files `2slit*` and `4slit*` are involved in these applications.
         
         The slit database can make either of two sets of assumptions about the two motors attached to the individual slit leaves, depending on the value of the macro "RELTOCENTER" that may be supplied when loading the 2slit.db database.
         
@@ -523,11 +376,11 @@ How to make synApps work
         To recalibrate slit positions, press the "Set" button, type in the current slit position as you want it to be called, and press the "Use" button. This procedure uses the "Set" buttons of both motors the slit software talks to, and the user/dial offsets of those motors actually implement the recalibration.
         
         There is a new, experimental slit database in synApps which uses soft motor records as the user/client interface. This allows clients that know how to control a motor also to control a slit, with some limitations. We hope to use soft motor records in front of other positioners (e.g. monochromators, optical tables, insertion devices, and DAC channels) in the future.
-    - Optical tables Optical tables are controlled by a custom EPICS record (the "table" record), used in the database `table.db` and controlled via MEDM displays `table*.adl`.
+    - Optical tables Optical tables are controlled by a custom EPICS record (the "table" record), used in the database `table.db` and controlled via display files `table*.ui` (caQtDM) or `table*.adl` (MEDM).
         
         Table virtual motors behave in much the same way as do slit virtual motors. However, the table software does not use user/dial offsets in the underlying motor to implement recalibration (it can't, since it works through a nonlinear transform). Instead, the table maintains its own offsets for all of the six coordinated motions it implements. Pressing the "Set" button causes new table positions to modify the offsets instead of moving the table (which is exactly the way motor and slit calibration works). In addition to a "Sync" button, which reads motor positions and calculates the table positions from them, the table display has an "Init" button, which zeros all offsets before doing a "sync" operation. It also has a "Zero" button, which manipulates all the table offsets to make the current table positions zero without moving or recalibrating any motors.
-    - Monochromators Several varieties of crystal monochromators are supported in synApps: two constant-offset "channel-cut" monochromators, two varieties of a high-resolution four-crystal monochromator, a spherical-grating monochromator, and a multilayer monochromator. Most are supported by databases paired with State Notation Language (SNL) programs, and several MEDM displays. The EPICS databases `kohzuSeq.db`, SNL program `kohzuCtl.st`, and MEDM displays `kohzu*.adl` (also `kohzu*.gif`) are involved in control of two varieties of high-heat-load monochromators. The EPICS database `hrSeq.db`, SNL program `hrCtl.st`, and MEDM displays `hSeq*.adl` are involved in control of the high-resolution double-crystal monochromator. The spherical grating monochromator is supported by the database `SGM.db` and the displays `SGM*.adl`. The multilayer monochromator is supported by the database `ml_monoSeq.db`and displays `ml_mono*.adl`.
-    - Filters The APS standard user filters combine several motors and solenoids to control the placement of filter material in the beam path. The databases `filterMotor.db` and `filterLock.db`, and the MEDM displays `*filter*.adl` are involved in this application.
+    - Monochromators Several varieties of crystal monochromators are supported in synApps: two constant-offset "channel-cut" monochromators, two varieties of a high-resolution four-crystal monochromator, a spherical-grating monochromator, and a multilayer monochromator. Most are supported by databases paired with State Notation Language (SNL) programs, and display files. The EPICS databases `kohzuSeq.db`, SNL program `kohzuCtl.st`, and displays `kohzu*` are involved in control of two varieties of high-heat-load monochromators. The EPICS database `hrSeq.db`, SNL program `hrCtl.st`, and displays `hSeq*` are involved in control of the high-resolution double-crystal monochromator. The spherical grating monochromator is supported by the database `SGM.db` and the displays `SGM*`. The multilayer monochromator is supported by the database `ml_monoSeq.db` and displays `ml_mono*`.
+    - Filters The APS standard user filters combine several motors and solenoids to control the placement of filter material in the beam path. The databases `filterMotor.db` and `filterLock.db`, and the display files `*filter*` are involved in this application.
         
         synApps also supports the XIA filter/shutter box, with two independently developed solutions:
         
@@ -538,7 +391,7 @@ How to make synApps work
         - filterbox:  
             filterBladeNoSensor.db, filterDrive.db  
             filter\_\*\_\*.adl, filterbox\_\*.adl filter\_drive\*.adl
-    - Basic run-time programming Impromptu coordinated motions and other bits of run-time programming are handled by what we call a "userCalc" (actually just a swait record with a nice MEDM interface) or a "userTransform" (actually just a transform record with a nice MEDM interface). We normally load sets of these and other records into each EPICS processor, specifically for end-user programming. Users type in expressions to be evaluated, and link inputs and outputs, as needed, to glue existing objects together to do what they want done at the moment. Here are some examples of the tasks that have been accomplished with userCalcs and userTransforms:
+    - Basic run-time programming Impromptu coordinated motions and other bits of run-time programming are handled by what we call a "userCalc" (actually just a swait record with a nice display-file interface) or a "userTransform" (actually just a transform record with a nice display-file interface). We normally load sets of these and other records into each EPICS processor, specifically for end-user programming. Users type in expressions to be evaluated, and link inputs and outputs, as needed, to glue existing objects together to do what they want done at the moment. Here are some examples of the tasks that have been accomplished with userCalcs and userTransforms:
         
         
         - Turn off hardware feedback control of a monochromator crystal when beam drops below a user-specified level. The userCalc monitored the EPICS PV that contains the value of the positron beam-current, and drove a DAC channel (used as a digital i/o bit) that enabled hardware feedback.
@@ -561,59 +414,37 @@ How to make synApps work
     - Interpolation EPICS supports breakpoint tables for linear interpolation of a dataset fixed at boot time. The synApps `interp` support (in the __calc__module) can run a drive or readback value through an interpolation table built at run time.
     - Glue electronics The __softGlue__ module supports simple digital electronic circuits that can be built at run time.
 4. Running synApps 
-    1. Boot parameters See `xxx/iocBoot/ioc*/bootParms` for sample boot parameters.
-    2. Display manager 
-        - MEDM See the MEDM Operator's Manual for detailed information on the special needs of this X11/Motif program. I'll assume those needs have been met.
-            
-            MEDM uses a search path list to find .adl files, and we'd like for that path list to refer to the synApps module versions actually in use. To generate the search path list from an application's configure/RELEASE file, edit the file `xxx/start_epics_xxx` so it sets the environment variables `EPICS_APP` and `EPICS_APP_ADL_DIR`. Here's an example:
-            
+    1. Display manager
+        - **caQtDM** (primary) -- caQtDM is the primary display manager for synApps. Display files use the `.ui` format and are located in each module's `op/ui/` directory. All synApps display files are operationally tested in caQtDM.
+
+            To start the caQtDM interface, edit and run the `start_caQtDM_xxx` script in your user directory. This script sets the environment variables `EPICS_APP` and `EPICS_APP_UI_DIR` and generates the display file search path from the application's `configure/RELEASE` file. For example:
+
             ```
-            setenv EPICS_APP /home/oxygen/MOONEY/epics/synApps/support/xxx
-            setenvEPICS_APP_ADL_DIR ${EPICS_APP}/xxxApp/op/adl
+            export EPICS_APP=/path/to/your/ioc
+            export EPICS_APP_UI_DIR=${EPICS_APP}/xxxApp/op/ui
             ```
 
-            If you plan to run MEDM on a workstation that isn't on the same subnet as the IOC's, you'll need to uncomment and edit the definition of the environment variable `EPICS_CA_ADDR_LIST`. In principle, you should be able to name only the broadcast address for the subnet that contains the IOC's, but if this doesn't work, you can put in the IP addresses of all the IOC's you want to connect with, separated by spaces, as follows: 
-            ```
-            setenv EPICS_CA_ADDR_LIST "164.54.53.126 164.54.53.127"
-            ```
-            
-            If you want to use arrays larger than 16000 bytes (e.g., MCA spectra of more than 4000 channels, or scans of more than 2000 data points), you must set the environment variable `EPICS_CA_MAX_ARRAY_BYTES`, in __both__ the IOC and workstation, to the size of the largest array you plan to send over the network, plus the size of the extra data channel access might be asked to include with the array. On a Unix system, for example, you might say
-            
-            ```
-            setenv EPICS_CA_MAX_ARRAY_BYTES 64008
-            ```
-            
-            in the IOC's common.iocsh file, you'd say 
-            ```
-            epicsEnvSet("EPICS_CA_MAX_ARRAY_BYTES", 64008)
-            ```
-            
-            This will permit scans of up to 8000 points (8000 doubles \* 8 bytes per double + 8 bytes for channel-access overhead), and mca spectra of up to 16000 channels. To bring up the top-level MEDM display for synApps software, cd to xxx and type "start\_MEDM\_xxx" (e.g., start\_MEDM\_1bma). This script locates the directories that might have MEDM-display files and includes them in the environment variable EPICS\_DISPLAY\_PATH, cd's to xxxApp/op/adl, and runs MEDM with the default top-level display file.
-        - caQtDM caQtDM display files (\*.ui) in synApps were translated from MEDM-display files (\*.adl) with the adl2ui translator in caQtDM-3-8-10 (available from http://epics.web.psi.ch/software/caqtdm/). (Actually, the version used to translate .adl files in xxx and other synApps modules was modified from the pristine version, so that related display menu buttons would look as they do in MEDM.)
-            
-            caQtDM implements a search path list very much as in MEDM, so we can use the same technique to autogenerate that path from an application's configure/RELEASE file. Edit the file `xxx/start_caQtDM_xxx` so it sets the environment variables `EPICS_APP` and `EPICS_APP_UI_DIR`. Here's an example:
-            
-            ```
-            setenv EPICS_APP /home/oxygen/MOONEY/epics/synApps/support/xxx
-            setenv EPICS_APP_UI_DIR ${EPICS_APP}/xxxApp/op/ui
-            ```
-            
-            Other environment variables used by caQtDM are the same as for MEDM.
-        - CSS-BOY CSS-BOY display files (\*.opi) in synApps were translated from MEDM-display files (\*.adl) using the ADL-to-BOY translator included with CSS-BOY.
-            
-            CSS-BOY can use a search path list for display files, as MEDM does, but the path is defined differently. One way to set it is to select the menu "Edit/Preferences", then select "CSS Applications/Display/BOY" and type the path into the "OPI Search Path" box. See CSS-BOY documentation for other options.
-    3. autosave/restore You must give a vxWorks IOC write permission to xxx/iocBoot/ioc\*/autosave so it can write the files auto\_positions.sav and auto\_settings.sav there. It's also helpful to set the autosave directory's 'group' bit so that files the crate writes will be owned by the owner of the directory instead of by . Normally, I do this: 
+        - **Phoebus** -- Phoebus `.bob` display files are also provided and well-supported. To start Phoebus with synApps displays, edit and run the `start_phoebus_xxx` script in your user directory.
+
+        - **MEDM** (legacy) -- The original MEDM `.adl` display files are still included and can be used with the `start_MEDM_xxx` script, but MEDM is no longer actively developed or the focus of testing.
+
+        If you are running a display manager on a workstation that isn't on the same subnet as the IOCs, you may need to set the environment variable `EPICS_CA_ADDR_LIST` to the IP addresses or broadcast addresses of the subnets containing the IOCs. With EPICS base 7.0 and PV Access, many of the old Channel Access array size limitations (`EPICS_CA_MAX_ARRAY_BYTES`) are no longer relevant when using PVA clients.
+
+    2. autosave/restore
+
+        The autosave directory (`xxx/iocBoot/ioc*/autosave/`) must be writable by the IOC process so it can write the files `auto_positions.sav` and `auto_settings.sav`. On Linux, ensure the IOC user has write permission:
+
         ```
         chmod a+w,g+s autosave
         ```
-        
-        If you are using autosaveBuild, you must give a vxWorks IOC write permission to the directory where it builds the autosave files. The default IOC builds these files in the autosave directory, so there isn't any need to change further permissions, only if you change common.iocsh to change the build location. Also, you must use a version of vxWorks that can append to files via NFS. vxWorks 6.9.4.1 works.
-        
-        To modify the list of PV's that are saved and restored, edit the files xxx/iocBoot/ioc\*/auto\_settings.req and xxx/iocBoot/ioc\*/auto\_positions.req
-        
-        The autosave software is started by the lines "`create_monitor_set(...`" in xxx/iocBoot/ioc\*/st.cmd. The restore happens during iocInit as a result of function calls inserted into initHooks.o, which is included in the library provided by the __autosave__ module, and linked into the executable loaded by xxx/iocBoot/ioc\*/st.cmd.
-        
-        6\. saveData saveData is a CA client that monitors sscan records and saves scan data to disk. On vxWorks, this is an NFS-mounted disk; on other operating systems, it's whatever file system the system provides for the standard C library. The saveData software is configured with the file xxx/iocBoot/ioc\*/saveData.req, which needs no special attention unless you want to modify the list of EPICS PV's whose values are to be saved with every data file. To do this, look for the string "\[extraPV\]" in the file, and edit the list of PV's immediately following that string. If an entry in this list contains only the PV name, saveData will describe the PV, in the data file, using the .DESC field of the record that contains that PV. If a string follows the PV name, saveData will use the string instead.
+
+        To modify the list of PVs that are saved and restored, edit `xxx/iocBoot/ioc*/auto_settings.req` and `xxx/iocBoot/ioc*/auto_positions.req`. Alternatively, you can use [autosaveBuild](https://epics-modules.github.io/autosave/) to have these files constructed automatically during the boot process.
+
+        The autosave software is started by the `create_monitor_set(...)` calls in `xxx/iocBoot/ioc*/st.cmd`. Restore happens during `iocInit` via initHooks in the __autosave__ module.
+
+    3. saveData
+
+        saveData is a Channel Access client that monitors sscan records and saves scan data to disk. It is configured with the file `xxx/iocBoot/ioc*/saveData.req`, which specifies which sscan records to monitor and which PV values to include in all data files. Look for the `[extraPV]` section in `saveData.req` to customize the list of PVs saved with every data file.
 
 
 How to extend synApps
@@ -658,7 +489,7 @@ Here is a list of techniques by which synApps has already been extended by users
     2. Press caputRecorder's "Start" button.
     3. Perform the task manually.
     4. Press caputRecorder's "Stop" button.
-- Display editing End users know better than anybody what they want in a graphical user interface. One thing they've demonstrated that they want is the ability to have some control over the user interface without having to specify every little detail to a programmer. MEDM/caQtDM/CSS-Boy provides end users with the ability easily to create custom displays, and synApps provides over 800 user-interface files that can be copied from, called up from, or included as part of a user crafted display.
+- Display editing End users know better than anybody what they want in a graphical user interface. One thing they've demonstrated that they want is the ability to have some control over the user interface without having to specify every little detail to a programmer. caQtDM and Phoebus provide end users with the ability to create custom displays, and synApps provides over 800 user-interface files that can be copied from, called up from, or included as part of a user-crafted display.
 - IOC command-file editing An EPICS IOC is populated and configured by ASCII command files, which knowledgeable end users can edit to add motors, change default baud rates, load additional copies of databases, etc.
 - Development of client-side scripts Many synApps end users have written scripts, in languages such as the unix shell, Python, SPEC macro, IDL, tcl, perl, and Labview, to simplify and/or standardize beamline operations. Any language can be used for this purpose, if it can be fitted with a Channel-Access interface.
 - EPICS-database development One very easy step from run-time programming to EPICS-database development can be taken by using the wxPython program, snapDb.py, (in the *utils*directory) to "freeze" a collection of programmed userCalcs into an independently loadable database. snapDb can also generate a first cut at a user interface for the database.
@@ -682,31 +513,44 @@ The synApps utils directory
 ---------------------------
 
 
-The synApps support/utils directory contains a variety of executables that may be useful in administering and/or using synApps. Some of these tools are probably peculiar to the way synApps is used at APS.
+The synApps support/utils directory contains a variety of scripts and programs that may be useful in administering and/or using synApps.
 
-> changePrefix, doSed 
-* These are for the application developer's convenience in changing EPICS prefixes in a user directory. You must be in the top level of the user directory to run changePrefix, and you should do a "make clean uninstall" before running it. Example of use:
+> changePrefix
+* A perl script for changing EPICS PV-name prefixes in a user directory (e.g., when creating a new IOC from the __xxx__ template). You must be in the top level of the user directory to run it. Example of use:
 > ```
->     cd $(SYNAPPS)/ioc/1bm
->     changePrefix xxx 1bma
-> ```
- 
-> copyAdl 
-* Look through synApps for .adl files, and copy them all to a specified directory Example of use:
-> ``` 
->     copyAdl $SYNAPPS/support adl_files
+>     cd /path/to/ioc/1bm
+>     $(SYNAPPS)/support/utils/changePrefix xxx 1bma
 > ```
 
-> convertIocFiles.py 
-* This file, and its associates, are intended to help convert an IOC directory from one version of EPICS to another, by collecting data from an existing IOC directory, and attempting to correctly edit files in a new IOC directory. See support/utils/HowToUse\_convertIocFiles.txt for more information on this program. 
-> mdautils-src.tar.gz  
-* This tar file contains utility programs for using data files written by the __sscan__ module's "saveData" program. These programs were written by Dohn Arms, and contributed to synApps. 
-> mdaExplorer 
-* This wxPython program displays the content of MDA files, and directories of MDA files. (An MDA file is the scan-data file produced by the synApps __sscan__ module's saveData software during a scan.) 
-> mdaPythonUtils 
-* A collection of python programs that read, write, modify, and translate MDA files. 
-> snapDb 
-* A wxPython rapid development tool for EPICS databases and MEDM display files. This program supports the use of EPICS' run-time programmability to prototype EPICS databases, using records loaded into an IOC. It's particularly useful with synApps "userCalcs", a collection of various record types intended for end users to program at run time.
+> copyScreens.pl
+* Search all synApps modules for display files and copy them to a single directory. This is also available as top-level Makefile targets: `make all_adl`, `make all_ui`, `make all_opi`, `make all_bob`.
+
+> convertIocFiles/
+* Scripts intended to help convert an IOC directory from one version of synApps to another, by collecting data from an existing IOC directory and attempting to edit files in a new IOC directory.
+
+> validateDB.py
+* Validates EPICS database (.db) files for common errors.
+
+> validateProto.py
+* Validates StreamDevice protocol (.proto) files for common errors.
+
+> dependencies.py
+* Finds and displays dependencies between synApps modules.
+
+> burt.py
+* Python support for writing the content of a BURT snapshot file to a running IOC.
+
+> mdautils-src/
+* Utility programs for using MDA data files written by the __sscan__ module's saveData software.
+
+> mdaExplorer/
+* A wxPython program that displays the content of MDA files and directories of MDA files.
+
+> mdaPythonUtils/
+* A collection of python programs that read, write, modify, and translate MDA files.
+
+> snapDb/
+* A wxPython rapid development tool for EPICS databases and display files. Supports the use of EPICS' run-time programmability to prototype EPICS databases using records loaded into an IOC.
 
 
 ### Appendix: Device support in or distributed with synApps (including support from EPICS base)

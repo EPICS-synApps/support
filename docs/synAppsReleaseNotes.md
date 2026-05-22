@@ -4,6 +4,58 @@ title: Release Notes
 nav_order: 3
 ---
 
+synApps 6.4 Release Notes
+===========================
+
+TBD
+
+- Version changes from R6-3 to R6-4
+   
+    | module | old version | new version | notes |
+    |---|---|---|---|
+    | ALIVE | 1-4-1 | TBD | [release notes](https://epics-modules.github.io/alive/aliveReleaseNotes.html) |
+    | ALLEN\_BRADLEY | 2-3 | TBD |  |
+    | AREA\_DETECTOR | 3-12-1 | TBD | [release notes](https://areadetector.github.io/master/release.html) |
+    | ASYN | 4-44-2 | TBD | [release notes](https://github.com/epics-modules/asyn/blob/master/RELEASE.md) |
+    | AUTOSAVE | 5-11 | TBD | [release notes](https://epics-modules.github.io/autosave/autosaveReleaseNotes.html) |
+    | BUSY | 1-7-4 | TBD | [release notes](https://epics-modules.github.io/busy/busyReleaseNotes.html) |
+    | CALC | 3-7-5 | TBD | [release notes](https://epics-modules.github.io/calc/calcReleaseNotes.html) |
+    | CAMAC | 2-7-5 | TBD | [release notes](https://epics-modules.github.io/camac/camacReleaseNotes.html) |
+    | CAPUTRECORDER | 1-7-6 | TBD | [release notes](https://epics-modules.github.io/caputRecorder/caputRecorderReleaseNotes.html) |
+    | DAC128V | 2-10-1 | TBD | [release notes](https://epics-modules.github.io/dac128V/dac128VReleaseNotes.html) |
+    | DELAYGEN | 1-2-4 | TBD | [release notes](https://epics-modules.github.io/delaygen/delaygenReleaseNotes.html) |
+    | DEVIOCSTATS | 3-1-16 | TBD | [release notes](https://github.com/epics-modules/iocStats) |
+    | DXP | 6-1 | TBD | [release notes](https://epics-modules.github.io/dxp/dxpReleaseNotes.html) |
+    | DXPSITORO | 1-3 | TBD | [release notes](https://epics-modules.github.io/dxpSITORO/dxpSITOROReleaseNotes.html) |
+    | ETHERIP | TBD | TBD |  |
+    | GALIL | 3-5 | TBD | [release notes](https://github.com/motorapp/Galil-3-0/releases) |
+    | IP | 2-22 | TBD | [release notes](https://epics-modules.github.io/ip/ipReleaseNotes.html) |
+    | IP330 | 2-10 | TBD | [release notes](https://epics-modules.github.io/ip330/ip330ReleaseNotes.html) |
+    | IPAC | 2-16 | TBD | [release notes](https://github.com/epics-modules/ipac/releases) |
+    | IPUNIDIG | 2-12 | TBD | [release notes](https://epics-modules.github.io/ipUnidig/ipUnidigReleaseNotes.html) |
+    | LABJACK | TBD | TBD | [release notes](https://github.com/epics-modules/LabJack/blob/master/RELEASE.md) |
+    | LOVE | 3-2-9 | TBD | [release notes](https://epics-modules.github.io/love/loveReleaseNotes.html) |
+    | LUA | 3-1 | TBD | [release notes](https://epics-modules.github.io/lua/luaReleaseNotes.html) |
+    | MCA | 7-10 | TBD | [release notes](https://epics-modules.github.io/mca/mcaReleaseNotes.html) |
+    | MEASCOMP | 4-2 | TBD | [release notes](https://github.com/epics-modules/measComp/blob/master/RELEASE.md) |
+    | MODBUS | 3-3 | TBD | [release notes](https://github.com/epics-modules/modbus/blob/master/RELEASE.md) |
+    | MOTOR | 7-3-1 | TBD | [release notes](https://github.com/epics-modules/motor/blob/master/docs/RELEASE.md) |
+    | OPTICS | 2-14 | TBD | [release notes](https://epics-modules.github.io/optics/opticsReleaseNotes.html) |
+    | QUADEM | 9-5 | TBD | [release notes](https://epics-modules.github.io/quadEM/quadEMReleaseNotes.html) |
+    | SCALER | TBD | TBD | [release notes](https://epics-modules.github.io/scaler/scalerReleaseNotes.html) |
+    | SNCSEQ | 2-2-9 | TBD | [release notes](https://github.com/epics-modules/sequencer) |
+    | SOFTGLUE | 2-8-4 | TBD | [release notes](https://epics-modules.github.io/softGlue/softGlueReleaseNotes.html) |
+    | SOFTGLUEZYNQ | 2-0-5 | TBD | [release notes](https://epics-modules.github.io/softGlueZynq/softGlueZynqReleaseNotes.html) |
+    | SSCAN | 2-11-6 | TBD | [release notes](https://epics-modules.github.io/sscan/sscanReleaseNotes.html) |
+    | STD | 3-6-4 | TBD | [release notes](https://epics-modules.github.io/std/stdReleaseNotes.html) |
+    | STREAM | 2-8-24 | TBD |  |
+    | VAC | 1-9-2 | TBD | [release notes](https://epics-modules.github.io/vac/vacReleaseNotes.html) |
+    | VME | 2-9-5 | TBD | [release notes](https://epics-modules.github.io/vme/vmeReleaseNotes.html) |
+    | XSPRESS3 | 3-2-8 | TBD |  |
+    | XXX | 6-3 | TBD | [release notes](https://epics-modules.github.io/xxx/xxxReleaseNotes.html) |
+    | YOKOGAWA\_DAS | 2-0-1 | TBD | [release notes](https://epics-modules.github.io/Yokogawa_DAS/YokogawaDASReleaseNotes.html) |
+
+
 synApps 6.3 Release Notes
 ===========================
 
@@ -11,24 +63,24 @@ LabJack module added
 
 - Version changes from R6-2-1 to R6-3
    
-    | module | old version | newversion | notes |
+    | module | old version | new version | notes |
     |---|---|---|---|
     | ALIVE | 1-4-0 | 1-4-1 | [release notes](https://epics-modules.github.io/alive/aliveReleaseNotes.html) |
     | ALLEN\_BRADLEY | 2-3 | 2-3 |  |
     | AREA\_DETECTOR | 3-11 | 3-12-1 | [release notes](https://areadetector.github.io/master/release.html) |
     | ASYN | 4-42 | 4-44-2 | [release notes](https://github.com/epics-modules/asyn/blob/master/RELEASE.md) |
     | AUTOSAVE | 5-10-2 | 5-11 | [release notes](https://epics-modules.github.io/autosave/autosaveReleaseNotes.html) |
-    | BUSY | 1-7-3 | 1-7-4 | [release notes](http://epics-modules.github.io/busy/busyReleaseNotes) |
+    | BUSY | 1-7-3 | 1-7-4 | [release notes](https://epics-modules.github.io/busy/busyReleaseNotes) |
     | CALC | 3-7-4 | 3-7-5 | [release notes](https://epics-modules.github.io/calc/calcReleaseNotes.html) |
-    | CAMAC | 2-7-3 | 2-7-5 | [release notes](http://epics-modules.github.io/camac/camacReleaseNotes.html) |
+    | CAMAC | 2-7-3 | 2-7-5 | [release notes](https://epics-modules.github.io/camac/camacReleaseNotes.html) |
     | CAPUTRECORDER | 1-7-3 | 1-7-6 | [release notes](https://epics-modules.github.io/caputRecorder/caputRecorderReleaseNotes.html) |
     | DAC128V | 2-10-1 | 2-10-1 | [release notes](https://epics-modules.github.io/dac128V/dac128VReleaseNotes.html) |
-    | DELAYGEN | 1-2-2 | 1-2-4 | [release notes](http://epics-modules.github.io/delaygen/delaygenReleaseNotes.html) |
-    | DEVIOCSTATS | 3-1-16 | 3-1-16 | [release notes](http://www.slac.stanford.edu/grp/ssrl/spear/epics/site/devIocStats/RELEASE_NOTES) |
+    | DELAYGEN | 1-2-2 | 1-2-4 | [release notes](https://epics-modules.github.io/delaygen/delaygenReleaseNotes.html) |
+    | DEVIOCSTATS | 3-1-16 | 3-1-16 | [release notes](https://github.com/epics-modules/iocStats) |
     | DXP | 6-0 | 6-1 | [release notes](https://epics-modules.github.io/dxp/dxpReleaseNotes.html) |
     | DXPSITORO | 1-2 | 1-3 | [release notes](https://epics-modules.github.io/dxpSITORO/dxpSITOROReleaseNotes.html) |
     | GALIL | master branch | 3-5 | [release notes](https://github.com/motorapp/Galil-3-0/releases/tag/V3-5) |
-    | IP | 2-21-1 | 2-22 | [release notes](http://epics-modules.github.io/ip/ipReleaseNotes.html) |
+    | IP | 2-21-1 | 2-22 | [release notes](https://epics-modules.github.io/ip/ipReleaseNotes.html) |
     | IP330 | 2-10 | 2-10 | [release notes](https://epics-modules.github.io/ip330/ip330ReleaseNotes.html) |
     | IPAC | 2-16 | 2-16 | [release notes](https://github.com/epics-modules/ipac/releases/tag/2.16) |
     | IPUNIDIG | 2-12 | 2-12 | [release notes](https://epics-modules.github.io/ipUnidig/ipUnidigReleaseNotes.html) |
@@ -38,18 +90,18 @@ LabJack module added
     | MEASCOMP | 2-5-1 | 4-2 | [release notes](https://github.com/epics-modules/measComp/blob/master/RELEASE.md) |
     | MODBUS | 3-2 | 3-3 | [release notes](https://github.com/epics-modules/modbus/blob/master/RELEASE.md) |
     | MOTOR | 7-2-2 | 7-3-1 | [release notes](https://github.com/epics-modules/motor/blob/master/docs/RELEASE.md) |
-    | OPTICS | 2-13-5 | 2-14 | [release notes](http://epics-modules.github.io/optics/opticsReleaseNotes.html) |
+    | OPTICS | 2-13-5 | 2-14 | [release notes](https://epics-modules.github.io/optics/opticsReleaseNotes.html) |
     | QUADEM | 9-4 | 9-5 | [release notes](https://epics-modules.github.io/quadEM/quadEMReleaseNotes.html) |
-    | SNCSEQ | 2-2-9 | 2-2-9 | [release notes](https://www-csr.bessy.de/control/SoftDist/sequencer/ReleaseNotes-2-2.html#release-notes-2-2-9) |
-    | SOFTGLUE | 2-8-3 | 2-8-4 | [release notes](http://epics-modules.github.io/softGlue/softGlueReleaseNotes.html) |
+    | SNCSEQ | 2-2-9 | 2-2-9 | [release notes](https://github.com/epics-modules/sequencer) |
+    | SOFTGLUE | 2-8-3 | 2-8-4 | [release notes](https://epics-modules.github.io/softGlue/softGlueReleaseNotes.html) |
     | SOFTGLUEZYNQ | 2-0-4 | 2-0-5 | [release notes](https://epics-modules.github.io/softGlueZynq/softGlueZynqReleaseNotes.html) |
-    | SSCAN | 2-11-4 | 2-11-6 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/sscan/blob/R2-11-3/documentation/sscanReleaseNotes.html) |
-    | STD | 3-6-3 | 3-6-4 | [release notes](http://epics-modules.github.io/std/stdReleaseNotes.html) |
+    | SSCAN | 2-11-4 | 2-11-6 | [release notes](https://epics-modules.github.io/sscan/sscanReleaseNotes.html) |
+    | STD | 3-6-3 | 3-6-4 | [release notes](https://epics-modules.github.io/std/stdReleaseNotes.html) |
     | STREAM | 2-8-16 | 2-8-24 |  |
     | VAC | 1-9-1 | 1-9-2 | [release notes](https://epics-modules.github.io/vac/vacReleaseNotes.html) |
-    | VME | 2-9-3 | 2-9-5 | [release notes](http://epics-modules.github.io/vme/vmeReleaseNotes.html) |
+    | VME | 2-9-3 | 2-9-5 | [release notes](https://epics-modules.github.io/vme/vmeReleaseNotes.html) |
     | XSPRESS3 | 2-5 | 3-2-8 |  |
-    | XXX | 6-2-1 | 6-3 | [release notes](http://epics-modules.github.io/xxx/xxxReleaseNotes.html) |
+    | XXX | 6-2-1 | 6-3 | [release notes](https://epics-modules.github.io/xxx/xxxReleaseNotes.html) |
     | YOKOGAWA\_DAS | 2-0-1 | 2-0-1 | [release notes](https://epics-modules.github.io/Yokogawa_DAS/YokogawaDASReleaseNotes.html) |
 
 
@@ -60,46 +112,46 @@ Scaler module added
 
 - Version changes from R6-2 to R6-2-1
    
-    | module | old version | newversion | notes |
+    | module | old version | new version | notes |
     |---|---|---|---|
-    | ALIVE | 1-3-1 | 1-4-0 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/alive/blob/R1-4-0/documentation/aliveReleaseNotes.html) |
+    | ALIVE | 1-3-1 | 1-4-0 | [release notes](https://epics-modules.github.io/alive/aliveReleaseNotes.html) |
     | ALLEN\_BRADLEY | 2-3 | 2-3 |  |
     | AREA\_DETECTOR | 3-11 | 3-11 | [release notes](https://areadetector.github.io/master/release.html) |
-    | ASYN | 4-42 | 4-42 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/asyn/blob/4-42/documentation/RELEASE_NOTES.html) |
-    | AUTOSAVE | 5-10-2 | 5-10-2 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/autosave/blob/R5-10-2/documentation/autosaveReleaseNotes.html) |
-    | BUSY | 1-7-3 | 1-7-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/busy/blob/R1-7-3/documentation/busyReleaseNotes.html) |
-    | CALC | 3-7-4 | 3-7-4 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/calc/blob/R3-7-4/documentation/calcReleaseNotes.html) |
-    | CAMAC | 2-7-3 | 2-7-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/camac/blob/R2-7-3/documentation/camacReleaseNotes.html) |
-    | CAPUTRECORDER | 1-7-3 | 1-7-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/caputRecorder/blob/R1-7-3/documentation/caputRecorderReleaseNotes.html) |
-    | DAC128V | 2-10-1 | 2-10-1 | [release notes](http://cars.uchicago.edu/software/epics/dac128VReleaseNotes.html) |
-    | DELAYGEN | 1-2-2 | 1-2-2 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/delaygen/blob/R1-2-2/documentation/delaygenReleaseNotes.html) |
-    | DEVIOCSTATS | 3-1-16 | 3-1-16 | [release notes](http://www.slac.stanford.edu/grp/ssrl/spear/epics/site/devIocStats/RELEASE_NOTES) |
-    | DXP | 6-0 | 6-0 | [release notes](http://cars.uchicago.edu/software/epics/dxpReleaseNotes.html) |
-    | DXPSITORO | 1-2 | 1-2 | [release notes](https://cars.uchicago.edu/software/epics/dxpSITOROReleaseNotes.html) |
+    | ASYN | 4-42 | 4-42 | [release notes](https://github.com/epics-modules/asyn/blob/master/RELEASE.md) |
+    | AUTOSAVE | 5-10-2 | 5-10-2 | [release notes](https://epics-modules.github.io/autosave/autosaveReleaseNotes.html) |
+    | BUSY | 1-7-3 | 1-7-3 | [release notes](https://epics-modules.github.io/busy/busyReleaseNotes.html) |
+    | CALC | 3-7-4 | 3-7-4 | [release notes](https://epics-modules.github.io/calc/calcReleaseNotes.html) |
+    | CAMAC | 2-7-3 | 2-7-3 | [release notes](https://epics-modules.github.io/camac/camacReleaseNotes.html) |
+    | CAPUTRECORDER | 1-7-3 | 1-7-3 | [release notes](https://epics-modules.github.io/caputRecorder/caputRecorderReleaseNotes.html) |
+    | DAC128V | 2-10-1 | 2-10-1 | [release notes](https://epics-modules.github.io/dac128V/dac128VReleaseNotes.html) |
+    | DELAYGEN | 1-2-2 | 1-2-2 | [release notes](https://epics-modules.github.io/delaygen/delaygenReleaseNotes.html) |
+    | DEVIOCSTATS | 3-1-16 | 3-1-16 | [release notes](https://github.com/epics-modules/iocStats) |
+    | DXP | 6-0 | 6-0 | [release notes](https://epics-modules.github.io/dxp/dxpReleaseNotes.html) |
+    | DXPSITORO | 1-2 | 1-2 | [release notes](https://epics-modules.github.io/dxpSITORO/dxpSITOROReleaseNotes.html) |
     | GALIL | 3-6 | 3-6 | [release notes](https://github.com/motorapp/Galil-3-0/files/4943340/change_log.txt) |
-    | IP | 2-21 | 2-21-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/ip/blob/R2-21-1/documentation/ipReleaseNotes.html) |
-    | IP330 | 2-10 | 2-10 | [release notes](http://cars.uchicago.edu/software/epics/ip330ReleaseNotes.html) |
+    | IP | 2-21 | 2-21-1 | [release notes](https://epics-modules.github.io/ip/ipReleaseNotes.html) |
+    | IP330 | 2-10 | 2-10 | [release notes](https://epics-modules.github.io/ip330/ip330ReleaseNotes.html) |
     | IPAC | 2-16 | 2-16 | [release notes](https://github.com/epics-modules/ipac/wiki) |
-    | IPUNIDIG | 2-12 | 2-12 | [release notes](http://cars9.uchicago.edu/software/epics/ipUnidigReleaseNotes.html) |
-    | LOVE | 3-2-8 | 3-2-8 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/love/blob/R3-2-8/documentation/loveReleaseNotes.html) |
-    | LUA | 3-0-1 | 3-0-2 | [release notes](https://epics-lua.readthedocs.io/en/latest/luaReleaseNotes.html) |
-    | MCA | 7-9 | 7-9 | [release notes](http://cars.uchicago.edu/software/epics/mcaReleaseNotes.html) |
-    | MEASCOMP | 2-5-1 | 2-5-1 | [release notes](http://cars.uchicago.edu/software/epics/measCompReleaseNotes.html) |
-    | MODBUS | 3-2 | 3-2 | [release notes](http://cars.uchicago.edu/software/epics/modbusReleaseNotes.html) |
-    | MOTOR | 7-2-1 | 7-2-2 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/motor/blob/R7-2-1/documentation/motor_release.html) |
-    | OPTICS | 2-13-5 | 2-13-5 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/optics/blob/R2-13-5/documentation/opticsReleaseNotes.html) |
-    | QUADEM | 9-2-1 | 9-4 | [release notes](http://cars.uchicago.edu/software/epics/quadEMReleaseNotes.html) |
-    | SNCSEQ | 2-2-8 | 2-2-9 | [release notes](https://www-csr.bessy.de/control/SoftDist/sequencer/ReleaseNotes-2-2.html#release-notes-2-2-9) |
-    | SOFTGLUE | 2-8-3 | 2-8-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/softGlue/blob/R2-8-3/documentation/softGlueReleaseNotes.html) |
-    | SOFTGLUEZYNQ | 2-0-3 | 2-0-4 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/softGlueZynq/blob/R2-0-4/documentation/softGlueZynqReleaseNotes.html) |
-    | SSCAN | 2-11-4 | 2-11-4 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/sscan/blob/R2-11-3/documentation/sscanReleaseNotes.html) |
-    | STD | 3-6-2 | 3-6-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/std/blob/R3-6-3/documentation/stdReleaseNotes.html) |
+    | IPUNIDIG | 2-12 | 2-12 | [release notes](https://epics-modules.github.io/ipUnidig/ipUnidigReleaseNotes.html) |
+    | LOVE | 3-2-8 | 3-2-8 | [release notes](https://epics-modules.github.io/love/loveReleaseNotes.html) |
+    | LUA | 3-0-1 | 3-0-2 | [release notes](https://epics-modules.github.io/lua/luaReleaseNotes.html) |
+    | MCA | 7-9 | 7-9 | [release notes](https://epics-modules.github.io/mca/mcaReleaseNotes.html) |
+    | MEASCOMP | 2-5-1 | 2-5-1 | [release notes](https://epics-modules.github.io/measComp/measCompReleaseNotes.html) |
+    | MODBUS | 3-2 | 3-2 | [release notes](https://epics-modules.github.io/modbus/modbusReleaseNotes.html) |
+    | MOTOR | 7-2-1 | 7-2-2 | [release notes](https://github.com/epics-modules/motor/blob/master/docs/RELEASE.md) |
+    | OPTICS | 2-13-5 | 2-13-5 | [release notes](https://epics-modules.github.io/optics/opticsReleaseNotes.html) |
+    | QUADEM | 9-2-1 | 9-4 | [release notes](https://epics-modules.github.io/quadEM/quadEMReleaseNotes.html) |
+    | SNCSEQ | 2-2-8 | 2-2-9 | [release notes](https://github.com/epics-modules/sequencer) |
+    | SOFTGLUE | 2-8-3 | 2-8-3 | [release notes](https://epics-modules.github.io/softGlue/softGlueReleaseNotes.html) |
+    | SOFTGLUEZYNQ | 2-0-3 | 2-0-4 | [release notes](https://epics-modules.github.io/softGlueZynq/softGlueZynqReleaseNotes.html) |
+    | SSCAN | 2-11-4 | 2-11-4 | [release notes](https://epics-modules.github.io/sscan/sscanReleaseNotes.html) |
+    | STD | 3-6-2 | 3-6-3 | [release notes](https://epics-modules.github.io/std/stdReleaseNotes.html) |
     | STREAM | 2-8-16 | 2-8-16 |  |
-    | VAC | 1-9 | 1-9-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/vac/blob/R1-9-1/documentation/vacReleaseNotes.html) |
-    | VME | 2-9-3 | 2-9-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/vme/blob/R2-9-3/documentation/vmeReleaseNotes.html) |
+    | VAC | 1-9 | 1-9-1 | [release notes](https://epics-modules.github.io/vac/vacReleaseNotes.html) |
+    | VME | 2-9-3 | 2-9-3 | [release notes](https://epics-modules.github.io/vme/vmeReleaseNotes.html) |
     | XSPRESS3 | 2-5 | 2-5 |  |
-    | XXX | 6-2 | 6-2-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/xxx/blob/R6-2-1/documentation/xxxReleaseNotes.html) |
-    | YOKOGAWA\_DAS | 2-0-1 | 2-0-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/Yokogawa_DAS/blob/R2-0-1/documentation/YokogawaDASReleaseNotes.html) |
+    | XXX | 6-2 | 6-2-1 | [release notes](https://epics-modules.github.io/xxx/xxxReleaseNotes.html) |
+    | YOKOGAWA\_DAS | 2-0-1 | 2-0-1 | [release notes](https://epics-modules.github.io/Yokogawa_DAS/YokogawaDASReleaseNotes.html) |
 
 synApps 6.2 Release Notes
 =========================
@@ -112,46 +164,46 @@ Python Wheel Install File created for mdaPythonUtils
 
 - Version changes from R6-1 to R6-2
     
-    | module | old version | newversion | notes |
+    | module | old version | new version | notes |
     |---|---|---|---|
-    | ALIVE | 1-1-1 | 1-3-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/alive/blob/R1-3-1/documentation/aliveReleaseNotes.html) |
+    | ALIVE | 1-1-1 | 1-3-1 | [release notes](https://epics-modules.github.io/alive/aliveReleaseNotes.html) |
     | ALLEN\_BRADLEY | 2-3 | 2-3 |  |
     | AREA\_DETECTOR | 3-7 | 3-10 | [release notes](https://github.com/areaDetector/blob/master/RELEASE.md) |
-    | ASYN | 4-36 | 4-41 | [release notes](https://epics.anl.gov/modules/soft/asyn/R4-41/RELEASE_NOTES.html) |
-    | AUTOSAVE | 5-10 | 5-10-2 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/autosave/blob/R5-10-2/documentation/autosaveReleaseNotes.html) |
-    | BUSY | 1-7-2 | 1-7-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/busy/blob/R1-7-3/documentation/busyReleaseNotes.html) |
-    | CALC | 3-7-3 | 3-7-4 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/calc/blob/R3-7-4/documentation/calcReleaseNotes.html) |
-    | CAMAC | 2-7-1 | 2-7-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/camac/blob/R2-7-3/documentation/camacReleaseNotes.html) |
-    | CAPUTRECORDER | 1-7-2 | 1-7-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/caputRecorder/blob/R1-7-3/documentation/caputRecorderReleaseNotes.html) |
-    | DAC128V | 2-9 | 2-10-1 | [release notes](http://cars.uchicago.edu/software/epics/dac128VReleaseNotes.html) |
-    | DELAYGEN | 1-2-1 | 1-2-2 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/delaygen/blob/R1-2-2/documentation/delaygenReleaseNotes.html) |
-    | DEVIOCSTATS | 3-1-16 | 3-1-16 | [release notes](http://www.slac.stanford.edu/grp/ssrl/spear/epics/site/devIocStats/RELEASE_NOTES) |
-    | DXP | 6-0 | 6-0 | [release notes](http://cars.uchicago.edu/software/epics/dxpReleaseNotes.html) |
-    | DXPSITORO | 1-2 | 1-2 | [release notes](https://cars.uchicago.edu/software/epics/dxpSITOROReleaseNotes.html) |
+    | ASYN | 4-36 | 4-41 | [release notes](https://github.com/epics-modules/asyn/blob/master/RELEASE.md) |
+    | AUTOSAVE | 5-10 | 5-10-2 | [release notes](https://epics-modules.github.io/autosave/autosaveReleaseNotes.html) |
+    | BUSY | 1-7-2 | 1-7-3 | [release notes](https://epics-modules.github.io/busy/busyReleaseNotes.html) |
+    | CALC | 3-7-3 | 3-7-4 | [release notes](https://epics-modules.github.io/calc/calcReleaseNotes.html) |
+    | CAMAC | 2-7-1 | 2-7-3 | [release notes](https://epics-modules.github.io/camac/camacReleaseNotes.html) |
+    | CAPUTRECORDER | 1-7-2 | 1-7-3 | [release notes](https://epics-modules.github.io/caputRecorder/caputRecorderReleaseNotes.html) |
+    | DAC128V | 2-9 | 2-10-1 | [release notes](https://epics-modules.github.io/dac128V/dac128VReleaseNotes.html) |
+    | DELAYGEN | 1-2-1 | 1-2-2 | [release notes](https://epics-modules.github.io/delaygen/delaygenReleaseNotes.html) |
+    | DEVIOCSTATS | 3-1-16 | 3-1-16 | [release notes](https://github.com/epics-modules/iocStats) |
+    | DXP | 6-0 | 6-0 | [release notes](https://epics-modules.github.io/dxp/dxpReleaseNotes.html) |
+    | DXPSITORO | 1-2 | 1-2 | [release notes](https://epics-modules.github.io/dxpSITORO/dxpSITOROReleaseNotes.html) |
     | GALIL | New Module | 3-6 | [release notes](https://github.com/motorapp/Galil-3-0/files/4943340/change_log.txt) |
-    | IP | 2-20-1 | 2-21 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/ip/blob/R2-21/documentation/ipReleaseNotes.html) |
-    | IP330 | 2-9 | 2-10 | [release notes](http://cars.uchicago.edu/software/epics/ip330ReleaseNotes.html) |
+    | IP | 2-20-1 | 2-21 | [release notes](https://epics-modules.github.io/ip/ipReleaseNotes.html) |
+    | IP330 | 2-9 | 2-10 | [release notes](https://epics-modules.github.io/ip330/ip330ReleaseNotes.html) |
     | IPAC | 2-15 | 2-16 | [release notes](https://github.com/epics-modules/ipac/wiki) |
-    | IPUNIDIG | 2-11 | 2-12 | [release notes](http://cars9.uchicago.edu/software/epics/ipUnidigReleaseNotes.html) |
-    | LOVE | 3-2-7 | 3-2-8 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/love/blob/R3-2-8/documentation/loveReleaseNotes.html) |
-    | LUA | 2-0 | 3-0-1 | [release notes](https://epics-lua.readthedocs.io/en/latest/luaReleaseNotes.html) |
-    | MCA | 7-8 | 7-9 | [release notes](http://cars.uchicago.edu/software/epics/mcaReleaseNotes.html) |
-    | MEASCOMP | 2-3 | 2-5-1 | [release notes](http://cars.uchicago.edu/software/epics/measCompReleaseNotes.html) |
-    | MODBUS | 3-0 | 3-2 | [release notes](http://cars.uchicago.edu/software/epics/modbusReleaseNotes.html) |
-    | MOTOR | 7-1 | 7-2-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/motor/blob/R7-1/documentation/motor_release.html) |
-    | OPTICS | 2-13-3 | 2-13-5 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/optics/blob/R2-13-3/documentation/opticsReleaseNotes.html) |
-    | QUADEM | 9-2-1 | 9-4 | [release notes](http://cars.uchicago.edu/software/epics/quadEMReleaseNotes.html) |
-    | SNCSEQ | 2-2-6 | 2-2-8 | [release notes](https://www-csr.bessy.de/control/SoftDist/sequencer/ReleaseNotes-2-2.html#release-notes-2-2-8) |
-    | SOFTGLUE | 2-8-2 | 2-8-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/softGlue/blob/R2-8-3/documentation/softGlueReleaseNotes.html) |
-    | SOFTGLUEZYNQ | 2-0-2 | 2-0-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/softGlueZynq/blob/R2-0-3/documentation/softGlueZynqReleaseNotes.html) |
-    | SSCAN | 2-11-3 | 2-11-4 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/sscan/blob/R2-11-3/documentation/sscanReleaseNotes.html) |
-    | STD | 3-6 | 3-6-2 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/std/blob/R3-6/documentation/stdReleaseNotes.html) |
+    | IPUNIDIG | 2-11 | 2-12 | [release notes](https://epics-modules.github.io/ipUnidig/ipUnidigReleaseNotes.html) |
+    | LOVE | 3-2-7 | 3-2-8 | [release notes](https://epics-modules.github.io/love/loveReleaseNotes.html) |
+    | LUA | 2-0 | 3-0-1 | [release notes](https://epics-modules.github.io/lua/luaReleaseNotes.html) |
+    | MCA | 7-8 | 7-9 | [release notes](https://epics-modules.github.io/mca/mcaReleaseNotes.html) |
+    | MEASCOMP | 2-3 | 2-5-1 | [release notes](https://epics-modules.github.io/measComp/measCompReleaseNotes.html) |
+    | MODBUS | 3-0 | 3-2 | [release notes](https://epics-modules.github.io/modbus/modbusReleaseNotes.html) |
+    | MOTOR | 7-1 | 7-2-1 | [release notes](https://github.com/epics-modules/motor/blob/master/docs/RELEASE.md) |
+    | OPTICS | 2-13-3 | 2-13-5 | [release notes](https://epics-modules.github.io/optics/opticsReleaseNotes.html) |
+    | QUADEM | 9-2-1 | 9-4 | [release notes](https://epics-modules.github.io/quadEM/quadEMReleaseNotes.html) |
+    | SNCSEQ | 2-2-6 | 2-2-8 | [release notes](https://github.com/epics-modules/sequencer) |
+    | SOFTGLUE | 2-8-2 | 2-8-3 | [release notes](https://epics-modules.github.io/softGlue/softGlueReleaseNotes.html) |
+    | SOFTGLUEZYNQ | 2-0-2 | 2-0-3 | [release notes](https://epics-modules.github.io/softGlueZynq/softGlueZynqReleaseNotes.html) |
+    | SSCAN | 2-11-3 | 2-11-4 | [release notes](https://epics-modules.github.io/sscan/sscanReleaseNotes.html) |
+    | STD | 3-6 | 3-6-2 | [release notes](https://epics-modules.github.io/std/stdReleaseNotes.html) |
     | STREAM | 2-8-9 | 2-8-16 |  |
-    | VAC | 1-9 | 1-9-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/vac/blob/R1-9-1/documentation/vacReleaseNotes.html) |
-    | VME | 2-9-2 | 2-9-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/vme/blob/R2-9-3/documentation/vmeReleaseNotes.html) |
+    | VAC | 1-9 | 1-9-1 | [release notes](https://epics-modules.github.io/vac/vacReleaseNotes.html) |
+    | VME | 2-9-2 | 2-9-3 | [release notes](https://epics-modules.github.io/vme/vmeReleaseNotes.html) |
     | XSPRESS3 | New Module | 2-5 |  |
-    | XXX | 6-1 | 6-2 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/xxx/blob/R6-2/documentation/xxxReleaseNotes.html) |
-    | YOKOGAWA\_DAS | 2-0-1 | 2-0-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/Yokogawa_DAS/blob/R2-0-1/documentation/YokogawaDASReleaseNotes.html) |
+    | XXX | 6-1 | 6-2 | [release notes](https://epics-modules.github.io/xxx/xxxReleaseNotes.html) |
+    | YOKOGAWA\_DAS | 2-0-1 | 2-0-1 | [release notes](https://epics-modules.github.io/Yokogawa_DAS/YokogawaDASReleaseNotes.html) |
 
 synApps 6.1 Release Notes
 =========================
@@ -173,42 +225,42 @@ copyScreens.pl:
     
     | module | old version | new version | notes |
     |---|---|---|---|
-    | ALIVE | 1-1-0 | 1-1-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/alive/blob/R1-1-1/documentation/aliveReleaseNotes.html) |
+    | ALIVE | 1-1-0 | 1-1-1 | [release notes](https://epics-modules.github.io/alive/aliveReleaseNotes.html) |
     | ALLEN\_BRADLEY | 2-3 | 2-3 |  |
     | AREA\_DETECTOR | 3-3-1 | 3-7 | [release notes](https://github.com/areaDetector/blob/master/RELEASE.md) |
-    | ASYN | 4-33 | 4-36 | [release notes](https://epics.anl.gov/modules/soft/asyn/R4-36/RELEASE_NOTES.html) |
-    | AUTOSAVE | 5-9 | 5-10 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/autosave/blob/R5-10/documentation/autosaveReleaseNotes.html) |
-    | BUSY | 1-7 | 1-7-2 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/busy/blob/R1-7-2/documentation/busyReleaseNotes.html) |
-    | CALC | 3-7-1 | 3-7-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/calc/blob/R3-7-3/documentation/calcReleaseNotes.html) |
+    | ASYN | 4-33 | 4-36 | [release notes](https://github.com/epics-modules/asyn/blob/master/RELEASE.md) |
+    | AUTOSAVE | 5-9 | 5-10 | [release notes](https://epics-modules.github.io/autosave/autosaveReleaseNotes.html) |
+    | BUSY | 1-7 | 1-7-2 | [release notes](https://epics-modules.github.io/busy/busyReleaseNotes.html) |
+    | CALC | 3-7-1 | 3-7-3 | [release notes](https://epics-modules.github.io/calc/calcReleaseNotes.html) |
     | CAMAC | 2-7-1 | 2-7-1 |  |
-    | CAPUTRECORDER | 1-7-1 | 1-7-2 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/caputRecorder/blob/R1-7-2/documentation/caputRecorderReleaseNotes.html) |
-    | DAC128V | 2-9 | 2-9 | [release notes](http://cars.uchicago.edu/software/epics/dac128VReleaseNotes.html) |
-    | DELAYGEN | 1-1-2 | 1-2-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/delaygen/blob/R1-2-1/documentation/delaygenReleaseNotes.html) |
-    | DEVIOCSTATS | 3-1-15 | 3-1-16 | [release notes](http://www.slac.stanford.edu/grp/ssrl/spear/epics/site/devIocStats/RELEASE_NOTES) |
-    | DXP | 5-0 | 6-0 | [release notes](http://cars.uchicago.edu/software/epics/dxpReleaseNotes.html) |
-    | DXPSITORO | 1-1 | 1-2 | [release notes](https://cars.uchicago.edu/software/epics/dxpSITOROReleaseNotes.html) |
-    | IP | 2-19-1 | 2-20-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/ip/blob/R2-20-1/documentation/ipReleaseNotes.html) |
-    | IP330 | 2-9 | 2-9 | [release notes](http://cars.uchicago.edu/software/epics/ip330ReleaseNotes.html) |
+    | CAPUTRECORDER | 1-7-1 | 1-7-2 | [release notes](https://epics-modules.github.io/caputRecorder/caputRecorderReleaseNotes.html) |
+    | DAC128V | 2-9 | 2-9 | [release notes](https://epics-modules.github.io/dac128V/dac128VReleaseNotes.html) |
+    | DELAYGEN | 1-1-2 | 1-2-1 | [release notes](https://epics-modules.github.io/delaygen/delaygenReleaseNotes.html) |
+    | DEVIOCSTATS | 3-1-15 | 3-1-16 | [release notes](https://github.com/epics-modules/iocStats) |
+    | DXP | 5-0 | 6-0 | [release notes](https://epics-modules.github.io/dxp/dxpReleaseNotes.html) |
+    | DXPSITORO | 1-1 | 1-2 | [release notes](https://epics-modules.github.io/dxpSITORO/dxpSITOROReleaseNotes.html) |
+    | IP | 2-19-1 | 2-20-1 | [release notes](https://epics-modules.github.io/ip/ipReleaseNotes.html) |
+    | IP330 | 2-9 | 2-9 | [release notes](https://epics-modules.github.io/ip330/ip330ReleaseNotes.html) |
     | IPAC | 2-15 | 2-15 | [release notes](https://github.com/epics-modules/ipac/wiki) |
-    | IPUNIDIG | 2-11 | 2-11 | [release notes](http://cars9.uchicago.edu/software/epics/ipUnidigReleaseNotes.html) |
-    | LOVE | 3-2-6 | 3-2-7 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/love/blob/R3-2-7/documentation/loveReleaseNotes.html) |
-    | LUA | 1-2-2 | 2-0 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/lua/blob/R2-0/documentation/luaReleaseNotes.html) |
-    | MCA | 7-7 | 7-8 | [release notes](http://cars.uchicago.edu/software/epics/mcaReleaseNotes.html) |
-    | MEASCOMP | 2-1 | 2-3 | [release notes](http://cars.uchicago.edu/software/epics/measCompReleaseNotes.html) |
-    | MODBUS | 2-10-1 | 3-0 | [release notes](http://cars.uchicago.edu/software/epics/modbusReleaseNotes.html) |
-    | MOTOR | 6-10-1 | 7-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/motor/blob/R7-1/documentation/motor_release.html) |
-    | OPTICS | 2-13-1 | 2-13-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/optics/blob/R2-13-3/documentation/opticsReleaseNotes.html) |
-    | QUADEM | 9-1 | 9-2-1 | [release notes](http://cars.uchicago.edu/software/epics/quadEMReleaseNotes.html) |
-    | SNCSEQ | 2-2-5 | 2-2-6 | [release notes](https://www-csr.bessy.de/control/SoftDist/sequencer/ReleaseNotes-2-2.html#release-notes-2-2-6) |
-    | SOFTGLUE | 2-8-1 | 2-8-2 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/softGlue/blob/R2-8-2/documentation/softGlueReleaseNotes.html) |
-    | SOFTGLUEZYNQ | 2-0-1 | 2-0-2 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/softGlueZynq/blob/R2-0-2/documentation/softGlueZynqReleaseNotes.html) |
-    | SSCAN | 2-11-1 | 2-11-3 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/sscan/blob/R2-11-3/documentation/sscanReleaseNotes.html) |
-    | STD | 3-5 | 3-6 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/std/blob/R3-6/documentation/stdReleaseNotes.html) |
+    | IPUNIDIG | 2-11 | 2-11 | [release notes](https://epics-modules.github.io/ipUnidig/ipUnidigReleaseNotes.html) |
+    | LOVE | 3-2-6 | 3-2-7 | [release notes](https://epics-modules.github.io/love/loveReleaseNotes.html) |
+    | LUA | 1-2-2 | 2-0 | [release notes](https://epics-modules.github.io/lua/luaReleaseNotes.html) |
+    | MCA | 7-7 | 7-8 | [release notes](https://epics-modules.github.io/mca/mcaReleaseNotes.html) |
+    | MEASCOMP | 2-1 | 2-3 | [release notes](https://epics-modules.github.io/measComp/measCompReleaseNotes.html) |
+    | MODBUS | 2-10-1 | 3-0 | [release notes](https://epics-modules.github.io/modbus/modbusReleaseNotes.html) |
+    | MOTOR | 6-10-1 | 7-1 | [release notes](https://github.com/epics-modules/motor/blob/master/docs/RELEASE.md) |
+    | OPTICS | 2-13-1 | 2-13-3 | [release notes](https://epics-modules.github.io/optics/opticsReleaseNotes.html) |
+    | QUADEM | 9-1 | 9-2-1 | [release notes](https://epics-modules.github.io/quadEM/quadEMReleaseNotes.html) |
+    | SNCSEQ | 2-2-5 | 2-2-6 | [release notes](https://github.com/epics-modules/sequencer) |
+    | SOFTGLUE | 2-8-1 | 2-8-2 | [release notes](https://epics-modules.github.io/softGlue/softGlueReleaseNotes.html) |
+    | SOFTGLUEZYNQ | 2-0-1 | 2-0-2 | [release notes](https://epics-modules.github.io/softGlueZynq/softGlueZynqReleaseNotes.html) |
+    | SSCAN | 2-11-1 | 2-11-3 | [release notes](https://epics-modules.github.io/sscan/sscanReleaseNotes.html) |
+    | STD | 3-5 | 3-6 | [release notes](https://epics-modules.github.io/std/stdReleaseNotes.html) |
     | STREAM | 2-7-7b | 2-8-9 | Now retrieved directly from PSI repository |
-    | VAC | 1-7 | 1-9 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/vac/blob/R1-9/documentation/vacReleaseNotes.html) |
-    | VME | 2-9 | 2-9-2 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/vme/blob/R2-9-2/documentation/vmeReleaseNotes.html) |
-    | XXX | 6-0 | 6-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/xxx/blob/R6-1/documentation/xxxReleaseNotes.html) |
-    | YOKOGAWA\_DAS | 1-0-0 | 2-0-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/Yokogawa_DAS/blob/R2-0-1/documentation/YokogawaDASReleaseNotes.html) |
+    | VAC | 1-7 | 1-9 | [release notes](https://epics-modules.github.io/vac/vacReleaseNotes.html) |
+    | VME | 2-9 | 2-9-2 | [release notes](https://epics-modules.github.io/vme/vmeReleaseNotes.html) |
+    | XXX | 6-0 | 6-1 | [release notes](https://epics-modules.github.io/xxx/xxxReleaseNotes.html) |
+    | YOKOGAWA\_DAS | 1-0-0 | 2-0-1 | [release notes](https://epics-modules.github.io/Yokogawa_DAS/YokogawaDASReleaseNotes.html) |
 
 synApps 6.0 Release Notes
 =========================
@@ -226,41 +278,41 @@ changePrefix:
     | module | old version | new version | notes |
     |---|---|---|---|
     | EPICS\_BASE | 3.14.12.4 | 3.15.6 |  |
-    | ALIVE | 1-0 | 1-1-0 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/alive/blob/R1-1-0/documentation/aliveReleaseNotes.html) |
+    | ALIVE | 1-0 | 1-1-0 | [release notes](https://epics-modules.github.io/alive/aliveReleaseNotes.html) |
     | ALLEN\_BRADLEY | 2-3 | 2-3 |  |
     | AREA\_DETECTOR | 2-0 | 3-3-1 | [release notes](https://github.com/areaDetector/blob/master/RELEASE.md) |
-    | ASYN | 4-26 | 4-33 | [release notes](https://epics.anl.gov/modules/soft/asyn/R4-33/RELEASE_NOTES.html) |
-    | AUTOSAVE | 5-6-1 | 5-9 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/autosave/blob/R5-9/documentation/autosaveReleaseNotes.html) |
-    | BUSY | 1-6-1 | 1-7 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/busy/blob/R1-7/documentation/busyReleaseNotes.html) |
-    | CALC | 3-4-2-1 | 3-7-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/calc/blob/R3-7-1/documentation/calcReleaseNotes.html) |
+    | ASYN | 4-26 | 4-33 | [release notes](https://github.com/epics-modules/asyn/blob/master/RELEASE.md) |
+    | AUTOSAVE | 5-6-1 | 5-9 | [release notes](https://epics-modules.github.io/autosave/autosaveReleaseNotes.html) |
+    | BUSY | 1-6-1 | 1-7 | [release notes](https://epics-modules.github.io/busy/busyReleaseNotes.html) |
+    | CALC | 3-4-2-1 | 3-7-1 | [release notes](https://epics-modules.github.io/calc/calcReleaseNotes.html) |
     | CAMAC | 2-7 | 2-7-1 | Minor changes to make sure module builds |
-    | CAPUTRECORDER | 1-4-2 | 1-7-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/caputRecorder/blob/R1-7-1/documentation/caputRecorderReleaseNotes.html) |
-    | DAC128V | 2-8 | 2-9 | [release notes](http://cars.uchicago.edu/software/epics/dac128VReleaseNotes.html) |
-    | DELAYGEN | 1-1-1 | 1-1-2 | [release notes](http://www.aps.anl.gov/bcda/synApps/delaygen/delaygen_notes.html) |
-    | DEVIOCSTATS | 3-1-13 | 3-1-15 | [release notes](http://www.slac.stanford.edu/grp/ssrl/spear/epics/site/devIocStats/RELEASE_NOTES)configure/RELEASE modified to work with synApps' "make release" build command. |
-    | DXP | 3-4 | 5-0 | [release notes](http://cars.uchicago.edu/software/epics/dxpReleaseNotes.html) |
+    | CAPUTRECORDER | 1-4-2 | 1-7-1 | [release notes](https://epics-modules.github.io/caputRecorder/caputRecorderReleaseNotes.html) |
+    | DAC128V | 2-8 | 2-9 | [release notes](https://epics-modules.github.io/dac128V/dac128VReleaseNotes.html) |
+    | DELAYGEN | 1-1-1 | 1-1-2 | [release notes](https://epics-modules.github.io/delaygen/delaygenReleaseNotes.html) |
+    | DEVIOCSTATS | 3-1-13 | 3-1-15 | [release notes](https://github.com/epics-modules/iocStats)configure/RELEASE modified to work with synApps' "make release" build command. |
+    | DXP | 3-4 | 5-0 | [release notes](https://epics-modules.github.io/dxp/dxpReleaseNotes.html) |
     | DXPSITORO | - | 1-1 | New Module |
-    | IP | 2-17 | 2-19-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/ip/blob/R2-19/documentation/ipReleaseNotes.html) |
-    | IP330 | 2-8 | 2-9 | [release notes](http://cars.uchicago.edu/software/epics/ip330ReleaseNotes.html) |
+    | IP | 2-17 | 2-19-1 | [release notes](https://epics-modules.github.io/ip/ipReleaseNotes.html) |
+    | IP330 | 2-8 | 2-9 | [release notes](https://epics-modules.github.io/ip330/ip330ReleaseNotes.html) |
     | IPAC | 2-13 | 2-15 | [release notes](https://github.com/epics-modules/ipac/wiki) |
-    | IPUNIDIG | 2-10 | 2-11 | [release notes](http://cars9.uchicago.edu/software/epics/ipUnidigReleaseNotes.html) |
-    | LOVE | 3-2-5 | 3-2-6 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/love/blob/R3-2-6/documentation/loveReleaseNotes.html) |
+    | IPUNIDIG | 2-10 | 2-11 | [release notes](https://epics-modules.github.io/ipUnidig/ipUnidigReleaseNotes.html) |
+    | LOVE | 3-2-5 | 3-2-6 | [release notes](https://epics-modules.github.io/love/loveReleaseNotes.html) |
     | LUA | - | 1-2-2 | New Module |
-    | MCA | 7-6 | 7-7 | [release notes](http://cars.uchicago.edu/software/epics/mcaReleaseNotes.html) |
-    | MEASCOMP | 1-1 | 2-1 | [release notes](http://cars.uchicago.edu/software/epics/measCompReleaseNotes.html) |
-    | MODBUS | 2-7 | 2-10-1 | [release notes](http://cars.uchicago.edu/software/epics/modbusReleaseNotes.html) |
-    | MOTOR | 6-9 | 6-10-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/motor/blob/R6-10-1/documentation/motor_release.html) |
-    | OPTICS | 2-9-3 | 2-13-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/optics/blob/R2-13-1/documentation/opticsReleaseNotes.html) |
-    | QUADEM | 5-0 | 9-1 | [release notes](http://cars.uchicago.edu/software/epics/quadEMReleaseNotes.html) |
-    | SNCSEQ | 2-2-1 | 2-2-5 | [release notes](https://www-csr.bessy.de/control/SoftDist/sequencer/ReleaseNotes-2-2.html#release-notes-2-2-5) |
-    | SOFTGLUE | 2-4-3 | 2-8-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/softGlue/blob/R2-8-1/documentation/softGlueReleaseNotes.html) |
+    | MCA | 7-6 | 7-7 | [release notes](https://epics-modules.github.io/mca/mcaReleaseNotes.html) |
+    | MEASCOMP | 1-1 | 2-1 | [release notes](https://epics-modules.github.io/measComp/measCompReleaseNotes.html) |
+    | MODBUS | 2-7 | 2-10-1 | [release notes](https://epics-modules.github.io/modbus/modbusReleaseNotes.html) |
+    | MOTOR | 6-9 | 6-10-1 | [release notes](https://github.com/epics-modules/motor/blob/master/docs/RELEASE.md) |
+    | OPTICS | 2-9-3 | 2-13-1 | [release notes](https://epics-modules.github.io/optics/opticsReleaseNotes.html) |
+    | QUADEM | 5-0 | 9-1 | [release notes](https://epics-modules.github.io/quadEM/quadEMReleaseNotes.html) |
+    | SNCSEQ | 2-2-1 | 2-2-5 | [release notes](https://github.com/epics-modules/sequencer) |
+    | SOFTGLUE | 2-4-3 | 2-8-1 | [release notes](https://epics-modules.github.io/softGlue/softGlueReleaseNotes.html) |
     | SOFTGLUEZYNQ | - | 2-0-1 | New Module |
-    | SSCAN | 2-10-1 | 2-11-1 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/sscan/blob/R2-11-1/documentation/sscanReleaseNotes.html) |
-    | STD | 3-4 | 3-5 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/std/blob/R3-5/documentation/stdReleaseNotes.html) |
+    | SSCAN | 2-10-1 | 2-11-1 | [release notes](https://epics-modules.github.io/sscan/sscanReleaseNotes.html) |
+    | STD | 3-4 | 3-5 | [release notes](https://epics-modules.github.io/std/stdReleaseNotes.html) |
     | STREAM | 2-6a | 2-7-7b | StreamDevice at commit 76115ae |
-    | VAC | 1-5-1 | 1-7 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/vac/blob/R1-7/documentation/vacReleaseNotes.html) |
-    | VME | 2-8-2 | 2-9 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/vme/blob/R2-9/documentation/vmeReleaseNotes.html) |
-    | XXX | 5-8-3 | 6-0 | [release notes](http://htmlpreview.github.io/?https://github.com/epics-modules/xxx/blob/R6-0/documentation/xxxReleaseNotes.html) |
+    | VAC | 1-5-1 | 1-7 | [release notes](https://epics-modules.github.io/vac/vacReleaseNotes.html) |
+    | VME | 2-8-2 | 2-9 | [release notes](https://epics-modules.github.io/vme/vmeReleaseNotes.html) |
+    | XXX | 5-8-3 | 6-0 | [release notes](https://epics-modules.github.io/xxx/xxxReleaseNotes.html) |
     | YOKOGAWA\_DAS | - | 1-0-0 | New Module |
 
 synApps 5.8 Release Notes
@@ -286,35 +338,35 @@ snapDb.py - Maintain default paths for medm displays, databases, and displayinfo
     | ALIVE | - | 1-0 | new module |
     | ALLEN\_BRADLEY | 2-2 | 2-3 |  |
     | AREA\_DETECTOR   ADCORE   ADBINARIES | 1-9-1 | R2-0   R2-2   R2-2 | [release notes](https://github.com/areaDetector/areaDetector/blob/master/RELEASE.md)configure/RELEASE files modified to work with synApps "make release" build command.  Note that synApps contains only ADCore and ADBinaries, because those modules require no vendor-supplied support. Other modules are available from [areaDetector on github](https://github.com/areaDetector/areaDetector)  The copy in the synApps tar file has been modified:   - Makefile: "DIRS := $(DIRS) ADBinaries" -&gt; "DIRS := $(DIRS) $(ADBINARIES)", and so on - RELEASE files have all been changed to support synApps "make release" - NDPluginSupport.dbd modified to add a newline to the last line (needed for 3.15.1). |
-    | ASYN | 4-21 | 4-26 | [release notes](http://www.aps.anl.gov/epics/modules/soft/asyn/R4-26/RELEASE_NOTES.html) |
-    | AUTOSAVE | 5-1 | 5-6-1 | [release notes](http://www.aps.anl.gov/bcda/synApps/autosave/autosaveReleaseNotes.html) |
-    | BUSY | 1-6 | 1-6-1 | [release notes](http://www.aps.anl.gov/bcda/synApps/busy/busyReleaseNotes.html) |
-    | CALC | 3-2 | 3-4-2-1 | [release notes](http://www.aps.anl.gov/bcda/synApps/calc/calcReleaseNotes.html) |
+    | ASYN | 4-21 | 4-26 | [release notes](https://github.com/epics-modules/asyn/blob/master/RELEASE.md) |
+    | AUTOSAVE | 5-1 | 5-6-1 | [release notes](https://epics-modules.github.io/autosave/autosaveReleaseNotes.html) |
+    | BUSY | 1-6 | 1-6-1 | [release notes](https://epics-modules.github.io/busy/busyReleaseNotes.html) |
+    | CALC | 3-2 | 3-4-2-1 | [release notes](https://epics-modules.github.io/calc/calcReleaseNotes.html) |
     | CAMAC | 2-7 | 2-7 | devCamacInclude.dbd modified to include stdSupport.dbd, (because std changed). |
     | CAPUTRECORDER | - | 1-4-2 | new module |
-    | DAC128V | 2-7 | 2-8 | [release notes](https://cars.uchicago.edu/software/epics/dac128VDoc.html) |
-    | DELAYGEN | 1-1-0 | 1-1-1 | [release notes](http://www.aps.anl.gov/bcda/synApps/delaygen/delaygen_notes.html) |
-    | DEVIOCSTATS | 3-1-7 | 3-1-13 | [release notes](http://www.slac.stanford.edu/grp/cd/soft/epics/site/devIocStats/RELEASE_NOTES)configure/RELEASE modified to work with synApps' "make release" build command. |
-    | DXP | 3-2 | 3-4 | [release notes](https://cars.uchicago.edu/software/epics/dxpReleaseNotes.html) |
-    | IP | 2-14 | 2-17 | [release notes](http://www.aps.anl.gov/bcda/synApps/ip/ipReleaseNotes.html) |
-    | IP330 | 2-7 | 2-8 | [release notes](https://cars.uchicago.edu/software/epics/ip330ReleaseNotes.html) |
+    | DAC128V | 2-7 | 2-8 | [release notes](https://epics-modules.github.io/dac128V/dac128VReleaseNotes.html) |
+    | DELAYGEN | 1-1-0 | 1-1-1 | [release notes](https://epics-modules.github.io/delaygen/delaygenReleaseNotes.html) |
+    | DEVIOCSTATS | 3-1-7 | 3-1-13 | [release notes](https://github.com/epics-modules/iocStats)configure/RELEASE modified to work with synApps' "make release" build command. |
+    | DXP | 3-2 | 3-4 | [release notes](https://epics-modules.github.io/dxp/dxpReleaseNotes.html) |
+    | IP | 2-14 | 2-17 | [release notes](https://epics-modules.github.io/ip/ipReleaseNotes.html) |
+    | IP330 | 2-7 | 2-8 | [release notes](https://epics-modules.github.io/ip330/ip330ReleaseNotes.html) |
     | IPAC | 2-12 | 2-13 | [release notes](https://svn.aps.anl.gov/trac/epics/ipac/wiki/V2.13)drvIpac/drvIpac.dbd modified to specify IP carrier types |
-    | IPUNIDIG | 2-9 | 2-10 | [release notes](http://cars9.uchicago.edu/software/epics/ipUnidigReleaseNotes.html) |
-    | LOVE | 3-2-5 | 3-2-5 | [release notes](http://www.aps.anl.gov/bcda/synApps/love/loveReleaseNotes.html) |
-    | MCA | 7-4 | 7-6 | [release notes](https://cars.uchicago.edu/software/epics/mcaReleaseNotes.html) |
-    | MEASCOMP | 1-0 | 1-1 | [release notes](https://cars.uchicago.edu/software/epics/measCompReleaseNotes.html) |
-    | MODBUS | 2-4 | 2-7 | [release notes](https://cars.uchicago.edu/software/epics/modbusReleaseNotes.html) |
-    | MOTOR | 6-8 | 6-9 | [release notes](http://www.aps.anl.gov/bcda/synApps/motor/R6-9/motor_release.html)motorApp/Makefile modified to specify motor-controller types |
-    | OPTICS | 2-9-1 | 2-9-3 | [release notes](http://www.aps.anl.gov/bcda/synApps/optics/opticsReleaseNotes.html) |
-    | QUADEM | 4-0 | 5-0 | [release notes](https://cars.uchicago.edu/software/epics/quadEMReleaseNotes.html) |
-    | SNCSEQ | 2-1-13 | 2-1-18 or 2-2-1 | [release notes](http://www-csr.bessy.de/control/SoftDist/sequencer/Installation.html) |
-    | SOFTGLUE | 2-3 | 2-4-3 | [release notes](http://www.aps.anl.gov/bcda/synApps/softGlue/softGlueReleaseNotes.html) |
-    | SSCAN | 2-9 | 2-10-1 | [release notes](http://www.aps.anl.gov/bcda/synApps/sscan/sscanReleaseNotes.html) |
-    | STD | 3-2 | 3-4 | [release notes](http://www.aps.anl.gov/bcda/synApps/std/stdReleaseNotes.html) |
+    | IPUNIDIG | 2-9 | 2-10 | [release notes](https://epics-modules.github.io/ipUnidig/ipUnidigReleaseNotes.html) |
+    | LOVE | 3-2-5 | 3-2-5 | [release notes](https://epics-modules.github.io/love/loveReleaseNotes.html) |
+    | MCA | 7-4 | 7-6 | [release notes](https://epics-modules.github.io/mca/mcaReleaseNotes.html) |
+    | MEASCOMP | 1-0 | 1-1 | [release notes](https://epics-modules.github.io/measComp/measCompReleaseNotes.html) |
+    | MODBUS | 2-4 | 2-7 | [release notes](https://epics-modules.github.io/modbus/modbusReleaseNotes.html) |
+    | MOTOR | 6-8 | 6-9 | [release notes](https://github.com/epics-modules/motor/blob/master/docs/RELEASE.md)motorApp/Makefile modified to specify motor-controller types |
+    | OPTICS | 2-9-1 | 2-9-3 | [release notes](https://epics-modules.github.io/optics/opticsReleaseNotes.html) |
+    | QUADEM | 4-0 | 5-0 | [release notes](https://epics-modules.github.io/quadEM/quadEMReleaseNotes.html) |
+    | SNCSEQ | 2-1-13 | 2-1-18 or 2-2-1 | [release notes](https://github.com/epics-modules/sequencer) |
+    | SOFTGLUE | 2-3 | 2-4-3 | [release notes](https://epics-modules.github.io/softGlue/softGlueReleaseNotes.html) |
+    | SSCAN | 2-9 | 2-10-1 | [release notes](https://epics-modules.github.io/sscan/sscanReleaseNotes.html) |
+    | STD | 3-2 | 3-4 | [release notes](https://epics-modules.github.io/std/stdReleaseNotes.html) |
     | STREAM | 2-6 | 2-6a | StreamDevice 2.6 with modifications:  - Packaged into an EPICS module - Modified with patches from the [web site](http://epics.web.psi.ch/software/streamdevice/), and with fixes in our local repository - streamDevice/Makefile modified to disable build of streamApp, which breaks the RTEMS build, because stream depends on calc, which now depends on the sequencer. |
-    | VAC | 1-4-1 | 1-5-1 | [release notes](http://www.aps.anl.gov/bcda/synApps/vac/vacReleaseNotes.html) |
-    | VME | 2-8-1 | 2-8-2 | [release notes](http://www.aps.anl.gov/bcda/synApps/vme/vmeReleaseNotes.html) |
-    | XXX | 5-7-1 | 5-8-3 | [release notes](http://www.aps.anl.gov/bcda/synApps/xxx/xxxReleaseNotes.html) |
+    | VAC | 1-4-1 | 1-5-1 | [release notes](https://epics-modules.github.io/vac/vacReleaseNotes.html) |
+    | VME | 2-8-1 | 2-8-2 | [release notes](https://epics-modules.github.io/vme/vmeReleaseNotes.html) |
+    | XXX | 5-7-1 | 5-8-3 | [release notes](https://epics-modules.github.io/xxx/xxxReleaseNotes.html) |
 
 synApps 5.7 Release Notes
 =========================
@@ -340,35 +392,35 @@ makeTar.py - automate generation of tar file from svn export
 |---|---|---|---|
 | EPICS\_BASE | 3.14.12.1 | 3.14.12.3 |  |
 | ALLEN\_BRADLEY | 2-2 | 2-2 |  |
-| AREA\_DETECTOR | 1-8beta1 | 1-9-1 | systemic changes [release notes](http://cars9.uchicago.edu/software/epics/areaDetectorReleaseNotes.html) |
-| ASYN | 4-18 | 4-21 | systemic changes [release notes](http://www.aps.anl.gov/epics/modules/soft/asyn/R4-21/RELEASE_NOTES.html) |
-| AUTOSAVE | 4-8 | 5-1 | bug fixes, configMenu [release notes](http://www.aps.anl.gov/bcda/synApps/autosave/autosaveReleaseNotes.html) |
-| BUSY | 1-4 | 1-6 | minor changes [release notes](http://www.aps.anl.gov/bcda/synApps/busy/busyReleaseNotes.html) |
-| CALC | 2-9 | 3-2 | - 80-character calc expressions - store operator (":=") in string and array calcs - sseq record moved from std to calc - acalcout records expression evaluator is now reentrant - [release notes](http://www.aps.anl.gov/bcda/synApps/calc/calcReleaseNotes.html) |
+| AREA\_DETECTOR | 1-8beta1 | 1-9-1 | systemic changes [release notes](https://areadetector.github.io/master/release.html) |
+| ASYN | 4-18 | 4-21 | systemic changes [release notes](https://github.com/epics-modules/asyn/blob/master/RELEASE.md) |
+| AUTOSAVE | 4-8 | 5-1 | bug fixes, configMenu [release notes](https://epics-modules.github.io/autosave/autosaveReleaseNotes.html) |
+| BUSY | 1-4 | 1-6 | minor changes [release notes](https://epics-modules.github.io/busy/busyReleaseNotes.html) |
+| CALC | 2-9 | 3-2 | - 80-character calc expressions - store operator (":=") in string and array calcs - sseq record moved from std to calc - acalcout records expression evaluator is now reentrant - [release notes](https://epics-modules.github.io/calc/calcReleaseNotes.html) |
 | CAMAC | 2-7 | 2-7 |  |
 | DAC128V | 2-7 | 2-7 |  |
-| DELAYGEN | 1-0-7 | 1-1-0 | minor changes [release notes](http://www.aps.anl.gov/bcda/synApps/delaygen/delaygen_notes.html) |
+| DELAYGEN | 1-0-7 | 1-1-0 | minor changes [release notes](https://epics-modules.github.io/delaygen/delaygenReleaseNotes.html) |
 | DEVIOCSTATS | 3-1-7 | 3-1-7 |  |
-| DXP | 3-1 | 3-2 | [release notes](https://cars.uchicago.edu/software/epics/dxpReleaseNotes.html) |
-| IP | 2-13 | 2-14 | minor changes [release notes](http://www.aps.anl.gov/bcda/synApps/ip/ipReleaseNotes.html) |
+| DXP | 3-1 | 3-2 | [release notes](https://epics-modules.github.io/dxp/dxpReleaseNotes.html) |
+| IP | 2-13 | 2-14 | minor changes [release notes](https://epics-modules.github.io/ip/ipReleaseNotes.html) |
 | IP330 | 2-7 | 2-7 |  |
 | IPAC | 2-11 | 2-12? | ? |
 | IPUNIDIG | 2-9 | 2-9 |  |
 | LOVE | 3-2-5 | 3-2-5 |  |
-| MCA | 7-1 | 7-4 | [release notes](https://cars.uchicago.edu/software/epics/mcaReleaseNotes.html) |
+| MCA | 7-1 | 7-4 | [release notes](https://epics-modules.github.io/mca/mcaReleaseNotes.html) |
 | MEASCOMP | - | 1-0 | new module |
-| MODBUS | 2-3 | 2-4 | [release notes](https://cars.uchicago.edu/software/epics/modbusReleaseNotes.html) |
-| MOTOR | 6-7 | 6-8 | [release notes](http://www.aps.anl.gov/bcda/synApps/motor/R6-8/motor_release.html) |
-| OPTICS | 2-8-1 | 2-9-1 | new XIA filter support [release notes](http://www.aps.anl.gov/bcda/synApps/optics/opticsReleaseNotes.html) |
-| QUADEM | 2-6 | 4-0 | systemic changes [release notes](https://cars.uchicago.edu/software/epics/quadEMReleaseNotes.html) |
+| MODBUS | 2-3 | 2-4 | [release notes](https://epics-modules.github.io/modbus/modbusReleaseNotes.html) |
+| MOTOR | 6-7 | 6-8 | [release notes](https://github.com/epics-modules/motor/blob/master/docs/RELEASE.md) |
+| OPTICS | 2-8-1 | 2-9-1 | new XIA filter support [release notes](https://epics-modules.github.io/optics/opticsReleaseNotes.html) |
+| QUADEM | 2-6 | 4-0 | systemic changes [release notes](https://epics-modules.github.io/quadEM/quadEMReleaseNotes.html) |
 | SNCSEQ | 2-1-3 | 2-1-13 | systemic changes |
-| SOFTGLUE | 2-2 | 2-3 | [release notes](http://www.aps.anl.gov/bcda/synApps/softGlue/softGlueReleaseNotes.html) |
-| SSCAN | 2-7 | 2-9 | [release notes](http://www.aps.anl.gov/bcda/synApps/sscan/sscanReleaseNotes.html) |
-| STD | 3-1 | 3-2 | [release notes](http://www.aps.anl.gov/bcda/synApps/std/stdReleaseNotes.html) |
+| SOFTGLUE | 2-2 | 2-3 | [release notes](https://epics-modules.github.io/softGlue/softGlueReleaseNotes.html) |
+| SSCAN | 2-7 | 2-9 | [release notes](https://epics-modules.github.io/sscan/sscanReleaseNotes.html) |
+| STD | 3-1 | 3-2 | [release notes](https://epics-modules.github.io/std/stdReleaseNotes.html) |
 | STREAM | 2-5-1 | 2-6 | StreamDevice 2.6 |
-| VAC | 1-4 | 1-4-1 | [release notes](http://www.aps.anl.gov/bcda/synApps/vac/vacReleaseNotes.html) |
-| VME | 2-8 | 2-8-1 | [release notes](http://www.aps.anl.gov/bcda/synApps/vme/vmeReleaseNotes.html) |
-| XXX | 5-6 | 5-7-1 | [release notes](http://www.aps.anl.gov/bcda/synApps/xxx/xxxReleaseNotes.html) |
+| VAC | 1-4 | 1-4-1 | [release notes](https://epics-modules.github.io/vac/vacReleaseNotes.html) |
+| VME | 2-8 | 2-8-1 | [release notes](https://epics-modules.github.io/vme/vmeReleaseNotes.html) |
+| XXX | 5-6 | 5-7-1 | [release notes](https://epics-modules.github.io/xxx/xxxReleaseNotes.html) |
 
 
 synApps 5.6 Release Notes
@@ -648,7 +700,7 @@ __camac__
 
 __ccd__
 
-> NOTE: This module is __now obsolete__ and has been replaced by the [ areaDetector module.](https://cars.uchicago.edu/software/epics/areaDetector.html/)
+> NOTE: This module is __now obsolete__ and has been replaced by the [ areaDetector module.](https://areadetector.github.io/areaDetector/index.html)
 > __1.10__
 > 
 > - Added code to support parallel make.
@@ -853,7 +905,7 @@ __pilatus__
 
 > __1.6__
 > 
-> - Notice that this module __will no longer be supported__, users should convert to the [areaDetector](https://cars.uchicago.edu/software/epics/areaDetector.html) module.
+> - Notice that this module __will no longer be supported__, users should convert to the [areaDetector](https://areadetector.github.io/areaDetector/index.html) module.
 > - Use the busy record from the new "busy" module, moved from the sscan module.
 > - Support parallel make (make -j).
 
