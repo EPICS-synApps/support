@@ -1,14 +1,14 @@
 ---
 layout: default
 title: vxWorks Configuration
-nav_order: 7
+nav_order: 10
 ---
 
 
 vxWorks IOC Configuration
 =========================
 
-This page covers the setup and configuration of vxWorks-based VME IOCs for use with synApps. For Linux soft IOC deployment, see the main [synApps Overview](synApps.html).
+This page covers the setup and configuration of vxWorks-based VME IOCs for use with synApps. For Linux soft IOC deployment, see the main [synApps Overview](index.html).
 
 
 Setting up the IOC

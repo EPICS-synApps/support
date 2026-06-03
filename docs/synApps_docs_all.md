@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Documentation Links
-nav_order: 4
+nav_order: 5
 ---
 
 
@@ -15,7 +15,7 @@ Please email any comments and bug reports to [Keenan Lang](mailto:klang@anl.gov)
 Overview
 --------
 
-- [synApps.html](https://epics-synapps.github.io/support/synApps.html)
+- [synApps Overview](https://epics-synapps.github.io/support/)
 - [Introduction To synApps](https://epics-synapps.github.io/support/IntroToSynApps.ppt)
 
 Records
