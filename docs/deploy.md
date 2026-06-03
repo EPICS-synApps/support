@@ -91,14 +91,10 @@ To create a user directory from the __xxx__ template, copy the __xxx__ module di
 
 Then edit the following files to configure the user directory:
 
-> `1bm/configure/RELEASE`
-* Edit the definition of `SUPPORT` with the correct path to the support directory.
-> `1bm/iocBoot/ioc1bma/*.cmd`, `1bm/iocBoot/ioc1bma/*.iocsh`
-* Configure hardware, load databases, and set IOC parameters.
-> `1bm/setup_epics_common`
-* Set the value of Channel Access environment variables.
-> `1bm/start_caQtDM_1bma` or `1bm/start_phoebus_1bma`
-* Edit to specify the path to the application and display-file directories.
+- `1bm/configure/RELEASE` -- Edit the definition of `SUPPORT` with the correct path to the support directory.
+- `1bm/iocBoot/ioc1bma/*.cmd`, `1bm/iocBoot/ioc1bma/*.iocsh` -- Configure hardware, load databases, and set IOC parameters.
+- `1bm/setup_epics_common` -- Set the value of Channel Access environment variables.
+- `1bm/start_caQtDM_1bma` or `1bm/start_phoebus_1bma` -- Edit to specify the path to the application and display-file directories.
 
 The association between a user directory and the support directory on which it depends is made entirely by the file `configure/RELEASE` in the user directory.
 

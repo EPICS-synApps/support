@@ -32,19 +32,11 @@ synApps is organized into modules, whose structure is based on the example direc
 
 Most synApps modules are intended primarily to export support to other modules. Some synApps modules produce bootable software, in addition to support software, but in most cases, this bootable software is primarily for testing, and for demonstrating how the support software can be used. The support exported by a module is of the following types, with example names and locations from the __calc__ module:
 
-> a database-definition file, in calc/dbd
-* `calcSupport.dbd`  
-> a linked library, in calc/lib/&lt;arch&gt;
-* 'libcalc`
-> header files, in calc/include 
-* `transformRecord.h`  
-> database files, and associated autosave-request files, in calc/calcApp/Db 
-* `userTransforms10.db`
-* `userTransforms10_settings.req`  
-> display files, in calc/calcApp/op/adl, calc/calcApp/op/ui, and calc/calcApp/op/opi 
-* `userTransforms10.adl`  
-* `userTransforms10.ui`  
-* `userTransforms10.opi`  
+- A database-definition file, in `calc/dbd`: `calcSupport.dbd`
+- A linked library, in `calc/lib/<arch>`: `libcalc`
+- Header files, in `calc/include`: `transformRecord.h`
+- Database files and associated autosave-request files, in `calc/calcApp/Db`: `userTransforms10.db`, `userTransforms10_settings.req`
+- Display files, in `calc/calcApp/op/adl`, `calc/calcApp/op/ui`, and `calc/calcApp/op/opi`: `userTransforms10.adl`, `userTransforms10.ui`, `userTransforms10.opi`
 
 
 One synApps module, the __xxx__ module, is different: it doesn't export anything. It imports support from other modules, and produces bootable software to support an EPICS *IOC*. The __xxx__ module is documentation in runnable form, and also a template from which a synApps application can be constructed. __xxx__ is not comprehensive: it doesn't apply all of synApps; it's usually a little behind the rest of synApps; it focuses more on VME crates than on other kinds of IOCs; and it's a compromise between what is most widely used and what is most likely to build and run out of the box. 
@@ -117,7 +109,7 @@ See [the assemble_synApps configuration](https://github.com/EPICS-synApps/assemb
 
 For convenience, this distribution includes the modules listed above, in place and ready to build, with minor modifications to build files. A few of the modules have suffered more substantial modifications to fix problems, add display files, etc.
 
-synApps includes software developed by the Beamline Controls &amp; Data Acquisition, Software Services, and Accelerator Controls groups of the Advanced Photon Source (APS); by developers in APS Collaborative Access Teams – notably, Mark Rivers (CARS-CAT); and by developers in the EPICS collaboration outside of the APS – notably, those at the Diamond Light Source, the Berliner Elektronenspeicherring-Gesellschaft für Synchrotronstrahlung (BESSY), the Stanford Linear Accelerator Center (SLAC), the Swiss Light Source (SLS)/Paul Scherrer Institut (PSI), the National Synchrotron Light Source (NSLS), the Deutsches Elektronen Synchrotron (DESY), the Spallation Neutron Source (SNS), the Australian Light Source, and the Canadian Light Source.
+synApps includes software developed by the Beamline Controls & Data Acquisition, Software Services, and Accelerator Controls groups of the Advanced Photon Source (APS); by developers in APS Collaborative Access Teams – notably, Mark Rivers (CARS-CAT); and by developers in the EPICS collaboration outside of the APS – notably, those at the Diamond Light Source, the Berliner Elektronenspeicherring-Gesellschaft für Synchrotronstrahlung (BESSY), the Stanford Linear Accelerator Center (SLAC), the Swiss Light Source (SLS)/Paul Scherrer Institut (PSI), the National Synchrotron Light Source (NSLS), the Deutsches Elektronen Synchrotron (DESY), the Spallation Neutron Source (SNS), the Australian Light Source, and the Canadian Light Source.
 
 Aside from EPICS databases, SNL (State Notation Language) programs, and the like, synApps contains the following code:
 
@@ -151,17 +143,12 @@ Aside from EPICS databases, SNL (State Notation Language) programs, and the like
     
     [Appended as a separate page](device_support.html).
 - ### Other C code
-    
-    aCalcPostfix, aCalcPerform sCalcPostfix, sCalcPerform 
-    * Support for run-time expression evaluation 
-    recDynLink 
-    * Backward compatible extension of the dynamic-link software previously in EPICS base. (New code should probably use dbCaPutlinkCallback(), instead of recDynLink.) 
-    autosave (save\_restore, dbrestore, configMenu, asVerify, autosaveBuild) 
-    * Automatic parameter save and boot-time restore. Run-time management of collections of PV values. 
-    saveData 
-    * Saves scan data to files on an NFS-mounted disk (vxWorks), or to a local disk (other operating systems). 
-    luascript 
-    * Support for running scripts to control the value of standard records
+
+    - **aCalcPostfix, aCalcPerform, sCalcPostfix, sCalcPerform** -- Support for run-time expression evaluation.
+    - **recDynLink** -- Backward compatible extension of the dynamic-link software previously in EPICS base. (New code should probably use dbCaPutLinkCallback(), instead of recDynLink.)
+    - **autosave** (save\_restore, dbrestore, configMenu, asVerify, autosaveBuild) -- Automatic parameter save and boot-time restore. Run-time management of collections of PV values.
+    - **saveData** -- Saves scan data to files on an NFS-mounted disk (vxWorks), or to a local disk (other operating systems).
+    - **luascript** -- Support for running scripts to control the value of standard records.
     
 - ### Documentation
     
