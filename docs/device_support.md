@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Device Support
-nav_order: 11
+nav_order: 10
 ---
 
 

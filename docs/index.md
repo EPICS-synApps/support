@@ -28,7 +28,6 @@ synApps is organized into modules, whose structure is based on the example direc
 - [Extending synApps](extend.html) -- From run-time programming to module development
 - [Utils Directory](utils.html) -- Utility scripts and tools
 - [Release Notes](synAppsReleaseNotes.html) -- Version history
-- [Documentation Links](synApps_docs_all.html) -- Links to all module documentation
 
 Most synApps modules are intended primarily to export support to other modules. Some synApps modules produce bootable software, in addition to support software, but in most cases, this bootable software is primarily for testing, and for demonstrating how the support software can be used. The support exported by a module is of the following types, with example names and locations from the __calc__ module:
 
@@ -156,6 +155,19 @@ Aside from EPICS databases, SNL (State Notation Language) programs, and the like
 - ### Miscellaneous
     
     The synApps support/utils directory contains a variety of scripts, programs, etc., that some have found useful. See the [utils directory](utils.html) page for details.
+
+
+Documentation links
+-------------------
+
+Documentation and release notes for individual EPICS modules can be found at [epics-modules.github.io](https://epics-modules.github.io/).
+
+The following resources are not covered by that site:
+
+- [areaDetector documentation](https://areadetector.github.io/areaDetector/index.html)
+- [allenBradley](https://epics.anl.gov/modules/bus/allenBradley/) -- Allen Bradley PLC support (ANL)
+- [galil](https://motorapp.github.io/Galil-3-0/) -- Galil motor controller support
+- [StreamDevice](https://github.com/paulscherrerinstitute/StreamDevice) -- Protocol-based device support for byte-stream communication (PSI)
 
 
 - - - - - -
