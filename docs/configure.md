@@ -49,52 +49,12 @@ How to make synApps work
     __In more detail__
     
     
-    - `xxx/iocBoot/ioc*/st.cmd.*` -- This is the file run by the IOC at boot time. It loads an executable built in the IOC directory (e.g., `xxx`, or `xxx.munch`), sets parameters to configure that software, makes calls to that software to configure it for a particular set of hardware, and loads databases from synApps modules. Mostly, it sources ioc shell files that do these same things.
-        
-        This file, and the files it sources, are probably worth studying. They are reasonably well commented, and contain `dbLoadRecords()` commands for most of the EPICS databases in synApps.
-    - **Motors** -- To load more motors, add lines to the file `xxx/iocBoot/ioc*/motor.substitutions`. For motors controlled by a VME board, edit `vme.cmd` to specify the hardware address, etc. For motors controlled through a serial connection, edit `serial.cmd`.
-        
-        If you want the new motors to work with the 'AllStop' button (`xxx:allstop.VAL`-- see the top-level display `xxx.ui`), load the database `$(MOTOR)/db/motorUtil.db`, and run the command `motorUtilInit("xxx:")`.
-        
-        If you want the IOC automatically to save positions and settings of the new motors, and restore them when the crate reboots, add lines to the files `xxx/iocBoot/ioc*/auto_settings.req` and `xxx/iocBoot/ioc*/auto_positions.req`.
-    - **Slits** -- To use a pair of motors to control a slit, search for `2slit.db`in `xxx/iocBoot/ioc*/examples/optics.iocsh`, and edit the `dbLoadRecords()` command you'll find there. The example in `optics.iocsh` loads two copies of `2slit.db` intended for use as the horizontal and vertical members of a four-jaw slit. The display files `2slit*` and `4slit*` are involved in these applications.
-        
-        The slit database can make either of two sets of assumptions about the two motors attached to the individual slit leaves, depending on the value of the macro "RELTOCENTER" that may be supplied when loading the 2slit.db database.
-        
-        If "RELTOCENTER=0" is supplied, or if RELTOCENTER is omitted altogether:
-        
-        
-        - Both motors have the same engineering units.
-        - Both motors are in the same coordinate system. When the center position is increased, both motors' .VAL fields increase.
-        - The APS standard beamline coordinate system is used. Positive Z is the beam direction; positive Y is upward; positive X is outward from the storage ring.
-        
-        If "RELTOCENTER=1" is supplied:
-        
-        
-        - Both motors have the same engineering units.
-        - Their .VAL fields increase as the slit opens.
-        - The APS standard beamline coordinate system is used. Positive Z is the beam direction; positive Y is upward; positive X is outward from the storage ring.
-        
-        The `2slit.db` database allows users to move either the slit virtual motors or the actual motors, and it keeps all the readback values current regardless of how the actual motors got moved or recalibrated. But it does not automatically reset the slit __drive__ values when the actual motors are used. This must be done manually, using the "SYNC" button on the `2slit.adl` display. Pressing this button causes the database to read the actual motor drive values and set the slit-drive values accordingly.
-        
-        To recalibrate slit positions, press the "Set" button, type in the current slit position as you want it to be called, and press the "Use" button. This procedure uses the "Set" buttons of both motors the slit software talks to, and the user/dial offsets of those motors actually implement the recalibration.
-        
-        There is a new, experimental slit database in synApps which uses soft motor records as the user/client interface. This allows clients that know how to control a motor also to control a slit, with some limitations. We hope to use soft motor records in front of other positioners (e.g. monochromators, optical tables, insertion devices, and DAC channels) in the future.
-    - **Optical tables** -- Optical tables are controlled by a custom EPICS record (the "table" record), used in the database `table.db` and controlled via display files `table*.ui` (caQtDM) or `table*.adl` (MEDM).
-        
-        Table virtual motors behave in much the same way as do slit virtual motors. However, the table software does not use user/dial offsets in the underlying motor to implement recalibration (it can't, since it works through a nonlinear transform). Instead, the table maintains its own offsets for all of the six coordinated motions it implements. Pressing the "Set" button causes new table positions to modify the offsets instead of moving the table (which is exactly the way motor and slit calibration works). In addition to a "Sync" button, which reads motor positions and calculates the table positions from them, the table display has an "Init" button, which zeros all offsets before doing a "sync" operation. It also has a "Zero" button, which manipulates all the table offsets to make the current table positions zero without moving or recalibrating any motors.
-    - **Monochromators** -- Several varieties of crystal monochromators are supported in synApps: two constant-offset "channel-cut" monochromators, two varieties of a high-resolution four-crystal monochromator, a spherical-grating monochromator, and a multilayer monochromator. Most are supported by databases paired with State Notation Language (SNL) programs, and display files. The EPICS databases `kohzuSeq.db`, SNL program `kohzuCtl.st`, and displays `kohzu*` are involved in control of two varieties of high-heat-load monochromators. The EPICS database `hrSeq.db`, SNL program `hrCtl.st`, and displays `hSeq*` are involved in control of the high-resolution double-crystal monochromator. The spherical grating monochromator is supported by the database `SGM.db` and the displays `SGM*`. The multilayer monochromator is supported by the database `ml_monoSeq.db` and displays `ml_mono*`.
-    - **Filters** -- The APS standard user filters combine several motors and solenoids to control the placement of filter material in the beam path. The databases `filterMotor.db` and `filterLock.db`, and the display files `*filter*` are involved in this application.
-        
-        synApps also supports the XIA filter/shutter box, with two independently developed solutions:
-        
-        
-        - pf4:   
-            pf4\*.db  
-            pf4\*.adl
-        - filterbox:  
-            filterBladeNoSensor.db, filterDrive.db  
-            filter\_\*\_\*.adl, filterbox\_\*.adl filter\_drive\*.adl
+    - `xxx/iocBoot/ioc*/st.cmd.*` -- This is the file run by the IOC at boot time. It loads an executable built in the IOC directory, sets parameters to configure that software, makes calls to configure it for a particular set of hardware, and loads databases from synApps modules. Mostly, it sources `.iocsh` files that do these same things. This file, and the files it sources, are worth studying -- they are well commented and contain `dbLoadRecords()` commands for most of the EPICS databases in synApps.
+
+    - **Motors** -- Motor configuration is done through substitution files and startup scripts. See the [motor module documentation](https://epics-modules.github.io/motor/) for details. In the xxx template, motor substitution files are at `xxx/iocBoot/ioc*/motor.substitutions`.
+
+    - **Slits, optical tables, monochromators, filters** -- These optics devices are configured through database loading and SNL programs in the IOC startup scripts. See the [optics module documentation](https://epics-modules.github.io/optics/) for detailed usage of slit (`2slit.db`), table (`table.db`), monochromator (`kohzuSeq.db`, `hrSeq.db`, `SGM.db`, `ml_monoSeq.db`), and filter (`pf4`, `filterMotor.db`) databases and displays.
+
     synApps also includes many features for run-time programming, including userCalcs, string and array expression evaluation, scan support, sequence records, signal averaging, interpolation, and FPGA-based digital logic. See [Extending synApps](extend.html) for details on these capabilities.
 4. Running synApps 
     1. Display manager

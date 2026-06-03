@@ -34,6 +34,6 @@ The synApps support/utils directory contains a variety of scripts and programs t
 
 - **mdaExplorer/** -- A wxPython program that displays the content of MDA files and directories of MDA files.
 
-- **mdaPythonUtils/** -- A collection of python programs that read, write, modify, and translate MDA files.
+- **mdaPythonUtils/** -- A collection of python programs that read, write, modify, and translate MDA files. Includes `tranFiles.py` for automated batch translation of MDA data files to other formats.
 
 - **snapDb/** -- A wxPython rapid development tool for EPICS databases and display files. Supports the use of EPICS' run-time programmability to prototype EPICS databases using records loaded into an IOC.
