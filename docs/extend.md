@@ -15,7 +15,7 @@ Here is a list of techniques by which synApps has been extended by users and dev
 
 ### Run-time programming
 
-synApps modules provide many records and databases designed for end-user programming at run time, collectively known as "userCalcs":
+synApps modules provide many records and databases designed for end-user programming at run time, some of these include:
 
 - **userCalcs** (swait, calcout, sCalcout, aCalcout, transform records) -- See the [calc module documentation](https://epics-modules.github.io/calc/)
 - **Scans** -- See the [sscan module documentation](https://epics-modules.github.io/sscan/)
