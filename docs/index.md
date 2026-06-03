@@ -148,23 +148,18 @@ Aside from EPICS databases, SNL (State Notation Language) programs, and the like
     
 - ### Documentation
     
-    In addition to this top-level documentation, synApps modules have their own documentation directories, and the __xxx__ module contains examples of how much of the software is imported, built, loaded, and run. Some modules have their own example iocBoot directories.
+    In addition to this top-level documentation, synApps modules have their own documentation directories. Documentation and release notes for individual modules can be found at [epics-modules.github.io](https://epics-modules.github.io/). The __xxx__ module contains examples of how the software is imported, built, loaded, and run.
+
+    The following modules are documented outside of epics-modules.github.io:
+
+    - [areaDetector](https://areadetector.github.io/areaDetector/index.html)
+    - [allenBradley](https://epics.anl.gov/modules/bus/allenBradley/) -- Allen Bradley PLC support (ANL)
+    - [galil](https://motorapp.github.io/Galil-3-0/) -- Galil motor controller support
+    - [StreamDevice](https://github.com/paulscherrerinstitute/StreamDevice) -- Protocol-based device support for byte-stream communication (PSI)
+
 - ### Miscellaneous
     
     The synApps support/utils directory contains a variety of scripts, programs, etc., that some have found useful. See the [utils directory](utils.html) page for details.
-
-
-Documentation links
--------------------
-
-Documentation and release notes for individual EPICS modules can be found at [epics-modules.github.io](https://epics-modules.github.io/).
-
-The following resources are not covered by that site:
-
-- [areaDetector documentation](https://areadetector.github.io/areaDetector/index.html)
-- [allenBradley](https://epics.anl.gov/modules/bus/allenBradley/) -- Allen Bradley PLC support (ANL)
-- [galil](https://motorapp.github.io/Galil-3-0/) -- Galil motor controller support
-- [StreamDevice](https://github.com/paulscherrerinstitute/StreamDevice) -- Protocol-based device support for byte-stream communication (PSI)
 
 
 - - - - - -
