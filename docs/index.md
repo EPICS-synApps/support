@@ -138,9 +138,6 @@ Aside from EPICS databases, SNL (State Notation Language) programs, and the like
     | __vme__ | generic vme record (Mark Rivers/APS/CARS-CAT) |
     | __timestamp__ | (written by Stephanie Allison/SLAC) Needed by the vxStats module, but apparently not available in a published module. |
     | __vs__ | vac-module custom record |
-- ### Device support in or distributed with synApps
-    
-    [Appended as a separate page](device_support.html).
 - ### Other C code
 
     - **aCalcPostfix, aCalcPerform, sCalcPostfix, sCalcPerform** -- Support for run-time expression evaluation.
