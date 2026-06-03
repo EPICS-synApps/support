@@ -172,7 +172,4 @@ The following resources are not covered by that site:
 
 - - - - - -
 
- Suggestions and Comments to:   
- [Keenan Lang](mailto:klang@anl.gov) (klang@anl.gov)   
- Beamline Controls & Data Acquisition Group  
- Advanced Photon Source, Argonne National Laboratory
+Comments and bug reports to [Keenan Lang](mailto:klang@anl.gov) (klang@anl.gov).

@@ -81,6 +81,3 @@ It is helpful to set the group sticky bit so that files written by the IOC proce
 
 If you are using autosaveBuild, the IOC must also have write permission to the directory where autosave request files are generated.
 
-
-Suggestions and Comments to:
-[Keenan Lang](mailto:klang@anl.gov) (klang@anl.gov)

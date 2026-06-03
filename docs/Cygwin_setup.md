@@ -35,6 +35,4 @@ The last element in the PATH definition must be the path to the bin/cygwin-x86 s
 source setup_epics
 ```
 
-to execute that script.  Suggestions and Comments to:   
- [Mark Rivers](mailto:rivers@cars.uchicago.edu): (rivers@cars.uchicago.edu)   
- Last modified: November 28, 2005
+to execute that script.
