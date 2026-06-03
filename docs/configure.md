@@ -95,28 +95,7 @@ How to make synApps work
         - filterbox:  
             filterBladeNoSensor.db, filterDrive.db  
             filter\_\*\_\*.adl, filterbox\_\*.adl filter\_drive\*.adl
-    - **Basic run-time programming** -- Impromptu coordinated motions and other bits of run-time programming are handled by what we call a "userCalc" (actually just a swait record with a nice display-file interface) or a "userTransform" (actually just a transform record with a nice display-file interface). We normally load sets of these and other records into each EPICS processor, specifically for end-user programming. Users type in expressions to be evaluated, and link inputs and outputs, as needed, to glue existing objects together to do what they want done at the moment. Here are some examples of the tasks that have been accomplished with userCalcs and userTransforms:
-        
-        
-        - Turn off hardware feedback control of a monochromator crystal when beam drops below a user-specified level. The userCalc monitored the EPICS PV that contains the value of the positron beam-current, and drove a DAC channel (used as a digital i/o bit) that enabled hardware feedback.
-        - Support the ubiquitous theta/two-theta coordination by slaving the two-theta motor's .VAL field to the theta motor's .VAL field.
-        - Talk to a motor through a nonlinear transformation, e.g., energy-to-Bragg-angle.
-        - Close slow feedback loops – e.g., to adjust a monochromator crystal to suppress third-order diffraction through the high-heat-load monochromator.
-        - Move multichannel-analyzer regions of interest automatically as the incident beam energy changes.
-        - Save and automatically subtract shutter-closed offsets from scaler data.
-        - Implement the first cut at support for a spherical grating monochromator.
-    - **String-expression support** -- Run-time programming involving strings and/or numbers can be done with userStringCalcs, which resemble userCalcs closely, but differ in significant details. A package containing two stringCalcs and an 'asyn' record (called a "deviceCmdReply") is also available for run-time programming of simple support for serial and other message-based devices.
-    - **Array-expression support** -- Run-time programming involving arrays and/or numbers can be done with userArrayCalcs, which resemble userCalcs closely, but differ in significant details.
-    - **Scan support** -- Scans of up to five dimensions are supported by the `standardScans.db` database. Scan data is written to disk by the saveData program, whose user interface is contained in `saveData.db`. The number of data points per scan dimension is specified when `standardScans.db` is loaded, and is limited to 2000, unless the environment variable `EPICS_CA_MAX_ARRAY_BYTES` is specified.
-        
-        Note that loading `saveData.db` does not automatically cause scan data to be written to disk. You must also call the function `saveData_Init()`, specifying a scan-configuration file (`saveData.req`) which tells saveData which sscan records to monitor.
-        
-        Also note that initializing saveData is an all-or-nothing choice. If you initialize saveData, then *all* scans performed by sscan records named in the configuration file will be written to disk. If saveData cannot write a file, it will prevent the next scan from completing. (Scans performed by sscan records that are *not* named in `saveData.req` are completely outside of this restriction. The data they accumulate is not written to disk by saveData, so saveData is not involved in their operation.)
-    - **Sequence support** -- Run-time programming of sequences is possible using the sseq record and related MEDM displays `yySseq.adl`
-    - **Multiple-step measurement** -- Up to four measurement steps involving positioners, detectors, and end calculations (e.g., to support dichroism experiments) can be done with the `4step.db` database and the related MEDM display, `4step.adl`. The entire measurement sequence can be involved in a scan by treating the 4step database as you would treat the scaler or mca software.
-    - **Signal averaging** -- Calculating the average of a series of PV values is supported by the `userAve10.db` database, and `userAve.adl` display. The database can calculate one-shot or running averages, and - for PID loops - can fit to a line, to mitigate the time delay inherent in signal averaging
-    - **Interpolation** -- EPICS supports breakpoint tables for linear interpolation of a dataset fixed at boot time. The synApps `interp` support (in the __calc__ module) can run a drive or readback value through an interpolation table built at run time.
-    - **Glue electronics** -- The __softGlue__ module supports simple digital electronic circuits that can be built at run time.
+    synApps also includes many features for run-time programming, including userCalcs, string and array expression evaluation, scan support, sequence records, signal averaging, interpolation, and FPGA-based digital logic. See [Extending synApps](extend.html) for details on these capabilities.
 4. Running synApps 
     1. Display manager
         - **caQtDM** (primary) -- caQtDM is the primary display manager for synApps. Display files use the `.ui` format and are located in each module's `op/ui/` directory. All synApps display files are operationally tested in caQtDM.
