@@ -142,20 +142,10 @@ Aside from EPICS databases, SNL (State Notation Language) programs, and the like
 
     - **aCalcPostfix, aCalcPerform, sCalcPostfix, sCalcPerform** -- Support for run-time expression evaluation.
     - **recDynLink** -- Backward compatible extension of the dynamic-link software previously in EPICS base. (New code should probably use dbCaPutLinkCallback(), instead of recDynLink.)
-    - **autosave** (save\_restore, dbrestore, configMenu, asVerify, autosaveBuild) -- Automatic parameter save and boot-time restore. Run-time management of collections of PV values.
-    - **saveData** -- Saves scan data to files on an NFS-mounted disk (vxWorks), or to a local disk (other operating systems).
-    - **luascript** -- Support for running scripts to control the value of standard records.
     
 - ### Documentation
     
-    In addition to this top-level documentation, synApps modules have their own documentation directories. Documentation and release notes for individual modules can be found at [epics-modules.github.io](https://epics-modules.github.io/). The __xxx__ module contains examples of how the software is imported, built, loaded, and run.
-
-    The following modules are documented outside of epics-modules.github.io:
-
-    - [areaDetector](https://areadetector.github.io/areaDetector/index.html)
-    - [allenBradley](https://epics.anl.gov/modules/bus/allenBradley/) -- Allen Bradley PLC support (ANL)
-    - [galil](https://motorapp.github.io/Galil-3-0/) -- Galil motor controller support
-    - [StreamDevice](https://github.com/paulscherrerinstitute/StreamDevice) -- Protocol-based device support for byte-stream communication (PSI)
+    In addition to this top-level documentation, synApps modules have their own documentation directories. Documentation and release notes for individual modules can be found at [epics-modules.github.io](https://epics-modules.github.io/). The __xxx__ module contains examples of how the software is imported, built, loaded, and run. The [areaDetector](https://areadetector.github.io/areaDetector/index.html) and [galil](https://motorapp.github.io/Galil-3-0/) modules are documented on their own sites.
 
 - ### Miscellaneous
     
