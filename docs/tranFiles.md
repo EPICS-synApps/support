@@ -7,6 +7,8 @@ nav_order: 8
 tranFiles.py
 ============
 
+Located in `support/utils/mdaPythonUtils/tranFiles.py`.
+
 tranFiles.py finds data files, translates them, and writes the translated files to disk. 
 The program finds data files either in a caller-specified directory, or by reading EPICS PVs 
 (using a caller-specified prefix string) and converting that information to a directory name. 
