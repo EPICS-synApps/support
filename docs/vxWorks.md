@@ -1,7 +1,7 @@
 ---
 layout: default
 title: vxWorks Configuration
-nav_order: 8
+nav_order: 7
 ---
 
 

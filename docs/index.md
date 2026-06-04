@@ -24,7 +24,7 @@ synApps is organized into modules, whose structure is based on the example direc
 
 **Getting Started:**
 - [Deploying synApps](deploy.html) -- How to obtain and build synApps
-- [Configuring an IOC](configure.html) -- Setting up and running an IOC with synApps
+- [Configuring an IOC](https://epics-modules.github.io/xxx/configuring.html) -- Setting up and running an IOC with synApps
 - [Extending synApps](extend.html) -- From run-time programming to module development
 - [Utils Directory](utils.html) -- Utility scripts and tools
 - [Release Notes](synAppsReleaseNotes.html) -- Version history

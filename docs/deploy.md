@@ -130,3 +130,15 @@ How to build synApps
     If the build fails because of missing system dependencies, you can disable individual modules by commenting them out of `support/configure/RELEASE` and re-running `make release`.
 
 3. **Building a user directory.** Once the support directory has built, the __xxx__ module will have been configured and built. Copy it, run `changePrefix`, edit the configuration files as described [above](<#How to deploy synApps>), and run `make`.
+
+
+Configuring and running the IOC
+-------------------------------
+
+Once you have created a user directory from the __xxx__ template, see the [xxx module documentation](https://epics-modules.github.io/xxx/configuring.html) for details on:
+
+- Setting up and starting the IOC (Linux soft IOC or vxWorks)
+- Configuring hardware (motors, optics, serial devices, detectors)
+- Display managers (caQtDM, Phoebus, MEDM)
+- autosave/restore
+- saveData scan-data writing
