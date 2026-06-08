@@ -5,9 +5,14 @@ nav_order: 4
 ---
 
 
-How to extend synApps
----------------------
+# How to extend synApps
+{: .no_toc}
 
+## Table of contents
+{: .no_toc .text-delta }
+
+- TOC
+{:toc}
 
 Like all EPICS software, synApps can be extended in many ways, and at many levels, by EPICS developers and users. synApps pushes the idea a little bit further toward end users who are not developers. One of the driving notions behind the development of synApps was to put as much of EPICS' flexibility and power as seems both wise and practical into the hands of end users -- typically, scientists running experiments -- whose backgrounds in software development and implementation vary over a wide range.
 

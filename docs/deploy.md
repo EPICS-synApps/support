@@ -5,28 +5,32 @@ nav_order: 2
 ---
 
 
-Deploying and Building synApps
-==============================
+# Deploying and Building synApps
+{: .no_toc}
 
+## Table of contents
+{: .no_toc .text-delta }
 
-How to deploy synApps
----------------------
+- TOC
+{:toc}
+
+## How to deploy synApps
 
 synApps is normally deployed as a two-part system: a 'support' directory, and one or more 'user' directories. The support directory can be installed on a read-only file system, along with EPICS base and other modules, and used from there by user directories. Each user directory typically begins as a copy of the __xxx__ module, customized and extended to suit a particular application and set of hardware.
 
 There are two ways to obtain the synApps support directory:
 
-#### Option 1: Download a prebuilt tarball
+### Option 1: Download a prebuilt tarball
 
 Download a release tarball from the [synApps releases page](https://github.com/EPICS-synApps/support/releases). This provides a pre-assembled support directory with all modules at tested, compatible versions.
 
-#### Option 2: Use the assemble_synApps script
+### Option 2: Use the assemble_synApps script
 
 The [assemble_synApps](https://github.com/EPICS-synApps/assemble_synApps) perl script will clone all synApps modules from GitHub at compatible versions and configure them to build together. This is the recommended approach for users who want to customize which modules are included or track specific module versions.
 
 The script can be configured to select module versions, enable or disable specific modules, and set the path to EPICS base. See the [assemble_synApps documentation](https://github.com/EPICS-synApps/assemble_synApps) for details.
 
-#### The support directory
+### The support directory
 
 Once deployed by either method, the support directory will contain:
 
@@ -77,7 +81,7 @@ synApps/support/
     xxx/
 ```
 
-#### The user directory
+### The user directory
 
 A user directory is typically constructed from the __xxx__ module, which serves as a template. At its simplest, a single copy of __xxx__ supports a single IOC. If several IOCs cooperate to serve a single application (such as a synchrotron beamline), one might make several independent copies of __xxx__, or extend a single copy to contain multiple xxxApp directories and multiple iocBoot/iocxxx directories.
 
@@ -98,14 +102,14 @@ Then edit the following files to configure the user directory:
 
 The association between a user directory and the support directory on which it depends is made entirely by the file `configure/RELEASE` in the user directory.
 
-> *Note that the modules in synApps are interdependent. Many of the modules depend on the __asyn__ module, for example, and there are many other dependencies, both direct and implied. The complete set of modules selected by a user directory must be self consistent, and the EPICS build will ensure this, unless you tell it not to, by defining `CHECK_RELEASE=NO` or `CHECK_RELEASE=WARN` in `configure/CONFIG_SITE`.*
+{: .note }
+> The modules in synApps are interdependent. Many of the modules depend on the __asyn__ module, for example, and there are many other dependencies, both direct and implied. The complete set of modules selected by a user directory must be self consistent, and the EPICS build will ensure this, unless you tell it not to, by defining `CHECK_RELEASE=NO` or `CHECK_RELEASE=WARN` in `configure/CONFIG_SITE`.
 
 The synApps build imposes an additional constraint on module names. Because synApps uses EPICS build rules to descend from `support` into the modules, module names may not include the character '.'. (The EPICS build rules expect '.' to be followed by a host or target architecture.)
 
 
 
-How to build synApps
---------------------
+## How to build synApps
 
 
 1. **System configuration.** Before building synApps, you should ensure that your system has the tools, libraries, header files, etc. required to build the modules you want to build. Key dependencies include:
@@ -132,8 +136,7 @@ How to build synApps
 3. **Building a user directory.** Once the support directory has built, the __xxx__ module will have been configured and built. Copy it, run `changePrefix`, edit the configuration files as described [above](<#How to deploy synApps>), and run `make`.
 
 
-Configuring and running the IOC
--------------------------------
+## Configuring and running the IOC
 
 Once you have created a user directory from the __xxx__ template, see the [xxx module documentation](https://epics-modules.github.io/xxx/configuring.html) for details on:
 

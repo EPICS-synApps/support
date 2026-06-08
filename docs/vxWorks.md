@@ -5,8 +5,8 @@ nav_order: 7
 ---
 
 
-vxWorks IOC Configuration
-=========================
+# vxWorks IOC Configuration
+{: .no_toc}
 
 This page covers the setup and configuration of vxWorks-based VME IOCs for use with synApps. For Linux soft IOC deployment, see the main [synApps Overview](index.html).
 

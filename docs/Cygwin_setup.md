@@ -5,8 +5,8 @@ nav_order: 6
 ---
 
 
-Building synApps on Cygwin
-==========================
+# Building synApps on Cygwin
+{: .no_toc}
 
 The following components from the Cygwin distribution package are required in order to build synApps for the cygwin-x86_64 architecture: 
 - base 

@@ -5,9 +5,8 @@ nav_order: 5
 ---
 
 
-The synApps utils directory
----------------------------
-
+# The synApps utils directory
+{: .no_toc}
 
 The synApps support/utils directory contains a variety of scripts and programs that may be useful in administering and/or using synApps.
 
